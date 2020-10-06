@@ -13,7 +13,6 @@ public class Type2Manager : MonoBehaviour
     double backArmpowersuccess; //同確率時
     int operationType = 1; //0:ボタン式，1:レバー式
     int limitTime = 60; //レバー式の場合
-    float craneMovespeed = 1.0f; //クレーンの移動速度設定;
 
     //For test-----------------------------------------
 
