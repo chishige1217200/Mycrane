@@ -32,7 +32,6 @@ public class Type2Manager : MonoBehaviour
         {
             //クレーン位置初期化動作; DECACRE・CARINOタイプは不要
             //コイン投入無効化;
-            craneStatus++;
         }
 
         if (craneStatus == 0)

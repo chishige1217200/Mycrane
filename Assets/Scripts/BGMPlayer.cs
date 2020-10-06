@@ -9,7 +9,7 @@ public class BGMPlayer : MonoBehaviour
 
 	void Start()
 	{
-		BGMflag = new bool[2];
+		BGMflag = new bool[_AudioIndex];
 		_AudioSource = GameObject.Find("BGM").GetComponents<AudioSource>();
 		for(int i = 0; i < _AudioIndex; i++)
 		{

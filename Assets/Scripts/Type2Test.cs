@@ -1,18 +1,18 @@
 using System;
 using UnityEngine;
 
-public class Test : MonoBehaviour
+public class Type2Test : MonoBehaviour
 {
     public void Testadder()
     {
         Debug.Log("Clicked.");
-        Type1Manager.craneStatus++;
+        Type2Manager.craneStatus++;
     }
 
     public void TestSubber()
     {
         Debug.Log("Clicked.");
-        Type1Manager.craneStatus--;
+        Type2Manager.craneStatus--;
     }
 
 }
