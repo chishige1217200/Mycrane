@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class BGMPlayer : MonoBehaviour
 {
-	public AudioSource[] _AudioSource; //オーディオ情報の格納
+	public static AudioSource[] _AudioSource; //オーディオ情報の格納
     public int _AudioIndex; //オーディオ数
-	public bool[] BGMflag; //BGMを再生するかどうか
+	public static bool[] BGMflag; //BGMを再生するかどうか
 
 	void Start()
 	{
@@ -28,14 +28,14 @@ public class BGMPlayer : MonoBehaviour
 		}
 	}
 
-	public void PlayBGM(int num)
+	public static void PlayBGM(int num)
 	{
 		BGMflag[num] = true;
 	}
 
-	public void StopBGM(int num)
+	public static void StopBGM(int num)
 	{
-		_AudioSource[num].Stop();
 		BGMflag[num] = false;
+		_AudioSource[num].Stop();
 	}
 }
