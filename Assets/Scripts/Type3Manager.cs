@@ -12,7 +12,7 @@ public class Type3Manager : MonoBehaviour
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
 
-    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 2; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
 
     //For test-----------------------------------------
 
@@ -67,9 +67,6 @@ public class Type3Manager : MonoBehaviour
                 case 1:
                     SEPlayer.PlaySE(7, 2147483647);
                     break;
-                case 2:
-                    SEPlayer.PlaySE(0, 1);
-                    break;
                 case 3:
                     BGMPlayer.PlayBGM(4);
                     break;
@@ -92,7 +89,7 @@ public class Type3Manager : MonoBehaviour
                     SEPlayer.PlaySE(8, 2147483647);
                     break;
                 case 2:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.PlaySE(13, 2147483647);
                     break;
                 case 3:
                     SEPlayer.PlaySE(0, 1);
@@ -106,7 +103,7 @@ public class Type3Manager : MonoBehaviour
             switch (soundType)
             {
                 case 2:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.StopSE(13);
                     break;
                 case 3:
                     SEPlayer.PlaySE(0, 1);
@@ -130,7 +127,7 @@ public class Type3Manager : MonoBehaviour
                     SEPlayer.PlaySE(9, 2147483647);
                     break;
                 case 2:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.PlaySE(13, 2147483647);
                     break;
                 case 3:
                     SEPlayer.PlaySE(0, 1);
@@ -152,7 +149,7 @@ public class Type3Manager : MonoBehaviour
                     SEPlayer.PlaySE(10, 2147483647);
                     break;
                 case 2:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.StopSE(13);
                     break;
                 case 3:
                     SEPlayer.PlaySE(0, 1);
@@ -168,7 +165,7 @@ public class Type3Manager : MonoBehaviour
             switch (soundType)
             {
                 case 2:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.PlaySE(14, 2147483647);
                     break;
                 case 3:
                     SEPlayer.PlaySE(0, 1);
