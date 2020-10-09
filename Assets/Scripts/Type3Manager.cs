@@ -12,7 +12,7 @@ public class Type3Manager : MonoBehaviour
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
 
-    int soundType = 2; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 3; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
 
     //For test-----------------------------------------
 
@@ -49,6 +49,7 @@ public class Type3Manager : MonoBehaviour
                     BGMPlayer.PlayBGM(2);
                     break;
                 case 3:
+                    BGMPlayer.StopBGM(4);
                     BGMPlayer.PlayBGM(3);
                     break;
             }
@@ -92,7 +93,7 @@ public class Type3Manager : MonoBehaviour
                     SEPlayer.PlaySE(13, 2147483647);
                     break;
                 case 3:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.PlaySE(17, 2147483647);
                     break;
             }
             //右移動効果音ループ再生;
@@ -106,7 +107,7 @@ public class Type3Manager : MonoBehaviour
                     SEPlayer.StopSE(13);
                     break;
                 case 3:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.StopSE(17);
                     break;
             }
             //右移動効果音ループ再生停止;
@@ -130,7 +131,7 @@ public class Type3Manager : MonoBehaviour
                     SEPlayer.PlaySE(13, 2147483647);
                     break;
                 case 3:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.PlaySE(18, 2147483647);
                     break;
             }
             //奥移動効果音ループ再生;
@@ -152,7 +153,8 @@ public class Type3Manager : MonoBehaviour
                     SEPlayer.StopSE(13);
                     break;
                 case 3:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.StopSE(18);
+                    SEPlayer.PlaySE(19,1);
                     break;
             }
             //奥移動効果音ループ再生停止;
@@ -168,7 +170,7 @@ public class Type3Manager : MonoBehaviour
                     SEPlayer.PlaySE(14, 2147483647);
                     break;
                 case 3:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.PlaySE(20, 2147483647);
                     break;
             }
             //アーム下降音再生
@@ -187,11 +189,8 @@ public class Type3Manager : MonoBehaviour
                     SEPlayer.StopSE(10);
                     SEPlayer.PlaySE(11, 2147483647);
                     break;
-                case 2:
-                    SEPlayer.PlaySE(0, 1);
-                    break;
                 case 3:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.StopSE(20);
                     break;
             }
             //アーム下降音再生停止;
@@ -203,11 +202,8 @@ public class Type3Manager : MonoBehaviour
         {
             switch (soundType)
             {
-                case 2:
-                    SEPlayer.PlaySE(0, 1);
-                    break;
                 case 3:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.PlaySE(21, 2147483647);
                     break;
             }
             //アーム上昇音再生;
@@ -218,11 +214,8 @@ public class Type3Manager : MonoBehaviour
         {
             switch (soundType)
             {
-                case 2:
-                    SEPlayer.PlaySE(0, 1);
-                    break;
                 case 3:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.StopSE(21);
                     break;
             }
             //アーム上昇停止音再生;
@@ -238,10 +231,11 @@ public class Type3Manager : MonoBehaviour
                     SEPlayer.PlaySE(1, 2147483647);
                     break;
                 case 2:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.StopSE(14);
+                    SEPlayer.PlaySE(13, 2147483647);
                     break;
                 case 3:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.PlaySE(22, 2147483647);
                     break;
             }
             //アーム獲得口ポジション移動音再生;
@@ -259,10 +253,12 @@ public class Type3Manager : MonoBehaviour
                     SEPlayer.StopSE(11);
                     break;
                 case 2:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.StopSE(13);
+                    SEPlayer.PlaySE(16, 1);
                     break;
                 case 3:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.StopSE(22);
+                    SEPlayer.PlaySE(23,1);
                     break;
             }
             //アーム開く音再生;
@@ -274,11 +270,8 @@ public class Type3Manager : MonoBehaviour
         {
             switch (soundType)
             {
-                case 2:
-                    SEPlayer.PlaySE(0, 1);
-                    break;
                 case 3:
-                    SEPlayer.PlaySE(0, 1);
+                    SEPlayer.PlaySE(24, 1);
                     break;
             }
             //アーム閉じる音再生;
