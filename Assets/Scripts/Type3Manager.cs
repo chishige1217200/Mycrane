@@ -12,7 +12,7 @@ public class Type3Manager : MonoBehaviour
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
 
-    int soundType = 3; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
 
     //For test-----------------------------------------
 
