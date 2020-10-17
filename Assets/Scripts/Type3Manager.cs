@@ -12,7 +12,7 @@ public class Type3Manager : MonoBehaviour
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
 
-    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 3; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
 
     //For test-----------------------------------------
 
@@ -154,7 +154,7 @@ public class Type3Manager : MonoBehaviour
                     break;
                 case 3:
                     SEPlayer.StopSE(19);
-                    SEPlayer.PlaySE(20,1);
+                    SEPlayer.PlaySE(20, 1);
                     break;
             }
             //奥移動効果音ループ再生停止;
@@ -258,7 +258,7 @@ public class Type3Manager : MonoBehaviour
                     break;
                 case 3:
                     SEPlayer.StopSE(23);
-                    SEPlayer.PlaySE(24,1);
+                    SEPlayer.PlaySE(24, 1);
                     break;
             }
             //アーム開く音再生;
@@ -287,5 +287,26 @@ public class Type3Manager : MonoBehaviour
             craneStatus = 0;
             //}
         }
+    }
+
+    public int CreditSoundNum()
+    {
+        if (soundType == 0) return 0;
+        if (soundType == 1) return 6;
+        if (soundType == 2) return 13;
+        if (soundType == 3) return -1; //No Sound
+        return -1;
+    }
+
+    public void Testadder()
+    {
+        Debug.Log("Clicked.");
+        craneStatus++;
+    }
+
+    public void TestSubber()
+    {
+        Debug.Log("Clicked.");
+        craneStatus--;
     }
 }

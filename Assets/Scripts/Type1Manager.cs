@@ -8,6 +8,7 @@ public class Type1Manager : MonoBehaviour
     double armPower; //アームパワー
     double armApertures; //開口率
     float catchTime; //キャッチに要する時間
+    int soundType = 0;
 
     //For test-----------------------------------------
 
@@ -86,7 +87,7 @@ public class Type1Manager : MonoBehaviour
         {
             SEPlayer.StopSE(3);
             SEPlayer.PlaySE(4, 2); //アーム上昇音再生;
-                                //アーム上昇;
+                                   //アーム上昇;
         }
 
         if (craneStatus == 9)
@@ -124,5 +125,23 @@ public class Type1Manager : MonoBehaviour
             craneStatus = 0;
             //}
         }
+    }
+
+    public int CreditSoundNum()
+    {
+        if (soundType == 0) return 0;
+        return -1;
+    }
+
+    public void Testadder()
+    {
+        Debug.Log("Clicked.");
+        craneStatus++;
+    }
+
+    public void TestSubber()
+    {
+        Debug.Log("Clicked.");
+        craneStatus--;
     }
 }

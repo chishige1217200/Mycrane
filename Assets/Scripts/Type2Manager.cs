@@ -13,7 +13,7 @@ public class Type2Manager : MonoBehaviour
     double backArmpowersuccess; //同確率時
     int operationType = 1; //0:ボタン式，1:レバー式
     int limitTime = 60; //レバー式の場合
-    int soundType = 0; //DECACRE:0, DECACRE alpha:1
+    int soundType = 1; //DECACRE:0, DECACRE Alpha:1
 
     //For test-----------------------------------------
 
@@ -174,5 +174,23 @@ public class Type2Manager : MonoBehaviour
                 //}
             }
         }
+    }
+
+    public int CreditSoundNum()
+    {
+        if(soundType == 0) return 0;
+        if(soundType == 1) return 6;
+        return -1;
+    }
+    public void Testadder()
+    {
+        Debug.Log("Clicked.");
+        craneStatus++;
+    }
+
+    public void TestSubber()
+    {
+        Debug.Log("Clicked.");
+        craneStatus--;
     }
 }
