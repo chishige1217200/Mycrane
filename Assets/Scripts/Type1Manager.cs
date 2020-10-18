@@ -5,7 +5,12 @@ using UnityEngine.UI;
 public class Type1Manager : MonoBehaviour
 {
     public static int craneStatus = -1; //-1:初期化動作，0:待機状態
-    double armPower; //アームパワー
+    double catchArmpower; //掴むときのアームパワー(%，未確率時)
+    double upArmpower; //上昇時のアームパワー(%，未確率時)
+    double backArmpower; //獲得口移動時のアームパワー(%，未確率時)
+    double catchArmpowersuccess; //同確率時
+    double upArmpowersuccess; //同確率時
+    double backArmpowersuccess; //同確率時
     double armApertures; //開口率
     float catchTime; //キャッチに要する時間
     int soundType = 0;
