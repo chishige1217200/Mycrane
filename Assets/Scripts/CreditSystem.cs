@@ -10,7 +10,7 @@ public class CreditSystem : MonoBehaviour
     private int nowpaid = 0; //投入金額（開始時リセット）
     public int nowpaidSum = 0; //投入金額合計
     private int[,] rateSet = new int[2, 2];  //100円1PLAY，500円6PLAYなどのプリセット?
-    private int craneType = 3; //クレーンタイプの指定
+    private int craneType = 1; //クレーンタイプの指定
     private Type1Manager craneType1;
     private Type2Manager craneType2;
     private Type3Manager craneType3;
