@@ -5,9 +5,15 @@ using UnityEngine.UI;
 public class Type1Manager : MonoBehaviour
 {
     public static int craneStatus = -1; //-1:初期化動作，0:待機状態
-    double armPower; //アームパワー
+    double catchArmpower; //掴むときのアームパワー(%，未確率時)
+    double upArmpower; //上昇時のアームパワー(%，未確率時)
+    double backArmpower; //獲得口移動時のアームパワー(%，未確率時)
+    double catchArmpowersuccess; //同確率時
+    double upArmpowersuccess; //同確率時
+    double backArmpowersuccess; //同確率時
     double armApertures; //開口率
     float catchTime; //キャッチに要する時間
+    int soundType = 0;
 
     //For test-----------------------------------------
 
@@ -86,7 +92,7 @@ public class Type1Manager : MonoBehaviour
         {
             SEPlayer.StopSE(3);
             SEPlayer.PlaySE(4, 2); //アーム上昇音再生;
-                                //アーム上昇;
+                                   //アーム上昇;
         }
 
         if (craneStatus == 9)
@@ -124,5 +130,23 @@ public class Type1Manager : MonoBehaviour
             craneStatus = 0;
             //}
         }
+    }
+
+    public int CreditSoundNum()
+    {
+        if (soundType == 0) return 0;
+        return -1;
+    }
+
+    public void Testadder()
+    {
+        Debug.Log("Clicked.");
+        craneStatus++;
+    }
+
+    public void TestSubber()
+    {
+        Debug.Log("Clicked.");
+        craneStatus--;
     }
 }
