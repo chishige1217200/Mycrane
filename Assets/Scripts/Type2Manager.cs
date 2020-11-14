@@ -14,7 +14,7 @@ public class Type2Manager : MonoBehaviour
     double backArmpowersuccess; //同確率時
     int operationType = 1; //0:ボタン式，1:レバー式
     int limitTime = 60; //レバー式の場合
-    int soundType = 1; //DECACRE:0, DECACRE Alpha:1
+    int soundType = 0; //DECACRE:0, DECACRE Alpha:1
 
     //For test-----------------------------------------
 
@@ -44,6 +44,8 @@ public class Type2Manager : MonoBehaviour
             BGMPlayer.StopBGM(1 + 2 * soundType);
             BGMPlayer.PlayBGM(2 * soundType);
             //コイン投入有効化;
+            if (creditSystem.creditDisplayed > 0)
+                craneStatus = 1;
         }
 
         if (operationType == 0)
@@ -59,7 +61,7 @@ public class Type2Manager : MonoBehaviour
             if (craneStatus == 2)
             { //右移動中
                 //コイン投入無効化;
-                //nowpaid = 0; //投入金額リセット
+                creditSystem.ResetNowPayment();
                 //クレーン右移動;
                 //右移動効果音ループ再生;
             }
@@ -97,6 +99,7 @@ public class Type2Manager : MonoBehaviour
 
             if (craneStatus == 6)
             {
+                creditSystem.ResetNowPayment();
                 switch (soundType)
                 {
                     case 0:
@@ -166,15 +169,10 @@ public class Type2Manager : MonoBehaviour
                 //アーム閉じる音再生;
                 //アーム閉じる;
                 //1秒待機;
-                /*if (credit > 0)
-                {
+                if (creditSystem.creditDisplayed > 0)
                     craneStatus = 1;
-                    credit--;
-                }
                 else
-                {*/
-                craneStatus = 0;
-                //}
+                    craneStatus = 0;
             }
         }
     }

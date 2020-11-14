@@ -64,6 +64,7 @@ public class CreditSystem : MonoBehaviour
         creditAll = creditAll + creditNew;
         creditNew = 0;
         creditDisplayed = creditAll + creditNew;
+        creditDisplayed--; //クレジット1減らす
     }
 
     public void ServiceButton()

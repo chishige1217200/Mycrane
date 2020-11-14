@@ -42,6 +42,8 @@ public class Type1Manager : MonoBehaviour
         {
             BGMPlayer.PlayBGM(0);
             //コイン投入有効化;
+            if (creditSystem.creditDisplayed > 0)
+                craneStatus = 1;
         }
 
         if (craneStatus == 1)
@@ -53,7 +55,7 @@ public class Type1Manager : MonoBehaviour
         if (craneStatus == 2)
         { //右移動中
           //コイン投入無効化;
-          //nowpaid = 0; //投入金額リセット
+          creditSystem.ResetNowPayment();
           //クレーン右移動;
             SEPlayer.PlaySE(1, 2); //右移動効果音ループ再生;
         }
@@ -122,15 +124,10 @@ public class Type1Manager : MonoBehaviour
             //アーム閉じる音再生;
             //アーム閉じる;
             //1秒待機;
-            /*if (credit > 0)
-            {
+            if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
-                credit--;
-            }
             else
-            {*/
-            craneStatus = 0;
-            //}
+                craneStatus = 0;
         }
     }
 

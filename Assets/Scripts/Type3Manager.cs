@@ -42,6 +42,8 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == 0)
         {
             //コイン投入有効化;
+            if (creditSystem.creditDisplayed > 0)
+                craneStatus = 1;
             switch (soundType)
             {
                 case 0:
@@ -83,7 +85,7 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == 2)
         { //右移動中
           //コイン投入無効化;
-          //nowpaid = 0; //投入金額リセット
+          creditSystem.ResetNowPayment();
           //クレーン右移動;
             switch (soundType)
             {
@@ -282,15 +284,10 @@ public class Type3Manager : MonoBehaviour
             //アーム閉じる音再生;
             //アーム閉じる;
             //1秒待機;
-            /*if (credit > 0)
-            {
+            if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
-                credit--;
-            }
             else
-            {*/
-            craneStatus = 0;
-            //}
+                craneStatus = 0;
         }
     }
 
