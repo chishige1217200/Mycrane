@@ -63,7 +63,7 @@ public class CreditSystem : MonoBehaviour
         else nowpaid = nowpaid % rateSet[0, 0];
         creditAll = creditAll + creditNew;
         creditNew = 0;
-        creditAll--; //クレジット1減らす
+        if (creditAll > 0) creditAll--; //クレジット1減らす
         creditDisplayed = creditAll + creditNew; //CreditAllがクレジットの実体
     }
 

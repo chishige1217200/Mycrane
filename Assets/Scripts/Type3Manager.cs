@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ public class Type3Manager : MonoBehaviour
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
-    int soundType = 3; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 0; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
 
     //For test-----------------------------------------
@@ -30,7 +31,7 @@ public class Type3Manager : MonoBehaviour
         if (soundType == 3) creditSystem.SetCreditSound(-1);
     }
 
-    void Update()
+    async void Update()
     {
         craneStatusdisplayed.text = craneStatus.ToString();
         if (craneStatus == -1)
@@ -69,10 +70,8 @@ public class Type3Manager : MonoBehaviour
             BGMPlayer.StopBGM(soundType);
             switch (soundType)
             {
-                case 0:
-                    SEPlayer.PlaySE(1, 2147483647);
-                    break;
                 case 1:
+                    await Task.Delay(1000);
                     SEPlayer.PlaySE(7, 2147483647);
                     break;
                 case 3:
