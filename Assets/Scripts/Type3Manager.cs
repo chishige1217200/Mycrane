@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 public class Type3Manager : MonoBehaviour
 {
-    public static int craneStatus = -1; //-1:初期化動作，0:待機状態
+    public CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
+    int craneStatus = -1; //-1:初期化動作，0:待機状態
     double catchArmpower; //掴むときのアームパワー(%，未確率時)
     double upArmpower; //上昇時のアームパワー(%，未確率時)
     double backArmpower; //獲得口移動時のアームパワー(%，未確率時)
@@ -22,7 +23,11 @@ public class Type3Manager : MonoBehaviour
 
     void Start()
     {
-
+        creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        if (soundType == 0) creditSystem.SetCreditSound(0);
+        if (soundType == 1) creditSystem.SetCreditSound(6);
+        if (soundType == 2) creditSystem.SetCreditSound(13);
+        if (soundType == 3) creditSystem.SetCreditSound(-1);
     }
 
     void Update()
@@ -287,15 +292,6 @@ public class Type3Manager : MonoBehaviour
             craneStatus = 0;
             //}
         }
-    }
-
-    public int CreditSoundNum()
-    {
-        if (soundType == 0) return 0;
-        if (soundType == 1) return 6;
-        if (soundType == 2) return 13;
-        if (soundType == 3) return -1; //No Sound
-        return -1;
     }
 
     public void Testadder()
