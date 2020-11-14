@@ -12,8 +12,8 @@ public class Type3Manager : MonoBehaviour
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
-
     int soundType = 3; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
 
     //For test-----------------------------------------
 
@@ -85,7 +85,11 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == 2)
         { //右移動中
           //コイン投入無効化;
-          creditSystem.ResetNowPayment();
+            if(resetFlag == false)
+            {
+               resetFlag = true;
+               creditSystem.ResetNowPayment();
+            }
           //クレーン右移動;
             switch (soundType)
             {
@@ -284,6 +288,7 @@ public class Type3Manager : MonoBehaviour
             //アーム閉じる音再生;
             //アーム閉じる;
             //1秒待機;
+            resetFlag = false;
             if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
             else

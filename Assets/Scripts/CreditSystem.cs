@@ -63,8 +63,8 @@ public class CreditSystem : MonoBehaviour
         else nowpaid = nowpaid % rateSet[0, 0];
         creditAll = creditAll + creditNew;
         creditNew = 0;
+        creditAll--; //クレジット1減らす
         creditDisplayed = creditAll + creditNew;
-        creditDisplayed--; //クレジット1減らす
     }
 
     public void ServiceButton()

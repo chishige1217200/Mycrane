@@ -15,6 +15,7 @@ public class Type1Manager : MonoBehaviour
     double armApertures; //開口率
     float catchTime; //キャッチに要する時間
     int soundType = 0;
+    bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
 
     //For test-----------------------------------------
 
@@ -55,7 +56,11 @@ public class Type1Manager : MonoBehaviour
         if (craneStatus == 2)
         { //右移動中
           //コイン投入無効化;
-          creditSystem.ResetNowPayment();
+          if(resetFlag == false)
+          {
+              resetFlag = true;
+              creditSystem.ResetNowPayment();
+          }
           //クレーン右移動;
             SEPlayer.PlaySE(1, 2); //右移動効果音ループ再生;
         }
@@ -124,6 +129,7 @@ public class Type1Manager : MonoBehaviour
             //アーム閉じる音再生;
             //アーム閉じる;
             //1秒待機;
+            resetFlag = false;
             if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
             else
