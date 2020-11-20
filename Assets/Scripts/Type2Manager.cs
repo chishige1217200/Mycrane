@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,13 +14,16 @@ public class Type2Manager : MonoBehaviour
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
     int operationType = 1; //0:ボタン式，1:レバー式
-    int limitTime = 60; //レバー式の場合
-    int soundType = 0; //DECACRE:0, DECACRE Alpha:1
+    int limitTimeSet = 30; //レバー式の場合，残り時間を設定
+    int limitTimeCount = 0; //実際のカウントダウン
+    int soundType = 1; //DECACRE:0, DECACRE Alpha:1
     bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
+    bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
 
     //For test-----------------------------------------
 
     public Text craneStatusdisplayed;
+    public Text limitTimedisplayed;
 
     //-------------------------------------------------
 
@@ -30,9 +34,10 @@ public class Type2Manager : MonoBehaviour
         if (soundType == 1) creditSystem.SetCreditSound(6);
     }
 
-    void Update()
+    async void Update()
     {
         craneStatusdisplayed.text = craneStatus.ToString();
+        limitTimedisplayed.text = limitTimeCount.ToString();
         if (craneStatus == -1)
         {
             BGMPlayer.StopBGM(2 * soundType);
@@ -97,9 +102,19 @@ public class Type2Manager : MonoBehaviour
             {
                 BGMPlayer.StopBGM(2 * soundType);
                 BGMPlayer.PlayBGM(1 + 2 * soundType);
-                limitTime = 60;
+                limitTimeCount = limitTimeSet;
                 //レバー操作有効化;
                 //降下ボタン有効化;
+                await Task.Delay(500);
+                craneStatus = 2;
+            }
+            if (craneStatus == 2)
+            {
+                if(!timerFlag)
+                {
+                    timerFlag = true;
+                    StartTimer();
+                }
             }
 
             if (craneStatus == 6)
@@ -109,6 +124,7 @@ public class Type2Manager : MonoBehaviour
                     resetFlag = true;
                     creditSystem.ResetNowPayment();
                 }
+                CancelTimer();
                 switch (soundType)
                 {
                     case 0:
@@ -179,12 +195,36 @@ public class Type2Manager : MonoBehaviour
                 //アーム閉じる;
                 //1秒待機;
                 resetFlag = false;
+                timerFlag = false;
                 if (creditSystem.creditDisplayed > 0)
                     craneStatus = 1;
                 else
                     craneStatus = 0;
             }
         }
+    }
+
+    async void StartTimer()
+    {
+        while(limitTimeCount >= 0)
+        {
+            if(limitTimeCount == 0)
+            {
+                craneStatus = 6;
+                break;
+            }
+            if(limitTimeCount <= 10)
+            {
+                SEPlayer.PlaySE(7, 1);
+            }
+            await Task.Delay(1000);
+            limitTimeCount--;
+        }
+    }
+
+    void CancelTimer()
+    {
+        limitTimeCount = -1;
     }
 
     public void Testadder()
