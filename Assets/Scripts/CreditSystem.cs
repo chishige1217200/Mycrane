@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class CreditSystem : MonoBehaviour
 {
     public int creditNew = 0; //新規クレジット
-    public int creditAll = 0; //全クレジット
-    public int creditDisplayed = 0; //筐体に表示されるクレジット
+    public int creditAll = 0; //全クレジット（全体管理用）
+    public int creditDisplayed = 0; //筐体に表示されるクレジット（表示専用）
     private int nowpaid = 0; //投入金額（開始時リセット）
     public int nowpaidSum = 0; //投入金額合計
     private int[,] rateSet = new int[2, 2];  //100円1PLAY，500円6PLAYなどのプリセット?
@@ -77,5 +77,37 @@ public class CreditSystem : MonoBehaviour
     public void SetCreditSound(int num)
     {
         creditSoundNum = num;
+    }
+
+    //Probabilty Function-----------------------------------------------
+
+    private int creditProbabilty = 0; //設定クレジット数
+    private int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
+    private int creditPlayedAll = 0; //プレイされたクレジット数
+    private int n = 1; //ランダム確率設定n
+
+    public bool ProbabiltyCheck(int mode) //0：確率なし，2:クレジット回数天井設定，3:クレジット回数周期設定，3:ランダム確率
+    {
+        if(mode == 0) return true; //常に確率
+        if(mode == 1 && UnityEngine.Random.Range(1, n + 1) == 1) return true; // 1/nの確率（nの数値有効）
+        if(mode == 2 && creditPlayed >= creditProbabilty) return true;
+        if(mode == 3 && creditPlayed / creditProbabilty == 0)
+        {
+            ResetCreditPlayed();
+            return true;
+        }
+
+        return false;
+    }
+
+    public void AddCreditPlayed()
+    {
+        creditPlayed++; //確率用プレイ数を1加算
+        creditPlayedAll++; //合計プレイ数を1加算
+    }
+
+    public void ResetCreditPlayed()
+    {
+        creditPlayed = 0;
     }
 }
