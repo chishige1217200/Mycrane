@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 public class Type1Manager : MonoBehaviour
 {
-    public static int craneStatus = -1; //-1:初期化動作，0:待機状態
+    public CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
+    int craneStatus = -1; //-1:初期化動作，0:待機状態
     double catchArmpower; //掴むときのアームパワー(%，未確率時)
     double upArmpower; //上昇時のアームパワー(%，未確率時)
     double backArmpower; //獲得口移動時のアームパワー(%，未確率時)
@@ -14,6 +15,7 @@ public class Type1Manager : MonoBehaviour
     double armApertures; //開口率
     float catchTime; //キャッチに要する時間
     int soundType = 0;
+    bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
 
     //For test-----------------------------------------
 
@@ -23,7 +25,8 @@ public class Type1Manager : MonoBehaviour
 
     void Start()
     {
-
+        creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        if (soundType == 0) creditSystem.SetCreditSound(0);
     }
 
     void Update()
@@ -40,6 +43,8 @@ public class Type1Manager : MonoBehaviour
         {
             BGMPlayer.PlayBGM(0);
             //コイン投入有効化;
+            if (creditSystem.creditDisplayed > 0)
+                craneStatus = 1;
         }
 
         if (craneStatus == 1)
@@ -51,7 +56,11 @@ public class Type1Manager : MonoBehaviour
         if (craneStatus == 2)
         { //右移動中
           //コイン投入無効化;
-          //nowpaid = 0; //投入金額リセット
+          if(resetFlag == false)
+          {
+              resetFlag = true;
+              creditSystem.ResetNowPayment();
+          }
           //クレーン右移動;
             SEPlayer.PlaySE(1, 2); //右移動効果音ループ再生;
         }
@@ -120,22 +129,12 @@ public class Type1Manager : MonoBehaviour
             //アーム閉じる音再生;
             //アーム閉じる;
             //1秒待機;
-            /*if (credit > 0)
-            {
+            resetFlag = false;
+            if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
-                credit--;
-            }
             else
-            {*/
-            craneStatus = 0;
-            //}
+                craneStatus = 0;
         }
-    }
-
-    public int CreditSoundNum()
-    {
-        if (soundType == 0) return 0;
-        return -1;
     }
 
     public void Testadder()

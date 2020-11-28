@@ -1,18 +1,20 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Type3Manager : MonoBehaviour
 {
-    public static int craneStatus = -1; //-1:初期化動作，0:待機状態
+    public CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
+    int craneStatus = -1; //-1:初期化動作，0:待機状態
     double catchArmpower; //掴むときのアームパワー(%，未確率時)
     double upArmpower; //上昇時のアームパワー(%，未確率時)
     double backArmpower; //獲得口移動時のアームパワー(%，未確率時)
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
-
-    int soundType = 3; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
 
     //For test-----------------------------------------
 
@@ -22,10 +24,14 @@ public class Type3Manager : MonoBehaviour
 
     void Start()
     {
-
+        creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        if (soundType == 0) creditSystem.SetCreditSound(0);
+        if (soundType == 1) creditSystem.SetCreditSound(6);
+        if (soundType == 2) creditSystem.SetCreditSound(13);
+        if (soundType == 3) creditSystem.SetCreditSound(-1);
     }
 
-    void Update()
+    async void Update()
     {
         craneStatusdisplayed.text = craneStatus.ToString();
         if (craneStatus == -1)
@@ -37,6 +43,8 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == 0)
         {
             //コイン投入有効化;
+            if (creditSystem.creditDisplayed > 0)
+                craneStatus = 1;
             switch (soundType)
             {
                 case 0:
@@ -62,10 +70,8 @@ public class Type3Manager : MonoBehaviour
             BGMPlayer.StopBGM(soundType);
             switch (soundType)
             {
-                case 0:
-                    SEPlayer.PlaySE(1, 2147483647);
-                    break;
                 case 1:
+                    await Task.Delay(1000);
                     SEPlayer.PlaySE(7, 2147483647);
                     break;
                 case 3:
@@ -78,7 +84,11 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == 2)
         { //右移動中
           //コイン投入無効化;
-          //nowpaid = 0; //投入金額リセット
+            if(resetFlag == false)
+            {
+               resetFlag = true;
+               creditSystem.ResetNowPayment();
+            }
           //クレーン右移動;
             switch (soundType)
             {
@@ -277,25 +287,12 @@ public class Type3Manager : MonoBehaviour
             //アーム閉じる音再生;
             //アーム閉じる;
             //1秒待機;
-            /*if (credit > 0)
-            {
+            resetFlag = false;
+            if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
-                credit--;
-            }
             else
-            {*/
-            craneStatus = 0;
-            //}
+                craneStatus = 0;
         }
-    }
-
-    public int CreditSoundNum()
-    {
-        if (soundType == 0) return 0;
-        if (soundType == 1) return 6;
-        if (soundType == 2) return 13;
-        if (soundType == 3) return -1; //No Sound
-        return -1;
     }
 
     public void Testadder()

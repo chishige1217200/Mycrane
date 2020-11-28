@@ -5,21 +5,18 @@ using UnityEngine.UI;
 public class CreditSystem : MonoBehaviour
 {
     public int creditNew = 0; //新規クレジット
-    public int creditAll = 0; //全クレジット
-    public int creditDisplayed = 0; //筐体に表示されるクレジット
+    public int creditAll = 0; //全クレジット（全体管理用）
+    public int creditDisplayed = 0; //筐体に表示されるクレジット（表示専用）
     private int nowpaid = 0; //投入金額（開始時リセット）
     public int nowpaidSum = 0; //投入金額合計
+    public int creditPlayedSum = 0; //プレイされたクレジット数
     private int[,] rateSet = new int[2, 2];  //100円1PLAY，500円6PLAYなどのプリセット?
-    private int craneType = 1; //クレーンタイプの指定
-    private Type1Manager craneType1;
-    private Type2Manager craneType2;
-    private Type3Manager craneType3;
     private int creditSoundNum = -1; //投入時サウンド番号
 
     //For test-----------------------------------------
 
-    public Text nowPaid;
-    public Text Credit;
+    public Text nowPaid; //試験用
+    public Text Credit; //残クレジット
 
     //-------------------------------------------------
     void Start()
@@ -30,27 +27,7 @@ public class CreditSystem : MonoBehaviour
         rateSet[1, 1] = 3; //temporary
 
         if ((float)rateSet[0, 0] / rateSet[0, 1] < (float)rateSet[1, 0] / rateSet[1, 1])
-        {
             Debug.Log("rateSet value error."); //高額のレートになるとコストが多くなる設定エラーのとき
-        }
-
-        if (craneType == 1)
-        {
-            craneType1 = GetComponentInParent<Type1Manager>();
-            creditSoundNum = craneType1.CreditSoundNum();
-        }
-        if (craneType == 2)
-        {
-            craneType2 = GetComponentInParent<Type2Manager>();
-            creditSoundNum = craneType2.CreditSoundNum();
-        }
-        if (craneType == 3)
-        {
-            craneType3 = GetComponentInParent<Type3Manager>();
-            creditSoundNum = craneType3.CreditSoundNum();
-        }
-
-        if (creditSoundNum == -1) Debug.Log("creditSoundNum value error.");
     }
 
     void Update()
@@ -63,18 +40,18 @@ public class CreditSystem : MonoBehaviour
     {
         nowpaid += cost;
         nowpaidSum += cost;
+        nowPaidforProbability += cost;
         if (nowpaid % rateSet[1, 0] == 0 && creditNew < nowpaid / rateSet[1, 0] * rateSet[1, 1])
-        {
             creditNew = nowpaid / rateSet[1, 0] * rateSet[1, 1];
-        }
         else if (nowpaid % rateSet[0, 0] == 0 && creditNew < nowpaid / rateSet[0, 0] * rateSet[0, 1])
-        {
             creditNew = nowpaid / rateSet[0, 0] * rateSet[0, 1];
-        }
         else
-        {
             Debug.Log("あなたは損または保留をしています");
-        }
+
+        if(probabilityMode == 4 || probabilityMode == 5)
+            if(nowPaidforProbability % costProbability == 0)
+                if(nowPaidforProbability / costProbability == 1) creditRemainbyCost = creditAll + creditNew;
+
         creditDisplayed = creditAll + creditNew;
         if (creditSoundNum != -1) SEPlayer.ForcePlaySE(creditSoundNum);
     }
@@ -83,15 +60,72 @@ public class CreditSystem : MonoBehaviour
     {
         if (nowpaid % rateSet[1, 0] == 0 || nowpaid % rateSet[0, 0] == 0) nowpaid = 0;
         else nowpaid = nowpaid % rateSet[0, 0];
-        creditAll = creditAll + creditNew;
-        creditNew = 0;
-        creditDisplayed = creditAll + creditNew;
+        creditAll = creditAll + creditNew; //実クレジットを更新
+        creditNew = 0; //新規クレジットを初期化
+        if (creditAll > 0) creditAll--; //クレジット1減らす
+        creditDisplayed = creditAll + creditNew; //CreditAllがクレジットの実体
     }
 
     public void ServiceButton()
     {
         creditAll++;
-        creditDisplayed = creditAll + creditNew;
+        creditDisplayed = creditAll + creditNew; //クレジット表示を更新
         if (creditSoundNum != -1) SEPlayer.ForcePlaySE(creditSoundNum);
     }
+
+    public void SetCreditSound(int num)
+    {
+        creditSoundNum = num; //クレジット投入効果音番号登録
+    }
+
+    //Probability Function-----------------------------------------------
+
+    private int creditProbability = 0; //設定クレジット数
+    private int costProbability = 0; //設定金額
+    private int nowPaidforProbability = 0; //確率設定用の投入金額
+    private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数
+    private int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
+    private int n = 1; //ランダム確率設定n
+    public int probabilityMode = 0; //0：確率なし，1:ランダム確率，2:クレジット回数天井設定，3:クレジット回数周期設定，4:設定金額天井設定，5:設定金額周期設定
+
+    public bool ProbabilityCheck()
+    {
+        if(probabilityMode == 0) return true; //常に確率
+        if(probabilityMode == 1 && UnityEngine.Random.Range(1, n + 1) == 1) return true; // 1/nの確率（nの数値有効）
+        if(probabilityMode == 2 && creditPlayed >= creditProbability) return true;
+        // *景品獲得時にResetCreditProbability()の処理が必要
+
+        if(probabilityMode == 3 && creditPlayed / creditProbability == 0)
+        {
+            ResetCreditProbability();
+            return true;
+        }
+        if(probabilityMode == 4 && creditPlayed >= creditRemainbyCost) return true;
+        // *景品獲得時にResetCostProbability()の処理が必要
+
+        if(probabilityMode == 5 && creditPlayed == creditRemainbyCost)
+        {
+            ResetCostProbability();
+            return true;
+        }
+        return false;
+    }
+
+    public void AddCreditPlayed() //プレイ開始時に1加算
+    {
+        creditPlayed++; //確率用プレイ数を1加算
+        creditPlayedSum++; //合計プレイ数を1加算
+    }
+
+    public void ResetCreditProbability()
+    {
+        creditPlayed = 0;
+    }
+
+    public void ResetCostProbability() //設定金額ベースの確率リセット
+    {
+        nowPaidforProbability = nowpaidSum - nowPaidforProbability; //既に投入済みの金額を引き継ぎ
+        creditPlayed = 0;
+    }
+
 }
