@@ -25,7 +25,7 @@ public class Type1Manager : MonoBehaviour
     void Start()
     {
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        if (soundType == 0) creditSystem.SetCreditSound(0);
+        creditSystem.SetCreditSound(0);
     }
 
     void Update()
