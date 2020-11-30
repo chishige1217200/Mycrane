@@ -6,7 +6,7 @@ using UnityEngine;
 public class UniversalGravity : MonoBehaviour
 {
     Rigidbody rb;
-    float CONST_G = -0.04f; //0.0001fがデフォルト
+    float CONST_G = 0.00001f; //0.0001fがデフォルト
     public string TAG_NAME = "NULL";
     // Start is called before the first frame update
     void Start()
