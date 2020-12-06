@@ -38,10 +38,11 @@ public class CreditSystem : MonoBehaviour
         nowPaid.text = nowpaid.ToString();
         if (serviceMode)
         {
-            creditAll = 99;
+            creditAll = 1;
             creditNew = 0;
             creditDisplayed = creditAll + creditNew;
             Credit.text = "--";
+            nowPaid.text = "--";
         }
         else Credit.text = creditDisplayed.ToString();
     }
