@@ -32,6 +32,8 @@ public class Type2Manager : MonoBehaviour
     void Start()
     {
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
+        _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
     }
