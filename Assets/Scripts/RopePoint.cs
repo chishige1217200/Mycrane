@@ -14,7 +14,7 @@ public class RopePoint : MonoBehaviour
     async void Start()
     {
         rb = this.GetComponent<Rigidbody>();
-        await Task.Delay(1000);
+        await Task.Delay(3000);
         moveFlag = true;
     }
 
@@ -76,14 +76,14 @@ public class RopePoint : MonoBehaviour
         if (moveFlag)
         {
             this.transform.position += new Vector3(0, 0.2f, 0);
-            if (this.transform.position.x < 0)
-                rb.AddForce(new Vector3(0.1f, 0, 0));
-            if (this.transform.position.x > 0)
-                rb.AddForce(new Vector3(-0.1f, 0, 0));
-            if (this.transform.position.z < 0)
-                rb.AddForce(new Vector3(0, 0, 0.1f));
-            if (this.transform.position.x > 0)
-                rb.AddForce(new Vector3(0, 0, -0.1f));
+            if (this.transform.position.x < -0.5f)
+                rb.AddForce(new Vector3(0.001f, 0, 0), ForceMode.Impulse);
+            if (this.transform.position.x > 0.5f)
+                rb.AddForce(new Vector3(-0.001f, 0, 0), ForceMode.Impulse);
+            if (this.transform.position.z < -0.5f)
+                rb.AddForce(new Vector3(0, 0, 0.001f), ForceMode.Impulse);
+            if (this.transform.position.x > 0.5f)
+                rb.AddForce(new Vector3(0, 0, -0.001f), ForceMode.Impulse);
         }
     }
 
