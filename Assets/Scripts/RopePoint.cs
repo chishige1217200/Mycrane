@@ -52,7 +52,7 @@ public class RopePoint : MonoBehaviour
 
     void OnTriggerExit(Collider collider)
     {
-        if (collider.tag == "UpLimit")
+        if (collider.tag == "DownStopPoint")
         {
             if (parent)
             {
@@ -90,6 +90,6 @@ public class RopePoint : MonoBehaviour
     void RopeDown()
     {
         if (moveFlag)
-            this.transform.position -= new Vector3(0, 0.3f, 0);
+            this.transform.position -= new Vector3(0, 0.2f, 0);
     }
 }
