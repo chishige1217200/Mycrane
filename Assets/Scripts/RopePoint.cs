@@ -48,13 +48,13 @@ public class RopePoint : MonoBehaviour
                 if (moveDownFlag)
                     moveDownFlag = false;
             }
-            else
+            if (!parent)
             {
                 if (moveDownFlag)
                 {
                     rb.useGravity = true;
                     rb.isKinematic = false;
-                    moveUpFlag = false;
+                    moveDownFlag = false;
                 }
             }
         }

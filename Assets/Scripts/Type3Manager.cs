@@ -326,14 +326,17 @@ public class Type3Manager : MonoBehaviour
                     if (i > 0)
                     {
                         i--;
+                        _RopePoint[i].moveDownFlag = true;
                         break;
                     }
                     else
+                    {
+                        ArmUnitDownForceStop();
                         return;
+                    }
                 }
-                await Task.Delay(500);
+                await Task.Delay(100);
             }
-
         }
     }
 
