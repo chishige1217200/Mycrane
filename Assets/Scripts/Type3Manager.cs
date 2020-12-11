@@ -313,7 +313,7 @@ public class Type3Manager : MonoBehaviour
         }
     }
 
-    public void ArmUnitDown()
+    async public void ArmUnitDown()
     {
         int i = 7;
         while (true)
@@ -331,6 +331,7 @@ public class Type3Manager : MonoBehaviour
                     else
                         return;
                 }
+                await Task.Delay(500);
             }
 
         }
