@@ -13,10 +13,13 @@ public class Type3Manager : MonoBehaviour
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
-    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 0; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
     private BGMPlayer _BGMPlayer;
     private SEPlayer _SEPlayer;
+    private RopePoint[] _RopePoint;
+    private Type3ArmController _ArmController;
+    Transform temp;
 
     //For test-----------------------------------------
 
@@ -26,9 +29,21 @@ public class Type3Manager : MonoBehaviour
 
     void Start()
     {
+        _RopePoint = new RopePoint[8];
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        temp = this.transform.Find("CraneUnit").transform;
+        _RopePoint[0] = temp.Find("Rope").Find("Sphere (1)").GetComponent<RopePoint>();
+        _RopePoint[1] = temp.Find("Rope").Find("Sphere (2)").GetComponent<RopePoint>();
+        _RopePoint[2] = temp.Find("Rope").Find("Sphere (3)").GetComponent<RopePoint>();
+        _RopePoint[3] = temp.Find("Rope").Find("Sphere (4)").GetComponent<RopePoint>();
+        _RopePoint[4] = temp.Find("Rope").Find("Sphere (5)").GetComponent<RopePoint>();
+        _RopePoint[5] = temp.Find("Rope").Find("Sphere (6)").GetComponent<RopePoint>();
+        _RopePoint[6] = temp.Find("Rope").Find("Sphere (7)").GetComponent<RopePoint>();
+        _RopePoint[7] = temp.Find("Rope").Find("Sphere (8)").GetComponent<RopePoint>();
+        _ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
+
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);
@@ -295,6 +310,45 @@ public class Type3Manager : MonoBehaviour
                 craneStatus = 1;
             else
                 craneStatus = 0;
+        }
+    }
+
+    public void ArmUnitDown()
+    {
+        int i = 7;
+        while (true)
+        {
+            _RopePoint[i].moveDownFlag = true;
+            while (true)
+            {
+                if (!_RopePoint[i].moveDownFlag)
+                {
+                    if (i > 0)
+                    {
+                        i--;
+                        break;
+                    }
+                    else
+                        return;
+                }
+            }
+
+        }
+    }
+
+    public void ArmUnitDownForceStop()
+    {
+        for (int i = 0; i <= 7; i++)
+        {
+            _RopePoint[i].moveDownFlag = false;
+        }
+    }
+
+    public void ArmUnitUp()
+    {
+        for (int i = 0; i <= 7; i++)
+        {
+            _RopePoint[i].moveUpFlag = true;
         }
     }
 
