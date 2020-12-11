@@ -29,12 +29,12 @@ public class Type3ArmController : MonoBehaviour
             limit[i] = joint[i].limits;
         }
 
-        await Task.Delay(5000);
+        /*await Task.Delay(5000);
         Debug.Log("Motor Activated.");
         motor_on();
         await Task.Delay(5000);
         Debug.Log("Motor not Activated.");
-        motor_off();
+        motor_off();*/
 
 
     }

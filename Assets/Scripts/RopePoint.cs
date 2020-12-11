@@ -15,8 +15,7 @@ public class RopePoint : MonoBehaviour
     {
         rb = this.GetComponent<Rigidbody>();
         await Task.Delay(1000);
-        if (parent)
-            moveFlag = true;
+        moveFlag = true;
     }
 
     void Update()
@@ -29,6 +28,7 @@ public class RopePoint : MonoBehaviour
         if (collider.tag == "UpLimit")
         {
             moveFlag = false;
+            this.transform.position = new Vector3(0, this.transform.position.y, 0);
         }
         else if (collider.tag == "UpPoint")
         {
@@ -36,7 +36,6 @@ public class RopePoint : MonoBehaviour
             {
                 rb.useGravity = false;
                 rb.isKinematic = true;
-                moveFlag = true;
             }
         }
     }
@@ -74,7 +73,17 @@ public class RopePoint : MonoBehaviour
     void RopeUp()
     {
         if (moveFlag)
+        {
             this.transform.position += new Vector3(0, 0.1f, 0);
+            if (this.transform.position.x < 0)
+                rb.AddForce(new Vector3(0.1f, 0, 0));
+            if (this.transform.position.x > 0)
+                rb.AddForce(new Vector3(-0.1f, 0, 0));
+            if (this.transform.position.z < 0)
+                rb.AddForce(new Vector3(0, 0, 0.1f));
+            if (this.transform.position.x > 0)
+                rb.AddForce(new Vector3(0, 0, -0.1f));
+        }
     }
 
     void RopeDown()
@@ -82,11 +91,4 @@ public class RopePoint : MonoBehaviour
         if (moveFlag)
             this.transform.position -= new Vector3(0, 0.1f, 0);
     }
-
-    void ResetRopePointPosition()
-    {
-        this.transform.position = new Vector3(0, 0, 0);
-    }
-
-
 }
