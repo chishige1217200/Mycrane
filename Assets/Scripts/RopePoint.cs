@@ -29,6 +29,7 @@ public class RopePoint : MonoBehaviour
         {
             moveFlag = false;
             this.transform.position = new Vector3(0, this.transform.position.y, 0);
+            this.transform.localRotation = new Quaternion(0, 0, 0, 0);
         }
         else if (collider.tag == "UpPoint")
         {
@@ -74,7 +75,7 @@ public class RopePoint : MonoBehaviour
     {
         if (moveFlag)
         {
-            this.transform.position += new Vector3(0, 0.1f, 0);
+            this.transform.position += new Vector3(0, 0.2f, 0);
             if (this.transform.position.x < 0)
                 rb.AddForce(new Vector3(0.1f, 0, 0));
             if (this.transform.position.x > 0)
@@ -89,6 +90,6 @@ public class RopePoint : MonoBehaviour
     void RopeDown()
     {
         if (moveFlag)
-            this.transform.position -= new Vector3(0, 0.1f, 0);
+            this.transform.position -= new Vector3(0, 0.3f, 0);
     }
 }
