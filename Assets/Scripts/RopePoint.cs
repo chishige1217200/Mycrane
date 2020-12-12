@@ -77,25 +77,25 @@ public class RopePoint : MonoBehaviour
         this.transform.position += new Vector3(0, 0.2f, 0);
         if (!rb.isKinematic)
         {
-            if (this.transform.position.x < -0.5f)
+            if (this.transform.position.x < -0.01f)
                 rb.AddForce(new Vector3(0.001f, 0, 0), ForceMode.Impulse);
-            if (this.transform.position.x > 0.5f)
+            if (this.transform.position.x > 0.01f)
                 rb.AddForce(new Vector3(-0.001f, 0, 0), ForceMode.Impulse);
-            if (this.transform.position.z < -0.5f)
+            if (this.transform.position.z < -0.01f)
                 rb.AddForce(new Vector3(0, 0, 0.001f), ForceMode.Impulse);
-            if (this.transform.position.x > 0.5f)
+            if (this.transform.position.x > 0.01f)
                 rb.AddForce(new Vector3(0, 0, -0.001f), ForceMode.Impulse);
         }
         if (rb.isKinematic)
         {
-            if (this.transform.position.x < -0.1f)
-                this.transform.position += new Vector3(0.1f, 0, 0);
-            if (this.transform.position.x > 0.1f)
-                this.transform.position -= new Vector3(0.1f, 0, 0);
-            if (this.transform.position.z < -0.1f)
-                this.transform.position += new Vector3(0, 0, 0.1f);
-            if (this.transform.position.x > 0.1f)
-                this.transform.position -= new Vector3(0, 0, 0.1f);
+            if (this.transform.position.x < -0.01f)
+                this.transform.position += new Vector3(0.01f, 0, 0);
+            if (this.transform.position.x > 0.01f)
+                this.transform.position -= new Vector3(0.01f, 0, 0);
+            if (this.transform.position.z < -0.01f)
+                this.transform.position += new Vector3(0, 0, 0.01f);
+            if (this.transform.position.x > 0.01f)
+                this.transform.position -= new Vector3(0, 0, 0.01f);
         }
     }
 
