@@ -9,6 +9,8 @@ public class RopePoint : MonoBehaviour
     Rigidbody rb; //Rigidbody情報
     public bool moveUpFlag = false; //上昇または下降をしているか
     public bool moveDownFlag = false;
+    public bool upCompleteFlag = false;
+    public bool downCompleteFlag = false;
 
     void Start()
     {
@@ -28,9 +30,11 @@ public class RopePoint : MonoBehaviour
             if (moveUpFlag)
             {
                 moveUpFlag = false;
-                this.transform.position = new Vector3(0, this.transform.position.y, 0);
+                this.transform.localPosition = new Vector3(0, this.transform.localPosition.y, 0);
                 this.transform.localRotation = new Quaternion(0, 0, 0, 0);
-                Debug.Log("enter UpLimit");
+                //Debug.Log("enter UpLimit");
+                if (last)
+                    upCompleteFlag = true;
             }
         }
         else if (collider.tag == "UpPoint")
@@ -41,7 +45,7 @@ public class RopePoint : MonoBehaviour
                 {
                     rb.useGravity = false;
                     rb.isKinematic = true;
-                    Debug.Log("!parent enter UpPoint");
+                    //Debug.Log("!parent enter UpPoint");
                 }
             }
         }
@@ -56,7 +60,8 @@ public class RopePoint : MonoBehaviour
                 if (moveDownFlag)
                 {
                     moveDownFlag = false;
-                    Debug.Log("parent exit DownStopPoint");
+                    downCompleteFlag = true;
+                    //Debug.Log("parent exit DownStopPoint");
                 }
             }
             if (!parent)
@@ -66,7 +71,7 @@ public class RopePoint : MonoBehaviour
                     rb.useGravity = true;
                     rb.isKinematic = false;
                     moveDownFlag = false;
-                    Debug.Log("!parent exit DownStopPoint");
+                    //Debug.Log("!parent exit DownStopPoint");
                 }
             }
         }
@@ -74,33 +79,33 @@ public class RopePoint : MonoBehaviour
 
     void RopeUp()
     {
-        this.transform.position += new Vector3(0, 0.2f, 0);
+        this.transform.localPosition += new Vector3(0, 0.04f, 0);
         if (!rb.isKinematic)
         {
-            if (this.transform.position.x < -0.01f)
+            if (this.transform.localPosition.x < -0.01f)
                 rb.AddForce(new Vector3(0.001f, 0, 0), ForceMode.Impulse);
-            if (this.transform.position.x > 0.01f)
+            if (this.transform.localPosition.x > 0.01f)
                 rb.AddForce(new Vector3(-0.001f, 0, 0), ForceMode.Impulse);
-            if (this.transform.position.z < -0.01f)
+            if (this.transform.localPosition.z < -0.01f)
                 rb.AddForce(new Vector3(0, 0, 0.001f), ForceMode.Impulse);
-            if (this.transform.position.x > 0.01f)
+            if (this.transform.localPosition.x > 0.01f)
                 rb.AddForce(new Vector3(0, 0, -0.001f), ForceMode.Impulse);
         }
         if (rb.isKinematic)
         {
-            if (this.transform.position.x < -0.05f)
-                this.transform.position += new Vector3(0.05f, 0, 0);
-            if (this.transform.position.x > 0.05f)
-                this.transform.position -= new Vector3(0.05f, 0, 0);
-            if (this.transform.position.z < -0.05f)
-                this.transform.position += new Vector3(0, 0, 0.05f);
-            if (this.transform.position.x > 0.05f)
-                this.transform.position -= new Vector3(0, 0, 0.05f);
+            if (this.transform.localPosition.x < -0.05f)
+                this.transform.localPosition += new Vector3(0.05f, 0, 0);
+            if (this.transform.localPosition.x > 0.05f)
+                this.transform.localPosition -= new Vector3(0.05f, 0, 0);
+            if (this.transform.localPosition.z < -0.05f)
+                this.transform.localPosition += new Vector3(0, 0, 0.05f);
+            if (this.transform.localPosition.x > 0.05f)
+                this.transform.localPosition -= new Vector3(0, 0, 0.05f);
         }
     }
 
     void RopeDown()
     {
-        this.transform.position -= new Vector3(0, 0.2f, 0);
+        this.transform.localPosition -= new Vector3(0, 0.04f, 0);
     }
 }
