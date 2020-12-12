@@ -44,9 +44,10 @@ public class Type3ArmController : MonoBehaviour
         Debug.Log("Motor Activated.");
         for (i = 0; i < 3; i++)
         {
+            jointmotor[i].force = 100;
+            jointmotor[i].targetVelocity = -100;
             joint[i].useMotor = true;
-            jointmotor[i].force = -100;
-            jointmotor[i].targetVelocity = -115;
+
             //limit[i].max = 180;
         }
     }
