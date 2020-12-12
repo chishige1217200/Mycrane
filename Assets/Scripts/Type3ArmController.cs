@@ -30,10 +30,8 @@ public class Type3ArmController : MonoBehaviour
         }
 
         /*await Task.Delay(5000);
-        Debug.Log("Motor Activated.");
         motor_on();
         await Task.Delay(5000);
-        Debug.Log("Motor not Activated.");
         motor_off();*/
 
 
@@ -43,6 +41,7 @@ public class Type3ArmController : MonoBehaviour
     {
         int i = 0;
 
+        Debug.Log("Motor Activated.");
         for (i = 0; i < 3; i++)
         {
             joint[i].useMotor = true;
@@ -56,6 +55,7 @@ public class Type3ArmController : MonoBehaviour
     {
         int i = 0;
 
+        Debug.Log("Motor not Activated.");
         for (i = 0; i < 3; i++)
             joint[i].useMotor = false;
     }
