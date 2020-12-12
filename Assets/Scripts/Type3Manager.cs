@@ -335,7 +335,7 @@ public class Type3Manager : MonoBehaviour
                         return;
                     }
                 }
-                await Task.Delay(100);
+                await Task.Delay(1);
             }
         }
     }

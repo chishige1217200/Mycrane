@@ -25,16 +25,24 @@ public class RopePoint : MonoBehaviour
     {
         if (collider.tag == "UpLimit")
         {
-            moveUpFlag = false;
-            this.transform.position = new Vector3(0, this.transform.position.y, 0);
-            this.transform.localRotation = new Quaternion(0, 0, 0, 0);
+            if (moveUpFlag)
+            {
+                moveUpFlag = false;
+                this.transform.position = new Vector3(0, this.transform.position.y, 0);
+                this.transform.localRotation = new Quaternion(0, 0, 0, 0);
+                Debug.Log("enter UpLimit");
+            }
         }
         else if (collider.tag == "UpPoint")
         {
             if (!parent)
             {
-                rb.useGravity = false;
-                rb.isKinematic = true;
+                if (moveUpFlag)
+                {
+                    rb.useGravity = false;
+                    rb.isKinematic = true;
+                    Debug.Log("!parent enter UpPoint");
+                }
             }
         }
     }
@@ -46,7 +54,10 @@ public class RopePoint : MonoBehaviour
             if (parent)
             {
                 if (moveDownFlag)
+                {
                     moveDownFlag = false;
+                    Debug.Log("parent exit DownStopPoint");
+                }
             }
             if (!parent)
             {
@@ -55,6 +66,7 @@ public class RopePoint : MonoBehaviour
                     rb.useGravity = true;
                     rb.isKinematic = false;
                     moveDownFlag = false;
+                    Debug.Log("!parent exit DownStopPoint");
                 }
             }
         }
@@ -63,14 +75,28 @@ public class RopePoint : MonoBehaviour
     void RopeUp()
     {
         this.transform.position += new Vector3(0, 0.2f, 0);
-        if (this.transform.position.x < -0.5f)
-            rb.AddForce(new Vector3(0.001f, 0, 0), ForceMode.Impulse);
-        if (this.transform.position.x > 0.5f)
-            rb.AddForce(new Vector3(-0.001f, 0, 0), ForceMode.Impulse);
-        if (this.transform.position.z < -0.5f)
-            rb.AddForce(new Vector3(0, 0, 0.001f), ForceMode.Impulse);
-        if (this.transform.position.x > 0.5f)
-            rb.AddForce(new Vector3(0, 0, -0.001f), ForceMode.Impulse);
+        if (!rb.isKinematic)
+        {
+            if (this.transform.position.x < -0.5f)
+                rb.AddForce(new Vector3(0.001f, 0, 0), ForceMode.Impulse);
+            if (this.transform.position.x > 0.5f)
+                rb.AddForce(new Vector3(-0.001f, 0, 0), ForceMode.Impulse);
+            if (this.transform.position.z < -0.5f)
+                rb.AddForce(new Vector3(0, 0, 0.001f), ForceMode.Impulse);
+            if (this.transform.position.x > 0.5f)
+                rb.AddForce(new Vector3(0, 0, -0.001f), ForceMode.Impulse);
+        }
+        if (rb.isKinematic)
+        {
+            if (this.transform.position.x < -0.1f)
+                this.transform.position += new Vector3(0.1f, 0, 0);
+            if (this.transform.position.x > 0.1f)
+                this.transform.position -= new Vector3(0.1f, 0, 0);
+            if (this.transform.position.z < -0.1f)
+                this.transform.position += new Vector3(0, 0, 0.1f);
+            if (this.transform.position.x > 0.1f)
+                this.transform.position -= new Vector3(0, 0, 0.1f);
+        }
     }
 
     void RopeDown()
