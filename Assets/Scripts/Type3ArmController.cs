@@ -39,7 +39,7 @@ public class Type3ArmController : MonoBehaviour
 
     }
 
-    void motor_on()
+    public void motor_on()
     {
         int i = 0;
 
@@ -52,7 +52,7 @@ public class Type3ArmController : MonoBehaviour
         }
     }
 
-    void motor_off()
+    public void motor_off()
     {
         int i = 0;
 
