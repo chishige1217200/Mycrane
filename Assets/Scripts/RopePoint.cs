@@ -88,14 +88,14 @@ public class RopePoint : MonoBehaviour
         }
         if (rb.isKinematic)
         {
-            if (this.transform.position.x < -0.01f)
-                this.transform.position += new Vector3(0.01f, 0, 0);
-            if (this.transform.position.x > 0.01f)
-                this.transform.position -= new Vector3(0.01f, 0, 0);
-            if (this.transform.position.z < -0.01f)
-                this.transform.position += new Vector3(0, 0, 0.01f);
-            if (this.transform.position.x > 0.01f)
-                this.transform.position -= new Vector3(0, 0, 0.01f);
+            if (this.transform.position.x < -0.05f)
+                this.transform.position += new Vector3(0.05f, 0, 0);
+            if (this.transform.position.x > 0.05f)
+                this.transform.position -= new Vector3(0.05f, 0, 0);
+            if (this.transform.position.z < -0.05f)
+                this.transform.position += new Vector3(0, 0, 0.05f);
+            if (this.transform.position.x > 0.05f)
+                this.transform.position -= new Vector3(0, 0, 0.05f);
         }
     }
 
