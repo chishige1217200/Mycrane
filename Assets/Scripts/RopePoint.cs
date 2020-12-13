@@ -7,10 +7,12 @@ public class RopePoint : MonoBehaviour
     public bool parent = false; //一番上の質点かどうか
     public bool last = false; //下から二番目の質点かどうか
     Rigidbody rb; //Rigidbody情報
-    public bool moveUpFlag = false; //上昇または下降をしているか
-    public bool moveDownFlag = false;
-    public bool upCompleteFlag = false;
-    public bool downCompleteFlag = false;
+    public bool moveUpFlag = false; //上昇中か
+    public bool moveDownFlag = false; //下降中か
+    public bool upCompleteFlag = false; //上昇終了時
+    public bool downCompleteFlag = false; //下降終了時
+    public float upSpeed = 0.03f; //上昇速度
+    public float downSpeed = 0.03f; //下降速度
 
     void Start()
     {
@@ -79,7 +81,7 @@ public class RopePoint : MonoBehaviour
 
     void RopeUp()
     {
-        this.transform.localPosition += new Vector3(0, 0.04f, 0);
+        this.transform.localPosition += new Vector3(0, upSpeed, 0);
         if (!rb.isKinematic)
         {
             if (this.transform.localPosition.x < -0.01f)
@@ -106,6 +108,6 @@ public class RopePoint : MonoBehaviour
 
     void RopeDown()
     {
-        this.transform.localPosition -= new Vector3(0, 0.04f, 0);
+        this.transform.localPosition -= new Vector3(0, downSpeed, 0);
     }
 }

@@ -19,6 +19,7 @@ public class Type3Manager : MonoBehaviour
     private SEPlayer _SEPlayer;
     private RopePoint[] _RopePoint;
     private Type3ArmController _ArmController;
+    private Type3CraneUnitMover _CraneUnitMover;
     Transform temp;
 
     //For test-----------------------------------------
@@ -34,6 +35,7 @@ public class Type3Manager : MonoBehaviour
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         temp = this.transform.Find("CraneUnit").transform;
+        _CraneUnitMover = temp.GetComponent<Type3CraneUnitMover>();
         _RopePoint[0] = temp.Find("Rope").Find("Sphere (1)").GetComponent<RopePoint>();
         _RopePoint[1] = temp.Find("Rope").Find("Sphere (2)").GetComponent<RopePoint>();
         _RopePoint[2] = temp.Find("Rope").Find("Sphere (3)").GetComponent<RopePoint>();
@@ -53,6 +55,11 @@ public class Type3Manager : MonoBehaviour
     async void Update()
     {
         craneStatusdisplayed.text = craneStatus.ToString();
+        if (craneStatus == -2)
+        {
+            _CraneUnitMover.leftMoveFlag = true;
+            _CraneUnitMover.forwardMoveFlag = true;
+        }
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(soundType);
@@ -101,6 +108,7 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 2)
         { //右移動中
+            _CraneUnitMover.rightMoveFlag = true;
             //コイン投入無効化;
             if (resetFlag == false)
             {
@@ -144,6 +152,7 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 4)
         { //奥移動中
+            _CraneUnitMover.backMoveFlag = true;
             //クレーン奥移動;
             switch (soundType)
             {
@@ -267,6 +276,8 @@ public class Type3Manager : MonoBehaviour
                     break;
             }
             //アーム獲得口ポジション移動音再生;
+            _CraneUnitMover.leftMoveFlag = true;
+            _CraneUnitMover.forwardMoveFlag = true;
             //アーム獲得口ポジションへ;
         }
 
