@@ -13,7 +13,7 @@ public class Type3Manager : MonoBehaviour
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
-    int soundType = 0; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
     private BGMPlayer _BGMPlayer;
     private SEPlayer _SEPlayer;
@@ -96,7 +96,7 @@ public class Type3Manager : MonoBehaviour
             switch (soundType)
             {
                 case 1:
-                    await Task.Delay(1000);
+                    //await Task.Delay(1000);
                     _SEPlayer.PlaySE(7, 2147483647);
                     break;
                 case 3:
@@ -137,6 +137,7 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 3)
         {
+            _CraneUnitMover.rightMoveFlag = false;
             switch (soundType)
             {
                 case 2:
@@ -176,6 +177,7 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 5)
         {
+            _CraneUnitMover.backMoveFlag = false;
             switch (soundType)
             {
                 case 0:
@@ -194,6 +196,7 @@ public class Type3Manager : MonoBehaviour
                     _SEPlayer.PlaySE(20, 1);
                     break;
             }
+            _ArmController.motor_on();
             //奥移動効果音ループ再生停止;
             //アーム開く音再生;
             //アーム開く;
@@ -230,6 +233,7 @@ public class Type3Manager : MonoBehaviour
                     _SEPlayer.StopSE(21);
                     break;
             }
+            _ArmController.motor_off();
             //アーム下降音再生停止;
             //アーム掴む音再生;
             //アーム掴む;
@@ -283,6 +287,8 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 11)
         {
+            _CraneUnitMover.leftMoveFlag = false;
+            _CraneUnitMover.forwardMoveFlag = false;
             switch (soundType)
             {
                 case 0:
@@ -300,6 +306,7 @@ public class Type3Manager : MonoBehaviour
                     _SEPlayer.PlaySE(24, 1);
                     break;
             }
+            _ArmController.motor_on();
             //アーム開く音再生;
             //アーム開く;
             //1秒待機;
@@ -313,6 +320,7 @@ public class Type3Manager : MonoBehaviour
                     _SEPlayer.PlaySE(25, 1);
                     break;
             }
+            _ArmController.motor_off();
             //アーム閉じる音再生;
             //アーム閉じる;
             //1秒待機;
