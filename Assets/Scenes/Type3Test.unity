@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: 43410226}
   - component: {fileID: 43410225}
   - component: {fileID: 43410228}
+  - component: {fileID: 43410229}
   m_Layer: 0
   m_Name: CraneBox
   m_TagString: CraneBox
@@ -326,6 +327,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!114 &43410229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43410223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bd010bcc5ab6eb4ca61ea9d07e2d66f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rightMoveFlag: 0
+  leftMoveFlag: 0
+  backMoveFlag: 0
+  forwardMoveFlag: 0
 --- !u!1 &58930068
 GameObject:
   m_ObjectHideFlags: 0
@@ -8693,6 +8710,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creditSystem: {fileID: 0}
+  moveSpeed: 0.1
+  rightMoveFlag: 0
+  leftMoveFlag: 0
+  backMoveFlag: 0
+  forwardMoveFlag: 0
   craneStatusdisplayed: {fileID: 469009826}
 --- !u!4 &1153012474
 Transform:
@@ -11459,7 +11481,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1602617801}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08696bd7d9fe51244a4b86c1910bb4af, type: 3}
   m_Name: 

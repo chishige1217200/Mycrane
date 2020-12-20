@@ -21,6 +21,16 @@ public class Type3Manager : MonoBehaviour
     private Type3ArmController _ArmController;
     private Type3CraneUnitMover _CraneUnitMover;
     Transform temp;
+    GameObject craneBox;
+    CraneBox _CraneBox;
+    GameObject craneBoxSupport;
+    public float moveSpeed = 0.1f;
+    public bool rightMoveFlag = false;
+    public bool leftMoveFlag = false;
+    public bool backMoveFlag = false;
+    public bool forwardMoveFlag = false;
+    private GameObject ropeHost;
+    //Transform temp;
 
     //For test-----------------------------------------
 
@@ -30,12 +40,14 @@ public class Type3Manager : MonoBehaviour
 
     void Start()
     {
-        _RopePoint = new RopePoint[8];
+        // 様々なコンポーネントの取得
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         temp = this.transform.Find("CraneUnit").transform;
-        _CraneUnitMover = temp.GetComponent<Type3CraneUnitMover>();
+        // ロープとアームコントローラに関する処理
+        // _CraneUnitMover = temp.GetComponent<Type3CraneUnitMover>();
+        _RopePoint = new RopePoint[8];
         _RopePoint[0] = temp.Find("Rope").Find("Sphere (1)").GetComponent<RopePoint>();
         _RopePoint[1] = temp.Find("Rope").Find("Sphere (2)").GetComponent<RopePoint>();
         _RopePoint[2] = temp.Find("Rope").Find("Sphere (3)").GetComponent<RopePoint>();
@@ -45,6 +57,12 @@ public class Type3Manager : MonoBehaviour
         _RopePoint[6] = temp.Find("Rope").Find("Sphere (7)").GetComponent<RopePoint>();
         _RopePoint[7] = temp.Find("Rope").Find("Sphere (8)").GetComponent<RopePoint>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
+
+        // CraneBoxに関する処理
+        craneBox = temp.Find("CraneBox").gameObject;
+        _CraneBox = craneBox.GetComponent<CraneBox>();
+        craneBoxSupport = temp.Find("CraneBoxSupport").gameObject;
+        ropeHost = temp.Find("Rope").gameObject;
 
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
@@ -57,8 +75,8 @@ public class Type3Manager : MonoBehaviour
         craneStatusdisplayed.text = craneStatus.ToString();
         if (craneStatus == -2)
         {
-            _CraneUnitMover.leftMoveFlag = true;
-            _CraneUnitMover.forwardMoveFlag = true;
+            //_CraneUnitMover.leftMoveFlag = true;
+            //_CraneUnitMover.forwardMoveFlag = true;
         }
         if (craneStatus == -1)
         {
@@ -108,7 +126,7 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 2)
         { //右移動中
-            _CraneUnitMover.rightMoveFlag = true;
+            //_CraneUnitMover.rightMoveFlag = true;
             //コイン投入無効化;
             if (resetFlag == false)
             {
@@ -137,7 +155,7 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 3)
         {
-            _CraneUnitMover.rightMoveFlag = false;
+            //_CraneUnitMover.rightMoveFlag = false;
             switch (soundType)
             {
                 case 2:
@@ -153,7 +171,7 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 4)
         { //奥移動中
-            _CraneUnitMover.backMoveFlag = true;
+            //_CraneUnitMover.backMoveFlag = true;
             //クレーン奥移動;
             switch (soundType)
             {
@@ -177,7 +195,7 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 5)
         {
-            _CraneUnitMover.backMoveFlag = false;
+            //_CraneUnitMover.backMoveFlag = false;
             switch (soundType)
             {
                 case 0:
@@ -280,15 +298,15 @@ public class Type3Manager : MonoBehaviour
                     break;
             }
             //アーム獲得口ポジション移動音再生;
-            _CraneUnitMover.leftMoveFlag = true;
-            _CraneUnitMover.forwardMoveFlag = true;
+            //_CraneUnitMover.leftMoveFlag = true;
+            //_CraneUnitMover.forwardMoveFlag = true;
             //アーム獲得口ポジションへ;
         }
 
         if (craneStatus == 11)
         {
-            _CraneUnitMover.leftMoveFlag = false;
-            _CraneUnitMover.forwardMoveFlag = false;
+            //_CraneUnitMover.leftMoveFlag = false;
+            //_CraneUnitMover.forwardMoveFlag = false;
             switch (soundType)
             {
                 case 0:
@@ -373,6 +391,32 @@ public class Type3Manager : MonoBehaviour
         {
             _RopePoint[i].moveUpFlag = true;
         }
+    }
+
+    void RightMove()
+    {
+        craneBox.transform.position += new Vector3(moveSpeed, 0, 0);
+        ropeHost.transform.position += new Vector3(moveSpeed, 0, 0);
+    }
+
+    void LeftMove()
+    {
+        craneBox.transform.position -= new Vector3(moveSpeed, 0, 0);
+        ropeHost.transform.position -= new Vector3(moveSpeed, 0, 0);
+    }
+
+    void BackMove()
+    {
+        craneBox.transform.position += new Vector3(0, 0, moveSpeed);
+        ropeHost.transform.position += new Vector3(0, 0, moveSpeed);
+        craneBoxSupport.transform.position += new Vector3(0, 0, moveSpeed);
+    }
+
+    void ForwardMove()
+    {
+        craneBox.transform.position -= new Vector3(0, 0, moveSpeed);
+        ropeHost.transform.position -= new Vector3(0, 0, moveSpeed);
+        craneBoxSupport.transform.position -= new Vector3(0, 0, moveSpeed);
     }
 
     public void Testadder()

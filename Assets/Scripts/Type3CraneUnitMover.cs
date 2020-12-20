@@ -5,9 +5,9 @@ using UnityEngine;
 public class Type3CraneUnitMover : MonoBehaviour
 {
     GameObject craneBox;
-    Rigidbody craneBoxRb;
+    //Rigidbody craneBoxRb;
     GameObject craneBoxSupport;
-    Rigidbody craneBoxSupportRb;
+    //Rigidbody craneBoxSupportRb;
     public float moveSpeed = 0.1f;
     public bool rightMoveFlag = false;
     public bool leftMoveFlag = false;
@@ -20,19 +20,19 @@ public class Type3CraneUnitMover : MonoBehaviour
     {
 
         craneBox = this.transform.Find("CraneBox").gameObject;
-        craneBoxRb = craneBox.GetComponent<Rigidbody>();
+        //craneBoxRb = craneBox.GetComponent<Rigidbody>();
         craneBoxSupport = this.transform.Find("CraneBoxSupport").gameObject;
-        craneBoxSupportRb = craneBoxSupport.GetComponent<Rigidbody>();
+        //craneBoxSupportRb = craneBoxSupport.GetComponent<Rigidbody>();
         temp = this.transform;
         ropeHost = temp.Find("Rope").gameObject;
     }
 
     void Update()
     {
-        if (rightMoveFlag) RightMove();
+        /*if (rightMoveFlag) RightMove();
         if (leftMoveFlag) LeftMove();
         if (backMoveFlag) BackMove();
-        if (forwardMoveFlag) ForwardMove();
+        if (forwardMoveFlag) ForwardMove();*/
     }
 
     void OnTriggerEnter(Collider collider)
@@ -48,7 +48,7 @@ public class Type3CraneUnitMover : MonoBehaviour
         if (collider.tag == "ForegroundLimit") forwardMoveFlag = false;
     }
 
-    void RightMove()
+    /*void RightMove()
     {
         craneBox.transform.position += new Vector3(moveSpeed, 0, 0);
         ropeHost.transform.position += new Vector3(moveSpeed, 0, 0);
@@ -72,5 +72,5 @@ public class Type3CraneUnitMover : MonoBehaviour
         craneBox.transform.position -= new Vector3(0, 0, moveSpeed);
         ropeHost.transform.position -= new Vector3(0, 0, moveSpeed);
         craneBoxSupport.transform.position -= new Vector3(0, 0, moveSpeed);
-    }
+    }*/
 }
