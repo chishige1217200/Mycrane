@@ -8,17 +8,18 @@ public class CraneBox : MonoBehaviour
     public bool leftMoveFlag = false;
     public bool backMoveFlag = false;
     public bool forwardMoveFlag = false;
+    GameObject craneBoxSupport;
 
-    // Start is called before the first frame update
     void Start()
     {
-
+        craneBoxSupport = transform.parent.Find("CraneBoxSupport").gameObject;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void GetManager(int num)
     {
-
+        if (num == 1) Debug.Log("1");
+        if (num == 2) Debug.Log("2");
+        if (num == 3) Debug.Log("3");
     }
 
     void OnTriggerEnter(Collider collider)

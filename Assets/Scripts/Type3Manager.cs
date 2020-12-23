@@ -23,12 +23,12 @@ public class Type3Manager : MonoBehaviour
     Transform temp;
     GameObject craneBox;
     CraneBox _CraneBox;
-    GameObject craneBoxSupport;
+    //GameObject craneBoxSupport;
     public float moveSpeed = 0.1f;
-    public bool rightMoveFlag = false;
-    public bool leftMoveFlag = false;
-    public bool backMoveFlag = false;
-    public bool forwardMoveFlag = false;
+    //public bool rightMoveFlag = false;
+    //public bool leftMoveFlag = false;
+    //public bool backMoveFlag = false;
+    //public bool forwardMoveFlag = false;
     private GameObject ropeHost;
     //Transform temp;
 
@@ -61,7 +61,7 @@ public class Type3Manager : MonoBehaviour
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").gameObject;
         _CraneBox = craneBox.GetComponent<CraneBox>();
-        craneBoxSupport = temp.Find("CraneBoxSupport").gameObject;
+        //craneBoxSupport = temp.Find("CraneBoxSupport").gameObject;
         ropeHost = temp.Find("Rope").gameObject;
 
         if (soundType == 0) creditSystem.SetCreditSound(0);
@@ -409,14 +409,14 @@ public class Type3Manager : MonoBehaviour
     {
         craneBox.transform.position += new Vector3(0, 0, moveSpeed);
         ropeHost.transform.position += new Vector3(0, 0, moveSpeed);
-        craneBoxSupport.transform.position += new Vector3(0, 0, moveSpeed);
+        //craneBoxSupport.transform.position += new Vector3(0, 0, moveSpeed);
     }
 
     void ForwardMove()
     {
         craneBox.transform.position -= new Vector3(0, 0, moveSpeed);
         ropeHost.transform.position -= new Vector3(0, 0, moveSpeed);
-        craneBoxSupport.transform.position -= new Vector3(0, 0, moveSpeed);
+        //craneBoxSupport.transform.position -= new Vector3(0, 0, moveSpeed);
     }
 
     public void Testadder()
