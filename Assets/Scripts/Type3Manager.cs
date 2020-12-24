@@ -15,6 +15,7 @@ public class Type3Manager : MonoBehaviour
     double backArmpowersuccess; //同確率時
     int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
+    bool gohomeFlagTemp = false; //Temporary
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
     RopePoint[] _RopePoint;
@@ -287,8 +288,13 @@ public class Type3Manager : MonoBehaviour
                     break;
             }
             //アーム獲得口ポジション移動音再生;
-            _CraneBox.leftMoveFlag = true;
-            _CraneBox.forwardMoveFlag = true;
+            if (!gohomeFlagTemp)
+            {
+                gohomeFlagTemp = true;
+                _CraneBox.leftMoveFlag = true;
+                _CraneBox.forwardMoveFlag = true;
+            }
+
             //アーム獲得口ポジションへ;
         }
 
@@ -332,6 +338,7 @@ public class Type3Manager : MonoBehaviour
             //アーム閉じる;
             //1秒待機;
             resetFlag = false;
+            gohomeFlagTemp = false;
             if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
             else
