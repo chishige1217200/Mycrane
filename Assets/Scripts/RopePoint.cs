@@ -53,6 +53,19 @@ public class RopePoint : MonoBehaviour
         }
     }
 
+    void OnTriggerStay(Collider collider)
+    {
+        if (collider.tag == "UpLimit")
+        {
+            if (moveUpFlag)
+            {
+                moveUpFlag = false;
+                /*if (last)
+                    upCompleteFlag = true;*/
+            }
+        }
+    }
+
     void OnTriggerExit(Collider collider)
     {
         if (collider.tag == "DownStopPoint")
