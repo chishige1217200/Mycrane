@@ -13,7 +13,7 @@ public class Type3Manager : MonoBehaviour
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
-    int soundType = 0; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 2; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
     bool gohomeFlagTemp = false; //Temporary
     BGMPlayer _BGMPlayer;
