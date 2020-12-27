@@ -11,8 +11,8 @@ public class RopePoint : MonoBehaviour
     public bool moveDownFlag = false; //下降中か
     public bool upCompleteFlag = false; //上昇終了時
     public bool downCompleteFlag = false; //下降終了時
-    public float upSpeed = 0.01f; //上昇速度
-    public float downSpeed = 0.01f; //下降速度
+    public float upSpeed = 0.001f; //上昇速度
+    public float downSpeed = 0.001f; //下降速度
 
     void Start()
     {

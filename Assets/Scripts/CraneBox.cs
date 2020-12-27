@@ -8,7 +8,7 @@ public class CraneBox : MonoBehaviour
     public bool leftMoveFlag = false;
     public bool backMoveFlag = false;
     public bool forwardMoveFlag = false;
-    public float moveSpeed = 0.01f;
+    public float moveSpeed = 0.001f;
     GameObject craneBoxSupport;
     GameObject ropeHost;
     Type1Manager _Type1Manager;
