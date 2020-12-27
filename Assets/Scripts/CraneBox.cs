@@ -8,7 +8,7 @@ public class CraneBox : MonoBehaviour
     public bool leftMoveFlag = false;
     public bool backMoveFlag = false;
     public bool forwardMoveFlag = false;
-    public float moveSpeed = 0.05f;
+    public float moveSpeed = 0.01f;
     GameObject craneBoxSupport;
     GameObject ropeHost;
     Type1Manager _Type1Manager;
@@ -23,7 +23,7 @@ public class CraneBox : MonoBehaviour
         ropeHost = ropeHost = transform.parent.Find("Rope").gameObject;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (rightMoveFlag) RightMove();
         if (leftMoveFlag) LeftMove();
@@ -82,27 +82,27 @@ public class CraneBox : MonoBehaviour
     }
     void RightMove()
     {
-        this.transform.position += new Vector3(moveSpeed, 0, 0);
-        ropeHost.transform.position += new Vector3(moveSpeed, 0, 0);
-        craneBoxSupport.transform.position += new Vector3(moveSpeed, 0, 0);
+        this.transform.localPosition += new Vector3(moveSpeed, 0, 0);
+        ropeHost.transform.localPosition += new Vector3(moveSpeed, 0, 0);
+        craneBoxSupport.transform.localPosition += new Vector3(moveSpeed, 0, 0);
     }
 
     void LeftMove()
     {
-        this.transform.position -= new Vector3(moveSpeed, 0, 0);
-        ropeHost.transform.position -= new Vector3(moveSpeed, 0, 0);
-        craneBoxSupport.transform.position -= new Vector3(moveSpeed, 0, 0);
+        this.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
+        ropeHost.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
+        craneBoxSupport.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
     }
 
     void BackMove()
     {
-        this.transform.position += new Vector3(0, 0, moveSpeed);
-        ropeHost.transform.position += new Vector3(0, 0, moveSpeed);
+        this.transform.localPosition += new Vector3(0, 0, moveSpeed);
+        ropeHost.transform.localPosition += new Vector3(0, 0, moveSpeed);
     }
 
     void ForwardMove()
     {
-        this.transform.position -= new Vector3(0, 0, moveSpeed);
-        ropeHost.transform.position -= new Vector3(0, 0, moveSpeed);
+        this.transform.localPosition -= new Vector3(0, 0, moveSpeed);
+        ropeHost.transform.localPosition -= new Vector3(0, 0, moveSpeed);
     }
 }

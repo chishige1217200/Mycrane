@@ -10,7 +10,7 @@ public class Type3ArmController : MonoBehaviour
     JointMotor[] jointmotor;
     JointLimits[] limit;
 
-    async void Start()
+    void Start()
     {
         int i = 0;
 
