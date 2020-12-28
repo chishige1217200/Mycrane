@@ -63,11 +63,11 @@ public class Type3Manager : MonoBehaviour
     async void Update()
     {
         craneStatusdisplayed.text = craneStatus.ToString();
-        if (craneStatus == -2)
+        /*if (craneStatus == -2)
         {
             _CraneBox.leftMoveFlag = true;
             _CraneBox.forwardMoveFlag = true;
-        }
+        }*/
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(soundType);

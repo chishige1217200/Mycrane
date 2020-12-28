@@ -8,7 +8,7 @@ public class Type3CraneUnitMover : MonoBehaviour
     //Rigidbody craneBoxRb;
     GameObject craneBoxSupport;
     //Rigidbody craneBoxSupportRb;
-    public float moveSpeed = 0.1f;
+    //public float moveSpeed = 0.1f;
     public bool rightMoveFlag = false;
     public bool leftMoveFlag = false;
     public bool backMoveFlag = false;
