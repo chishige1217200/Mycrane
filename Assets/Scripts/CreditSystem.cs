@@ -63,8 +63,6 @@ public class CreditSystem : MonoBehaviour
             creditAll = 1;
             creditNew = 0;
             creditDisplayed = creditAll + creditNew;
-            //Credit.text = "--";
-            //nowPaid.text = "--";
         }
 
     }
