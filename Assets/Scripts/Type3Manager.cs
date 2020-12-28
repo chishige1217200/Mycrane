@@ -112,12 +112,14 @@ public class Type3Manager : MonoBehaviour
                     _BGMPlayer.PlayBGM(4);
                     break;
             }
+            InputKeyCheck(craneStatus);
             //右移動ボタン有効化;
         }
 
         if (craneStatus == 2)
         { //右移動中
-            _CraneBox.rightMoveFlag = true;
+            InputKeyCheck(craneStatus);
+            //_CraneBox.rightMoveFlag = true;
             //コイン投入無効化;
             if (resetFlag == false)
             {
@@ -146,7 +148,8 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 3)
         {
-            _CraneBox.rightMoveFlag = false;
+            //_CraneBox.rightMoveFlag = false;
+            InputKeyCheck(craneStatus);
             switch (soundType)
             {
                 case 2:
@@ -162,7 +165,8 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 4)
         { //奥移動中
-            _CraneBox.backMoveFlag = true;
+            InputKeyCheck(craneStatus);
+            //_CraneBox.backMoveFlag = true;
             //クレーン奥移動;
             switch (soundType)
             {
@@ -186,7 +190,7 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 5)
         {
-            _CraneBox.backMoveFlag = false;
+            //_CraneBox.backMoveFlag = false;
             switch (soundType)
             {
                 case 0:
@@ -387,6 +391,40 @@ public class Type3Manager : MonoBehaviour
         for (int i = 0; i <= 7; i++)
         {
             _RopePoint[i].moveUpFlag = true;
+        }
+    }
+
+    public void InputKeyCheck(int num)
+    {
+        switch (num)
+        {
+            case 1:
+            //投入を無効化
+            case 2:
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    craneStatus = 2;
+                    _CraneBox.rightMoveFlag = true;
+                }
+                if (Input.GetKeyUp(KeyCode.RightArrow))
+                {
+                    craneStatus = 3;
+                    _CraneBox.rightMoveFlag = false;
+                }
+                break;
+            case 3:
+            case 4:
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    craneStatus = 4;
+                    _CraneBox.backMoveFlag = true;
+                }
+                if (Input.GetKeyUp(KeyCode.UpArrow))
+                {
+                    craneStatus = 5;
+                    _CraneBox.backMoveFlag = false;
+                }
+                break;
         }
     }
 
