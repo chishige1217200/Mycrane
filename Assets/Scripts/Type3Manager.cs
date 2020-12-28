@@ -46,7 +46,7 @@ public class Type3Manager : MonoBehaviour
         _RopePoint[4] = temp.Find("Rope").Find("Sphere (5)").GetComponent<RopePoint>();
         _RopePoint[5] = temp.Find("Rope").Find("Sphere (6)").GetComponent<RopePoint>();
         _RopePoint[6] = temp.Find("Rope").Find("Sphere (7)").GetComponent<RopePoint>();
-        _RopePoint[7] = temp.Find("Rope").Find("Sphere (8)").GetComponent<RopePoint>();
+        //_RopePoint[7] = temp.Find("Rope").Find("Sphere (8)").GetComponent<RopePoint>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
 
         // CraneBoxに関する処理
@@ -353,7 +353,7 @@ public class Type3Manager : MonoBehaviour
 
     async public void ArmUnitDown()
     {
-        int i = 7;
+        int i = 6;
         while (true)
         {
             _RopePoint[i].moveDownFlag = true;
@@ -380,7 +380,7 @@ public class Type3Manager : MonoBehaviour
 
     public void ArmUnitDownForceStop()
     {
-        for (int i = 0; i <= 7; i++)
+        for (int i = 0; i <= 6; i++)
         {
             _RopePoint[i].moveDownFlag = false;
         }
@@ -388,7 +388,7 @@ public class Type3Manager : MonoBehaviour
 
     public void ArmUnitUp()
     {
-        for (int i = 0; i <= 7; i++)
+        for (int i = 0; i <= 6; i++)
         {
             _RopePoint[i].moveUpFlag = true;
         }
