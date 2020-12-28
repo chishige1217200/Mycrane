@@ -428,6 +428,48 @@ public class Type3Manager : MonoBehaviour
         }
     }
 
+    public void ButtonDown(int num)
+    {
+        switch (num)
+        {
+            case 1:
+                if (craneStatus == 1 || craneStatus == 2)
+                {
+                    craneStatus = 2;
+                    _CraneBox.rightMoveFlag = true;
+                }
+                break;
+            case 2:
+                if (craneStatus == 3 || craneStatus == 4)
+                {
+                    craneStatus = 4;
+                    _CraneBox.backMoveFlag = true;
+                }
+                break;
+        }
+    }
+
+    public void ButtonUp(int num)
+    {
+        switch (num)
+        {
+            case 1:
+                if (craneStatus == 1 || craneStatus == 2)
+                {
+                    craneStatus = 3;
+                    _CraneBox.rightMoveFlag = false;
+                }
+                break;
+            case 2:
+                if (craneStatus == 3 || craneStatus == 4)
+                {
+                    craneStatus = 5;
+                    _CraneBox.backMoveFlag = false;
+                }
+                break;
+        }
+    }
+
     public void Testadder()
     {
         Debug.Log("Clicked.");
