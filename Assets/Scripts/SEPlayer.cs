@@ -40,7 +40,7 @@ public class SEPlayer : MonoBehaviour
         _RepeatCount[num] = 0;
     }
 
-    public static void ForcePlaySE(int num)
+    public void ForcePlaySE(int num)
     {
         _AudioSource[num].Stop();
         _RepeatCount[num] = 0;

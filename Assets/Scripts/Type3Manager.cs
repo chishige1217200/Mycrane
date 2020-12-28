@@ -54,6 +54,7 @@ public class Type3Manager : MonoBehaviour
         _CraneBox = craneBox.GetComponent<CraneBox>();
         _CraneBox.GetManager(3);
 
+        creditSystem.GetSEPlayer(_SEPlayer);
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);

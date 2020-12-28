@@ -13,6 +13,7 @@ public class CreditSystem : MonoBehaviour
     private bool serviceMode = false; // trueならサービスモード
     private int[,] rateSet = new int[2, 2]; //100円1PLAY，500円6PLAYなどのプリセット?
     private int creditSoundNum = -1; //投入時サウンド番号
+    private SEPlayer _SEPlayer;
 
     //For test-----------------------------------------
 
@@ -66,7 +67,7 @@ public class CreditSystem : MonoBehaviour
                     if (nowPaidforProbability / costProbability == 1) creditRemainbyCost = creditAll + creditNew;
 
             creditDisplayed = creditAll + creditNew;
-            if (creditSoundNum != -1) SEPlayer.ForcePlaySE(creditSoundNum);
+            if (creditSoundNum != -1) _SEPlayer.ForcePlaySE(creditSoundNum);
         }
         else Debug.Log("サービスモードではお金を投入できません．");
     }
@@ -90,13 +91,18 @@ public class CreditSystem : MonoBehaviour
         {
             creditAll++;
             creditDisplayed = creditAll + creditNew; //クレジット表示を更新
-            if (creditSoundNum != -1) SEPlayer.ForcePlaySE(creditSoundNum);
+            if (creditSoundNum != -1) _SEPlayer.ForcePlaySE(creditSoundNum);
         }
     }
 
     public void SetCreditSound(int num)
     {
         creditSoundNum = num; //クレジット投入効果音番号登録
+    }
+
+    public void GetSEPlayer(SEPlayer s)
+    {
+        _SEPlayer = s;
     }
 
     //Probability Function-----------------------------------------------
