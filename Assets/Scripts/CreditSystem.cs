@@ -19,7 +19,8 @@ public class CreditSystem : MonoBehaviour
 
     public Text nowPaid; //試験用
     public Text Credit; //残クレジット
-
+    public Text[] priceSet = new Text[2];
+    public Text[] timesSet = new Text[2];
     //-------------------------------------------------
     void Start()
     {
@@ -31,21 +32,41 @@ public class CreditSystem : MonoBehaviour
         if ((float)rateSet[0, 0] / rateSet[0, 1] < (float)rateSet[1, 0] / rateSet[1, 1])
             Debug.Log("rateSet value error."); //高額のレートになるとコストが多くなる設定エラーのとき
 
-        if (serviceMode) Debug.Log("サービスモードです");
+        if (!serviceMode)
+        {
+            priceSet[0].text = rateSet[0, 0].ToString();
+            priceSet[1].text = rateSet[1, 0].ToString();
+            timesSet[0].text = rateSet[0, 1].ToString();
+            timesSet[1].text = rateSet[1, 1].ToString();
+        }
+        else
+        {
+            priceSet[0].text = "---";
+            priceSet[1].text = "---";
+            timesSet[0].text = "-";
+            timesSet[1].text = "-";
+            Credit.text = "--";
+            nowPaid.text = "--";
+            Debug.Log("サービスモードです");
+        }
     }
 
     void Update()
     {
-        nowPaid.text = nowpaid.ToString();
-        if (serviceMode)
+        if (!serviceMode)
+        {
+            Credit.text = creditDisplayed.ToString();
+            nowPaid.text = nowpaid.ToString();
+        }
+        else
         {
             creditAll = 1;
             creditNew = 0;
             creditDisplayed = creditAll + creditNew;
-            Credit.text = "--";
-            nowPaid.text = "--";
+            //Credit.text = "--";
+            //nowPaid.text = "--";
         }
-        else Credit.text = creditDisplayed.ToString();
+
     }
 
     public void GetPayment(int cost)
