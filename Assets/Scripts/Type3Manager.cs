@@ -393,7 +393,7 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.PlaySE(25, 1);
                         break;
                 }
-                for (int i = 0; i < 11; i++)
+                for (int i = 0; i < 12; i++)
                     instanceFlag[i] = false;
                 await Task.Delay(2000);
                 switch (soundType)
