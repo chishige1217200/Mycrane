@@ -13,6 +13,10 @@ public class RopePoint : MonoBehaviour
     public bool downCompleteFlag = false; //下降終了時
     public float upSpeed = 0.001f; //上昇速度
     public float downSpeed = 0.001f; //下降速度
+    Type1Manager _Type1Manager;
+    Type2Manager _Type2Manager;
+    Type3Manager _Type3Manager;
+    int craneType = -1;
 
     void Start()
     {
@@ -23,6 +27,26 @@ public class RopePoint : MonoBehaviour
     {
         if (moveDownFlag) RopeDown();
         if (moveUpFlag) RopeUp();
+    }
+
+    public void GetManager(int num)
+    {
+        craneType = num;
+        if (craneType == 1)
+        {
+            Debug.Log("1");
+            _Type1Manager = transform.root.gameObject.GetComponent<Type1Manager>();
+        }
+        if (craneType == 2)
+        {
+            Debug.Log("2");
+            _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
+        }
+        if (craneType == 3)
+        {
+            Debug.Log("3");
+            _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
+        }
     }
 
     void OnTriggerEnter(Collider collider)
@@ -36,7 +60,14 @@ public class RopePoint : MonoBehaviour
                 this.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 //Debug.Log("enter UpLimit");
                 if (last)
-                    upCompleteFlag = true;
+                {
+                    if (craneType == 1)
+                        if (_Type1Manager.craneStatus == 8) _Type1Manager.craneStatus = 9;
+                    if (craneType == 2)
+                        if (_Type2Manager.craneStatus == 8) _Type2Manager.craneStatus = 9;
+                    if (craneType == 3)
+                        if (_Type3Manager.craneStatus == 8) _Type3Manager.craneStatus = 9;
+                }
             }
         }
         else if (collider.tag == "UpPoint")
@@ -75,8 +106,12 @@ public class RopePoint : MonoBehaviour
                 if (moveDownFlag)
                 {
                     moveDownFlag = false;
-                    downCompleteFlag = true;
-                    //Debug.Log("parent exit DownStopPoint");
+                    if (craneType == 1)
+                        if (_Type1Manager.craneStatus == 6) _Type1Manager.craneStatus = 7;
+                    if (craneType == 2)
+                        if (_Type2Manager.craneStatus == 6) _Type2Manager.craneStatus = 7;
+                    if (craneType == 3)
+                        if (_Type3Manager.craneStatus == 6) _Type3Manager.craneStatus = 7;
                 }
             }
             if (!parent)

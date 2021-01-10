@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class SEPlayer : MonoBehaviour
 {
-    public static AudioSource[] _AudioSource; //オーディオ情報の格納
+    public AudioSource[] _AudioSource; //オーディオ情報の格納
     public int _AudioIndex; //オーディオ数
-    private static int[] _RepeatCount; //リピート再生回数
+    private int[] _RepeatCount; //リピート再生回数
 
     void Start()
     {

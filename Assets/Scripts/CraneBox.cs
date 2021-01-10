@@ -15,7 +15,6 @@ public class CraneBox : MonoBehaviour
     Type2Manager _Type2Manager;
     Type3Manager _Type3Manager;
     int craneType = -1;
-    int returnCheckFlag = 0;
 
     void Start()
     {
@@ -80,6 +79,24 @@ public class CraneBox : MonoBehaviour
         }
         if (collider.tag == "ForegroundLimit") forwardMoveFlag = false;
     }
+
+    public bool CheckHomePos(int mode) // 1:左手前，2：左奥，3：右手前，4：右奥への復帰確認
+    {
+        int checker = 0; // 復帰チェック用
+        if (mode == 1 || mode == 2)
+            if (!leftMoveFlag) checker++;
+        if (mode == 2 || mode == 4)
+            if (!backMoveFlag) checker++;
+        if (mode == 1 || mode == 3)
+            if (!forwardMoveFlag) checker++;
+        if (mode == 3 || mode == 4)
+            if (!rightMoveFlag) checker++;
+
+        if (checker == 2) return true;  // 該当箇所に復帰したとみなす
+        else return false;              // 復帰していないとみなす
+    }
+
+
     void RightMove()
     {
         this.transform.localPosition += new Vector3(moveSpeed, 0, 0);
