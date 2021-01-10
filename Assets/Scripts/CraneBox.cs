@@ -34,28 +34,17 @@ public class CraneBox : MonoBehaviour
     {
         craneType = num;
         if (craneType == 1)
-        {
-            Debug.Log("1");
             _Type1Manager = transform.root.gameObject.GetComponent<Type1Manager>();
-        }
         if (craneType == 2)
-        {
-            Debug.Log("2");
             _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
-        }
         if (craneType == 3)
-        {
-            Debug.Log("3");
             _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
-        }
     }
 
     void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "LeftLimit")
-        {
             leftMoveFlag = false;
-        }
         if (collider.tag == "RightLimit")
         {
             rightMoveFlag = false;

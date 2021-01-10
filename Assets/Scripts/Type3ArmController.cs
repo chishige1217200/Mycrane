@@ -41,7 +41,7 @@ public class Type3ArmController : MonoBehaviour
     {
         int i = 0;
 
-        Debug.Log("Motor Activated.");
+        //Debug.Log("Motor Activated.");
         for (i = 0; i < 3; i++)
         {
             jointmotor[i].force = 100;
@@ -56,7 +56,7 @@ public class Type3ArmController : MonoBehaviour
     {
         int i = 0;
 
-        Debug.Log("Motor not Activated.");
+        //Debug.Log("Motor not Activated.");
         for (i = 0; i < 3; i++)
             joint[i].useMotor = false;
     }

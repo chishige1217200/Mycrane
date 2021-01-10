@@ -33,20 +33,11 @@ public class RopePoint : MonoBehaviour
     {
         craneType = num;
         if (craneType == 1)
-        {
-            Debug.Log("1");
             _Type1Manager = transform.root.gameObject.GetComponent<Type1Manager>();
-        }
         if (craneType == 2)
-        {
-            Debug.Log("2");
             _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
-        }
         if (craneType == 3)
-        {
-            Debug.Log("3");
             _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
-        }
     }
 
     void OnTriggerEnter(Collider collider)
@@ -58,7 +49,6 @@ public class RopePoint : MonoBehaviour
                 moveUpFlag = false;
                 this.transform.localPosition = new Vector3(0, this.transform.localPosition.y, 0);
                 this.transform.localRotation = new Quaternion(0, 0, 0, 0);
-                //Debug.Log("enter UpLimit");
                 if (last)
                 {
                     if (craneType == 1)
@@ -73,28 +63,19 @@ public class RopePoint : MonoBehaviour
         else if (collider.tag == "UpPoint")
         {
             if (!parent)
-            {
                 if (moveUpFlag)
                 {
                     rb.useGravity = false;
                     rb.isKinematic = true;
-                    //Debug.Log("!parent enter UpPoint");
                 }
-            }
         }
     }
 
     void OnTriggerStay(Collider collider)
     {
         if (collider.tag == "UpLimit")
-        {
             if (moveUpFlag)
-            {
                 moveUpFlag = false;
-                /*if (last)
-                    upCompleteFlag = true;*/
-            }
-        }
     }
 
     void OnTriggerExit(Collider collider)
@@ -121,7 +102,6 @@ public class RopePoint : MonoBehaviour
                     rb.useGravity = true;
                     rb.isKinematic = false;
                     moveDownFlag = false;
-                    //Debug.Log("!parent exit DownStopPoint");
                 }
             }
         }
