@@ -79,7 +79,7 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(soundType);
-            await Task.Delay(1000);
+            await Task.Delay(1500);
             if (_CraneBox.CheckHomePos(1))
             {
                 craneStatus = 0;
@@ -138,26 +138,26 @@ public class Type3Manager : MonoBehaviour
         { //右移動中
             InputKeyCheck(craneStatus);
             //コイン投入無効化;
-            if (!instanceFlag[craneStatus])
+            /*if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
-                creditSystem.ResetNowPayment();
-                switch (soundType)
-                {
-                    case 0:
-                        _SEPlayer.PlaySE(1, 2147483647);
-                        break;
-                    case 1:
-                        _SEPlayer.StopSE(7);
-                        _SEPlayer.PlaySE(8, 2147483647);
-                        break;
-                    case 2:
-                        _SEPlayer.PlaySE(14, 2147483647);
-                        break;
-                    case 3:
-                        _SEPlayer.PlaySE(18, 2147483647);
-                        break;
-                }
+                Debug.Log("Instance");
+            }*/
+            switch (soundType)
+            {
+                case 0:
+                    _SEPlayer.PlaySE(1, 2147483647);
+                    break;
+                case 1:
+                    _SEPlayer.StopSE(7);
+                    _SEPlayer.PlaySE(8, 2147483647);
+                    break;
+                case 2:
+                    _SEPlayer.PlaySE(14, 2147483647);
+                    break;
+                case 3:
+                    _SEPlayer.PlaySE(18, 2147483647);
+                    break;
             }
             //クレーン右移動;
             //右移動効果音ループ再生;
@@ -166,19 +166,20 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == 3)
         {
             InputKeyCheck(craneStatus);         //奥移動ボタン有効化;
-            if (!instanceFlag[craneStatus])
+            switch (soundType)
+            {
+                case 2:
+                    _SEPlayer.StopSE(14);
+                    break;
+                case 3:
+                    _SEPlayer.StopSE(18);
+                    break;
+            }
+            /*if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
-                switch (soundType)
-                {
-                    case 2:
-                        _SEPlayer.StopSE(14);
-                        break;
-                    case 3:
-                        _SEPlayer.StopSE(18);
-                        break;
-                }
-            }
+
+            }*/
             //右移動効果音ループ再生停止;
         }
 
@@ -460,13 +461,15 @@ public class Type3Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-            //投入を無効化
-            case 2:
                 if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
+                    if (craneStatus == 1) creditSystem.ResetNowPayment();
                     craneStatus = 2;
                     _CraneBox.rightMoveFlag = true;
                 }
+                break;
+            //投入を無効化
+            case 2:
                 if (Input.GetKeyUp(KeyCode.RightArrow))
                 {
                     craneStatus = 3;
@@ -494,11 +497,13 @@ public class Type3Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if (craneStatus == 1 || craneStatus == 2)
+                if (craneStatus == 1)
                 {
                     craneStatus = 2;
-                    _CraneBox.rightMoveFlag = true;
+                    creditSystem.ResetNowPayment();
                 }
+                if (craneStatus == 2)
+                    _CraneBox.rightMoveFlag = true;
                 break;
             case 2:
                 if (craneStatus == 3 || craneStatus == 4)
