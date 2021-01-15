@@ -26,8 +26,8 @@ public class CreditSystem : MonoBehaviour
     {
         rateSet[0, 0] = 100; //temporary
         rateSet[0, 1] = 1; //temporary
-        rateSet[1, 0] = 500; //temporary
-        rateSet[1, 1] = 6; //temporary
+        rateSet[1, 0] = 100; //temporary
+        rateSet[1, 1] = 1; //temporary
 
         if ((float)rateSet[0, 0] / rateSet[0, 1] < (float)rateSet[1, 0] / rateSet[1, 1])
             Debug.Log("rateSet value error."); //高額のレートになるとコストが多くなる設定エラーのとき
@@ -35,9 +35,17 @@ public class CreditSystem : MonoBehaviour
         if (!serviceMode)
         {
             priceSet[0].text = rateSet[0, 0].ToString();
-            priceSet[1].text = rateSet[1, 0].ToString();
             timesSet[0].text = rateSet[0, 1].ToString();
-            timesSet[1].text = rateSet[1, 1].ToString();
+            if (rateSet[0, 0] == rateSet[1, 0] && rateSet[0, 1] == rateSet[1, 1]) // 単一プレイ回数設定
+            {
+                priceSet[1].text = "---";
+                timesSet[1].text = "-";
+            }
+            else
+            {
+                priceSet[1].text = rateSet[1, 0].ToString();
+                timesSet[1].text = rateSet[1, 1].ToString();
+            }
         }
         else
         {
