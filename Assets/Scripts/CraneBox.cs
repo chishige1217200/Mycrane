@@ -69,6 +69,14 @@ public class CraneBox : MonoBehaviour
         if (collider.tag == "ForegroundLimit") forwardMoveFlag = false;
     }
 
+    void OnTriggerStay(Collider collider)
+    {
+        if (collider.tag == "LeftLimit") leftMoveFlag = false;
+        if (collider.tag == "RightLimit") rightMoveFlag = false;
+        if (collider.tag == "BackgroundLimit") backMoveFlag = false;
+        if (collider.tag == "ForegroundLimit") forwardMoveFlag = false;
+    }
+
     public bool CheckHomePos(int mode) // 1:左手前，2：左奥，3：右手前，4：右奥への復帰確認
     {
         int checker = 0; // 復帰チェック用

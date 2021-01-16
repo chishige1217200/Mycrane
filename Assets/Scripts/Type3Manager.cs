@@ -13,7 +13,7 @@ public class Type3Manager : MonoBehaviour
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
-    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 2; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     private bool[] instanceFlag = new bool[13];
     private bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     BGMPlayer _BGMPlayer;
