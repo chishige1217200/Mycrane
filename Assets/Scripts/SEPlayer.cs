@@ -29,6 +29,12 @@ public class SEPlayer : MonoBehaviour
         }
     }
 
+    public void SetAudioPitch(float pitch)
+    {
+        for (int i = 0; i < _AudioIndex; i++)
+            _AudioSource[i].pitch = pitch;
+    }
+
     public void PlaySE(int num, int repeatcount)
     {
         _RepeatCount[num] = repeatcount;

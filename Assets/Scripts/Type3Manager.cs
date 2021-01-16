@@ -13,7 +13,8 @@ public class Type3Manager : MonoBehaviour
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
-    int soundType = 2; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 0; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    float audioPitch = 0.8f;
     private bool[] instanceFlag = new bool[13];
     private bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     BGMPlayer _BGMPlayer;
@@ -62,6 +63,9 @@ public class Type3Manager : MonoBehaviour
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);
         if (soundType == 3) creditSystem.SetCreditSound(-1);
+
+        _BGMPlayer.SetAudioPitch(audioPitch);
+        _SEPlayer.SetAudioPitch(audioPitch);
 
         await Task.Delay(300);
         ArmUnitUp();

@@ -28,6 +28,12 @@ public class BGMPlayer : MonoBehaviour
         }
     }
 
+    public void SetAudioPitch(float pitch)
+    {
+        for (int i = 0; i < _AudioIndex; i++)
+            _AudioSource[i].pitch = pitch;
+    }
+
     public void PlayBGM(int num)
     {
         BGMflag[num] = true;
