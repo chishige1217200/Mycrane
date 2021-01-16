@@ -53,7 +53,11 @@ public class CraneBox : MonoBehaviour
             if (craneType == 2)
                 if (_Type2Manager.craneStatus == 2) _Type2Manager.craneStatus = 3;
             if (craneType == 3)
-                if (_Type3Manager.craneStatus == 2) _Type3Manager.craneStatus = 3;
+                if (_Type3Manager.craneStatus == 2)
+                {
+                    _Type3Manager.craneStatus = 3;
+                    _Type3Manager.buttonFlag = false;
+                }
         }
 
         if (collider.tag == "BackgroundLimit")
@@ -64,7 +68,11 @@ public class CraneBox : MonoBehaviour
             if (craneType == 2)
                 if (_Type2Manager.craneStatus == 4) _Type2Manager.craneStatus = 5;
             if (craneType == 3)
+            {
                 if (_Type3Manager.craneStatus == 4) _Type3Manager.craneStatus = 5;
+                _Type3Manager.buttonFlag = false;
+            }
+
         }
         if (collider.tag == "ForegroundLimit") forwardMoveFlag = false;
     }

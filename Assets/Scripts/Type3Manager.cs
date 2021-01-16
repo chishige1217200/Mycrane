@@ -16,7 +16,7 @@ public class Type3Manager : MonoBehaviour
     int soundType = 0; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     float audioPitch = 0.8f;
     private bool[] instanceFlag = new bool[13];
-    private bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
+    public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
     RopePoint[] _RopePoint;
@@ -484,13 +484,14 @@ public class Type3Manager : MonoBehaviour
                 }
                 break;
             case 3:
-            case 4:
                 if (Input.GetKeyDown(KeyCode.UpArrow) && !buttonFlag)
                 {
                     buttonFlag = true;
                     craneStatus = 4;
                     _CraneBox.backMoveFlag = true;
                 }
+                break;
+            case 4:
                 if (Input.GetKeyUp(KeyCode.UpArrow) && buttonFlag)
                 {
                     craneStatus = 5;
