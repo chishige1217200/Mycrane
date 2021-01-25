@@ -13,7 +13,7 @@ public class Type3Manager : MonoBehaviour
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
-    int soundType = 3; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     float audioPitch = 1f;
     private bool[] instanceFlag = new bool[13];
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
@@ -61,31 +61,14 @@ public class Type3Manager : MonoBehaviour
             _RopePoint[i].GetManager(3);
 
         creditSystem.GetSEPlayer(_SEPlayer);
-        _GetPoint.GetSEPlayer(_SEPlayer);
-        _GetPoint.GetCreditSystem(creditSystem);
-        if (soundType == 0)
-        {
-            creditSystem.SetCreditSound(0);
-            _GetPoint.SetGetSound(5);
-        }
-        if (soundType == 1)
-        {
-            creditSystem.SetCreditSound(6);
-            _GetPoint.SetGetSound(12);
-        }
-        if (soundType == 2)
-        {
-            creditSystem.SetCreditSound(13);
-            _GetPoint.SetGetSound(16);
-        }
-        if (soundType == 3)
-        {
-            creditSystem.SetCreditSound(-1);
-            _GetPoint.SetGetSound(26);
-        }
-
+        if (soundType == 0) creditSystem.SetCreditSound(0);
+        if (soundType == 1) creditSystem.SetCreditSound(6);
+        if (soundType == 2) creditSystem.SetCreditSound(13);
+        if (soundType == 3) creditSystem.SetCreditSound(-1);
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
+
+        _GetPoint.GetManager(3);
 
         await Task.Delay(300);
         ArmUnitUp();
@@ -118,26 +101,27 @@ public class Type3Manager : MonoBehaviour
             //コイン投入有効化;
             if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
-            if (!instanceFlag[craneStatus])
+            /*if (!instanceFlag[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
-                switch (soundType)
-                {
-                    case 0:
-                        _BGMPlayer.PlayBGM(0);
-                        break;
-                    case 1:
-                        _BGMPlayer.PlayBGM(1);
-                        break;
-                    case 2:
+                instanceFlag[craneStatus] = true;*/
+            switch (soundType)
+            {
+                case 0:
+                    _BGMPlayer.PlayBGM(0);
+                    break;
+                case 1:
+                    _BGMPlayer.PlayBGM(1);
+                    break;
+                case 2:
+                    if (!_SEPlayer._AudioSource[16].isPlaying && !_SEPlayer._AudioSource[17].isPlaying)
                         _BGMPlayer.PlayBGM(2);
-                        break;
-                    case 3:
-                        _BGMPlayer.StopBGM(4);
-                        _BGMPlayer.PlayBGM(3);
-                        break;
-                }
+                    break;
+                case 3:
+                    _BGMPlayer.StopBGM(4);
+                    _BGMPlayer.PlayBGM(3);
+                    break;
             }
+            //}
         }
 
         if (craneStatus == 1)
@@ -387,13 +371,6 @@ public class Type3Manager : MonoBehaviour
                 _ArmController.motor_on();
                 switch (soundType)
                 {
-                    case 0:
-                        _SEPlayer.StopSE(1);
-                        break;
-                    case 2:
-                        _SEPlayer.StopSE(14);
-                        _SEPlayer.PlaySE(17, 1);
-                        break;
                     case 3:
                         _SEPlayer.StopSE(23);
                         _SEPlayer.PlaySE(24, 1);
@@ -415,6 +392,11 @@ public class Type3Manager : MonoBehaviour
                 _ArmController.motor_off();
                 switch (soundType)
                 {
+                    case 2:
+                        _SEPlayer.StopSE(14);
+                        if (!_SEPlayer._AudioSource[16].isPlaying)
+                            _SEPlayer.PlaySE(17, 1);
+                        break;
                     case 3:
                         _SEPlayer.PlaySE(25, 1);
                         break;
@@ -424,6 +406,9 @@ public class Type3Manager : MonoBehaviour
                 await Task.Delay(2000);
                 switch (soundType)
                 {
+                    case 0:
+                        _SEPlayer.StopSE(1);
+                        break;
                     case 1:
                         _SEPlayer.StopSE(11);
                         break;
@@ -435,6 +420,50 @@ public class Type3Manager : MonoBehaviour
                 //アーム閉じる音再生;
                 //アーム閉じる;
             }
+        }
+    }
+
+    public void GetPrize()
+    {
+        int getSoundNum = -1;
+
+        switch (soundType)
+        {
+            case 0:
+                getSoundNum = 5;
+                _SEPlayer.StopSE(1);
+                break;
+            case 1:
+                getSoundNum = 12;
+                _SEPlayer.StopSE(11);
+                break;
+            case 2:
+                getSoundNum = 16;
+                _SEPlayer.StopSE(14);
+                _SEPlayer.StopSE(17);
+                break;
+            case 3:
+                getSoundNum = 26;
+                _SEPlayer.StopSE(25);
+                break;
+        }
+
+        switch (creditSystem.probabilityMode)
+        {
+            case 2:
+            case 3:
+                creditSystem.ResetCreditProbability();
+                break;
+            case 4:
+            case 5:
+                creditSystem.ResetCostProbability();
+                break;
+        }
+
+        if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
+        {
+            if (getSoundNum != -1)
+                _SEPlayer.PlaySE(getSoundNum, 1);
         }
     }
 
