@@ -13,8 +13,8 @@ public class Type3Manager : MonoBehaviour
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
-    int soundType = 0; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
-    float audioPitch = 0.8f;
+    int soundType = 3; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    float audioPitch = 1f;
     private bool[] instanceFlag = new bool[13];
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     BGMPlayer _BGMPlayer;
@@ -24,6 +24,7 @@ public class Type3Manager : MonoBehaviour
     Transform temp;
     GameObject craneBox;
     CraneBox _CraneBox;
+    GetPoint _GetPoint;
 
     //For test-----------------------------------------
 
@@ -37,6 +38,7 @@ public class Type3Manager : MonoBehaviour
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
         // ロープとアームコントローラに関する処理
         _RopePoint = new RopePoint[7];
@@ -59,10 +61,28 @@ public class Type3Manager : MonoBehaviour
             _RopePoint[i].GetManager(3);
 
         creditSystem.GetSEPlayer(_SEPlayer);
-        if (soundType == 0) creditSystem.SetCreditSound(0);
-        if (soundType == 1) creditSystem.SetCreditSound(6);
-        if (soundType == 2) creditSystem.SetCreditSound(13);
-        if (soundType == 3) creditSystem.SetCreditSound(-1);
+        _GetPoint.GetSEPlayer(_SEPlayer);
+        _GetPoint.GetCreditSystem(creditSystem);
+        if (soundType == 0)
+        {
+            creditSystem.SetCreditSound(0);
+            _GetPoint.SetGetSound(5);
+        }
+        if (soundType == 1)
+        {
+            creditSystem.SetCreditSound(6);
+            _GetPoint.SetGetSound(12);
+        }
+        if (soundType == 2)
+        {
+            creditSystem.SetCreditSound(13);
+            _GetPoint.SetGetSound(16);
+        }
+        if (soundType == 3)
+        {
+            creditSystem.SetCreditSound(-1);
+            _GetPoint.SetGetSound(26);
+        }
 
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
