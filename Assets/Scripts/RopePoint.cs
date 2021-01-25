@@ -113,24 +113,24 @@ public class RopePoint : MonoBehaviour
         if (!rb.isKinematic)
         {
             if (this.transform.localPosition.x < -0.01f)
-                rb.AddForce(new Vector3(0.001f, 0, 0), ForceMode.Impulse);
+                rb.AddForce(new Vector3(0.01f, 0, 0), ForceMode.Impulse);
             if (this.transform.localPosition.x > 0.01f)
-                rb.AddForce(new Vector3(-0.001f, 0, 0), ForceMode.Impulse);
+                rb.AddForce(new Vector3(-0.01f, 0, 0), ForceMode.Impulse);
             if (this.transform.localPosition.z < -0.01f)
-                rb.AddForce(new Vector3(0, 0, 0.001f), ForceMode.Impulse);
+                rb.AddForce(new Vector3(0, 0, 0.01f), ForceMode.Impulse);
             if (this.transform.localPosition.x > 0.01f)
-                rb.AddForce(new Vector3(0, 0, -0.001f), ForceMode.Impulse);
+                rb.AddForce(new Vector3(0, 0, -0.01f), ForceMode.Impulse);
         }
         if (rb.isKinematic)
         {
-            if (this.transform.localPosition.x < -0.05f)
-                this.transform.localPosition += new Vector3(0.05f, 0, 0);
-            if (this.transform.localPosition.x > 0.05f)
-                this.transform.localPosition -= new Vector3(0.05f, 0, 0);
-            if (this.transform.localPosition.z < -0.05f)
-                this.transform.localPosition += new Vector3(0, 0, 0.05f);
-            if (this.transform.localPosition.x > 0.05f)
-                this.transform.localPosition -= new Vector3(0, 0, 0.05f);
+            if (this.transform.localPosition.x < -0.5f)
+                this.transform.localPosition += new Vector3(0.5f, 0, 0);
+            else if (this.transform.localPosition.x > 0.5f)
+                this.transform.localPosition -= new Vector3(0.5f, 0, 0);
+            else if (this.transform.localPosition.z < -0.5f)
+                this.transform.localPosition += new Vector3(0, 0, 0.5f);
+            else if (this.transform.localPosition.x > 0.5f)
+                this.transform.localPosition -= new Vector3(0, 0, 0.5f);
         }
     }
 
