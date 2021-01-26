@@ -11,6 +11,7 @@ public class CreditSystem : MonoBehaviour
     private int nowpaidSum = 0; //投入金額合計
     private int creditPlayedSum = 0; //プレイされたクレジット数
     private bool serviceMode = false; // trueならサービスモード
+    public bool insertFlag = false; // trueならコイン投入可能
     private int[,] rateSet = new int[2, 2]; //100円1PLAY，500円6PLAYなどのプリセット?
     private int creditSoundNum = -1; //投入時サウンド番号
     private SEPlayer _SEPlayer;
@@ -77,7 +78,7 @@ public class CreditSystem : MonoBehaviour
 
     public void GetPayment(int cost)
     {
-        if (!serviceMode)
+        if (!serviceMode && insertFlag)
         {
             nowpaid += cost;
             nowpaidSum += cost;

@@ -13,8 +13,8 @@ public class Type3Manager : MonoBehaviour
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
-    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
-    float audioPitch = 1f;
+    int soundType = 0; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    float audioPitch = 0.8f;
     private bool[] instanceFlag = new bool[13];
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     BGMPlayer _BGMPlayer;
@@ -104,6 +104,7 @@ public class Type3Manager : MonoBehaviour
             /*if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;*/
+            creditSystem.insertFlag = true;
             switch (soundType)
             {
                 case 0:
