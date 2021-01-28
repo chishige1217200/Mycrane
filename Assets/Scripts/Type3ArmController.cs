@@ -45,7 +45,7 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            spring[i].spring = 1.5f * power / 100f + 0.5f;
+            spring[i].spring = 2.5f * power / 100f + 0.5f;
             joint[i].spring = spring[i];
         }
     }
