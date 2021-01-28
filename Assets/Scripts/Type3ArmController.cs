@@ -7,8 +7,7 @@ public class Type3ArmController : MonoBehaviour
 {
     GameObject[] arm;
     HingeJoint[] joint;
-    JointMotor[] jointmotor;
-    JointLimits[] limit;
+    JointSpring[] spring;
 
     void Start()
     {
@@ -16,8 +15,7 @@ public class Type3ArmController : MonoBehaviour
 
         arm = new GameObject[3];
         joint = new HingeJoint[3];
-        jointmotor = new JointMotor[3];
-        limit = new JointLimits[3];
+        spring = new JointSpring[3];
         arm[0] = this.transform.Find("Arm1").gameObject;
         arm[1] = this.transform.Find("Arm2").gameObject;
         arm[2] = this.transform.Find("Arm3").gameObject;
@@ -25,39 +23,30 @@ public class Type3ArmController : MonoBehaviour
         for (i = 0; i < 3; i++)
         {
             joint[i] = arm[i].GetComponent<HingeJoint>();
-            jointmotor[i] = joint[i].motor;
-            limit[i] = joint[i].limits;
+            spring[i] = joint[i].spring;
         }
-
-        /*await Task.Delay(5000);
-        motor_on();
-        await Task.Delay(5000);
-        motor_off();*/
-
-
     }
 
-    public void motor_on()
+    public void ArmOpen()
     {
-        int i = 0;
-
-        //Debug.Log("Motor Activated.");
-        for (i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
-            jointmotor[i].force = 100;
-            jointmotor[i].targetVelocity = -100;
             joint[i].useMotor = true;
-
-            //limit[i].max = 180;
         }
     }
 
-    public void motor_off()
+    public void ArmClose()
     {
-        int i = 0;
-
-        //Debug.Log("Motor not Activated.");
-        for (i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
             joint[i].useMotor = false;
+    }
+
+    public void SpringPower(float power)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            spring[i].spring = 1.5f * power / 100f + 0.5f;
+            joint[i].spring = spring[i];
+        }
     }
 }

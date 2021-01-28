@@ -72,7 +72,7 @@ public class Type3Manager : MonoBehaviour
 
         await Task.Delay(300);
         ArmUnitUp();
-        _ArmController.motor_on();
+        _ArmController.ArmOpen();
         await Task.Delay(500);
         _CraneBox.leftMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
@@ -91,7 +91,7 @@ public class Type3Manager : MonoBehaviour
             if (_CraneBox.CheckHomePos(1))
             {
                 craneStatus = 0;
-                _ArmController.motor_off();
+                _ArmController.ArmClose();
             }
             //コイン投入無効化;
         }
@@ -227,7 +227,7 @@ public class Type3Manager : MonoBehaviour
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
-                _ArmController.motor_on();
+                _ArmController.ArmOpen();
                 switch (soundType)
                 {
                     case 0:
@@ -293,7 +293,7 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.StopSE(21);
                         break;
                 }
-                _ArmController.motor_off();
+                _ArmController.ArmClose();
                 await Task.Delay(1000);
                 craneStatus = 8;
             }
@@ -322,6 +322,7 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 9)
         {
+            _ArmController.SpringPower(0);
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
@@ -369,7 +370,7 @@ public class Type3Manager : MonoBehaviour
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
-                _ArmController.motor_on();
+                _ArmController.ArmOpen();
                 switch (soundType)
                 {
                     case 3:
@@ -387,10 +388,11 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 12)
         {
+            _ArmController.SpringPower(100f);
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
-                _ArmController.motor_off();
+                _ArmController.ArmClose();
                 switch (soundType)
                 {
                     case 2:
