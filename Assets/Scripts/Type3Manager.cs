@@ -34,7 +34,7 @@ public class Type3Manager : MonoBehaviour
 
     //-------------------------------------------------
 
-    async void Start()
+    void Start()
     {
         // 様々なコンポーネントの取得
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
@@ -85,6 +85,7 @@ public class Type3Manager : MonoBehaviour
 
     async void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
         craneStatusdisplayed.text = craneStatus.ToString();
         if (craneStatus == -1)
         {
@@ -546,7 +547,7 @@ public class Type3Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if (Input.GetKeyDown(KeyCode.RightArrow) && !buttonFlag)
+                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonFlag)
                 {
                     buttonFlag = true;
                     if (craneStatus == 1)
@@ -562,7 +563,7 @@ public class Type3Manager : MonoBehaviour
                 break;
             //投入を無効化
             case 2:
-                if (Input.GetKeyUp(KeyCode.RightArrow) && buttonFlag)
+                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonFlag)
                 {
                     craneStatus = 3;
                     _CraneBox.rightMoveFlag = false;
@@ -570,7 +571,7 @@ public class Type3Manager : MonoBehaviour
                 }
                 break;
             case 3:
-                if (Input.GetKeyDown(KeyCode.UpArrow) && !buttonFlag)
+                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonFlag)
                 {
                     buttonFlag = true;
                     craneStatus = 4;
@@ -578,7 +579,7 @@ public class Type3Manager : MonoBehaviour
                 }
                 break;
             case 4:
-                if (Input.GetKeyUp(KeyCode.UpArrow) && buttonFlag)
+                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonFlag)
                 {
                     craneStatus = 5;
                     _CraneBox.backMoveFlag = false;
