@@ -92,7 +92,11 @@ public class CreditSystem : MonoBehaviour
 
             if (probabilityMode == 4 || probabilityMode == 5)
                 if (nowPaidforProbability % costProbability == 0)
-                    if (nowPaidforProbability / costProbability == 1) creditRemainbyCost = creditAll + creditNew;
+                    if (nowPaidforProbability / costProbability == 1)
+                    {
+                        creditRemainbyCost = creditAll + creditNew;
+                        if (probabilityMode == 5) creditPlayed = 0; // creditPlayedとcreditRemainbyCostの辻褄あわせ
+                    }
 
             creditDisplayed = creditAll + creditNew;
             if (creditSoundNum != -1) _SEPlayer.ForcePlaySE(creditSoundNum);
@@ -136,7 +140,7 @@ public class CreditSystem : MonoBehaviour
     //Probability Function-----------------------------------------------
 
     private int creditProbability = 3; //設定クレジット数
-    private int costProbability = 0; //設定金額
+    private int costProbability = 300; //設定金額
     private int nowPaidforProbability = 0; //確率設定用の投入金額
     private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数
     private int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
@@ -145,6 +149,7 @@ public class CreditSystem : MonoBehaviour
 
     public bool ProbabilityCheck()
     {
+        Debug.Log("creditPlayed" + creditPlayed + " creditRemainbyCost" + creditRemainbyCost);
         if (probabilityMode == 0) return true; //常に確率
         if (probabilityMode == 1 && UnityEngine.Random.Range(1, n + 1) == 1) return true; // 1/nの確率（nの数値有効）
         if (probabilityMode == 2 && creditPlayed >= creditProbability) return true;
@@ -157,10 +162,10 @@ public class CreditSystem : MonoBehaviour
         }
         if (!serviceMode) //お金を投入する場合のみ
         {
-            if (probabilityMode == 4 && creditPlayed >= creditRemainbyCost) return true;
+            if (probabilityMode == 4 && creditPlayed >= creditRemainbyCost && creditRemainbyCost != -1) return true;
             // *景品獲得時にResetCostProbability()の処理が必要
 
-            if (probabilityMode == 5 && creditPlayed == creditRemainbyCost)
+            if (probabilityMode == 5 && creditPlayed == creditRemainbyCost && creditRemainbyCost != -1)
             {
                 ResetCostProbability();
                 return true;
@@ -182,6 +187,7 @@ public class CreditSystem : MonoBehaviour
 
     public void ResetCostProbability() //設定金額ベースの確率リセット
     {
+        creditRemainbyCost = -1;
         nowPaidforProbability = nowpaidSum - nowPaidforProbability; //既に投入済みの金額を引き継ぎ
         creditPlayed = 0;
     }
