@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Type2Manager : MonoBehaviour
 {
     public CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
-    int craneStatus = -1; //-1:初期化動作，0:待機状態
+    public int craneStatus = -1; //-1:初期化動作，0:待機状態
     double catchArmpower; //掴むときのアームパワー(%，未確率時)
     double upArmpower; //上昇時のアームパワー(%，未確率時)
     double backArmpower; //獲得口移動時のアームパワー(%，未確率時)
@@ -19,6 +19,8 @@ public class Type2Manager : MonoBehaviour
     int soundType = 1; //DECACRE:0, DECACRE Alpha:1
     bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
+    private BGMPlayer _BGMPlayer;
+    private SEPlayer _SEPlayer;
 
     //For test-----------------------------------------
 
@@ -30,6 +32,8 @@ public class Type2Manager : MonoBehaviour
     void Start()
     {
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
+        _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
     }
@@ -40,15 +44,15 @@ public class Type2Manager : MonoBehaviour
         limitTimedisplayed.text = limitTimeCount.ToString();
         if (craneStatus == -1)
         {
-            BGMPlayer.StopBGM(2 * soundType);
+            _BGMPlayer.StopBGM(2 * soundType);
             //クレーン位置初期化動作; DECACRE・CARINOタイプは不要
             //コイン投入無効化;
         }
 
         if (craneStatus == 0)
         {
-            BGMPlayer.StopBGM(1 + 2 * soundType);
-            BGMPlayer.PlayBGM(2 * soundType);
+            _BGMPlayer.StopBGM(1 + 2 * soundType);
+            _BGMPlayer.PlayBGM(2 * soundType);
             //コイン投入有効化;
             if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
@@ -59,8 +63,8 @@ public class Type2Manager : MonoBehaviour
             if (craneStatus == 1)
             {
                 //コイン投入有効化;
-                BGMPlayer.StopBGM(2 * soundType);
-                BGMPlayer.PlayBGM(1 + 2 * soundType);
+                _BGMPlayer.StopBGM(2 * soundType);
+                _BGMPlayer.PlayBGM(1 + 2 * soundType);
                 //右移動ボタン有効化;
             }
 
@@ -100,8 +104,8 @@ public class Type2Manager : MonoBehaviour
         {
             if (craneStatus == 1)
             {
-                BGMPlayer.StopBGM(2 * soundType);
-                BGMPlayer.PlayBGM(1 + 2 * soundType);
+                _BGMPlayer.StopBGM(2 * soundType);
+                _BGMPlayer.PlayBGM(1 + 2 * soundType);
                 limitTimeCount = limitTimeSet;
                 //レバー操作有効化;
                 //降下ボタン有効化;
@@ -110,7 +114,7 @@ public class Type2Manager : MonoBehaviour
             }
             if (craneStatus == 2)
             {
-                if(!timerFlag)
+                if (!timerFlag)
                 {
                     timerFlag = true;
                     StartTimer();
@@ -128,10 +132,10 @@ public class Type2Manager : MonoBehaviour
                 switch (soundType)
                 {
                     case 0:
-                        SEPlayer.PlaySE(1, 2147483647);
+                        _SEPlayer.PlaySE(1, 2147483647);
                         break;
                     case 1:
-                        SEPlayer.PlaySE(8, 2147483647);
+                        _SEPlayer.PlaySE(8, 2147483647);
                         break;
                 }
                 //アーム下降音再生
@@ -143,11 +147,11 @@ public class Type2Manager : MonoBehaviour
                 switch (soundType)
                 {
                     case 0:
-                        SEPlayer.StopSE(1); //アーム下降音再生停止;
-                        SEPlayer.PlaySE(2, 1); //アーム掴む音再生;
+                        _SEPlayer.StopSE(1); //アーム下降音再生停止;
+                        _SEPlayer.PlaySE(2, 1); //アーム掴む音再生;
                         break;
                     case 1:
-                        SEPlayer.StopSE(8);
+                        _SEPlayer.StopSE(8);
                         break;
                 }
                 //アーム掴む;
@@ -155,7 +159,7 @@ public class Type2Manager : MonoBehaviour
 
             if (craneStatus == 8)
             {
-                if (soundType == 1) SEPlayer.PlaySE(9, 2147483647);
+                if (soundType == 1) _SEPlayer.PlaySE(9, 2147483647);
                 //アーム上昇音再生;
                 //アーム上昇;
             }
@@ -165,11 +169,11 @@ public class Type2Manager : MonoBehaviour
                 switch (soundType)
                 {
                     case 0:
-                        SEPlayer.StopSE(2);
-                        SEPlayer.PlaySE(3, 1); //アーム上昇停止音再生;
+                        _SEPlayer.StopSE(2);
+                        _SEPlayer.PlaySE(3, 1); //アーム上昇停止音再生;
                         break;
                     case 1:
-                        SEPlayer.StopSE(9);
+                        _SEPlayer.StopSE(9);
                         break;
                 }
 
@@ -184,7 +188,7 @@ public class Type2Manager : MonoBehaviour
 
             if (craneStatus == 11)
             {
-                if (soundType == 0) SEPlayer.PlaySE(4, 1); //アーム開く音再生;
+                if (soundType == 0) _SEPlayer.PlaySE(4, 1); //アーム開く音再生;
                 //アーム開く;
                 //1秒待機;
             }
@@ -206,16 +210,16 @@ public class Type2Manager : MonoBehaviour
 
     async void StartTimer()
     {
-        while(limitTimeCount >= 0)
+        while (limitTimeCount >= 0)
         {
-            if(limitTimeCount == 0)
+            if (limitTimeCount == 0)
             {
                 craneStatus = 6;
                 break;
             }
-            if(limitTimeCount <= 10)
+            if (limitTimeCount <= 10)
             {
-                SEPlayer.PlaySE(7, 1);
+                _SEPlayer.PlaySE(7, 1);
             }
             await Task.Delay(1000);
             limitTimeCount--;
