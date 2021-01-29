@@ -7,16 +7,18 @@ public class Type3Manager : MonoBehaviour
 {
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    double catchArmpower; //掴むときのアームパワー(%，未確率時)
-    double upArmpower; //上昇時のアームパワー(%，未確率時)
-    double backArmpower; //獲得口移動時のアームパワー(%，未確率時)
-    double catchArmpowersuccess; //同確率時
-    double upArmpowersuccess; //同確率時
-    double backArmpowersuccess; //同確率時
+    float catchArmpower = 80; //掴むときのアームパワー(%，未確率時)
+    float upArmpower = 30; //上昇時のアームパワー(%，未確率時)
+    float backArmpower = 0; //獲得口移動時のアームパワー(%，未確率時)
+    float catchArmpowersuccess = 100; //同確率時
+    float upArmpowersuccess = 100; //同確率時
+    float backArmpowersuccess = 100; //同確率時
     int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
-    float audioPitch = 1f;
+    float audioPitch = 1f; //サウンドのピッチ
     private bool[] instanceFlag = new bool[13];
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
+    bool probability; // 確率判定用
+    float armPower; // 現在のアームパワー
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
     RopePoint[] _RopePoint;
@@ -70,10 +72,10 @@ public class Type3Manager : MonoBehaviour
 
         _GetPoint.GetManager(3);
 
-        await Task.Delay(300);
+        //await Task.Delay(300);
         ArmUnitUp();
         _ArmController.ArmOpen();
-        await Task.Delay(500);
+        //await Task.Delay(500);
         _CraneBox.leftMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
 
@@ -87,7 +89,7 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(soundType);
-            await Task.Delay(1500);
+            //await Task.Delay(1500);
             if (_CraneBox.CheckHomePos(1))
             {
                 craneStatus = 0;
@@ -146,12 +148,12 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 2)
         { //右移動中
+
             InputKeyCheck(craneStatus);
             //コイン投入無効化;
             /*if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
-                Debug.Log("Instance");
             }*/
             switch (soundType)
             {
@@ -293,6 +295,9 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.StopSE(21);
                         break;
                 }
+                if (probability) armPower = catchArmpowersuccess;
+                else armPower = catchArmpower;
+                _ArmController.SpringPower(armPower);
                 _ArmController.ArmClose();
                 await Task.Delay(1000);
                 craneStatus = 8;
@@ -316,13 +321,25 @@ public class Type3Manager : MonoBehaviour
                 }
                 ArmUnitUp();
             }
+            if (probability && armPower > upArmpowersuccess)
+            {
+                armPower -= 0.1f;
+                _ArmController.SpringPower(armPower);
+            }
+            else if (!probability && armPower > upArmpower)
+            {
+                armPower -= 0.1f;
+                _ArmController.SpringPower(armPower);
+            }
             //アーム上昇音再生;
             //アーム上昇;
         }
 
         if (craneStatus == 9)
         {
-            _ArmController.SpringPower(0);
+            if (probability) armPower = upArmpowersuccess;
+            else armPower = upArmpower;
+            _ArmController.SpringPower(armPower);
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
@@ -361,6 +378,16 @@ public class Type3Manager : MonoBehaviour
                         break;
                 }
             }
+            if (probability && armPower > backArmpowersuccess)
+            {
+                armPower -= 0.1f;
+                _ArmController.SpringPower(armPower);
+            }
+            else if (!probability && armPower > backArmpower)
+            {
+                armPower -= 0.1f;
+                _ArmController.SpringPower(armPower);
+            }
             if (_CraneBox.CheckHomePos(1)) craneStatus = 11;
             //アーム獲得口ポジションへ;
         }
@@ -388,10 +415,11 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 12)
         {
-            _ArmController.SpringPower(100f);
+
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
+                _ArmController.SpringPower(100f);
                 _ArmController.ArmClose();
                 switch (soundType)
                 {
@@ -521,7 +549,13 @@ public class Type3Manager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.RightArrow) && !buttonFlag)
                 {
                     buttonFlag = true;
-                    if (craneStatus == 1) creditSystem.ResetNowPayment();
+                    if (craneStatus == 1)
+                    {
+                        creditSystem.ResetNowPayment();
+                        creditSystem.AddCreditPlayed();
+                        probability = creditSystem.ProbabilityCheck();
+                        Debug.Log("Probability:" + probability);
+                    }
                     craneStatus = 2;
                     _CraneBox.rightMoveFlag = true;
                 }

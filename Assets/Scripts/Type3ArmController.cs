@@ -43,9 +43,10 @@ public class Type3ArmController : MonoBehaviour
 
     public void SpringPower(float power)
     {
+        Debug.Log("Change Spring Power " + power);
         for (int i = 0; i < 3; i++)
         {
-            spring[i].spring = 4.5f * power / 100f + 0.5f;
+            spring[i].spring = 1.5f * power / 100f + 0.5f;
             joint[i].spring = spring[i];
         }
     }
