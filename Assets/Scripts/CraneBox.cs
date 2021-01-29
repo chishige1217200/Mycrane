@@ -9,6 +9,7 @@ public class CraneBox : MonoBehaviour
     public bool backMoveFlag = false;
     public bool forwardMoveFlag = false;
     public float moveSpeed = 0.001f;
+    public bool supportDirectionChanger = false; // true:x-move false:z-move
     GameObject craneBoxSupport;
     GameObject ropeHost;
     Type1Manager _Type1Manager;
@@ -106,25 +107,27 @@ public class CraneBox : MonoBehaviour
     {
         this.transform.localPosition += new Vector3(moveSpeed, 0, 0);
         ropeHost.transform.localPosition += new Vector3(moveSpeed, 0, 0);
-        craneBoxSupport.transform.localPosition += new Vector3(moveSpeed, 0, 0);
+        if (!supportDirectionChanger) craneBoxSupport.transform.localPosition += new Vector3(moveSpeed, 0, 0);
     }
 
     void LeftMove()
     {
         this.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
         ropeHost.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
-        craneBoxSupport.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
+        if (!supportDirectionChanger) craneBoxSupport.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
     }
 
     void BackMove()
     {
         this.transform.localPosition += new Vector3(0, 0, moveSpeed);
         ropeHost.transform.localPosition += new Vector3(0, 0, moveSpeed);
+        if (supportDirectionChanger) craneBoxSupport.transform.localPosition += new Vector3(0, 0, moveSpeed);
     }
 
     void ForwardMove()
     {
         this.transform.localPosition -= new Vector3(0, 0, moveSpeed);
         ropeHost.transform.localPosition -= new Vector3(0, 0, moveSpeed);
+        if (supportDirectionChanger) craneBoxSupport.transform.localPosition -= new Vector3(0, 0, moveSpeed);
     }
 }
