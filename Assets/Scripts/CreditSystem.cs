@@ -150,7 +150,7 @@ public class CreditSystem : MonoBehaviour
         if (probabilityMode == 2 && creditPlayed >= creditProbability) return true;
         // *景品獲得時にResetCreditProbability()の処理が必要
 
-        if (probabilityMode == 3 && creditPlayed / creditProbability == 0)
+        if (probabilityMode == 3 && creditPlayed % creditProbability == 0 && creditPlayed != 0)
         {
             ResetCreditProbability();
             return true;
