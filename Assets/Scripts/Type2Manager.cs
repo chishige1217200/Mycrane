@@ -34,14 +34,16 @@ public class Type2Manager : MonoBehaviour
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        creditSystem.GetSEPlayer(_SEPlayer);
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
+        creditSystem.insertFlag = true;
     }
 
     async void Update()
     {
         craneStatusdisplayed.text = craneStatus.ToString();
-        limitTimedisplayed.text = limitTimeCount.ToString();
+        //limitTimedisplayed.text = limitTimeCount.ToString();
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(2 * soundType);
@@ -205,16 +207,19 @@ public class Type2Manager : MonoBehaviour
                 else
                     craneStatus = 0;
             }
+            if (timerFlag) limitTimedisplayed.text = limitTimeCount.ToString();
         }
     }
 
     async void StartTimer()
     {
+        creditSystem.segUpdateFlag = false;
         while (limitTimeCount >= 0)
         {
             if (limitTimeCount == 0)
             {
                 craneStatus = 6;
+                creditSystem.segUpdateFlag = true;
                 break;
             }
             if (limitTimeCount <= 10)
@@ -229,6 +234,7 @@ public class Type2Manager : MonoBehaviour
     void CancelTimer()
     {
         limitTimeCount = -1;
+        creditSystem.segUpdateFlag = true;
     }
 
     public void Testadder()
