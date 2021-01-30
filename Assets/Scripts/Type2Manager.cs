@@ -16,7 +16,7 @@ public class Type2Manager : MonoBehaviour
     int operationType = 1; //0:ボタン式，1:レバー式
     int limitTimeSet = 30; //レバー式の場合，残り時間を設定
     int limitTimeCount = 0; //実際のカウントダウン
-    int soundType = 1; //DECACRE:0, DECACRE Alpha:1
+    int soundType = 0; //DECACRE:0, DECACRE Alpha:1
     bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     private BGMPlayer _BGMPlayer;
