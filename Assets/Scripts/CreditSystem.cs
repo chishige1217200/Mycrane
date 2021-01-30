@@ -12,6 +12,7 @@ public class CreditSystem : MonoBehaviour
     private int creditPlayedSum = 0; //プレイされたクレジット数
     private bool serviceMode = false; // trueならサービスモード
     public bool insertFlag = false; // trueならコイン投入可能
+    public bool segUpdateFlag = true; // trueならクレジット情報を7セグに表示
     private int[,] rateSet = new int[2, 2]; //100円1PLAY，500円6PLAYなどのプリセット?
     private int creditSoundNum = -1; //投入時サウンド番号
     private SEPlayer _SEPlayer;
@@ -62,7 +63,7 @@ public class CreditSystem : MonoBehaviour
 
     void Update()
     {
-        if (!serviceMode)
+        if (!serviceMode && segUpdateFlag) // segUpdateFlagはタイマー存在機種のみ使用
         {
             Credit.text = creditDisplayed.ToString();
             nowPaid.text = nowpaid.ToString();
@@ -71,7 +72,7 @@ public class CreditSystem : MonoBehaviour
         {
             creditAll = 1;
             creditNew = 0;
-            creditDisplayed = creditAll + creditNew;
+            creditDisplayed = creditAll + creditNew; // 表示は更新してない
         }
 
     }
@@ -140,7 +141,7 @@ public class CreditSystem : MonoBehaviour
     //Probability Function-----------------------------------------------
 
     private int creditProbability = 3; //設定クレジット数
-    private int costProbability = 300; //設定金額
+    private int costProbability = 0; //設定金額
     private int nowPaidforProbability = 0; //確率設定用の投入金額
     private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数
     private int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
