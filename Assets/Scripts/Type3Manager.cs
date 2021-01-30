@@ -7,8 +7,8 @@ public class Type3Manager : MonoBehaviour
 {
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    float catchArmpower = 80; //掴むときのアームパワー(%，未確率時)
-    float upArmpower = 10; //上昇時のアームパワー(%，未確率時)
+    float catchArmpower = 70; //掴むときのアームパワー(%，未確率時)
+    float upArmpower = 0; //上昇時のアームパワー(%，未確率時)
     float backArmpower = 0; //獲得口移動時のアームパワー(%，未確率時)
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
@@ -17,7 +17,7 @@ public class Type3Manager : MonoBehaviour
     float audioPitch = 1f; //サウンドのピッチ
     private bool[] instanceFlag = new bool[13];
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
-    bool probability; // 確率判定用
+    public bool probability; // 確率判定用
     float armPower; // 現在のアームパワー
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
@@ -74,7 +74,7 @@ public class Type3Manager : MonoBehaviour
 
         //await Task.Delay(300);
         ArmUnitUp();
-        _ArmController.ArmOpen();
+        //_ArmController.ArmOpen();
         //await Task.Delay(500);
         _CraneBox.leftMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
@@ -298,7 +298,7 @@ public class Type3Manager : MonoBehaviour
                 }
                 if (probability) armPower = catchArmpowersuccess;
                 else armPower = catchArmpower;
-                _ArmController.SpringPower(armPower);
+                //_ArmController.SpringPower(armPower);
                 _ArmController.ArmClose();
                 await Task.Delay(1000);
                 craneStatus = 8;
@@ -322,16 +322,16 @@ public class Type3Manager : MonoBehaviour
                 }
                 ArmUnitUp();
             }
-            if (probability && armPower > upArmpowersuccess)
+            /*if (probability && armPower > upArmpowersuccess)
             {
-                armPower -= 0.1f;
-                _ArmController.SpringPower(armPower);
+                armPower -= 0.5f;
+                //_ArmController.SpringPower(armPower);
             }
             else if (!probability && armPower > upArmpower)
             {
-                armPower -= 0.1f;
-                _ArmController.SpringPower(armPower);
-            }
+                armPower -= 0.5f;
+                //_ArmController.SpringPower(armPower);
+            }*/
             //アーム上昇音再生;
             //アーム上昇;
         }
@@ -340,7 +340,7 @@ public class Type3Manager : MonoBehaviour
         {
             if (probability) armPower = upArmpowersuccess;
             else armPower = upArmpower;
-            _ArmController.SpringPower(armPower);
+            //_ArmController.SpringPower(armPower);
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
@@ -379,16 +379,16 @@ public class Type3Manager : MonoBehaviour
                         break;
                 }
             }
-            if (probability && armPower > backArmpowersuccess)
+            /*if (probability && armPower > backArmpowersuccess)
             {
-                armPower -= 0.1f;
+                armPower -= 0.5f;
                 _ArmController.SpringPower(armPower);
             }
             else if (!probability && armPower > backArmpower)
             {
-                armPower -= 0.1f;
+                armPower -= 0.5f;
                 _ArmController.SpringPower(armPower);
-            }
+            }*/
             if (_CraneBox.CheckHomePos(1)) craneStatus = 11;
             //アーム獲得口ポジションへ;
         }
@@ -420,7 +420,7 @@ public class Type3Manager : MonoBehaviour
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
-                _ArmController.SpringPower(100f);
+                //_ArmController.SpringPower(0f);
                 _ArmController.ArmClose();
                 switch (soundType)
                 {
