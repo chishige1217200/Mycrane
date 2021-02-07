@@ -39,7 +39,7 @@ public class Type3ArmController : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             motor[i].targetVelocity = -130f;
-            motor[i].force = 100f;
+            motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
             //joint[i].useMotor = true;
@@ -50,7 +50,7 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = 130f;
+            motor[i].targetVelocity = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
             //joint[i].useSpring = true;
@@ -63,7 +63,7 @@ public class Type3ArmController : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             motor[i].targetVelocity = -50f;
-            motor[i].force = 100f;
+            motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
         }
@@ -92,7 +92,7 @@ public class Type3ArmController : MonoBehaviour
         //Debug.Log("Change Spring Power " + power);
         for (int i = 0; i < 3; i++)
         {
-            motor[i].force = power;
+            motor[i].force = power / 100;
             joint[i].motor = motor[i];
         }
     }
