@@ -21,12 +21,13 @@ public class Type3Manager : MonoBehaviour
     float armPower; // 現在のアームパワー
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
-    RopePoint[] _RopePoint;
+    //RopePoint[] _RopePoint;
     Type3ArmController _ArmController;
     Transform temp;
     GameObject craneBox;
     CraneBox _CraneBox;
     GetPoint _GetPoint;
+    RopeManager _RopeManager;
 
     //For test-----------------------------------------
 
@@ -43,14 +44,15 @@ public class Type3Manager : MonoBehaviour
         _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
         // ロープとアームコントローラに関する処理
-        _RopePoint = new RopePoint[7];
+        /*_RopePoint = new RopePoint[7];
         _RopePoint[0] = temp.Find("Rope").Find("Sphere (1)").GetComponent<RopePoint>();
         _RopePoint[1] = temp.Find("Rope").Find("Sphere (2)").GetComponent<RopePoint>();
         _RopePoint[2] = temp.Find("Rope").Find("Sphere (3)").GetComponent<RopePoint>();
         _RopePoint[3] = temp.Find("Rope").Find("Sphere (4)").GetComponent<RopePoint>();
         _RopePoint[4] = temp.Find("Rope").Find("Sphere (5)").GetComponent<RopePoint>();
         _RopePoint[5] = temp.Find("Rope").Find("Sphere (6)").GetComponent<RopePoint>();
-        _RopePoint[6] = temp.Find("Rope").Find("Sphere (7)").GetComponent<RopePoint>();
+        _RopePoint[6] = temp.Find("Rope").Find("Sphere (7)").GetComponent<RopePoint>();*/
+        _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
 
         // CraneBoxに関する処理
@@ -59,8 +61,9 @@ public class Type3Manager : MonoBehaviour
         _CraneBox.GetManager(3);
 
         // ロープにマネージャー情報をセット
-        for (int i = 0; i < 7; i++)
-            _RopePoint[i].GetManager(3);
+        /*for (int i = 0; i < 7; i++)
+            _RopePoint[i].GetManager(3);*/
+        _RopeManager.SetManagerToPoint(3);
 
         creditSystem.GetSEPlayer(_SEPlayer);
         if (soundType == 0) creditSystem.SetCreditSound(0);
@@ -73,7 +76,7 @@ public class Type3Manager : MonoBehaviour
         _GetPoint.GetManager(3);
 
         //await Task.Delay(300);
-        ArmUnitUp();
+        _RopeManager.ArmUnitUp();
         //_ArmController.ArmOpen();
         //await Task.Delay(500);
         _CraneBox.leftMoveFlag = true;
@@ -250,7 +253,7 @@ public class Type3Manager : MonoBehaviour
                         break;
                 }
                 await Task.Delay(1000);
-                ArmUnitDown();
+                _RopeManager.ArmUnitDown();
                 craneStatus = 6;
             }
             //奥移動効果音ループ再生停止;
@@ -320,7 +323,7 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.PlaySE(22, 2147483647);
                         break;
                 }
-                ArmUnitUp();
+                _RopeManager.ArmUnitUp();
             }
             if (probability && armPower > upArmpowersuccess)
             {
@@ -496,49 +499,6 @@ public class Type3Manager : MonoBehaviour
         {
             if (getSoundNum != -1)
                 _SEPlayer.PlaySE(getSoundNum, 1);
-        }
-    }
-
-    async public void ArmUnitDown()
-    {
-        int i = 6;
-        while (true)
-        {
-            _RopePoint[i].moveDownFlag = true;
-            while (true)
-            {
-                if (!_RopePoint[i].moveDownFlag)
-                {
-                    if (i > 0)
-                    {
-                        i--;
-                        _RopePoint[i].moveDownFlag = true;
-                        break;
-                    }
-                    else
-                    {
-                        ArmUnitDownForceStop();
-                        return;
-                    }
-                }
-                await Task.Delay(1);
-            }
-        }
-    }
-
-    public void ArmUnitDownForceStop()
-    {
-        for (int i = 0; i <= 6; i++)
-        {
-            _RopePoint[i].moveDownFlag = false;
-        }
-    }
-
-    public void ArmUnitUp()
-    {
-        for (int i = 0; i <= 6; i++)
-        {
-            _RopePoint[i].moveUpFlag = true;
         }
     }
 

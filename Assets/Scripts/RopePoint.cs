@@ -138,4 +138,14 @@ public class RopePoint : MonoBehaviour
     {
         this.transform.localPosition -= new Vector3(0, downSpeed, 0);
     }
+
+    public bool KinematicCheck()
+    {
+        return rb.isKinematic;
+    }
+
+    public bool GravityCheck()
+    {
+        return rb.useGravity;
+    }
 }
