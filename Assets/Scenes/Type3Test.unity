@@ -14652,6 +14652,7 @@ Transform:
   - {fileID: 150297966}
   - {fileID: 1565994829}
   - {fileID: 1503980549}
+  - {fileID: 1326282357}
   - {fileID: 1602617802}
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -16582,6 +16583,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1314696998}
   m_CullTransparentMesh: 0
+--- !u!1 &1326282356
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1326282357}
+  - component: {fileID: 1326282358}
+  m_Layer: 0
+  m_Name: RopeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1326282357
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326282356}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1153012474}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1326282358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326282356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844a688a4c4fd5843b1746d8b6144944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ropePointCount: 7
+  ropePoint:
+  - {fileID: 1996014922}
+  - {fileID: 607829359}
+  - {fileID: 1207272507}
+  - {fileID: 1907595286}
+  - {fileID: 1958094981}
+  - {fileID: 775839090}
+  - {fileID: 753103481}
 --- !u!1 &1333346427
 GameObject:
   m_ObjectHideFlags: 0
@@ -19402,7 +19455,7 @@ Transform:
   - {fileID: 43410224}
   - {fileID: 1026843213}
   m_Father: {fileID: 1153012474}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1602617803
 MonoBehaviour:
