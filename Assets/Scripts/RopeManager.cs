@@ -10,7 +10,7 @@ public class RopeManager : MonoBehaviour
     private bool downCheckFlag = false; //降下処理の確認を行うか
     private int ropePointNum; //降下処理用
 
-    void Update()
+    void FixedUpdate()
     {
         if (checkFlag && downCheckFlag)
         {
