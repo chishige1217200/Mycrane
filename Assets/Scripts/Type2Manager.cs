@@ -26,11 +26,12 @@ public class Type2Manager : MonoBehaviour
     private BGMPlayer _BGMPlayer;
     private SEPlayer _SEPlayer;
     RopePoint[] _RopePoint;
-    Type3ArmController _ArmController;
+    //Type2ArmController _ArmController;
     Transform temp;
     GameObject craneBox;
     CraneBox _CraneBox;
     GetPoint _GetPoint;
+    RopeManager _RopeManager;
 
     //For test-----------------------------------------
 
@@ -48,15 +49,16 @@ public class Type2Manager : MonoBehaviour
         temp = this.transform.Find("CraneUnit").transform;
 
         // ロープとアームコントローラに関する処理
-        _RopePoint = new RopePoint[7];
+        /*_RopePoint = new RopePoint[7];
         _RopePoint[0] = temp.Find("Rope").Find("Sphere (1)").GetComponent<RopePoint>();
         _RopePoint[1] = temp.Find("Rope").Find("Sphere (2)").GetComponent<RopePoint>();
         _RopePoint[2] = temp.Find("Rope").Find("Sphere (3)").GetComponent<RopePoint>();
         _RopePoint[3] = temp.Find("Rope").Find("Sphere (4)").GetComponent<RopePoint>();
         _RopePoint[4] = temp.Find("Rope").Find("Sphere (5)").GetComponent<RopePoint>();
         _RopePoint[5] = temp.Find("Rope").Find("Sphere (6)").GetComponent<RopePoint>();
-        _RopePoint[6] = temp.Find("Rope").Find("Sphere (7)").GetComponent<RopePoint>();
-        _ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
+        _RopePoint[6] = temp.Find("Rope").Find("Sphere (7)").GetComponent<RopePoint>();*/
+        _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        //_ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").gameObject;
@@ -64,8 +66,9 @@ public class Type2Manager : MonoBehaviour
         _CraneBox.GetManager(2);
 
         // ロープにマネージャー情報をセット
-        for (int i = 0; i < 7; i++)
-            _RopePoint[i].GetManager(2);
+        /*for (int i = 0; i < 7; i++)
+            _RopePoint[i].GetManager(2);*/
+        _RopeManager.SetManagerToPoint(2);
         creditSystem.GetSEPlayer(_SEPlayer);
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
@@ -73,7 +76,7 @@ public class Type2Manager : MonoBehaviour
         _SEPlayer.SetAudioPitch(audioPitch);
 
         _GetPoint.GetManager(2);
-        ArmUnitUp();
+        _RopeManager.ArmUnitUp();
 
         //_CraneBox.leftMoveFlag = true;
         //_CraneBox.forwardMoveFlag = true;
@@ -182,7 +185,7 @@ public class Type2Manager : MonoBehaviour
                         break;
                 }
                 await Task.Delay(300);
-                ArmUnitDown();
+                _RopeManager.ArmUnitDown();
             }
             //アーム下降音再生
             //アーム下降;
@@ -211,7 +214,7 @@ public class Type2Manager : MonoBehaviour
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
-                ArmUnitUp();
+                _RopeManager.ArmUnitUp();
             }
             //アーム上昇音再生;
             //アーム上昇;
@@ -219,31 +222,50 @@ public class Type2Manager : MonoBehaviour
 
         if (craneStatus == 9)
         {
-            switch (soundType)
+            if (!instanceFlag[craneStatus])
             {
-                case 0:
-                    _SEPlayer.StopSE(2);
-                    _SEPlayer.PlaySE(3, 1); //アーム上昇停止音再生;
-                    break;
-                case 1:
-                    _SEPlayer.StopSE(9);
-                    break;
+                instanceFlag[craneStatus] = true;
+                switch (soundType)
+                {
+                    case 0:
+                        _SEPlayer.StopSE(2);
+                        _SEPlayer.PlaySE(3, 1); //アーム上昇停止音再生;
+                        break;
+                    case 1:
+                        _SEPlayer.StopSE(9);
+                        break;
+                }
             }
-
+            craneStatus = 10;
             //アーム上昇停止;
         }
 
         if (craneStatus == 10)
         {
+            if (!instanceFlag[craneStatus])
+            {
+                instanceFlag[craneStatus] = true;
+                _CraneBox.leftMoveFlag = true;
+                _CraneBox.forwardMoveFlag = true;
+            }
+            if (_CraneBox.CheckHomePos(1)) craneStatus = 11;
             //アーム獲得口ポジション移動音再生;
             //アーム獲得口ポジションへ;
         }
 
         if (craneStatus == 11)
         {
-            if (soundType == 0) _SEPlayer.PlaySE(4, 1); //アーム開く音再生;
-                                                        //アーム開く;
-                                                        //1秒待機;
+            if (!instanceFlag[craneStatus])
+            {
+                instanceFlag[craneStatus] = true;
+                //_ArmController.ArmOpen();
+                if (soundType == 0) _SEPlayer.PlaySE(4, 1);
+                await Task.Delay(1000);
+                craneStatus = 12;
+            }
+            //アーム開く音再生;
+            //アーム開く;
+            //1秒待機;
         }
 
         if (craneStatus == 12)
@@ -257,6 +279,7 @@ public class Type2Manager : MonoBehaviour
                 for (int i = 0; i < 12; i++)
                     instanceFlag[i] = false;
             }
+
             if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
             else
@@ -333,49 +356,6 @@ public class Type2Manager : MonoBehaviour
         {
             if (getSoundNum != -1)
                 _SEPlayer.PlaySE(getSoundNum, 1);
-        }
-    }
-
-    async public void ArmUnitDown()
-    {
-        int i = 6;
-        while (true)
-        {
-            _RopePoint[i].moveDownFlag = true;
-            while (true)
-            {
-                if (!_RopePoint[i].moveDownFlag)
-                {
-                    if (i > 0)
-                    {
-                        i--;
-                        _RopePoint[i].moveDownFlag = true;
-                        break;
-                    }
-                    else
-                    {
-                        ArmUnitDownForceStop();
-                        return;
-                    }
-                }
-                await Task.Delay(1);
-            }
-        }
-    }
-
-    public void ArmUnitDownForceStop()
-    {
-        for (int i = 0; i <= 6; i++)
-        {
-            _RopePoint[i].moveDownFlag = false;
-        }
-    }
-
-    public void ArmUnitUp()
-    {
-        for (int i = 0; i <= 6; i++)
-        {
-            _RopePoint[i].moveUpFlag = true;
         }
     }
 

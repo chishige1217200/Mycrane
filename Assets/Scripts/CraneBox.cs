@@ -52,7 +52,11 @@ public class CraneBox : MonoBehaviour
             if (craneType == 1)
                 if (_Type1Manager.craneStatus == 2) _Type1Manager.craneStatus = 3;
             if (craneType == 2)
-                if (_Type2Manager.craneStatus == 2) _Type2Manager.craneStatus = 3;
+                if (_Type2Manager.craneStatus == 2)
+                {
+                    _Type2Manager.craneStatus = 3;
+                    _Type2Manager.buttonFlag = false;
+                }
             if (craneType == 3)
                 if (_Type3Manager.craneStatus == 2)
                 {
@@ -67,7 +71,10 @@ public class CraneBox : MonoBehaviour
             if (craneType == 1)
                 if (_Type1Manager.craneStatus == 4) _Type1Manager.craneStatus = 5;
             if (craneType == 2)
+            {
                 if (_Type2Manager.craneStatus == 4) _Type2Manager.craneStatus = 5;
+                _Type2Manager.buttonFlag = false;
+            }
             if (craneType == 3)
             {
                 if (_Type3Manager.craneStatus == 4) _Type3Manager.craneStatus = 5;
