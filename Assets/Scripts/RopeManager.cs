@@ -5,7 +5,7 @@ using UnityEngine;
 public class RopeManager : MonoBehaviour
 {
     public int ropePointCount = 0; //RopePointの数
-    public RopePoint[] ropePoint = new RopePoint[10];
+    public RopePoint[] ropePoint = new RopePoint[30];
     private bool checkFlag = false; //マネージャーがセットされたかを確認
     private bool downCheckFlag = false; //降下処理の確認を行うか
     private int ropePointNum; //降下処理用
