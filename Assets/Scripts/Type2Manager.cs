@@ -14,9 +14,9 @@ public class Type2Manager : MonoBehaviour
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
     int operationType = 0; //0:ボタン式，1:レバー式
-    int limitTimeSet = 30; //レバー式の場合，残り時間を設定
+    int limitTimeSet = 10; //レバー式の場合，残り時間を設定
     int limitTimeCount = 0; //実際のカウントダウン
-    int soundType = 0; //DECACRE:0, DECACRE Alpha:1
+    int soundType = 1; //DECACRE:0, DECACRE Alpha:1
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1f; //サウンドのピッチ
     private bool[] instanceFlag = new bool[13];
@@ -84,6 +84,8 @@ public class Type2Manager : MonoBehaviour
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
 
+        _CraneBox.leftMoveFlag = true;
+        _CraneBox.forwardMoveFlag = true;
         creditSystem.insertFlag = true;
     }
 
@@ -174,6 +176,7 @@ public class Type2Manager : MonoBehaviour
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
+                //await Task.Delay(1000);
                 CancelTimer();
                 switch (soundType)
                 {
@@ -273,9 +276,9 @@ public class Type2Manager : MonoBehaviour
             //アーム閉じる音再生;
             //アーム閉じる;
             //1秒待機;
-            timerFlag = false;
             if (!instanceFlag[craneStatus])
             {
+                timerFlag = false;
                 for (int i = 0; i < 12; i++)
                     instanceFlag[i] = false;
             }
@@ -285,7 +288,13 @@ public class Type2Manager : MonoBehaviour
             else
                 craneStatus = 0;
         }
-        if (timerFlag) limitTimedisplayed.text = limitTimeCount.ToString();
+        if (!creditSystem.segUpdateFlag)
+        {
+            if (limitTimeCount >= 0)
+                limitTimedisplayed.text = limitTimeCount.ToString();
+            else
+                limitTimedisplayed.text = "0";
+        }
     }
 
 
@@ -297,7 +306,8 @@ public class Type2Manager : MonoBehaviour
             if (limitTimeCount == 0)
             {
                 craneStatus = 6;
-                creditSystem.segUpdateFlag = true;
+                await Task.Delay(1000);
+                //creditSystem.segUpdateFlag = true;
                 break;
             }
             if (limitTimeCount <= 10)
@@ -312,7 +322,7 @@ public class Type2Manager : MonoBehaviour
     void CancelTimer()
     {
         limitTimeCount = -1;
-        creditSystem.segUpdateFlag = true;
+        //creditSystem.segUpdateFlag = true;
     }
 
     public void GetPrize()
