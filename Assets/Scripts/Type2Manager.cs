@@ -332,21 +332,8 @@ public class Type2Manager : MonoBehaviour
         switch (soundType)
         {
             case 0:
-                getSoundNum = 5;
-                _SEPlayer.StopSE(1);
-                break;
             case 1:
-                getSoundNum = 12;
-                _SEPlayer.StopSE(11);
-                break;
-            case 2:
-                getSoundNum = 16;
-                _SEPlayer.StopSE(14);
-                _SEPlayer.StopSE(17);
-                break;
-            case 3:
-                getSoundNum = 26;
-                _SEPlayer.StopSE(25);
+                getSoundNum = 5;
                 break;
         }
 
