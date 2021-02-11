@@ -190,6 +190,7 @@ public class Type2Manager : MonoBehaviour
                 await Task.Delay(300);
                 _RopeManager.ArmUnitDown();
             }
+            InputKeyCheck(craneStatus);
             //アーム下降音再生
             //アーム下降;
         }
@@ -398,6 +399,13 @@ public class Type2Manager : MonoBehaviour
                     craneStatus = 5;
                     _CraneBox.backMoveFlag = false;
                     buttonFlag = false;
+                }
+                break;
+            case 6:
+                if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3)) && !buttonFlag)
+                {
+                    _RopeManager.ArmUnitDownForceStop();
+                    craneStatus = 7;
                 }
                 break;
         }
