@@ -45,20 +45,12 @@ public class Type2ArmController : MonoBehaviour
         }
     }
 
-    public void Release()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            joint[i].useMotor = false;
-        }
-    }
-
     public void MotorPower(float power)
     {
         Debug.Log("Change Spring Power " + power);
         for (int i = 0; i < 3; i++)
         {
-            motor[i].force = power;
+            motor[i].force = power / 50f;
             joint[i].motor = motor[i];
         }
     }
