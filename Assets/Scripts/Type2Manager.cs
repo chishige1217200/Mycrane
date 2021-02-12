@@ -436,6 +436,13 @@ public class Type2Manager : MonoBehaviour
                     _CraneBox.backMoveFlag = true;
                 }
                 break;
+            case 3:
+                if (craneStatus == 6)
+                {
+                    _RopeManager.ArmUnitDownForceStop();
+                    craneStatus = 7;
+                }
+                break;
         }
     }
 
