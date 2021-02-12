@@ -188,9 +188,9 @@ public class Type2Manager : MonoBehaviour
                         break;
                 }
                 await Task.Delay(300);
-                _RopeManager.ArmUnitDown();
+                if (craneStatus == 6) _RopeManager.ArmUnitDown(); //awaitによる時差実行を防止
             }
-            InputKeyCheck(craneStatus);
+            if (craneStatus == 6) InputKeyCheck(craneStatus); //awaitによる時差実行を防止
             //アーム下降音再生
             //アーム下降;
         }
@@ -208,7 +208,7 @@ public class Type2Manager : MonoBehaviour
                     break;
             }
             await Task.Delay(1000);
-            craneStatus = 8;
+            if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
             //アーム掴む;
         }
 
