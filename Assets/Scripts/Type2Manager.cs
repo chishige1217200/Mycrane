@@ -39,7 +39,7 @@ public class Type2Manager : MonoBehaviour
 
     //-------------------------------------------------
 
-    void Start()
+    async void Start()
     {
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
@@ -76,13 +76,14 @@ public class Type2Manager : MonoBehaviour
 
         _GetPoint.GetManager(2);
         _RopeManager.ArmUnitUp();
-        _ArmController.ArmOpen();
 
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
 
         _CraneBox.leftMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
+        await Task.Delay(1000);
+        _ArmController.ArmOpen();
         creditSystem.insertFlag = true;
     }
 
