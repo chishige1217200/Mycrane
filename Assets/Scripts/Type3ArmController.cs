@@ -7,17 +7,13 @@ public class Type3ArmController : MonoBehaviour
 {
     GameObject[] arm;
     HingeJoint[] joint;
-    JointSpring[] spring;
     JointMotor[] motor;
     ArmControllerSupport support;
 
     void Start()
     {
-        int i = 0;
-
         arm = new GameObject[3];
         joint = new HingeJoint[3];
-        //spring = new JointSpring[3];
         motor = new JointMotor[3];
         arm[0] = this.transform.Find("Arm1").gameObject;
         arm[1] = this.transform.Find("Arm2").gameObject;
@@ -26,10 +22,9 @@ public class Type3ArmController : MonoBehaviour
         support.GetManager(3);
         support.GetArmController(3);
 
-        for (i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             joint[i] = arm[i].GetComponent<HingeJoint>();
-            //spring[i] = joint[i].spring;
             motor[i] = joint[i].motor;
         }
     }
@@ -42,7 +37,6 @@ public class Type3ArmController : MonoBehaviour
             motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
-            //joint[i].useMotor = true;
         }
     }
 
@@ -53,8 +47,6 @@ public class Type3ArmController : MonoBehaviour
             motor[i].targetVelocity = 50f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
-            //joint[i].useSpring = true;
-            //joint[i].useMotor = false;
         }
     }
 
@@ -77,19 +69,8 @@ public class Type3ArmController : MonoBehaviour
         }
     }
 
-    /*public void SpringPower(float power)
-    {
-        Debug.Log("Change Spring Power " + power);
-        for (int i = 0; i < 3; i++)
-        {
-            spring[i].spring = 100f * power / 100f;
-            joint[i].spring = spring[i];
-        }
-    }*/
-
     public void MotorPower(float power)
     {
-        //Debug.Log("Change Spring Power " + power);
         for (int i = 0; i < 3; i++)
         {
             motor[i].force = power;
