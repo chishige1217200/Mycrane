@@ -7,12 +7,12 @@ public class Type2Manager : MonoBehaviour
 {
     public CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    double catchArmpower; //掴むときのアームパワー(%，未確率時)
-    double upArmpower; //上昇時のアームパワー(%，未確率時)
-    double backArmpower; //獲得口移動時のアームパワー(%，未確率時)
-    double catchArmpowersuccess; //同確率時
-    double upArmpowersuccess; //同確率時
-    double backArmpowersuccess; //同確率時
+    float catchArmpower = 100f; //掴むときのアームパワー(%，未確率時)
+    float upArmpower = 50f; //上昇時のアームパワー(%，未確率時)
+    float backArmpower = 0f; //獲得口移動時のアームパワー(%，未確率時)
+    float catchArmpowersuccess = 100f; //同確率時
+    float upArmpowersuccess = 100f; //同確率時
+    float backArmpowersuccess = 100f; //同確率時
     int operationType = 0; //0:ボタン式，1:レバー式
     int limitTimeSet = 10; //レバー式の場合，残り時間を設定
     int limitTimeCount = 0; //実際のカウントダウン
@@ -25,8 +25,7 @@ public class Type2Manager : MonoBehaviour
     float armPower; // 現在のアームパワー
     private BGMPlayer _BGMPlayer;
     private SEPlayer _SEPlayer;
-    RopePoint[] _RopePoint;
-    //Type2ArmController _ArmController;
+    Type2ArmController _ArmController;
     Transform temp;
     GameObject craneBox;
     CraneBox _CraneBox;
@@ -58,7 +57,7 @@ public class Type2Manager : MonoBehaviour
         _RopePoint[5] = temp.Find("Rope").Find("Sphere (6)").GetComponent<RopePoint>();
         _RopePoint[6] = temp.Find("Rope").Find("Sphere (7)").GetComponent<RopePoint>();*/
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
-        //_ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
+        _ArmController = temp.Find("ArmUnit").GetComponent<Type2ArmController>();
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").gameObject;
@@ -77,9 +76,7 @@ public class Type2Manager : MonoBehaviour
 
         _GetPoint.GetManager(2);
         _RopeManager.ArmUnitUp();
-
-        //_CraneBox.leftMoveFlag = true;
-        //_CraneBox.forwardMoveFlag = true;
+        _ArmController.ArmOpen();
 
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
@@ -197,15 +194,22 @@ public class Type2Manager : MonoBehaviour
 
         if (craneStatus == 7)
         {
-            switch (soundType)
+            if (craneStatus == 7) //awaitによる時差実行を防止
             {
-                case 0:
-                    _SEPlayer.StopSE(1); //アーム下降音再生停止;
-                    _SEPlayer.PlaySE(2, 1); //アーム掴む音再生;
-                    break;
-                case 1:
-                    _SEPlayer.StopSE(8);
-                    break;
+                switch (soundType)
+                {
+                    case 0:
+                        _SEPlayer.StopSE(1); //アーム下降音再生停止;
+                        _SEPlayer.PlaySE(2, 1); //アーム掴む音再生;
+                        break;
+                    case 1:
+                        _SEPlayer.StopSE(8);
+                        break;
+                }
+                if (probability) armPower = catchArmpowersuccess;
+                else armPower = catchArmpower;
+                _ArmController.MotorPower(armPower);
+                _ArmController.ArmClose();
             }
             await Task.Delay(1000);
             if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
@@ -220,12 +224,25 @@ public class Type2Manager : MonoBehaviour
                 instanceFlag[craneStatus] = true;
                 _RopeManager.ArmUnitUp();
             }
+            if (probability && armPower > upArmpowersuccess)
+            {
+                armPower -= 0.5f;
+                _ArmController.MotorPower(armPower);
+            }
+            else if (!probability && armPower > upArmpower)
+            {
+                armPower -= 0.5f;
+                _ArmController.MotorPower(armPower);
+            }
             //アーム上昇音再生;
             //アーム上昇;
         }
 
         if (craneStatus == 9)
         {
+            if (probability) armPower = upArmpowersuccess;
+            else armPower = upArmpower;
+            _ArmController.MotorPower(armPower);
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
@@ -252,6 +269,16 @@ public class Type2Manager : MonoBehaviour
                 _CraneBox.leftMoveFlag = true;
                 _CraneBox.forwardMoveFlag = true;
             }
+            if (probability && armPower > backArmpowersuccess)
+            {
+                armPower -= 0.5f;
+                _ArmController.MotorPower(armPower);
+            }
+            else if (!probability && armPower > backArmpower)
+            {
+                armPower -= 0.5f;
+                _ArmController.MotorPower(armPower);
+            }
             if (_CraneBox.CheckHomePos(1)) craneStatus = 11;
             //アーム獲得口ポジション移動音再生;
             //アーム獲得口ポジションへ;
@@ -262,7 +289,7 @@ public class Type2Manager : MonoBehaviour
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
-                //_ArmController.ArmOpen();
+                _ArmController.ArmOpen();
                 if (soundType == 0) _SEPlayer.PlaySE(4, 1);
                 await Task.Delay(1000);
                 craneStatus = 12;
@@ -274,8 +301,6 @@ public class Type2Manager : MonoBehaviour
 
         if (craneStatus == 12)
         {
-            //アーム閉じる音再生;
-            //アーム閉じる;
             //1秒待機;
             if (!instanceFlag[craneStatus])
             {

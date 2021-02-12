@@ -21,7 +21,6 @@ public class Type3Manager : MonoBehaviour
     float armPower; // 現在のアームパワー
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
-    //RopePoint[] _RopePoint;
     Type3ArmController _ArmController;
     Transform temp;
     GameObject craneBox;
