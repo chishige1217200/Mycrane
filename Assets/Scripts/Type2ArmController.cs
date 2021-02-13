@@ -28,7 +28,7 @@ public class Type2ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = 100f;
+            motor[i].targetVelocity = 70f;
             motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
