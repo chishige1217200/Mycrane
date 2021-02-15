@@ -13,9 +13,9 @@ public class Type2ArmController : MonoBehaviour
         arm = new GameObject[3];
         joint = new HingeJoint[3];
         motor = new JointMotor[3];
-        arm[0] = this.transform.Find("Arm1").Find("UpperArmCollider").gameObject;
-        arm[1] = this.transform.Find("Arm2").Find("UpperArmCollider").gameObject;
-        arm[2] = this.transform.Find("Arm3").Find("UpperArmCollider").gameObject;
+        arm[0] = this.transform.Find("Arm1").gameObject;
+        arm[1] = this.transform.Find("Arm2").gameObject;
+        arm[2] = this.transform.Find("Arm3").gameObject;
 
         for (int i = 0; i < 3; i++)
         {
@@ -28,7 +28,7 @@ public class Type2ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = 70f;
+            motor[i].targetVelocity = 100f;
             motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
@@ -39,7 +39,7 @@ public class Type2ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = -50f;
+            motor[i].targetVelocity = -100f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
         }
