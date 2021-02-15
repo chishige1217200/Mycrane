@@ -167,22 +167,22 @@ public class Type2Manager : MonoBehaviour
                 _BGMPlayer.StopBGM(2 * soundType);
                 _BGMPlayer.PlayBGM(1 + 2 * soundType);
                 instanceFlag[12] = false;
-                if (instanceFlag[craneStatus])
+                if (!instanceFlag[craneStatus])
                 {
-                    instanceFlag[craneStatus] = false;
+                    instanceFlag[craneStatus] = true;
                     limitTimeCount = limitTimeSet;
                 }
 
                 //レバー操作有効化;
                 //降下ボタン有効化;
-                await Task.Delay(500);
                 craneStatus = 3;
             }
             if (craneStatus == 3)
             {
-                if (instanceFlag[craneStatus] && !timerFlag)
+                if (!instanceFlag[craneStatus] && !timerFlag)
                 {
-                    instanceFlag[craneStatus] = false;
+                    instanceFlag[craneStatus] = true;
+                    creditSystem.ResetNowPayment(); // Temporary
                     timerFlag = true;
                     StartTimer();
                 }
@@ -196,7 +196,6 @@ public class Type2Manager : MonoBehaviour
             {
                 instanceFlag[craneStatus] = true;
                 //await Task.Delay(1000);
-                CancelTimer();
                 switch (soundType)
                 {
                     case 0:
@@ -207,6 +206,7 @@ public class Type2Manager : MonoBehaviour
                         break;
                 }
                 await Task.Delay(300);
+                CancelTimer();
                 if (craneStatus == 6) _RopeManager.ArmUnitDown(); //awaitによる時差実行を防止
             }
             if (craneStatus == 6) InputKeyCheck(craneStatus); //awaitによる時差実行を防止
@@ -331,7 +331,7 @@ public class Type2Manager : MonoBehaviour
                     instanceFlag[i] = false;
             }
 
-            if (creditSystem.creditDisplayed > 0)
+            if (creditSystem.creditAll > 0)
                 craneStatus = 1;
             else
                 craneStatus = 0;
@@ -370,7 +370,7 @@ public class Type2Manager : MonoBehaviour
     void CancelTimer()
     {
         limitTimeCount = -1;
-        //creditSystem.segUpdateFlag = true;
+        creditSystem.segUpdateFlag = true;
     }
 
     public void GetPrize()
