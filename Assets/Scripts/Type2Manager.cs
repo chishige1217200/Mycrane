@@ -13,7 +13,7 @@ public class Type2Manager : MonoBehaviour
     float catchArmpowersuccess = 100f; //同確率時
     float upArmpowersuccess = 100f; //同確率時
     float backArmpowersuccess = 100f; //同確率時
-    int operationType = 0; //0:ボタン式，1:レバー式
+    int operationType = 1; //0:ボタン式，1:レバー式
     int limitTimeSet = 10; //レバー式の場合，残り時間を設定
     int limitTimeCount = 0; //実際のカウントダウン
     int soundType = 0; //DECACRE:0, DECACRE Alpha:1
@@ -456,7 +456,7 @@ public class Type2Manager : MonoBehaviour
             case 6:
                 if (operationType == 0)
                 {
-                    if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3)) && !buttonFlag)
+                    if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3)))
                     {
                         _RopeManager.ArmUnitDownForceStop();
                         craneStatus = 7;
@@ -464,7 +464,7 @@ public class Type2Manager : MonoBehaviour
                 }
                 else if (operationType == 1) // レバー操作時
                 {
-                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && !buttonFlag)
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)))
                     {
                         _RopeManager.ArmUnitDownForceStop();
                         craneStatus = 7;
@@ -532,13 +532,15 @@ public class Type2Manager : MonoBehaviour
             case 3:
                 if (craneStatus == 6)
                 {
+                    buttonFlag = true;
                     _RopeManager.ArmUnitDownForceStop();
                     craneStatus = 7;
                 }
-                break;
-            case 4: // レバー操作時
-                if (craneStatus == 3)
+                else if (craneStatus == 3)
+                {
+                    buttonFlag = true;
                     craneStatus = 6;
+                }
                 break;
         }
     }
