@@ -13,7 +13,7 @@ public class Type2Manager : MonoBehaviour
     float catchArmpowersuccess = 100f; //同確率時
     float upArmpowersuccess = 100f; //同確率時
     float backArmpowersuccess = 100f; //同確率時
-    int operationType = 0; //0:ボタン式，1:レバー式
+    int operationType = 1; //0:ボタン式，1:レバー式
     int limitTimeSet = 10; //レバー式の場合，残り時間を設定
     int limitTimeCount = 0; //実際のカウントダウン
     int soundType = 0; //DECACRE:0, DECACRE Alpha:1
@@ -79,6 +79,20 @@ public class Type2Manager : MonoBehaviour
 
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
+
+        // ControlGroupの制御
+        if (operationType == 0)
+        {
+            this.transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(false);
+            this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(false);
+            this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(false);
+        }
+        else if (operationType == 1)
+        {
+            this.transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(false);
+            this.transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(false);
+            this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
+        }
 
         _CraneBox.leftMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
@@ -153,19 +167,26 @@ public class Type2Manager : MonoBehaviour
                 _BGMPlayer.StopBGM(2 * soundType);
                 _BGMPlayer.PlayBGM(1 + 2 * soundType);
                 instanceFlag[12] = false;
-                limitTimeCount = limitTimeSet;
+                if (instanceFlag[craneStatus])
+                {
+                    instanceFlag[craneStatus] = false;
+                    limitTimeCount = limitTimeSet;
+                }
+
                 //レバー操作有効化;
                 //降下ボタン有効化;
                 await Task.Delay(500);
-                craneStatus = 2;
+                craneStatus = 3;
             }
-            if (craneStatus == 2)
+            if (craneStatus == 3)
             {
-                if (!timerFlag)
+                if (instanceFlag[craneStatus] && !timerFlag)
                 {
+                    instanceFlag[craneStatus] = false;
                     timerFlag = true;
                     StartTimer();
                 }
+                InputKeyCheck(5);
             }
         }
 
@@ -427,11 +448,26 @@ public class Type2Manager : MonoBehaviour
                     buttonFlag = false;
                 }
                 break;
+            case 5: // レバー操作時に使用
+                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && craneStatus == 3)
+                    craneStatus = 6;
+                break;
             case 6:
-                if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3)) && !buttonFlag)
+                if (operationType == 0)
                 {
-                    _RopeManager.ArmUnitDownForceStop();
-                    craneStatus = 7;
+                    if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3)) && !buttonFlag)
+                    {
+                        _RopeManager.ArmUnitDownForceStop();
+                        craneStatus = 7;
+                    }
+                }
+                else if (operationType == 1) // レバー操作時
+                {
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && !buttonFlag)
+                    {
+                        _RopeManager.ArmUnitDownForceStop();
+                        craneStatus = 7;
+                    }
                 }
                 break;
         }
@@ -468,6 +504,10 @@ public class Type2Manager : MonoBehaviour
                     _RopeManager.ArmUnitDownForceStop();
                     craneStatus = 7;
                 }
+                break;
+            case 4: // レバー操作時
+                if (craneStatus == 3)
+                    craneStatus = 6;
                 break;
         }
     }
