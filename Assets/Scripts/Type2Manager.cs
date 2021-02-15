@@ -13,7 +13,7 @@ public class Type2Manager : MonoBehaviour
     float catchArmpowersuccess = 100f; //同確率時
     float upArmpowersuccess = 100f; //同確率時
     float backArmpowersuccess = 100f; //同確率時
-    int operationType = 1; //0:ボタン式，1:レバー式
+    int operationType = 0; //0:ボタン式，1:レバー式
     int limitTimeSet = 10; //レバー式の場合，残り時間を設定
     int limitTimeCount = 0; //実際のカウントダウン
     int soundType = 0; //DECACRE:0, DECACRE Alpha:1
@@ -175,7 +175,7 @@ public class Type2Manager : MonoBehaviour
 
                 //レバー操作有効化;
                 //降下ボタン有効化;
-                craneStatus = 3;
+                InputLeverCheck();
             }
             if (craneStatus == 3)
             {
@@ -186,6 +186,7 @@ public class Type2Manager : MonoBehaviour
                     timerFlag = true;
                     StartTimer();
                 }
+                InputLeverCheck();
                 InputKeyCheck(5);
             }
         }
@@ -471,6 +472,36 @@ public class Type2Manager : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void InputLeverCheck()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            _CraneBox.rightMoveFlag = true;
+        if (Input.GetKeyUp(KeyCode.RightArrow))
+            _CraneBox.rightMoveFlag = false;
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+            _CraneBox.leftMoveFlag = true;
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
+            _CraneBox.leftMoveFlag = false;
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            _CraneBox.backMoveFlag = true;
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+            _CraneBox.backMoveFlag = false;
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+            _CraneBox.forwardMoveFlag = true;
+        if (Input.GetKeyUp(KeyCode.DownArrow))
+            _CraneBox.forwardMoveFlag = false;
+
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+            if (craneStatus == 1)
+            {
+                craneStatus = 3;
+                creditSystem.ResetNowPayment();
+                creditSystem.AddCreditPlayed();
+                probability = creditSystem.ProbabilityCheck();
+                Debug.Log("Probability:" + probability);
+            }
     }
 
     public void ButtonDown(int num)
