@@ -196,6 +196,10 @@ public class Type2Manager : MonoBehaviour
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
+                _CraneBox.rightMoveFlag = false;
+                _CraneBox.leftMoveFlag = false;
+                _CraneBox.backMoveFlag = false;
+                _CraneBox.forwardMoveFlag = false;
                 //await Task.Delay(1000);
                 switch (soundType)
                 {
