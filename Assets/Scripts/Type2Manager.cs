@@ -16,7 +16,7 @@ public class Type2Manager : MonoBehaviour
     int operationType = 1; //0:ボタン式，1:レバー式
     int limitTimeSet = 10; //レバー式の場合，残り時間を設定
     int limitTimeCount = 0; //実際のカウントダウン
-    int soundType = 0; //DECACRE:0, DECACRE Alpha:1
+    int soundType = 2; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1f; //サウンドのピッチ
     private bool[] instanceFlag = new bool[13];
@@ -48,14 +48,6 @@ public class Type2Manager : MonoBehaviour
         temp = this.transform.Find("CraneUnit").transform;
 
         // ロープとアームコントローラに関する処理
-        /*_RopePoint = new RopePoint[7];
-        _RopePoint[0] = temp.Find("Rope").Find("Sphere (1)").GetComponent<RopePoint>();
-        _RopePoint[1] = temp.Find("Rope").Find("Sphere (2)").GetComponent<RopePoint>();
-        _RopePoint[2] = temp.Find("Rope").Find("Sphere (3)").GetComponent<RopePoint>();
-        _RopePoint[3] = temp.Find("Rope").Find("Sphere (4)").GetComponent<RopePoint>();
-        _RopePoint[4] = temp.Find("Rope").Find("Sphere (5)").GetComponent<RopePoint>();
-        _RopePoint[5] = temp.Find("Rope").Find("Sphere (6)").GetComponent<RopePoint>();
-        _RopePoint[6] = temp.Find("Rope").Find("Sphere (7)").GetComponent<RopePoint>();*/
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type2ArmController>();
 
@@ -71,6 +63,7 @@ public class Type2Manager : MonoBehaviour
         creditSystem.GetSEPlayer(_SEPlayer);
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
+        if (soundType == 2) creditSystem.SetCreditSound(10);
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
 
@@ -208,6 +201,9 @@ public class Type2Manager : MonoBehaviour
                     case 1:
                         _SEPlayer.PlaySE(8, 2147483647);
                         break;
+                    case 2:
+                        _SEPlayer.PlaySE(12, 2147483647);
+                        break;
                 }
                 await Task.Delay(300);
                 CancelTimer();
@@ -231,6 +227,9 @@ public class Type2Manager : MonoBehaviour
                     case 1:
                         _SEPlayer.StopSE(8);
                         break;
+                    case 2:
+                        _SEPlayer.StopSE(12);
+                        break;
                 }
                 if (probability) armPower = catchArmpowersuccess;
                 else armPower = catchArmpower;
@@ -244,7 +243,16 @@ public class Type2Manager : MonoBehaviour
 
         if (craneStatus == 8)
         {
-            if (soundType == 1) _SEPlayer.PlaySE(9, 2147483647);
+            switch (soundType)
+            {
+                case 1:
+                    _SEPlayer.PlaySE(9, 2147483647);
+                    break;
+                case 2:
+                    _SEPlayer.PlaySE(13, 2147483647);
+                    break;
+            }
+
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
@@ -280,6 +288,9 @@ public class Type2Manager : MonoBehaviour
                         break;
                     case 1:
                         _SEPlayer.StopSE(9);
+                        break;
+                    case 2:
+                        _SEPlayer.StopSE(13);
                         break;
                 }
             }
@@ -335,12 +346,13 @@ public class Type2Manager : MonoBehaviour
                     instanceFlag[i] = false;
             }
 
-            if (creditSystem.creditAll > 0)
+            if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
             else
                 craneStatus = 0;
         }
-        if (!creditSystem.segUpdateFlag)
+
+        if (!creditSystem.segUpdateFlag) // Timer表示用
         {
             if (limitTimeCount >= 0)
                 limitTimedisplayed.text = limitTimeCount.ToString();
@@ -364,7 +376,15 @@ public class Type2Manager : MonoBehaviour
             }
             if (limitTimeCount <= 10)
             {
-                _SEPlayer.PlaySE(7, 1);
+                switch (soundType)
+                {
+                    case 2:
+                        _SEPlayer.PlaySE(11, 1);
+                        break;
+                    default:
+                        _SEPlayer.PlaySE(7, 1);
+                        break;
+                }
             }
             await Task.Delay(1000);
             limitTimeCount--;
@@ -385,6 +405,7 @@ public class Type2Manager : MonoBehaviour
         {
             case 0:
             case 1:
+            case 2:
                 getSoundNum = 5;
                 break;
         }
