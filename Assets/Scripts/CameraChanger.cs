@@ -26,8 +26,8 @@ public class CameraChanger : MonoBehaviour
     //単位時間ごとに実行される関数
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Keypad6)) ChangeCameraStatus(1);
-        else if (Input.GetKeyDown(KeyCode.Keypad4)) ChangeCameraStatus(-1);
+        if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6)) ChangeCameraStatus(1);
+        else if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) ChangeCameraStatus(-1);
         if (cameraStatus == 0) //メインカメラ
         {
             mainCamera.SetActive(true);
