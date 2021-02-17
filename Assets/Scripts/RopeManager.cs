@@ -16,13 +16,13 @@ public class RopeManager : MonoBehaviour
         {
             if (ropePointNum > 0 && !ropePoint[ropePointNum].KinematicCheck())
             {
-                Debug.Log("Next down." + ropePointNum);
+                //Debug.Log("Next down." + ropePointNum);
                 ropePointNum--;
                 ropePoint[ropePointNum].moveDownFlag = true;
             }
             else if (ropePointNum == 0 && !ropePoint[0].moveDownFlag)
             {
-                Debug.Log("Stop!");
+                //Debug.Log("Stop!");
                 ArmUnitDownForceStop();
             }
         }

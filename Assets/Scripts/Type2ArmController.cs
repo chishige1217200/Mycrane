@@ -47,7 +47,7 @@ public class Type2ArmController : MonoBehaviour
 
     public void MotorPower(float power)
     {
-        Debug.Log("Change Spring Power " + power);
+        //Debug.Log("Change Spring Power " + power);
         for (int i = 0; i < 3; i++)
         {
             motor[i].force = power;
