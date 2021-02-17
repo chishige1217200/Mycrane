@@ -35,7 +35,7 @@ public class Lever : MonoBehaviour
         //自身のゲームオブジェクトのRectTransformをpointerに入れる
         pointer = this.GetComponent<RectTransform>();
         init = new Vector2(pointer.anchoredPosition.x, pointer.anchoredPosition.y);
-        Debug.Log(init);
+        //Debug.Log(init);
     }
 
     // Update is called once per frame
@@ -73,15 +73,15 @@ public class Lever : MonoBehaviour
 
     public void ClickDown()
     {
-        Debug.Log("Pointer Down");
+        //Debug.Log("Pointer Down");
         isClicked = true;
     }
 
     public void ClickUp()
     {
-        Debug.Log("Pointer Up");
+        //Debug.Log("Pointer Up");
         isClicked = false;
-        Debug.Log(init);
+        //Debug.Log(init);
         pointer.anchoredPosition = init;
     }
 

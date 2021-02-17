@@ -52,7 +52,7 @@ public class RopePoint : MonoBehaviour
                 this.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 if (last)
                 {
-                    Debug.Log("UpFinished.");
+                    //Debug.Log("UpFinished.");
                     if (craneType == 1)
                         if (_Type1Manager.craneStatus == 8) _Type1Manager.craneStatus = 9;
                     if (craneType == 2)
