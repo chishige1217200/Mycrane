@@ -14,7 +14,7 @@ public class Type2Manager : MonoBehaviour
     float upArmpowersuccess = 100f; //同確率時
     float backArmpowersuccess = 100f; //同確率時
     int operationType = 1; //0:ボタン式，1:レバー式
-    int limitTimeSet = 10; //レバー式の場合，残り時間を設定
+    int limitTimeSet = 20; //レバー式の場合，残り時間を設定
     int limitTimeCount = 0; //実際のカウントダウン
     int soundType = 2; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
@@ -71,7 +71,7 @@ public class Type2Manager : MonoBehaviour
 
         _GetPoint.GetManager(2);
         _RopeManager.ArmUnitUp();
-        lever.GetManager(2);
+        //lever.GetManager(2);
 
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
@@ -501,26 +501,27 @@ public class Type2Manager : MonoBehaviour
         }
     }
 
-    public void InputLeverCheck()
+    public void InputLeverCheck() // キーボード，UI共通
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow) || lever.rightFlag)
             _CraneBox.rightMoveFlag = true;
-        if (Input.GetKeyUp(KeyCode.RightArrow))
+        else if (Input.GetKeyUp(KeyCode.RightArrow) || !lever.rightFlag)
             _CraneBox.rightMoveFlag = false;
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow) || lever.leftFlag)
             _CraneBox.leftMoveFlag = true;
-        if (Input.GetKeyUp(KeyCode.LeftArrow))
+        else if (Input.GetKeyUp(KeyCode.LeftArrow) || !lever.leftFlag)
             _CraneBox.leftMoveFlag = false;
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow) || lever.backFlag)
             _CraneBox.backMoveFlag = true;
-        if (Input.GetKeyUp(KeyCode.UpArrow))
+        else if (Input.GetKeyUp(KeyCode.UpArrow) || !lever.backFlag)
             _CraneBox.backMoveFlag = false;
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow) || lever.forwardFlag)
             _CraneBox.forwardMoveFlag = true;
-        if (Input.GetKeyUp(KeyCode.DownArrow))
+        else if (Input.GetKeyUp(KeyCode.DownArrow) || !lever.forwardFlag)
             _CraneBox.forwardMoveFlag = false;
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)
+        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
             if (craneStatus == 1)
             {
                 craneStatus = 3;

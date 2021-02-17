@@ -16592,6 +16592,10 @@ MonoBehaviour:
   canvasRect: {fileID: 0}
   MousePos: {x: 0, y: 0}
   pointer: {fileID: 0}
+  rightFlag: 0
+  leftFlag: 0
+  backFlag: 0
+  forwardFlag: 0
 --- !u!114 &1708662329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16610,7 +16614,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1708662328}
-          m_MethodName: ClickDown
+          m_MethodName: ButtonDown
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -16625,7 +16629,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1708662328}
-          m_MethodName: ClickUp
+          m_MethodName: ButtonUp
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -19353,7 +19357,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 492476b367d4534429a8cdc415d1712b, type: 2}
+  - {fileID: 2100000, guid: 7488fd5716a0ea147a27381c5ac59fe9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
