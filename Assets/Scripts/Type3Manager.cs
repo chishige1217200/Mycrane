@@ -13,8 +13,8 @@ public class Type3Manager : MonoBehaviour
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
     float backArmpowersuccess = 100; //同確率時
-    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
-    float audioPitch = 1f; //サウンドのピッチ
+    int soundType = 0; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    float audioPitch = 0.8f; //サウンドのピッチ
     private bool[] instanceFlag = new bool[13];
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     public bool probability; // 確率判定用
@@ -34,7 +34,7 @@ public class Type3Manager : MonoBehaviour
 
     //-------------------------------------------------
 
-    void Start()
+    async void Start()
     {
         // 様々なコンポーネントの取得
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
@@ -74,12 +74,13 @@ public class Type3Manager : MonoBehaviour
 
         _GetPoint.GetManager(3);
 
-        //await Task.Delay(300);
+        await Task.Delay(300);
         _RopeManager.ArmUnitUp();
-        //_ArmController.ArmOpen();
+        if (soundType == 2) _ArmController.ArmOpen();
         //await Task.Delay(500);
         _CraneBox.leftMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
+        creditSystem.insertFlag = true;
 
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
@@ -232,7 +233,7 @@ public class Type3Manager : MonoBehaviour
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
-                _ArmController.ArmOpen();
+                if (soundType != 2) _ArmController.ArmOpen();
                 switch (soundType)
                 {
                     case 0:
@@ -251,7 +252,7 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.PlaySE(20, 1);
                         break;
                 }
-                await Task.Delay(1000);
+                if (soundType != 2) await Task.Delay(1000);
                 _RopeManager.ArmUnitDown();
                 craneStatus = 6;
             }
@@ -286,10 +287,6 @@ public class Type3Manager : MonoBehaviour
                 instanceFlag[craneStatus] = true;
                 switch (soundType)
                 {
-                    case 0:
-                        _SEPlayer.StopSE(3);
-                        _SEPlayer.PlaySE(4, 2147483647);
-                        break;
                     case 3:
                         _SEPlayer.StopSE(21);
                         break;
@@ -314,9 +311,17 @@ public class Type3Manager : MonoBehaviour
                 instanceFlag[craneStatus] = true;
                 switch (soundType)
                 {
+                    case 0:
+                        _SEPlayer.StopSE(3);
+                        _SEPlayer.PlaySE(4, 2147483647);
+                        break;
                     case 1:
                         _SEPlayer.StopSE(10);
                         _SEPlayer.PlaySE(11, 2147483647);
+                        break;
+                    case 2:
+                        _SEPlayer.StopSE(15);
+                        _SEPlayer.PlaySE(14, 2147483647);
                         break;
                     case 3:
                         _SEPlayer.PlaySE(22, 2147483647);
@@ -373,7 +378,7 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.PlaySE(1, 2147483647);
                         break;
                     case 2:
-                        _SEPlayer.StopSE(15);
+                        _SEPlayer.StopSE(14);
                         _SEPlayer.PlaySE(14, 2147483647);
                         break;
                     case 3:
@@ -423,7 +428,7 @@ public class Type3Manager : MonoBehaviour
             {
                 instanceFlag[craneStatus] = true;
                 //_ArmController.MotorPower(0f);
-                _ArmController.ArmFinalClose();
+                if (soundType != 2) _ArmController.ArmFinalClose();
                 switch (soundType)
                 {
                     case 2:
@@ -437,7 +442,8 @@ public class Type3Manager : MonoBehaviour
                 }
                 for (int i = 0; i < 12; i++)
                     instanceFlag[i] = false;
-                await Task.Delay(2000);
+                await Task.Delay(1000);
+                if (soundType == 3) await Task.Delay(1000);
                 switch (soundType)
                 {
                     case 0:
