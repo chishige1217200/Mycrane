@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MousePointerpos : MonoBehaviour
+public class Lever : MonoBehaviour
 {
     //Canvasの変数
     public Canvas canvas;
