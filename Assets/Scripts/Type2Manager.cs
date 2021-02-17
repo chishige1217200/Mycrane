@@ -31,6 +31,7 @@ public class Type2Manager : MonoBehaviour
     CraneBox _CraneBox;
     GetPoint _GetPoint;
     RopeManager _RopeManager;
+    Lever lever;
 
     //For test-----------------------------------------
 
@@ -44,6 +45,7 @@ public class Type2Manager : MonoBehaviour
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
         _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
 
@@ -69,6 +71,7 @@ public class Type2Manager : MonoBehaviour
 
         _GetPoint.GetManager(2);
         _RopeManager.ArmUnitUp();
+        lever.GetManager(2);
 
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
