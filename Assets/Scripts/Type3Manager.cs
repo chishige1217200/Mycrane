@@ -13,11 +13,12 @@ public class Type3Manager : MonoBehaviour
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
     float backArmpowersuccess = 100; //同確率時
-    int soundType = 0; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
-    float audioPitch = 0.8f; //サウンドのピッチ
+    int soundType = 2; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    float audioPitch = 1f; //サウンドのピッチ
     private bool[] instanceFlag = new bool[13];
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     public bool probability; // 確率判定用
+    public int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
     float armPower; // 現在のアームパワー
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
@@ -274,6 +275,15 @@ public class Type3Manager : MonoBehaviour
                     case 3:
                         _SEPlayer.PlaySE(21, 2147483647);
                         break;
+                }
+                if (downTime > 0 && downTime <= 4600)
+                {
+                    await Task.Delay(downTime);
+                    if (craneStatus == 6)
+                    {
+                        _RopeManager.ArmUnitDownForceStop();
+                        craneStatus = 7;
+                    }
                 }
             }
             //アーム下降音再生
