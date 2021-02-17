@@ -6,39 +6,28 @@ using UnityEngine.UI;
 
 public class Lever : MonoBehaviour
 {
-    //Canvasの変数
-    public Canvas canvas;
-    //キャンバス内のレクトトランスフォーム
-    public RectTransform canvasRect;
-    //マウスの位置の最終的な格納先
-    public Vector2 MousePos;
-    //自身のゲームオブジェクトのRectTransform
-    public RectTransform pointer;
+    public Canvas canvas; // Canvasの変数
+    public RectTransform canvasRect; // キャンバス内のレクトトランスフォーム
+    public Vector2 MousePos; // マウスの位置の最終的な格納先
+    public RectTransform pointer; // 自身のゲームオブジェクトのRectTransform
+    public bool rightFlag = false; // 右に倒しているとき
+    public bool leftFlag = false; // 左に倒しているとき
+    public bool backFlag = false; // 奥に倒しているとき
+    public bool forwardFlag = false; // 手前に倒しているとき
     bool isClicked = false;
     Vector2 init; // レバーの基準初期座標
-    Type1Manager _Type1Manager;
-    Type2Manager _Type2Manager;
-    Type3Manager _Type3Manager;
-    int craneType = -1;
     float leverRange = 30f; // レバーの可動域
     float radian = 0f; // 角度計算用
 
-    // Start is called before the first frame update
     void Start()
     {
-        //マウスポインター非表示
-        //Cursor.visible = false;
-        //HierarchyにあるCanvasオブジェクトを探してcanvasに入れいる
-        //canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        //canvas内にあるRectTransformをcanvasRectに入れる
+        // canvas内にあるRectTransformをcanvasRectに入れる
         canvasRect = canvas.GetComponent<RectTransform>();
-        //自身のゲームオブジェクトのRectTransformをpointerに入れる
+        // 自身のゲームオブジェクトのRectTransformをpointerに入れる
         pointer = this.GetComponent<RectTransform>();
         init = new Vector2(pointer.anchoredPosition.x, pointer.anchoredPosition.y);
-        //Debug.Log(init);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isClicked)
@@ -49,40 +38,86 @@ public class Lever : MonoBehaviour
              * 出力先はMousePos
              */
             RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, Input.mousePosition, canvas.worldCamera, out MousePos);
-            //RectTransformの座標を更新
+            // RectTransformの座標を更新
             if (Vector2.Distance(init, MousePos) <= leverRange)
                 pointer.anchoredPosition = new Vector2(MousePos.x, MousePos.y);
-            else if (Vector2.Distance(init, MousePos) > leverRange)
+            else if (Vector2.Distance(init, MousePos) > leverRange) // 可動域よりも外側にカーソルがある場合
             {
                 radian = (float)Math.Atan2(MousePos.y - init.y, MousePos.x - init.x); //x-z平面のtanの値計算
-                pointer.anchoredPosition = new Vector2(init.x + (leverRange * (float)Math.Cos(radian)), init.y + (leverRange * (float)Math.Sin(radian)));
+                pointer.anchoredPosition = new Vector2(init.x + (leverRange * (float)Math.Cos(radian)), init.y + (leverRange * (float)Math.Sin(radian))); // 基準値にオフセットを足して座標とする
             }
+
+            //Flagの処理
+            if (Vector2.Distance(init, MousePos) >= leverRange / 2)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    if (radian > (-7 + 2 * i) * Math.PI / 8 && radian <= (-5 + 2 * i) * Math.PI / 8) // レバーの方向を検知，Flagを場合分け．radianは弧度法による値:-Pi to Pi
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                InitializeFlag();
+                                leftFlag = true;
+                                forwardFlag = true;
+                                break;
+                            case 1:
+                                InitializeFlag();
+                                forwardFlag = true;
+                                break;
+                            case 2:
+                                InitializeFlag();
+                                rightFlag = true;
+                                forwardFlag = true;
+                                break;
+                            case 3:
+                                InitializeFlag();
+                                rightFlag = true;
+                                break;
+                            case 4:
+                                InitializeFlag();
+                                rightFlag = true;
+                                backFlag = true;
+                                break;
+                            case 5:
+                                InitializeFlag();
+                                backFlag = true;
+                                break;
+                            case 6:
+                                InitializeFlag();
+                                leftFlag = true;
+                                backFlag = true;
+                                break;
+                        }
+                    }
+                }
+                if (radian > 7 * Math.PI / 8 && radian <= Math.PI || radian > -Math.PI && radian <= -7 * Math.PI) // 左端は-と+が交じるため特別な処理
+                {
+                    InitializeFlag();
+                    leftFlag = true;
+                }
+            }
+            else InitializeFlag(); // 距離によってレバーが動作しないようにする
         }
     }
 
-    public void GetManager(int num)
+    public void ButtonDown()
     {
-        craneType = num;
-        if (craneType == 1)
-            _Type1Manager = transform.root.gameObject.GetComponent<Type1Manager>();
-        if (craneType == 2)
-            _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
-        if (craneType == 3)
-            _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
-    }
-
-    public void ClickDown()
-    {
-        //Debug.Log("Pointer Down");
         isClicked = true;
     }
 
-    public void ClickUp()
+    public void ButtonUp()
     {
-        //Debug.Log("Pointer Up");
         isClicked = false;
-        //Debug.Log(init);
         pointer.anchoredPosition = init;
+        InitializeFlag();
     }
 
+    void InitializeFlag()
+    {
+        rightFlag = false;
+        leftFlag = false;
+        backFlag = false;
+        forwardFlag = false;
+    }
 }
