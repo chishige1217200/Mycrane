@@ -290,10 +290,6 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.StopSE(3);
                         _SEPlayer.PlaySE(4, 2147483647);
                         break;
-                    case 1:
-                        _SEPlayer.StopSE(10);
-                        _SEPlayer.PlaySE(11, 2147483647);
-                        break;
                     case 3:
                         _SEPlayer.StopSE(21);
                         break;
@@ -318,6 +314,10 @@ public class Type3Manager : MonoBehaviour
                 instanceFlag[craneStatus] = true;
                 switch (soundType)
                 {
+                    case 1:
+                        _SEPlayer.StopSE(10);
+                        _SEPlayer.PlaySE(11, 2147483647);
+                        break;
                     case 3:
                         _SEPlayer.PlaySE(22, 2147483647);
                         break;
