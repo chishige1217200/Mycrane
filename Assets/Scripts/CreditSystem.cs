@@ -63,16 +63,19 @@ public class CreditSystem : MonoBehaviour
 
     void Update()
     {
-        if (!serviceMode && segUpdateFlag) // segUpdateFlagはタイマー存在機種のみ使用
+        if (segUpdateFlag) // segUpdateFlagはタイマー存在機種のみ使用 falseにすると表示を更新しない
         {
-            Credit.text = creditDisplayed.ToString();
-            nowPaid.text = nowpaid.ToString();
-        }
-        else
-        {
-            creditAll = 1;
-            creditNew = 0;
-            creditDisplayed = creditAll + creditNew; // 表示は更新してない
+            if (!serviceMode) // 通常時
+            {
+                Credit.text = creditDisplayed.ToString();
+                nowPaid.text = nowpaid.ToString();
+            }
+            else // サービスモード時
+            {
+                creditAll = 1;
+                creditNew = 0;
+                creditDisplayed = creditAll + creditNew; // 表示は更新してない
+            }
         }
 
     }

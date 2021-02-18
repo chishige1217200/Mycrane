@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class CraneBox : MonoBehaviour
 {
-    public bool rightMoveFlag = false;
+    public bool rightMoveFlag = false; // trueのとき，その方向に移動
     public bool leftMoveFlag = false;
     public bool backMoveFlag = false;
     public bool forwardMoveFlag = false;
+    public bool rightRefusedFlag = false; // trueなら、その方向に移動禁止
+    public bool leftRefusedFlag = false;
+    public bool backRefusedFlag = false;
+    public bool forwardRefusedFlag = false;
     public float moveSpeed = 0.001f;
     public bool supportDirectionChanger = false; // true:x-move false:z-move
     GameObject craneBoxSupport;
@@ -25,10 +29,10 @@ public class CraneBox : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (rightMoveFlag) RightMove();
-        if (leftMoveFlag) LeftMove();
-        if (backMoveFlag) BackMove();
-        if (forwardMoveFlag) ForwardMove();
+        if (rightMoveFlag && !rightRefusedFlag) RightMove();
+        if (leftMoveFlag && !leftRefusedFlag) LeftMove();
+        if (backMoveFlag && !backRefusedFlag) BackMove();
+        if (forwardMoveFlag && !forwardRefusedFlag) ForwardMove();
     }
 
     public void GetManager(int num)
@@ -45,14 +49,22 @@ public class CraneBox : MonoBehaviour
     void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "LeftLimit")
+        {
             leftMoveFlag = false;
+            leftRefusedFlag = true;
+        }
         if (collider.tag == "RightLimit")
         {
             rightMoveFlag = false;
+            rightRefusedFlag = true;
             if (craneType == 1)
                 if (_Type1Manager.craneStatus == 2) _Type1Manager.craneStatus = 3;
             if (craneType == 2)
-                if (_Type2Manager.craneStatus == 2) _Type2Manager.craneStatus = 3;
+                if (_Type2Manager.craneStatus == 2)
+                {
+                    _Type2Manager.craneStatus = 3;
+                    _Type2Manager.buttonFlag = false;
+                }
             if (craneType == 3)
                 if (_Type3Manager.craneStatus == 2)
                 {
@@ -64,10 +76,14 @@ public class CraneBox : MonoBehaviour
         if (collider.tag == "BackgroundLimit")
         {
             backMoveFlag = false;
+            backRefusedFlag = true;
             if (craneType == 1)
                 if (_Type1Manager.craneStatus == 4) _Type1Manager.craneStatus = 5;
             if (craneType == 2)
+            {
                 if (_Type2Manager.craneStatus == 4) _Type2Manager.craneStatus = 5;
+                _Type2Manager.buttonFlag = false;
+            }
             if (craneType == 3)
             {
                 if (_Type3Manager.craneStatus == 4) _Type3Manager.craneStatus = 5;
@@ -75,28 +91,40 @@ public class CraneBox : MonoBehaviour
             }
 
         }
-        if (collider.tag == "ForegroundLimit") forwardMoveFlag = false;
+        if (collider.tag == "ForegroundLimit")
+        {
+            forwardMoveFlag = false;
+            forwardRefusedFlag = true;
+        }
     }
 
-    void OnTriggerStay(Collider collider)
+    /*void OnTriggerStay(Collider collider)
     {
         if (collider.tag == "LeftLimit") leftMoveFlag = false;
         if (collider.tag == "RightLimit") rightMoveFlag = false;
         if (collider.tag == "BackgroundLimit") backMoveFlag = false;
         if (collider.tag == "ForegroundLimit") forwardMoveFlag = false;
+    }*/
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (collider.tag == "LeftLimit") leftRefusedFlag = false;
+        if (collider.tag == "RightLimit") rightRefusedFlag = false;
+        if (collider.tag == "BackgroundLimit") backRefusedFlag = false;
+        if (collider.tag == "ForegroundLimit") forwardRefusedFlag = false;
     }
 
     public bool CheckHomePos(int mode) // 1:左手前，2：左奥，3：右手前，4：右奥への復帰確認
     {
         int checker = 0; // 復帰チェック用
         if (mode == 1 || mode == 2)
-            if (!leftMoveFlag) checker++;
+            if (!leftMoveFlag || leftRefusedFlag) checker++;
         if (mode == 2 || mode == 4)
-            if (!backMoveFlag) checker++;
+            if (!backMoveFlag || backRefusedFlag) checker++;
         if (mode == 1 || mode == 3)
-            if (!forwardMoveFlag) checker++;
+            if (!forwardMoveFlag || forwardRefusedFlag) checker++;
         if (mode == 3 || mode == 4)
-            if (!rightMoveFlag) checker++;
+            if (!rightMoveFlag || rightRefusedFlag) checker++;
 
         if (checker == 2) return true;  // 該当箇所に復帰したとみなす
         else return false;              // 復帰していないとみなす

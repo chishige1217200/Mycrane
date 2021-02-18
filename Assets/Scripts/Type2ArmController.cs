@@ -1,14 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
-public class Type3ArmController : MonoBehaviour
+public class Type2ArmController : MonoBehaviour
 {
     GameObject[] arm;
     HingeJoint[] joint;
     JointMotor[] motor;
-    ArmControllerSupport support;
 
     void Start()
     {
@@ -18,9 +16,6 @@ public class Type3ArmController : MonoBehaviour
         arm[0] = this.transform.Find("Arm1").gameObject;
         arm[1] = this.transform.Find("Arm2").gameObject;
         arm[2] = this.transform.Find("Arm3").gameObject;
-        support = this.transform.Find("Hat").GetComponent<ArmControllerSupport>();
-        support.GetManager(3);
-        support.GetArmController(3);
 
         for (int i = 0; i < 3; i++)
         {
@@ -33,7 +28,7 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = -130f;
+            motor[i].targetVelocity = 100f;
             motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
@@ -44,33 +39,15 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = 50f;
+            motor[i].targetVelocity = -100f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
-        }
-    }
-
-    public void ArmFinalClose() // 景品排出後に閉じる時
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            motor[i].targetVelocity = -10f;
-            motor[i].force = 1f;
-            joint[i].motor = motor[i];
-            joint[i].useMotor = true;
-        }
-    }
-
-    public void Release()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            joint[i].useMotor = false;
         }
     }
 
     public void MotorPower(float power)
     {
+        //Debug.Log("Change Spring Power " + power);
         for (int i = 0; i < 3; i++)
         {
             motor[i].force = power;

@@ -17,6 +17,7 @@ public class RopePoint : MonoBehaviour
     Type2Manager _Type2Manager;
     Type3Manager _Type3Manager;
     int craneType = -1;
+    bool upRefusedFlag = false; // 上昇拒否フラグ trueなら上昇禁止
 
     void Start()
     {
@@ -26,7 +27,7 @@ public class RopePoint : MonoBehaviour
     void FixedUpdate()
     {
         if (moveDownFlag) RopeDown();
-        if (moveUpFlag) RopeUp();
+        if (moveUpFlag && !upRefusedFlag) RopeUp();
     }
 
     public void GetManager(int num)
@@ -51,6 +52,7 @@ public class RopePoint : MonoBehaviour
                 this.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 if (last)
                 {
+                    //Debug.Log("UpFinished.");
                     if (craneType == 1)
                         if (_Type1Manager.craneStatus == 8) _Type1Manager.craneStatus = 9;
                     if (craneType == 2)
@@ -75,11 +77,22 @@ public class RopePoint : MonoBehaviour
     {
         if (collider.tag == "UpLimit")
             if (moveUpFlag)
+            {
+                upRefusedFlag = true;
+                if (last && _Type2Manager.craneStatus == 8) _Type2Manager.craneStatus = 9;
                 moveUpFlag = false;
+            }
+        if (collider.tag == "UpPoint")
+            if (moveUpFlag && !upRefusedFlag && !rb.isKinematic)
+                rb.isKinematic = true;
     }
 
     void OnTriggerExit(Collider collider)
     {
+        if (collider.tag == "UpLimit")
+            if (moveDownFlag)
+                upRefusedFlag = false;
+
         if (collider.tag == "DownStopPoint")
         {
             if (parent)
@@ -137,5 +150,15 @@ public class RopePoint : MonoBehaviour
     void RopeDown()
     {
         this.transform.localPosition -= new Vector3(0, downSpeed, 0);
+    }
+
+    public bool KinematicCheck()
+    {
+        return rb.isKinematic;
+    }
+
+    public bool GravityCheck()
+    {
+        return rb.useGravity;
     }
 }
