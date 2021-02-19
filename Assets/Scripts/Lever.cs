@@ -86,7 +86,10 @@ public class Lever : MonoBehaviour
                     }
                 }
                 if (radian > 7 * Math.PI / 8 && radian <= Math.PI || radian > -Math.PI && radian <= -7 * Math.PI) // 左端は-と+が交じるため特別な処理
+                {
+                    InitializeFlag();
                     leftFlag = true;
+                }
             }
             else InitializeFlag(); // 距離によってレバーが動作しないようにする
         }
