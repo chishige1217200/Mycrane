@@ -520,7 +520,7 @@ public class Type2Manager : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.DownArrow) || !lever.forwardFlag)
             _CraneBox.forwardMoveFlag = false;
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
         || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
             if (craneStatus == 1)
             {
