@@ -30,6 +30,8 @@ public class Type1Manager : MonoBehaviour
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         creditSystem.SetCreditSound(0);
+        creditSystem.GetSEPlayer(_SEPlayer);
+        creditSystem.insertFlag = true;
     }
 
     void Update()
