@@ -50,7 +50,8 @@ public class Lever : MonoBehaviour
             //Flagの処理
             if (Vector2.Distance(init, MousePos) >= leverRange / 2.0f)
             {
-                Debug.Log(radian / Math.PI + "pi");
+                //Debug.Log(radian / Math.PI + "pi");
+                InitializeFlag();                       // 事前に方向を初期化
                 for (int i = 0; i < 7; i++)
                 {
                     if (radian > (-7 + 2 * i) * Math.PI / 8 && radian <= (-5 + 2 * i) * Math.PI / 8) // レバーの方向を検知，Flagを場合分け．radianは弧度法による値:-Pi to Pi
@@ -58,34 +59,27 @@ public class Lever : MonoBehaviour
                         switch (i)
                         {
                             case 0:
-                                InitializeFlag();
                                 leftFlag = true;
                                 forwardFlag = true;
                                 break;
                             case 1:
-                                InitializeFlag();
                                 forwardFlag = true;
                                 break;
                             case 2:
-                                InitializeFlag();
                                 rightFlag = true;
                                 forwardFlag = true;
                                 break;
                             case 3:
-                                InitializeFlag();
                                 rightFlag = true;
                                 break;
                             case 4:
-                                InitializeFlag();
                                 rightFlag = true;
                                 backFlag = true;
                                 break;
                             case 5:
-                                InitializeFlag();
                                 backFlag = true;
                                 break;
                             case 6:
-                                InitializeFlag();
                                 leftFlag = true;
                                 backFlag = true;
                                 break;
@@ -93,10 +87,7 @@ public class Lever : MonoBehaviour
                     }
                 }
                 if (radian > 7 * Math.PI / 8 && radian <= Math.PI || radian >= -Math.PI && radian <= -7 * Math.PI / 8) // 左端は-と+が交じるため特別な処理
-                {
-                    InitializeFlag();
                     leftFlag = true;
-                }
             }
             else InitializeFlag(); // 距離によってレバーが動作しないようにする
         }
