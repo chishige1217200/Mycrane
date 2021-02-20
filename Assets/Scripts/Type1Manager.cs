@@ -310,7 +310,7 @@ public class Type1Manager : MonoBehaviour
                 }
                 break;
             case 6:
-                if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3)))
+                if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)))
                 {
                     _RopeManager.ArmUnitDownForceStop();
                     craneStatus = 7;
