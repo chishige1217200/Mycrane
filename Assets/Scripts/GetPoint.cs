@@ -22,7 +22,7 @@ public class GetPoint : MonoBehaviour
 
     void OnTriggerEnter()
     {
-        if (craneType == 1) ;
+        if (craneType == 1) _Type1Manager.GetPrize();
         if (craneType == 2) _Type2Manager.GetPrize();
         if (craneType == 3) _Type3Manager.GetPrize();
     }

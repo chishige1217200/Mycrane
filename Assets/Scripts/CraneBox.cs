@@ -53,7 +53,10 @@ public class CraneBox : MonoBehaviour
             leftMoveFlag = false;
             leftRefusedFlag = true;
             if (craneType == 1)
+            {
                 if (_Type1Manager.craneStatus == 2) _Type1Manager.craneStatus = 3;
+                _Type1Manager.buttonFlag = false;
+            }
         }
         if (collider.tag == "RightLimit")
         {
@@ -83,7 +86,10 @@ public class CraneBox : MonoBehaviour
             backMoveFlag = false;
             backRefusedFlag = true;
             if (craneType == 1)
+            {
                 if (_Type1Manager.craneStatus == 4) _Type1Manager.craneStatus = 5;
+                _Type1Manager.buttonFlag = false;
+            }
             if (craneType == 2)
             {
                 if (_Type2Manager.craneStatus == 4) _Type2Manager.craneStatus = 5;
