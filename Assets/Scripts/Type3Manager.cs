@@ -24,7 +24,6 @@ public class Type3Manager : MonoBehaviour
     SEPlayer _SEPlayer;
     Type3ArmController _ArmController;
     Transform temp;
-    GameObject craneBox;
     CraneBox _CraneBox;
     GetPoint _GetPoint;
     RopeManager _RopeManager;
@@ -44,25 +43,14 @@ public class Type3Manager : MonoBehaviour
         _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
         // ロープとアームコントローラに関する処理
-        /*_RopePoint = new RopePoint[7];
-        _RopePoint[0] = temp.Find("Rope").Find("Sphere (1)").GetComponent<RopePoint>();
-        _RopePoint[1] = temp.Find("Rope").Find("Sphere (2)").GetComponent<RopePoint>();
-        _RopePoint[2] = temp.Find("Rope").Find("Sphere (3)").GetComponent<RopePoint>();
-        _RopePoint[3] = temp.Find("Rope").Find("Sphere (4)").GetComponent<RopePoint>();
-        _RopePoint[4] = temp.Find("Rope").Find("Sphere (5)").GetComponent<RopePoint>();
-        _RopePoint[5] = temp.Find("Rope").Find("Sphere (6)").GetComponent<RopePoint>();
-        _RopePoint[6] = temp.Find("Rope").Find("Sphere (7)").GetComponent<RopePoint>();*/
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
 
         // CraneBoxに関する処理
-        craneBox = temp.Find("CraneBox").gameObject;
-        _CraneBox = craneBox.GetComponent<CraneBox>();
+        _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
         _CraneBox.GetManager(3);
 
         // ロープにマネージャー情報をセット
-        /*for (int i = 0; i < 7; i++)
-            _RopePoint[i].GetManager(3);*/
         _RopeManager.SetManagerToPoint(3);
 
         creditSystem.GetSEPlayer(_SEPlayer);

@@ -27,7 +27,6 @@ public class Type2Manager : MonoBehaviour
     private SEPlayer _SEPlayer;
     Type2ArmController _ArmController;
     Transform temp;
-    GameObject craneBox;
     CraneBox _CraneBox;
     GetPoint _GetPoint;
     RopeManager _RopeManager;
@@ -54,15 +53,13 @@ public class Type2Manager : MonoBehaviour
         _ArmController = temp.Find("ArmUnit").GetComponent<Type2ArmController>();
 
         // CraneBoxに関する処理
-        craneBox = temp.Find("CraneBox").gameObject;
-        _CraneBox = craneBox.GetComponent<CraneBox>();
+        _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
         _CraneBox.GetManager(2);
 
         // ロープにマネージャー情報をセット
-        /*for (int i = 0; i < 7; i++)
-            _RopePoint[i].GetManager(2);*/
         _RopeManager.SetManagerToPoint(2);
         creditSystem.GetSEPlayer(_SEPlayer);
+
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(10);
@@ -71,7 +68,6 @@ public class Type2Manager : MonoBehaviour
 
         _GetPoint.GetManager(2);
         _RopeManager.ArmUnitUp();
-        //lever.GetManager(2);
 
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
@@ -501,7 +497,7 @@ public class Type2Manager : MonoBehaviour
         }
     }
 
-    public void InputLeverCheck() // キーボード，UI共通
+    public void InputLeverCheck() // キーボード，UI共通のレバー処理
     {
         if (Input.GetKey(KeyCode.RightArrow) || lever.rightFlag)
             _CraneBox.rightMoveFlag = true;
@@ -521,7 +517,7 @@ public class Type2Manager : MonoBehaviour
             _CraneBox.forwardMoveFlag = false;
 
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
-        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
+        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) // 初動時にタイマーを起動
             if (craneStatus == 1)
             {
                 craneStatus = 3;
