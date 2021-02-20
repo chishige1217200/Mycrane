@@ -479,7 +479,7 @@ public class Type2Manager : MonoBehaviour
             case 6:
                 if (operationType == 0)
                 {
-                    if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3)))
+                    if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)))
                     {
                         _RopeManager.ArmUnitDownForceStop();
                         craneStatus = 7;
@@ -487,7 +487,7 @@ public class Type2Manager : MonoBehaviour
                 }
                 else if (operationType == 1) // レバー操作時
                 {
-                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)))
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)))
                     {
                         _RopeManager.ArmUnitDownForceStop();
                         craneStatus = 7;
