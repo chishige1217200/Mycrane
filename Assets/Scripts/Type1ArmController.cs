@@ -49,18 +49,6 @@ public class Type1ArmController : MonoBehaviour
         }
     }
 
-    public void ArmFinalClose() // 景品排出後に閉じる時
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            motor[i].targetVelocity = -1f;
-            if (i == 0) motor[i].targetVelocity *= -1;
-            motor[i].force = 1f;
-            joint[i].motor = motor[i];
-            joint[i].useMotor = true;
-        }
-    }
-
     public void MotorPower(float power)
     {
         //Debug.Log("Change Spring Power " + power);

@@ -29,7 +29,7 @@ public class Type1Manager : MonoBehaviour
 
     //-------------------------------------------------
 
-    void Start()
+    async void Start()
     {
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
@@ -58,6 +58,7 @@ public class Type1Manager : MonoBehaviour
             instanceFlag[i] = false;
 
         // イニシャル移動とinsertFlagを後に実行
+        await Task.Delay(500);
         _CraneBox.leftMoveFlag = true;
         _CraneBox.rightMoveFlag = false;
         _ArmController.ArmLimit(armApertures);
@@ -224,7 +225,7 @@ public class Type1Manager : MonoBehaviour
         {
             if (!instanceFlag[craneStatus])
             {
-                _ArmController.ArmFinalClose();
+                _ArmController.ArmClose();
                 for (int i = 0; i < 12; i++)
                     instanceFlag[i] = false;
             }
@@ -232,10 +233,13 @@ public class Type1Manager : MonoBehaviour
             //アーム閉じる;
             //1秒待機;
             await Task.Delay(1000);
-            if (creditSystem.creditDisplayed > 0)
-                craneStatus = 1;
-            else
-                craneStatus = 0;
+            if (craneStatus == 12)
+            {
+                if (creditSystem.creditDisplayed > 0)
+                    craneStatus = 1;
+                else
+                    craneStatus = 0;
+            }
         }
     }
 
