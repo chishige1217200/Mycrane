@@ -6,17 +6,23 @@ public class Type1Manager : MonoBehaviour
 {
     public CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    //double catchArmpower; //掴むときのアームパワー(%，未確率時)
-    //double upArmpower; //上昇時のアームパワー(%，未確率時)
-    //double backArmpower; //獲得口移動時のアームパワー(%，未確率時)
     double catchArmpowersuccess; //同確率時
     double upArmpowersuccess; //同確率時
     double backArmpowersuccess; //同確率時
     double armApertures; //開口率
     float catchTime; //キャッチに要する時間
     bool resetFlag = false; //投入金額リセットは1プレイにつき1度のみ実行
+    private bool[] instanceFlag = new bool[13];
+    public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
+    float armPower; // 現在のアームパワー
     private BGMPlayer _BGMPlayer;
     private SEPlayer _SEPlayer;
+    //Type1ArmController _ArmController;
+    Transform temp;
+    GameObject craneBox;
+    CraneBox _CraneBox;
+    GetPoint _GetPoint;
+    RopeManager _RopeManager;
 
     //For test-----------------------------------------
 
@@ -29,9 +35,30 @@ public class Type1Manager : MonoBehaviour
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        temp = this.transform.Find("CraneUnit").transform;
+
+        // ロープとアームコントローラに関する処理
+        _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        //_ArmController = temp.Find("ArmUnit").GetComponent<Type2ArmController>();
+
+        // CraneBoxに関する処理
+        _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
+        _CraneBox.GetManager(1);
+
+        // ロープにマネージャー情報をセット
+        _RopeManager.SetManagerToPoint(1);
+        creditSystem.GetSEPlayer(_SEPlayer);
+
+        _GetPoint.GetManager(1);
+        _RopeManager.ArmUnitUp();
         creditSystem.SetCreditSound(0);
         creditSystem.GetSEPlayer(_SEPlayer);
-        creditSystem.insertFlag = true;
+
+        for (int i = 0; i < 12; i++)
+            instanceFlag[i] = false;
+
+        // イニシャル移動とinsertFlagを後に実行
     }
 
     void Update()

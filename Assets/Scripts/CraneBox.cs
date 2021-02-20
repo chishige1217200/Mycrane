@@ -52,13 +52,19 @@ public class CraneBox : MonoBehaviour
         {
             leftMoveFlag = false;
             leftRefusedFlag = true;
+            if (craneType == 1)
+                if (_Type1Manager.craneStatus == 2) _Type1Manager.craneStatus = 3;
         }
         if (collider.tag == "RightLimit")
         {
             rightMoveFlag = false;
             rightRefusedFlag = true;
             if (craneType == 1)
-                if (_Type1Manager.craneStatus == 2) _Type1Manager.craneStatus = 3;
+                if (_Type1Manager.craneStatus == 2)
+                {
+                    _Type1Manager.craneStatus = 3;
+                    _Type1Manager.buttonFlag = false;
+                }
             if (craneType == 2)
                 if (_Type2Manager.craneStatus == 2)
                 {
@@ -72,7 +78,6 @@ public class CraneBox : MonoBehaviour
                     _Type3Manager.buttonFlag = false;
                 }
         }
-
         if (collider.tag == "BackgroundLimit")
         {
             backMoveFlag = false;
@@ -89,7 +94,6 @@ public class CraneBox : MonoBehaviour
                 if (_Type3Manager.craneStatus == 4) _Type3Manager.craneStatus = 5;
                 _Type3Manager.buttonFlag = false;
             }
-
         }
         if (collider.tag == "ForegroundLimit")
         {
@@ -98,15 +102,7 @@ public class CraneBox : MonoBehaviour
         }
     }
 
-    /*void OnTriggerStay(Collider collider)
-    {
-        if (collider.tag == "LeftLimit") leftMoveFlag = false;
-        if (collider.tag == "RightLimit") rightMoveFlag = false;
-        if (collider.tag == "BackgroundLimit") backMoveFlag = false;
-        if (collider.tag == "ForegroundLimit") forwardMoveFlag = false;
-    }*/
-
-    void OnTriggerExit(Collider collider)
+    void OnTriggerExit(Collider collider) // 限界に達すると，RefusedFlagをTrueに
     {
         if (collider.tag == "LeftLimit") leftRefusedFlag = false;
         if (collider.tag == "RightLimit") rightRefusedFlag = false;
@@ -114,22 +110,27 @@ public class CraneBox : MonoBehaviour
         if (collider.tag == "ForegroundLimit") forwardRefusedFlag = false;
     }
 
-    public bool CheckHomePos(int mode) // 1:左手前，2：左奥，3：右手前，4：右奥への復帰確認
+    public bool CheckHomePos(int mode) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥への移動確認
     {
         int checker = 0; // 復帰チェック用
-        if (mode == 1 || mode == 2)
+        if (mode == 1 || mode == 2 || mode == 5)
             if (!leftMoveFlag || leftRefusedFlag) checker++;
-        if (mode == 2 || mode == 4)
+        if (mode == 2 || mode == 4 || mode == 8)
             if (!backMoveFlag || backRefusedFlag) checker++;
-        if (mode == 1 || mode == 3)
+        if (mode == 1 || mode == 3 || mode == 6)
             if (!forwardMoveFlag || forwardRefusedFlag) checker++;
-        if (mode == 3 || mode == 4)
+        if (mode == 3 || mode == 4 || mode == 7)
             if (!rightMoveFlag || rightRefusedFlag) checker++;
 
-        if (checker == 2) return true;  // 該当箇所に復帰したとみなす
-        else return false;              // 復帰していないとみなす
+        if (mode <= 4 && checker == 2) return true;         // 該当箇所に復帰したとみなす
+        else if (mode >= 5 && checker == 1) return true;    // 該当箇所に復帰したとみなす
+        else return false;                                  // 復帰していないとみなす
     }
 
+    public void GoPosition(Vector2 point)
+    {
+        ;
+    }
 
     void RightMove()
     {
