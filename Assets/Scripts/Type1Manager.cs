@@ -60,7 +60,7 @@ public class Type1Manager : MonoBehaviour
         // イニシャル移動とinsertFlagを後に実行
         await Task.Delay(500);
         _CraneBox.leftMoveFlag = true;
-        _CraneBox.rightMoveFlag = false;
+        _CraneBox.forwardMoveFlag = true;
         _ArmController.ArmLimit(armApertures);
         creditSystem.insertFlag = true;
         craneStatus = 0;
