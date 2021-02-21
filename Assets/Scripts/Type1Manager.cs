@@ -202,7 +202,7 @@ public class Type1Manager : MonoBehaviour
                 armPower -= 0.5f;
                 _ArmController.MotorPower(armPower);
             }
-            if (_CraneBox.CheckHomePos(1)) craneStatus = 11;
+            if (_CraneBox.CheckPos(1)) craneStatus = 11;
             //アーム獲得口ポジション移動音再生;
             //アーム獲得口ポジションへ;
         }
