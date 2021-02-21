@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Type2Manager : MonoBehaviour
 {
-    public CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
+    CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     float catchArmpower = 60f; //掴むときのアームパワー(%，未確率時)
     float upArmpower = 1f; //上昇時のアームパワー(%，未確率時)
