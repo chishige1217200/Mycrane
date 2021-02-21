@@ -8,6 +8,7 @@ public class ArmControllerSupport : MonoBehaviour
     Type2Manager _Type2Manager;
     Type3Manager _Type3Manager;
     Type3ArmController _Type3ArmController;
+    [SerializeField] int playerNumber = 1;
     int craneType = -1;
 
     void OnTriggerEnter(Collider collider)
@@ -35,7 +36,7 @@ public class ArmControllerSupport : MonoBehaviour
     {
         craneType = num;
         if (craneType == 1)
-            _Type1Manager = transform.root.gameObject.GetComponent<Type1Manager>();
+            _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
         if (craneType == 2)
             _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
         if (craneType == 3)
