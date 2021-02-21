@@ -41,7 +41,7 @@ public class CraneBox : MonoBehaviour
         craneType = num;
         if (craneType == 1)
         {
-            _Type1Manager = transform.root.gameObject.GetComponent<Type1Manager>(); // 関数に変更になる
+            _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber); // 関数に変更になる
         }
         if (craneType == 2)
             _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
