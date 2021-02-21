@@ -13,7 +13,8 @@ public class CraneBox : MonoBehaviour
     public bool backRefusedFlag = false;
     public bool forwardRefusedFlag = false;
     public float moveSpeed = 0.001f;
-    public bool supportDirectionChanger = false; // true:x-move false:z-move
+    [SerializeField] bool supportDirectionChanger = false; // true:x-move false:z-move
+    [SerializeField] int playerNumber = 1;
     GameObject craneBoxSupport;
     GameObject ropeHost;
     Type1Manager _Type1Manager;
@@ -35,11 +36,13 @@ public class CraneBox : MonoBehaviour
         if (forwardMoveFlag && !forwardRefusedFlag) ForwardMove();
     }
 
-    public void GetManager(int num)
+    public void GetManager(int num) // 筐体のマネージャー情報取得
     {
         craneType = num;
         if (craneType == 1)
-            _Type1Manager = transform.root.gameObject.GetComponent<Type1Manager>();
+        {
+            _Type1Manager = transform.root.gameObject.GetComponent<Type1Manager>(); // 関数に変更になる
+        }
         if (craneType == 2)
             _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
         if (craneType == 3)
@@ -116,7 +119,7 @@ public class CraneBox : MonoBehaviour
         if (collider.tag == "ForegroundLimit") forwardRefusedFlag = false;
     }
 
-    public bool CheckHomePos(int mode) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥への移動確認
+    public bool CheckPos(int mode) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：停止状態の移動確認
     {
         int checker = 0; // 復帰チェック用
         if (mode == 1 || mode == 2 || mode == 5)
@@ -127,6 +130,8 @@ public class CraneBox : MonoBehaviour
             if (!forwardMoveFlag || forwardRefusedFlag) checker++;
         if (mode == 3 || mode == 4 || mode == 7)
             if (!rightMoveFlag || rightRefusedFlag) checker++;
+        if (mode == 9)
+            if (!leftMoveFlag && !backMoveFlag && !forwardMoveFlag && !rightMoveFlag) checker++;
 
         if (mode <= 4 && checker == 2) return true;         // 該当箇所に復帰したとみなす
         else if (mode >= 5 && checker == 1) return true;    // 該当箇所に復帰したとみなす
