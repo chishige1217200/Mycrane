@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class BGMPlayer : MonoBehaviour
 {
-    public static AudioSource[] _AudioSource; //オーディオ情報の格納
+    public AudioSource[] _AudioSource; //オーディオ情報の格納
     public int _AudioIndex; //オーディオ数
-    public static bool[] BGMflag; //BGMを再生するかどうか
+    public bool[] BGMflag; //BGMを再生するかどうか
 
     void Start()
     {
         BGMflag = new bool[_AudioIndex];
-        _AudioSource = GameObject.Find("BGM").GetComponents<AudioSource>();
+        _AudioSource = this.transform.GetComponents<AudioSource>();
         for (int i = 0; i < _AudioIndex; i++)
         {
             BGMflag[i] = false; //すべての再生を無効にする

@@ -10,7 +10,7 @@ public class SEPlayer : MonoBehaviour
     void Start()
     {
         _RepeatCount = new int[_AudioIndex];
-        _AudioSource = GameObject.Find("SE").GetComponents<AudioSource>();
+        _AudioSource = this.transform.GetComponents<AudioSource>();
         for (int i = 0; i < _AudioIndex; i++)
         {
             _RepeatCount[i] = 0; //すべてのリピート再生回数を0にする
