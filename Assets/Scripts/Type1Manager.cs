@@ -159,7 +159,7 @@ public class Type1Manager : MonoBehaviour
         {
             _SEPlayer.StopSE(2); //アーム下降音再生停止;
             await Task.Delay(1000);
-            _SEPlayer.PlaySE(3, 2); //アーム掴む音再生;
+            if(craneStatus == 7) _SEPlayer.PlaySE(3, 2); //アーム掴む音再生;
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
