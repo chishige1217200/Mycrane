@@ -85,6 +85,24 @@ public class Type1Manager : MonoBehaviour
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) && !player2) creditSystem.GetPayment(100);
         if ((Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus)) && player2) creditSystem.GetPayment(100);
         craneStatusdisplayed.text = craneStatus.ToString();
+
+        if (craneStatus == -2) // Test
+        {
+            if (!instanceFlag[0])
+            {
+                instanceFlag[0] = true;
+                _CraneBox.goPoint = new Vector2(-0.3f, 0f);
+                _CraneBox.goPositionFlag = true;
+            }
+            await Task.Delay(500);
+            if (instanceFlag[0])
+                if (_CraneBox.CheckPos(9))
+                {
+                    _ArmController.ArmOpen();
+                    Debug.Log("OK");
+                }
+        }
+
         if (craneStatus == -1)
         {
             //クレーン位置初期化動作;

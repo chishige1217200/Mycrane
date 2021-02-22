@@ -20,6 +20,8 @@ public class CraneBox : MonoBehaviour
     Type1Manager _Type1Manager;
     Type2Manager _Type2Manager;
     Type3Manager _Type3Manager;
+    public Vector2 goPoint; // GoPosition関数の目的地
+    public bool goPositionFlag = false; // GoPosition関数の実行フラグ
     int craneType = -1;
 
     void Start()
@@ -34,6 +36,7 @@ public class CraneBox : MonoBehaviour
         if (leftMoveFlag && !leftRefusedFlag) LeftMove();
         if (backMoveFlag && !backRefusedFlag) BackMove();
         if (forwardMoveFlag && !forwardRefusedFlag) ForwardMove();
+        if (goPositionFlag) GoPosition();
     }
 
     public void GetManager(int num) // 筐体のマネージャー情報取得
@@ -131,16 +134,58 @@ public class CraneBox : MonoBehaviour
         if (mode == 3 || mode == 4 || mode == 7)
             if (!rightMoveFlag || rightRefusedFlag) checker++;
         if (mode == 9)
-            if (!leftMoveFlag && !backMoveFlag && !forwardMoveFlag && !rightMoveFlag) checker++;
+            if (!leftMoveFlag && !backMoveFlag && !forwardMoveFlag && !rightMoveFlag)
+            {
+                checker++;
+                goPositionFlag = false;
+            }
 
         if (mode <= 4 && checker == 2) return true;         // 該当箇所に復帰したとみなす
         else if (mode >= 5 && checker == 1) return true;    // 該当箇所に復帰したとみなす
         else return false;                                  // 復帰していないとみなす
     }
 
-    public void GoPosition(Vector2 point)
+    void GoPosition()
     {
-        ;
+        if (this.transform.localPosition.x < goPoint.x)
+        {
+            leftMoveFlag = false;
+            rightMoveFlag = true;
+        }
+        if (this.transform.localPosition.x > goPoint.x)
+        {
+            rightMoveFlag = false;
+            leftMoveFlag = true;
+        }
+        if (this.transform.localPosition.z < goPoint.y)
+        {
+            forwardMoveFlag = false;
+            backMoveFlag = true;
+        }
+        if (this.transform.localPosition.z > goPoint.y)
+        {
+            backMoveFlag = false;
+            forwardMoveFlag = true;
+        }
+
+        if (this.transform.position.x - goPoint.x <= moveSpeed && this.transform.position.x - goPoint.x >= -moveSpeed)
+        {
+            if (this.transform.position.x - goPoint.x != 0)
+            {
+                this.transform.position = new Vector3(goPoint.x, this.transform.position.y, this.transform.position.z);
+                leftMoveFlag = false;
+                rightMoveFlag = false;
+            }
+        }
+        if (this.transform.position.z - goPoint.y <= moveSpeed && this.transform.position.z - goPoint.y >= -moveSpeed)
+        {
+            if (this.transform.position.z - goPoint.y != 0)
+            {
+                this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, goPoint.y);
+                backMoveFlag = false;
+                forwardMoveFlag = false;
+            }
+        }
     }
 
     void RightMove()
