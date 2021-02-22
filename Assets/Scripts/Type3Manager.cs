@@ -19,6 +19,7 @@ public class Type3Manager : MonoBehaviour
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     public bool probability; // 確率判定用
     public int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
+    [SerializeField] bool playable = true;
     float armPower; // 現在のアームパワー
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
@@ -52,8 +53,8 @@ public class Type3Manager : MonoBehaviour
 
         // ロープにマネージャー情報をセット
         _RopeManager.SetManagerToPoint(3);
-
         creditSystem.GetSEPlayer(_SEPlayer);
+        creditSystem.playable = playable;
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);

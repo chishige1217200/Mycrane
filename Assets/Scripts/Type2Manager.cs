@@ -22,6 +22,7 @@ public class Type2Manager : MonoBehaviour
     private bool[] instanceFlag = new bool[13];
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     public bool probability; // 確率判定用
+    [SerializeField] bool playable = true;
     float armPower; // 現在のアームパワー
     private BGMPlayer _BGMPlayer;
     private SEPlayer _SEPlayer;
@@ -59,6 +60,7 @@ public class Type2Manager : MonoBehaviour
         // ロープにマネージャー情報をセット
         _RopeManager.SetManagerToPoint(2);
         creditSystem.GetSEPlayer(_SEPlayer);
+        creditSystem.playable = playable;
 
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);

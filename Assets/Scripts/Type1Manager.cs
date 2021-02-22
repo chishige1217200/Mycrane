@@ -15,6 +15,7 @@ public class Type1Manager : MonoBehaviour
     private bool[] instanceFlag = new bool[13];
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] bool player2 = false;
+    [SerializeField] bool playable = true;
     float armPower; // 現在のアームパワー
     private BGMPlayer _BGMPlayer;
     private SEPlayer _SEPlayer;
@@ -49,7 +50,7 @@ public class Type1Manager : MonoBehaviour
         // ロープにマネージャー情報をセット
         _RopeManager.SetManagerToPoint(1);
         creditSystem.GetSEPlayer(_SEPlayer);
-
+        creditSystem.playable = playable;
         _GetPoint.GetManager(1);
         _RopeManager.ArmUnitUp();
         creditSystem.SetCreditSound(0);
@@ -159,7 +160,7 @@ public class Type1Manager : MonoBehaviour
         {
             _SEPlayer.StopSE(2); //アーム下降音再生停止;
             await Task.Delay(1000);
-            if(craneStatus == 7) _SEPlayer.PlaySE(3, 2); //アーム掴む音再生;
+            if (craneStatus == 7) _SEPlayer.PlaySE(3, 2); //アーム掴む音再生;
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
