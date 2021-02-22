@@ -16,6 +16,7 @@ public class Type1Manager : MonoBehaviour
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] bool player2 = false;
     [SerializeField] bool playable = true;
+    [SerializeField] bool button3 = true;
     float armPower; // 現在のアームパワー
     private BGMPlayer _BGMPlayer;
     private SEPlayer _SEPlayer;
@@ -58,6 +59,8 @@ public class Type1Manager : MonoBehaviour
 
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
+
+        if (!button3) this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
 
         // イニシャル移動とinsertFlagを後に実行
         await Task.Delay(3000);
@@ -374,12 +377,12 @@ public class Type1Manager : MonoBehaviour
                 }
                 break;
             case 6:
-                if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2)
+                if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2 && button3)
                 {
                     _RopeManager.ArmUnitDownForceStop();
                     craneStatus = 7;
                 }
-                if ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2)
+                if ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2 && button3)
                 {
                     _RopeManager.ArmUnitDownForceStop();
                     craneStatus = 7;
