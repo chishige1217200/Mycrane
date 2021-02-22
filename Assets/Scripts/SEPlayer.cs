@@ -4,14 +4,14 @@ using UnityEngine;
 public class SEPlayer : MonoBehaviour
 {
     public AudioSource[] _AudioSource; //オーディオ情報の格納
-    public int _AudioIndex; //オーディオ数
+    //public int _AudioIndex; //オーディオ数
     private int[] _RepeatCount; //リピート再生回数
 
     void Start()
     {
-        _RepeatCount = new int[_AudioIndex];
         _AudioSource = this.transform.GetComponents<AudioSource>();
-        for (int i = 0; i < _AudioIndex; i++)
+        _RepeatCount = new int[_AudioSource.Length];
+        for (int i = 0; i < _AudioSource.Length; i++)
         {
             _RepeatCount[i] = 0; //すべてのリピート再生回数を0にする
         }
@@ -19,7 +19,7 @@ public class SEPlayer : MonoBehaviour
 
     void Update()
     {
-        for (int i = 0; i < _AudioIndex; i++)
+        for (int i = 0; i < _AudioSource.Length; i++)
         {
             if (_RepeatCount[i] > 0 && _AudioSource[i].isPlaying == false)
             {
@@ -31,7 +31,7 @@ public class SEPlayer : MonoBehaviour
 
     public void SetAudioPitch(float pitch)
     {
-        for (int i = 0; i < _AudioIndex; i++)
+        for (int i = 0; i < _AudioSource.Length; i++)
             _AudioSource[i].pitch = pitch;
     }
 

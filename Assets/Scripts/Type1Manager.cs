@@ -84,7 +84,7 @@ public class Type1Manager : MonoBehaviour
     {
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) && !player2) creditSystem.GetPayment(100);
         if ((Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus)) && player2) creditSystem.GetPayment(100);
-        craneStatusdisplayed.text = craneStatus.ToString();
+        //craneStatusdisplayed.text = craneStatus.ToString();
 
         if (craneStatus == -2) // Test
         {

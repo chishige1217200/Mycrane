@@ -72,7 +72,7 @@ public class CreditSystem : MonoBehaviour
             if (!serviceMode) // 通常時
             {
                 Credit.text = creditDisplayed.ToString();
-                nowPaid.text = nowpaid.ToString();
+                //nowPaid.text = nowpaid.ToString();
             }
             else // サービスモード時
             {

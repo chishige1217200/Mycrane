@@ -98,7 +98,7 @@ public class Type2Manager : MonoBehaviour
     async void Update()
     {
         if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
-        craneStatusdisplayed.text = craneStatus.ToString();
+        //craneStatusdisplayed.text = craneStatus.ToString();
         //limitTimedisplayed.text = limitTimeCount.ToString();
         if (craneStatus == -1)
         {
