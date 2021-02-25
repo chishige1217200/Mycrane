@@ -13,8 +13,8 @@ public class Type3Manager : MonoBehaviour
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
     float backArmpowersuccess = 100; //同確率時
-    int soundType = 0; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
-    float audioPitch = 0.8f; //サウンドのピッチ
+    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    float audioPitch = 1f; //サウンドのピッチ
     private bool[] instanceFlag = new bool[13];
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
     public bool probability; // 確率判定用
@@ -107,7 +107,7 @@ public class Type3Manager : MonoBehaviour
                     if (!_SEPlayer._AudioSource[5].isPlaying) _BGMPlayer.PlayBGM(0);
                     break;
                 case 1:
-                    _BGMPlayer.PlayBGM(1);
+                    if (!_SEPlayer._AudioSource[12].isPlaying) _BGMPlayer.PlayBGM(1);
                     break;
                 case 2:
                     if (!_SEPlayer._AudioSource[16].isPlaying && !_SEPlayer._AudioSource[17].isPlaying)
