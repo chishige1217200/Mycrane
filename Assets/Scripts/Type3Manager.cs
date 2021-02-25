@@ -104,7 +104,7 @@ public class Type3Manager : MonoBehaviour
             switch (soundType)
             {
                 case 0:
-                    _BGMPlayer.PlayBGM(0);
+                    if (!_SEPlayer._AudioSource[5].isPlaying) _BGMPlayer.PlayBGM(0);
                     break;
                 case 1:
                     _BGMPlayer.PlayBGM(1);
