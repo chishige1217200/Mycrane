@@ -199,5 +199,4 @@ public class CreditSystem : MonoBehaviour
         nowPaidforProbability = nowpaidSum - nowPaidforProbability; //既に投入済みの金額を引き継ぎ
         creditPlayed = 0;
     }
-
 }
