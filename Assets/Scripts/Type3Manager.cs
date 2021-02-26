@@ -244,7 +244,7 @@ public class Type3Manager : MonoBehaviour
                 }
                 if (soundType != 2) await Task.Delay(1000);
                 _RopeManager.ArmUnitDown();
-                craneStatus = 6;
+                if (craneStatus == 5) craneStatus = 6;
             }
             //奥移動効果音ループ再生停止;
             //アーム開く音再生;
@@ -295,7 +295,7 @@ public class Type3Manager : MonoBehaviour
                 _ArmController.MotorPower(armPower);
                 _ArmController.ArmClose();
                 await Task.Delay(1000);
-                craneStatus = 8;
+                if (craneStatus == 7) craneStatus = 8;
             }
 
             //アーム下降音再生停止;
@@ -357,7 +357,7 @@ public class Type3Manager : MonoBehaviour
                         break;
                 }
             }
-            craneStatus = 10;
+            if (craneStatus == 9) craneStatus = 10;
             //アーム上昇停止音再生;
             //アーム上昇停止;
         }
@@ -395,7 +395,7 @@ public class Type3Manager : MonoBehaviour
                 armPower -= 0.5f;
                 _ArmController.MotorPower(armPower);
             }
-            if (_CraneBox.CheckPos(1)) craneStatus = 11;
+            if (_CraneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
             //アーム獲得口ポジションへ;
         }
 
@@ -413,7 +413,7 @@ public class Type3Manager : MonoBehaviour
                         break;
                 }
                 await Task.Delay(2000);
-                craneStatus = 12;
+                if (craneStatus == 11) craneStatus = 12;
             }
             //アーム開く音再生;
             //アーム開く;
