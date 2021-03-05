@@ -20,7 +20,7 @@ public class Type1Manager : MonoBehaviour
     float armPower; // 現在のアームパワー
     private Vector2 startPoint; // 開始位置
     private Vector2 homePoint; // 獲得口
-    private Vector2 vec2offset = new Vector2(0.2f, 0.1f);
+    private Vector2 vec2offset = new Vector2(0.05f, 0.1f); // <=0.5, <=0.6
     private BGMPlayer _BGMPlayer;
     private SEPlayer _SEPlayer;
     Type1ArmController _ArmController;
@@ -75,13 +75,13 @@ public class Type1Manager : MonoBehaviour
 
         if (!player2)
         {
-            startPoint = new Vector2(-0.6f + vec2offset.x, 0.3f - vec2offset.y);
-            homePoint = new Vector2(-0.6f + vec2offset.x, 0.3f - vec2offset.y);
+            startPoint = new Vector2(-0.65f + vec2offset.x, -0.3f + vec2offset.y);
+            homePoint = new Vector2(-0.65f + vec2offset.x, -0.3f + vec2offset.y);
         }
         else
         {
-            startPoint = new Vector2(0.6f - vec2offset.x, 0.3f - vec2offset.y);
-            homePoint = new Vector2(0.6f - vec2offset.x, 0.3f - vec2offset.y);
+            startPoint = new Vector2(0.65f - vec2offset.x, -0.3f + vec2offset.y);
+            homePoint = new Vector2(0.65f - vec2offset.x, -0.3f + vec2offset.y);
         }
 
         while (true)
