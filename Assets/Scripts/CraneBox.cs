@@ -37,6 +37,7 @@ public class CraneBox : MonoBehaviour
         if (backMoveFlag && !backRefusedFlag) BackMove();
         if (forwardMoveFlag && !forwardRefusedFlag) ForwardMove();
         if (goPositionFlag) GoPosition();
+        if (!leftMoveFlag && !backMoveFlag && !forwardMoveFlag && !rightMoveFlag) goPositionFlag = false;
     }
 
     public void GetManager(int num) // 筐体のマネージャー情報取得

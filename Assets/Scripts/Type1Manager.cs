@@ -18,6 +18,9 @@ public class Type1Manager : MonoBehaviour
     [SerializeField] bool playable = true;
     [SerializeField] bool button3 = true;
     float armPower; // 現在のアームパワー
+    private Vector2 startPoint; // 開始位置
+    private Vector2 homePoint; // 獲得口
+    private Vector2 vec2offset = new Vector2(0.2f, 0.1f);
     private BGMPlayer _BGMPlayer;
     private SEPlayer _SEPlayer;
     Type1ArmController _ArmController;
@@ -70,17 +73,46 @@ public class Type1Manager : MonoBehaviour
         _CraneBox.forwardMoveFlag = true;
         if (!player2) _SEPlayer.PlaySE(6, 1);
 
+        if (!player2)
+        {
+            startPoint = new Vector2(-0.6f + vec2offset.x, 0.3f - vec2offset.y);
+            homePoint = new Vector2(-0.6f + vec2offset.x, 0.3f - vec2offset.y);
+        }
+        else
+        {
+            startPoint = new Vector2(0.6f - vec2offset.x, 0.3f - vec2offset.y);
+            homePoint = new Vector2(0.6f - vec2offset.x, 0.3f - vec2offset.y);
+        }
+
         while (true)
         {
             if (!player2 && _CraneBox.CheckPos(1))
+            {
+                _CraneBox.goPoint = startPoint;
+                _CraneBox.goPositionFlag = true;
                 break;
+            }
             if (player2 && _CraneBox.CheckPos(3))
+            {
+                _CraneBox.goPoint = startPoint;
+                _CraneBox.goPositionFlag = true;
                 break;
+            }
             await Task.Delay(1000);
         }
 
-        creditSystem.insertFlag = true;
-        craneStatus = 0;
+        await Task.Delay(500);
+
+        while (true)
+        {
+            if (_CraneBox.CheckPos(9))
+            {
+                creditSystem.insertFlag = true;
+                craneStatus = 0;
+                break;
+            }
+            await Task.Delay(1000);
+        }
     }
 
     async void Update()
