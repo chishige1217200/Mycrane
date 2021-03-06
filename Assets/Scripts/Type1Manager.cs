@@ -47,8 +47,8 @@ public class Type1Manager : MonoBehaviour
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
-        nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
-        nail[1] = temp.Find("ArmUnit").Find("Arm2").Find("Nail2").GetComponent<ArmNail>();
+        nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
+        nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();
 
         // CraneBoxに関する処理
         _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
