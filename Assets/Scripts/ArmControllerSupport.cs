@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ArmControllerSupport : MonoBehaviour
@@ -9,6 +10,7 @@ public class ArmControllerSupport : MonoBehaviour
     Type3Manager _Type3Manager;
     Type3ArmController _Type3ArmController;
     [SerializeField] int playerNumber = 1;
+    RopeManager ropeManager;
     int craneType = -1;
 
     void OnTriggerEnter(Collider collider)
@@ -26,6 +28,24 @@ public class ArmControllerSupport : MonoBehaviour
                     {
                         Debug.Log("Released.");
                         _Type3ArmController.Release();
+                    }
+                    break;
+            }
+        }
+    }
+    async void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "prize")
+        {
+            Debug.Log("景品に接触");
+            switch (craneType)
+            {
+                case 1:
+                    await Task.Delay(500);
+                    if (_Type1Manager.craneStatus == 6)
+                    {
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type1Manager.craneStatus = 7;
                     }
                     break;
             }
@@ -51,5 +71,9 @@ public class ArmControllerSupport : MonoBehaviour
             _Type2Manager = transform.parent.gameObject.GetComponent<Type2Manager>();*/
         if (num == 3)
             _Type3ArmController = transform.parent.gameObject.GetComponent<Type3ArmController>();
+    }
+    public void GetRopeManager(RopeManager r)
+    {
+        ropeManager = r;
     }
 }

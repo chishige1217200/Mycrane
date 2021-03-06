@@ -8,7 +8,7 @@ public class Type1Manager : MonoBehaviour
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     float catchArmpower = 100f;
-    float armApertures = 60f; //開口率
+    float armApertures = 100f; //開口率
     int catchTime = 2000; //キャッチに要する時間
     private bool[] instanceFlag = new bool[15];
     public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
@@ -26,6 +26,7 @@ public class Type1Manager : MonoBehaviour
     CraneBox _CraneBox;
     GetPoint _GetPoint;
     RopeManager _RopeManager;
+    ArmControllerSupport support;
 
     //For test-----------------------------------------
 
@@ -44,6 +45,7 @@ public class Type1Manager : MonoBehaviour
         // ロープとアームコントローラに関する処理
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
+        support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
 
         // CraneBoxに関する処理
         _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
@@ -57,6 +59,8 @@ public class Type1Manager : MonoBehaviour
         _RopeManager.ArmUnitUp();
         creditSystem.SetCreditSound(0);
         creditSystem.GetSEPlayer(_SEPlayer);
+        support.GetManager(1);
+        support.GetRopeManager(_RopeManager);
 
         for (int i = 0; i < 15; i++)
             instanceFlag[i] = false;
