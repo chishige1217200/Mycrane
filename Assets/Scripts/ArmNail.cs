@@ -1,47 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
-public class ArmControllerSupport : MonoBehaviour
+public class ArmNail : MonoBehaviour
 {
     Type1Manager _Type1Manager;
     Type2Manager _Type2Manager;
     Type3Manager _Type3Manager;
-    Type3ArmController _Type3ArmController;
     [SerializeField] int playerNumber = 1;
     RopeManager ropeManager;
     int craneType = -1;
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.tag == "ReleaseCheck")
+        if (collider.tag == "DownLimit")
         {
+            Debug.Log("下降制限");
             switch (craneType)
             {
                 case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8)
+                    if (_Type1Manager.craneStatus == 6)
                     {
-                        Debug.Log("Released.");
-                        _Type3ArmController.Release();
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type1Manager.craneStatus = 7;
                     }
                     break;
             }
         }
     }
-    async void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "prize")
+        if (collision.gameObject.tag == "Floor")
         {
-            Debug.Log("景品に接触");
+            Debug.Log("床に接触");
             switch (craneType)
             {
                 case 1:
-                    await Task.Delay(300);
                     if (_Type1Manager.craneStatus == 6)
                     {
                         ropeManager.ArmUnitDownForceStop();
@@ -63,15 +57,6 @@ public class ArmControllerSupport : MonoBehaviour
             _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
     }
 
-    public void GetArmController(int num)
-    {
-        /*if (num == 1)
-            _Type1Manager = transform.parent.gameObject.GetComponent<Type1Manager>();
-        if (num == 2)
-            _Type2Manager = transform.parent.gameObject.GetComponent<Type2Manager>();*/
-        if (num == 3)
-            _Type3ArmController = transform.parent.gameObject.GetComponent<Type3ArmController>();
-    }
     public void GetRopeManager(RopeManager r)
     {
         ropeManager = r;

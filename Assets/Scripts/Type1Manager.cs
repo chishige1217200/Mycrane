@@ -27,6 +27,7 @@ public class Type1Manager : MonoBehaviour
     GetPoint _GetPoint;
     RopeManager _RopeManager;
     ArmControllerSupport support;
+    ArmNail[] nail = new ArmNail[2];
 
     //For test-----------------------------------------
 
@@ -46,6 +47,8 @@ public class Type1Manager : MonoBehaviour
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
+        nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
+        nail[1] = temp.Find("ArmUnit").Find("Arm2").Find("Nail2").GetComponent<ArmNail>();
 
         // CraneBoxに関する処理
         _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
@@ -61,6 +64,12 @@ public class Type1Manager : MonoBehaviour
         creditSystem.GetSEPlayer(_SEPlayer);
         support.GetManager(1);
         support.GetRopeManager(_RopeManager);
+        for (int i = 0; i < 2; i++)
+        {
+            nail[i].GetManager(1);
+            nail[i].GetRopeManager(_RopeManager);
+        }
+
 
         for (int i = 0; i < 15; i++)
             instanceFlag[i] = false;
