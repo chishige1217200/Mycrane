@@ -15,7 +15,6 @@ public class ArmNail : MonoBehaviour
     {
         if (collider.tag == "Floor")
         {
-
             switch (craneType)
             {
                 case 1:

@@ -47,15 +47,15 @@ public class ArmControllerSupport : MonoBehaviour
             }
         }
     }
-    async void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "prize")
         {
             switch (craneType)
             {
                 case 1:
+                    // 押し込みパワー調整用のDelay?
                     Debug.Log("景品に接触");
-                    await Task.Delay(300);
                     if (_Type1Manager.craneStatus == 6)
                     {
                         ropeManager.ArmUnitDownForceStop();
