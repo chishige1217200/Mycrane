@@ -32,15 +32,29 @@ public class ArmControllerSupport : MonoBehaviour
                     break;
             }
         }
+        if (collider.tag == "DownLimit")
+        {
+            switch (craneType)
+            {
+                case 1:
+                    if (_Type1Manager.craneStatus == 6)
+                    {
+                        Debug.Log("下降制限に接触");
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type1Manager.craneStatus = 7;
+                    }
+                    break;
+            }
+        }
     }
     async void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "prize")
         {
-            Debug.Log("景品に接触");
             switch (craneType)
             {
                 case 1:
+                    Debug.Log("景品に接触");
                     await Task.Delay(300);
                     if (_Type1Manager.craneStatus == 6)
                     {

@@ -13,31 +13,15 @@ public class ArmNail : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.tag == "DownLimit")
+        if (collider.tag == "Floor")
         {
-            Debug.Log("下降制限");
+
             switch (craneType)
             {
                 case 1:
                     if (_Type1Manager.craneStatus == 6)
                     {
-                        ropeManager.ArmUnitDownForceStop();
-                        _Type1Manager.craneStatus = 7;
-                    }
-                    break;
-            }
-        }
-    }
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Floor")
-        {
-            Debug.Log("床に接触");
-            switch (craneType)
-            {
-                case 1:
-                    if (_Type1Manager.craneStatus == 6)
-                    {
+                        Debug.Log("床");
                         ropeManager.ArmUnitDownForceStop();
                         _Type1Manager.craneStatus = 7;
                     }
