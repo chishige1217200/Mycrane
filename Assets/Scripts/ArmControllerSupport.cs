@@ -55,9 +55,9 @@ public class ArmControllerSupport : MonoBehaviour
             {
                 case 1:
                     // 押し込みパワー調整用のDelay?
-                    Debug.Log("景品に接触");
                     if (_Type1Manager.craneStatus == 6)
                     {
+                        Debug.Log("景品に接触");
                         ropeManager.ArmUnitDownForceStop();
                         _Type1Manager.craneStatus = 7;
                     }
