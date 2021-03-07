@@ -12,6 +12,7 @@ public class ArmControllerSupport : MonoBehaviour
     [SerializeField] int playerNumber = 1;
     RopeManager ropeManager;
     int craneType = -1;
+    public int pushTime = 0;
 
     void OnTriggerEnter(Collider collider)
     {
@@ -47,17 +48,17 @@ public class ArmControllerSupport : MonoBehaviour
             }
         }
     }
-    void OnCollisionEnter(Collision collision)
+    async void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "prize")
         {
             switch (craneType)
             {
                 case 1:
-                    // 押し込みパワー調整用のDelay?
+                    Debug.Log("景品に接触");
+                    await Task.Delay(pushTime); //押し込みパワーの調整
                     if (_Type1Manager.craneStatus == 6)
                     {
-                        Debug.Log("景品に接触");
                         ropeManager.ArmUnitDownForceStop();
                         _Type1Manager.craneStatus = 7;
                     }

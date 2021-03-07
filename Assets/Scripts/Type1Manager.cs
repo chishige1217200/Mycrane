@@ -64,6 +64,7 @@ public class Type1Manager : MonoBehaviour
         creditSystem.GetSEPlayer(_SEPlayer);
         support.GetManager(1);
         support.GetRopeManager(_RopeManager);
+        support.pushTime = 300; // 押し込みパワーの調整
         for (int i = 0; i < 2; i++)
         {
             nail[i].GetManager(1);
@@ -505,7 +506,7 @@ public class Type1Manager : MonoBehaviour
             case 3:
                 if (craneStatus == 6)
                 {
-                    buttonFlag = true;
+                    //buttonFlag = true;
                     _RopeManager.ArmUnitDownForceStop();
                     craneStatus = 7;
                 }
