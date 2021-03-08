@@ -16,7 +16,7 @@ public class Type2Manager : MonoBehaviour
     int operationType = 1; //0:ボタン式，1:レバー式
     int limitTimeSet = 20; //レバー式の場合，残り時間を設定
     int limitTimeCount = 0; //実際のカウントダウン
-    int soundType = 2; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
+    int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1f; //サウンドのピッチ
     private bool[] instanceFlag = new bool[13];
