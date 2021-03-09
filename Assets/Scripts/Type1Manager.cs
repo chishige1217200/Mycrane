@@ -18,9 +18,9 @@ public class Type1Manager : MonoBehaviour
     private Vector2 startPoint; // 開始位置
     private Vector2 homePoint; // 獲得口
     private Vector2 vec2offset = new Vector2(0.05f, 0.1f); // <=0.5, <=0.6 座標設定用Temp
-    private int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
-    private BGMPlayer _BGMPlayer;
-    private SEPlayer _SEPlayer;
+    public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
+    BGMPlayer _BGMPlayer;
+    SEPlayer _SEPlayer;
     Type1ArmController _ArmController;
     Transform temp;
     CraneBox _CraneBox;
