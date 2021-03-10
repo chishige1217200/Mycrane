@@ -148,44 +148,40 @@ public class CraneBox : MonoBehaviour
 
     void GoPosition()
     {
-        if (this.transform.localPosition.x < goPoint.x)
+        if (this.transform.position.x < goPoint.x)
         {
             leftMoveFlag = false;
             rightMoveFlag = true;
         }
-        if (this.transform.localPosition.x > goPoint.x)
+        if (this.transform.position.x > goPoint.x)
         {
             rightMoveFlag = false;
             leftMoveFlag = true;
         }
-        if (this.transform.localPosition.z < goPoint.y)
+        if (this.transform.position.z < goPoint.y)
         {
             forwardMoveFlag = false;
             backMoveFlag = true;
         }
-        if (this.transform.localPosition.z > goPoint.y)
+        if (this.transform.position.z > goPoint.y)
         {
             backMoveFlag = false;
             forwardMoveFlag = true;
         }
 
-        if (this.transform.position.x - goPoint.x <= moveSpeed && this.transform.position.x - goPoint.x >= -moveSpeed)
+        if (Mathf.Abs(this.transform.position.x - goPoint.x) <= moveSpeed)
         {
             if (this.transform.position.x - goPoint.x != 0)
-            {
                 this.transform.position = new Vector3(goPoint.x, this.transform.position.y, this.transform.position.z);
-                leftMoveFlag = false;
-                rightMoveFlag = false;
-            }
+            leftMoveFlag = false;
+            rightMoveFlag = false;
         }
-        if (this.transform.position.z - goPoint.y <= moveSpeed && this.transform.position.z - goPoint.y >= -moveSpeed)
+        if (Mathf.Abs(this.transform.position.z - goPoint.y) <= moveSpeed)
         {
             if (this.transform.position.z - goPoint.y != 0)
-            {
                 this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, goPoint.y);
-                backMoveFlag = false;
-                forwardMoveFlag = false;
-            }
+            backMoveFlag = false;
+            forwardMoveFlag = false;
         }
     }
 

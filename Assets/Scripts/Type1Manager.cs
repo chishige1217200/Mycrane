@@ -19,6 +19,7 @@ public class Type1Manager : MonoBehaviour
     private Vector2 homePoint; // 獲得口
     private Vector2 vec2offset = new Vector2(0.05f, 0.1f); // <=0.5, <=0.6 座標設定用Temp
     public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
+    Vector2 craneHost;
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
     Type1ArmController _ArmController;
@@ -41,6 +42,8 @@ public class Type1Manager : MonoBehaviour
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        temp = this.transform.parent;
+        craneHost = new Vector2(temp.position.x, temp.position.z);
         temp = this.transform.Find("CraneUnit").transform;
 
         // ロープとアームコントローラに関する処理
@@ -71,7 +74,6 @@ public class Type1Manager : MonoBehaviour
             nail[i].GetRopeManager(_RopeManager);
         }
 
-
         for (int i = 0; i < 15; i++)
             instanceFlag[i] = false;
 
@@ -87,13 +89,13 @@ public class Type1Manager : MonoBehaviour
 
         if (!player2)
         {
-            startPoint = new Vector2(-0.65f + vec2offset.x, -0.3f + vec2offset.y);
-            homePoint = new Vector2(-0.65f + vec2offset.x, -0.3f + vec2offset.y);
+            startPoint = new Vector2(-0.65f + vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
+            homePoint = new Vector2(-0.65f + vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
         }
         else
         {
-            startPoint = new Vector2(0.65f - vec2offset.x, -0.3f + vec2offset.y);
-            homePoint = new Vector2(0.65f - vec2offset.x, -0.3f + vec2offset.y);
+            startPoint = new Vector2(0.65f - vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
+            homePoint = new Vector2(0.65f - vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
         }
 
         while (true)
