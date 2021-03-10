@@ -38,24 +38,45 @@ public class Type1ArmController : MonoBehaviour
         }
     }
 
-    public void ArmClose()
+    public void ArmFinalClose()
     {
         for (int i = 0; i < 2; i++)
         {
-            motor[i].targetVelocity = -100f;
+            motor[i].targetVelocity = -50f;
             if (i == 0) motor[i].targetVelocity *= -1;
+            motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
         }
     }
 
-    public void MotorPower(float power)
+    public void ArmClose(float power)
     {
-        //Debug.Log("Change Spring Power " + power);
         for (int i = 0; i < 2; i++)
         {
-            motor[i].force = power;
+            motor[i].targetVelocity = -power;
+            if (i == 0) motor[i].targetVelocity *= -1;
+            motor[i].force = 1f;
             joint[i].motor = motor[i];
+            joint[i].useMotor = true;
+        }
+    }
+
+    public void MotorPower(float power, int num)
+    {
+        if (power > 50)
+        {
+            motor[num].targetVelocity = -100f;
+            if (num == 0) motor[num].targetVelocity *= -1;
+            motor[num].force = power;
+            joint[num].motor = motor[num];
+        }
+        else
+        {
+            motor[num].targetVelocity = 0.3f * (50 - power);
+            if (num == 0) motor[num].targetVelocity *= -1;
+            motor[num].force = 1f;
+            joint[num].motor = motor[num];
         }
     }
 

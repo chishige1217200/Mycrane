@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Type2Manager : MonoBehaviour
 {
-    CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     float catchArmpower = 60f; //掴むときのアームパワー(%，未確率時)
     float upArmpower = 1f; //上昇時のアームパワー(%，未確率時)
@@ -19,13 +18,15 @@ public class Type2Manager : MonoBehaviour
     int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1f; //サウンドのピッチ
-    private bool[] instanceFlag = new bool[13];
-    public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
-    public bool probability; // 確率判定用
-    [SerializeField] bool playable = true;
-    float armPower; // 現在のアームパワー
-    private BGMPlayer _BGMPlayer;
-    private SEPlayer _SEPlayer;
+    private bool[] instanceFlag = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
+    public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
+    public bool probability; //確率判定用
+    [SerializeField] bool playable = true; //playableがtrueのとき操作可能
+    float armPower; //現在のアームパワー
+
+    CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
+    BGMPlayer _BGMPlayer;
+    SEPlayer _SEPlayer;
     Type2ArmController _ArmController;
     Transform temp;
     CraneBox _CraneBox;
