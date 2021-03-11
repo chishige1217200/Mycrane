@@ -50,8 +50,17 @@ public class Type2ArmController : MonoBehaviour
         //Debug.Log("Change Spring Power " + power);
         for (int i = 0; i < 3; i++)
         {
-            motor[i].force = power;
-            joint[i].motor = motor[i];
+            if (power > 50)
+            {
+                motor[i].force = power;
+                joint[i].motor = motor[i];
+            }
+            else
+            {
+                motor[i].targetVelocity = power - 50f;
+                motor[i].force = 1f;
+                joint[i].motor = motor[i];
+            }
         }
     }
 }

@@ -11,8 +11,9 @@ public class CreditSystem : MonoBehaviour
     private int nowpaidSum = 0; //投入金額合計
     private int creditPlayedSum = 0; //プレイされたクレジット数
     private bool serviceMode = false; // trueならサービスモード
-    public bool insertFlag = false; // trueならコイン投入可能
-    public bool segUpdateFlag = true; // trueならクレジット情報を7セグに表示
+    public bool insertFlag = false; // trueならコイン投入可能，初期化処理街用
+    public bool segUpdateFlag = true; // trueならクレジット情報を7セグに表示，タイマー共存時用
+    public bool playable = true; // trueならプレイ可能，ユーザ指定用
     private int[,] rateSet = new int[2, 2]; //100円1PLAY，500円6PLAYなどのプリセット?
     private int creditSoundNum = -1; //投入時サウンド番号
     private SEPlayer _SEPlayer;
@@ -28,47 +29,50 @@ public class CreditSystem : MonoBehaviour
     {
         rateSet[0, 0] = 100; //temporary
         rateSet[0, 1] = 1; //temporary
-        rateSet[1, 0] = 100; //temporary
-        rateSet[1, 1] = 1; //temporary
+        rateSet[1, 0] = 500; //temporary
+        rateSet[1, 1] = 6; //temporary
 
         if ((float)rateSet[0, 0] / rateSet[0, 1] < (float)rateSet[1, 0] / rateSet[1, 1])
             Debug.Log("rateSet value error."); //高額のレートになるとコストが多くなる設定エラーのとき
 
-        if (!serviceMode)
+        if (playable)
         {
-            priceSet[0].text = rateSet[0, 0].ToString();
-            timesSet[0].text = rateSet[0, 1].ToString();
-            if (rateSet[0, 0] == rateSet[1, 0] && rateSet[0, 1] == rateSet[1, 1]) // 単一プレイ回数設定
+            if (!serviceMode)
             {
-                priceSet[1].text = "---";
-                timesSet[1].text = "-";
+                priceSet[0].text = rateSet[0, 0].ToString();
+                timesSet[0].text = rateSet[0, 1].ToString();
+                if (rateSet[0, 0] == rateSet[1, 0] && rateSet[0, 1] == rateSet[1, 1]) // 単一プレイ回数設定
+                {
+                    priceSet[1].text = "---";
+                    timesSet[1].text = "-";
+                }
+                else
+                {
+                    priceSet[1].text = rateSet[1, 0].ToString();
+                    timesSet[1].text = rateSet[1, 1].ToString();
+                }
             }
             else
             {
-                priceSet[1].text = rateSet[1, 0].ToString();
-                timesSet[1].text = rateSet[1, 1].ToString();
+                priceSet[0].text = "---";
+                priceSet[1].text = "---";
+                timesSet[0].text = "-";
+                timesSet[1].text = "-";
+                Credit.text = "--";
+                nowPaid.text = "--";
+                Debug.Log("サービスモードです");
             }
-        }
-        else
-        {
-            priceSet[0].text = "---";
-            priceSet[1].text = "---";
-            timesSet[0].text = "-";
-            timesSet[1].text = "-";
-            Credit.text = "--";
-            nowPaid.text = "--";
-            Debug.Log("サービスモードです");
         }
     }
 
     void Update()
     {
-        if (segUpdateFlag) // segUpdateFlagはタイマー存在機種のみ使用 falseにすると表示を更新しない
+        if (segUpdateFlag && playable) // segUpdateFlagはタイマー存在機種のみ使用 falseにすると表示を更新しない
         {
             if (!serviceMode) // 通常時
             {
                 Credit.text = creditDisplayed.ToString();
-                nowPaid.text = nowpaid.ToString();
+                //nowPaid.text = nowpaid.ToString();
             }
             else // サービスモード時
             {
@@ -82,7 +86,7 @@ public class CreditSystem : MonoBehaviour
 
     public void GetPayment(int cost)
     {
-        if (!serviceMode && insertFlag)
+        if (!serviceMode && insertFlag && playable)
         {
             nowpaid += cost;
             nowpaidSum += cost;
@@ -105,12 +109,12 @@ public class CreditSystem : MonoBehaviour
             creditDisplayed = creditAll + creditNew;
             if (creditSoundNum != -1) _SEPlayer.ForcePlaySE(creditSoundNum);
         }
-        else Debug.Log("サービスモードではお金を投入できません．");
+        else Debug.Log("休止中です．");
     }
 
     public void ResetNowPayment()
     {
-        if (!serviceMode)
+        if (!serviceMode && playable)
         {
             if (nowpaid % rateSet[1, 0] == 0 || nowpaid % rateSet[0, 0] == 0) nowpaid = 0;
             else nowpaid = nowpaid % rateSet[0, 0];
@@ -123,7 +127,7 @@ public class CreditSystem : MonoBehaviour
 
     public void ServiceButton()
     {
-        if (!serviceMode)
+        if (!serviceMode && playable)
         {
             creditAll++;
             creditDisplayed = creditAll + creditNew; //クレジット表示を更新
@@ -148,7 +152,7 @@ public class CreditSystem : MonoBehaviour
     private int nowPaidforProbability = 0; //確率設定用の投入金額
     private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数
     private int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
-    private int n = 1; //ランダム確率設定n
+    private int n = 3; //ランダム確率設定n
     public int probabilityMode; //0：確率なし，1:ランダム確率，2:クレジット回数天井設定，3:クレジット回数周期設定，4:設定金額天井設定，5:設定金額周期設定
 
     public bool ProbabilityCheck()
@@ -195,5 +199,4 @@ public class CreditSystem : MonoBehaviour
         nowPaidforProbability = nowpaidSum - nowPaidforProbability; //既に投入済みの金額を引き継ぎ
         creditPlayed = 0;
     }
-
 }

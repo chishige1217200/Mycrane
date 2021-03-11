@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Type2Manager : MonoBehaviour
 {
-    public CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     float catchArmpower = 60f; //掴むときのアームパワー(%，未確率時)
     float upArmpower = 1f; //上昇時のアームパワー(%，未確率時)
@@ -16,18 +15,20 @@ public class Type2Manager : MonoBehaviour
     int operationType = 1; //0:ボタン式，1:レバー式
     int limitTimeSet = 20; //レバー式の場合，残り時間を設定
     int limitTimeCount = 0; //実際のカウントダウン
-    int soundType = 2; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
+    int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1f; //サウンドのピッチ
-    private bool[] instanceFlag = new bool[13];
-    public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
-    public bool probability; // 確率判定用
-    float armPower; // 現在のアームパワー
-    private BGMPlayer _BGMPlayer;
-    private SEPlayer _SEPlayer;
+    private bool[] instanceFlag = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
+    public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
+    public bool probability; //確率判定用
+    [SerializeField] bool playable = true; //playableがtrueのとき操作可能
+    float armPower; //現在のアームパワー
+
+    CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
+    BGMPlayer _BGMPlayer;
+    SEPlayer _SEPlayer;
     Type2ArmController _ArmController;
     Transform temp;
-    GameObject craneBox;
     CraneBox _CraneBox;
     GetPoint _GetPoint;
     RopeManager _RopeManager;
@@ -54,15 +55,14 @@ public class Type2Manager : MonoBehaviour
         _ArmController = temp.Find("ArmUnit").GetComponent<Type2ArmController>();
 
         // CraneBoxに関する処理
-        craneBox = temp.Find("CraneBox").gameObject;
-        _CraneBox = craneBox.GetComponent<CraneBox>();
+        _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
         _CraneBox.GetManager(2);
 
         // ロープにマネージャー情報をセット
-        /*for (int i = 0; i < 7; i++)
-            _RopePoint[i].GetManager(2);*/
         _RopeManager.SetManagerToPoint(2);
         creditSystem.GetSEPlayer(_SEPlayer);
+        creditSystem.playable = playable;
+
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(10);
@@ -71,7 +71,6 @@ public class Type2Manager : MonoBehaviour
 
         _GetPoint.GetManager(2);
         _RopeManager.ArmUnitUp();
-        //lever.GetManager(2);
 
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
@@ -100,7 +99,7 @@ public class Type2Manager : MonoBehaviour
     async void Update()
     {
         if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
-        craneStatusdisplayed.text = craneStatus.ToString();
+        //craneStatusdisplayed.text = craneStatus.ToString();
         //limitTimedisplayed.text = limitTimeCount.ToString();
         if (craneStatus == -1)
         {
@@ -319,7 +318,7 @@ public class Type2Manager : MonoBehaviour
                 armPower -= 0.5f;
                 _ArmController.MotorPower(armPower);
             }
-            if (_CraneBox.CheckHomePos(1)) craneStatus = 11;
+            if (_CraneBox.CheckPos(1)) craneStatus = 11;
             //アーム獲得口ポジション移動音再生;
             //アーム獲得口ポジションへ;
         }
@@ -483,7 +482,7 @@ public class Type2Manager : MonoBehaviour
             case 6:
                 if (operationType == 0)
                 {
-                    if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3)))
+                    if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)))
                     {
                         _RopeManager.ArmUnitDownForceStop();
                         craneStatus = 7;
@@ -491,7 +490,7 @@ public class Type2Manager : MonoBehaviour
                 }
                 else if (operationType == 1) // レバー操作時
                 {
-                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)))
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)))
                     {
                         _RopeManager.ArmUnitDownForceStop();
                         craneStatus = 7;
@@ -501,7 +500,7 @@ public class Type2Manager : MonoBehaviour
         }
     }
 
-    public void InputLeverCheck() // キーボード，UI共通
+    public void InputLeverCheck() // キーボード，UI共通のレバー処理
     {
         if (Input.GetKey(KeyCode.RightArrow) || lever.rightFlag)
             _CraneBox.rightMoveFlag = true;
@@ -520,8 +519,8 @@ public class Type2Manager : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.DownArrow) || !lever.forwardFlag)
             _CraneBox.forwardMoveFlag = false;
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)
-        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
+        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) // 初動時にタイマーを起動
             if (craneStatus == 1)
             {
                 craneStatus = 3;

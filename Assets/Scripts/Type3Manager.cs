@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Type3Manager : MonoBehaviour
 {
-    CreditSystem creditSystem; //クレジットシステムのインスタンスを格納
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
     float upArmpower = 100; //上昇時のアームパワー(%，未確率時)
@@ -13,18 +12,19 @@ public class Type3Manager : MonoBehaviour
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
     float backArmpowersuccess = 100; //同確率時
-    int soundType = 2; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     float audioPitch = 1f; //サウンドのピッチ
-    private bool[] instanceFlag = new bool[13];
-    public bool buttonFlag = false; // trueならボタンをクリックしているかキーボードを押下している
-    public bool probability; // 確率判定用
+    private bool[] instanceFlag = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
+    public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
+    public bool probability; //確率判定用
     public int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
-    float armPower; // 現在のアームパワー
+    [SerializeField] bool playable = true; //playableがtrueのとき操作可能
+    float armPower; //現在のアームパワー
+    CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
     Type3ArmController _ArmController;
     Transform temp;
-    GameObject craneBox;
     CraneBox _CraneBox;
     GetPoint _GetPoint;
     RopeManager _RopeManager;
@@ -44,28 +44,17 @@ public class Type3Manager : MonoBehaviour
         _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
         // ロープとアームコントローラに関する処理
-        /*_RopePoint = new RopePoint[7];
-        _RopePoint[0] = temp.Find("Rope").Find("Sphere (1)").GetComponent<RopePoint>();
-        _RopePoint[1] = temp.Find("Rope").Find("Sphere (2)").GetComponent<RopePoint>();
-        _RopePoint[2] = temp.Find("Rope").Find("Sphere (3)").GetComponent<RopePoint>();
-        _RopePoint[3] = temp.Find("Rope").Find("Sphere (4)").GetComponent<RopePoint>();
-        _RopePoint[4] = temp.Find("Rope").Find("Sphere (5)").GetComponent<RopePoint>();
-        _RopePoint[5] = temp.Find("Rope").Find("Sphere (6)").GetComponent<RopePoint>();
-        _RopePoint[6] = temp.Find("Rope").Find("Sphere (7)").GetComponent<RopePoint>();*/
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
 
         // CraneBoxに関する処理
-        craneBox = temp.Find("CraneBox").gameObject;
-        _CraneBox = craneBox.GetComponent<CraneBox>();
+        _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
         _CraneBox.GetManager(3);
 
         // ロープにマネージャー情報をセット
-        /*for (int i = 0; i < 7; i++)
-            _RopePoint[i].GetManager(3);*/
         _RopeManager.SetManagerToPoint(3);
-
         creditSystem.GetSEPlayer(_SEPlayer);
+        creditSystem.playable = playable;
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);
@@ -90,12 +79,12 @@ public class Type3Manager : MonoBehaviour
     async void Update()
     {
         if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
-        craneStatusdisplayed.text = craneStatus.ToString();
+        //craneStatusdisplayed.text = craneStatus.ToString();
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(soundType);
             //await Task.Delay(1500);
-            if (_CraneBox.CheckHomePos(1))
+            if (_CraneBox.CheckPos(1))
             {
                 craneStatus = 0;
                 _ArmController.ArmClose();
@@ -115,10 +104,10 @@ public class Type3Manager : MonoBehaviour
             switch (soundType)
             {
                 case 0:
-                    _BGMPlayer.PlayBGM(0);
+                    if (!_SEPlayer._AudioSource[5].isPlaying) _BGMPlayer.PlayBGM(0);
                     break;
                 case 1:
-                    _BGMPlayer.PlayBGM(1);
+                    if (!_SEPlayer._AudioSource[12].isPlaying) _BGMPlayer.PlayBGM(1);
                     break;
                 case 2:
                     if (!_SEPlayer._AudioSource[16].isPlaying && !_SEPlayer._AudioSource[17].isPlaying)
@@ -255,7 +244,7 @@ public class Type3Manager : MonoBehaviour
                 }
                 if (soundType != 2) await Task.Delay(1000);
                 _RopeManager.ArmUnitDown();
-                craneStatus = 6;
+                if (craneStatus == 5) craneStatus = 6;
             }
             //奥移動効果音ループ再生停止;
             //アーム開く音再生;
@@ -306,7 +295,7 @@ public class Type3Manager : MonoBehaviour
                 _ArmController.MotorPower(armPower);
                 _ArmController.ArmClose();
                 await Task.Delay(1000);
-                craneStatus = 8;
+                if (craneStatus == 7) craneStatus = 8;
             }
 
             //アーム下降音再生停止;
@@ -368,7 +357,7 @@ public class Type3Manager : MonoBehaviour
                         break;
                 }
             }
-            craneStatus = 10;
+            if (craneStatus == 9) craneStatus = 10;
             //アーム上昇停止音再生;
             //アーム上昇停止;
         }
@@ -406,7 +395,7 @@ public class Type3Manager : MonoBehaviour
                 armPower -= 0.5f;
                 _ArmController.MotorPower(armPower);
             }
-            if (_CraneBox.CheckHomePos(1)) craneStatus = 11;
+            if (_CraneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
             //アーム獲得口ポジションへ;
         }
 
@@ -424,7 +413,7 @@ public class Type3Manager : MonoBehaviour
                         break;
                 }
                 await Task.Delay(2000);
-                craneStatus = 12;
+                if (craneStatus == 11) craneStatus = 12;
             }
             //アーム開く音再生;
             //アーム開く;

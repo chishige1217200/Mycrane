@@ -16,6 +16,7 @@ public class RopePoint : MonoBehaviour
     Type1Manager _Type1Manager;
     Type2Manager _Type2Manager;
     Type3Manager _Type3Manager;
+    [SerializeField] int playerNumber = 1;
     int craneType = -1;
     bool upRefusedFlag = false; // 上昇拒否フラグ trueなら上昇禁止
 
@@ -34,7 +35,7 @@ public class RopePoint : MonoBehaviour
     {
         craneType = num;
         if (craneType == 1)
-            _Type1Manager = transform.root.gameObject.GetComponent<Type1Manager>();
+            _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
         if (craneType == 2)
             _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
         if (craneType == 3)
@@ -126,13 +127,13 @@ public class RopePoint : MonoBehaviour
         if (!rb.isKinematic)
         {
             if (this.transform.localPosition.x < -0.01f)
-                rb.AddForce(new Vector3(0.01f, 0, 0), ForceMode.Impulse);
+                rb.AddForce(new Vector3(upSpeed / 2, 0, 0), ForceMode.Impulse);
             if (this.transform.localPosition.x > 0.01f)
-                rb.AddForce(new Vector3(-0.01f, 0, 0), ForceMode.Impulse);
+                rb.AddForce(new Vector3(-upSpeed / 2, 0, 0), ForceMode.Impulse);
             if (this.transform.localPosition.z < -0.01f)
-                rb.AddForce(new Vector3(0, 0, 0.01f), ForceMode.Impulse);
-            if (this.transform.localPosition.x > 0.01f)
-                rb.AddForce(new Vector3(0, 0, -0.01f), ForceMode.Impulse);
+                rb.AddForce(new Vector3(0, 0, upSpeed / 2), ForceMode.Impulse);
+            if (this.transform.localPosition.z > 0.01f)
+                rb.AddForce(new Vector3(0, 0, -upSpeed / 2), ForceMode.Impulse);
         }
         if (rb.isKinematic)
         {
@@ -140,9 +141,9 @@ public class RopePoint : MonoBehaviour
                 this.transform.localPosition += new Vector3(0.5f, 0, 0);
             else if (this.transform.localPosition.x > 0.5f)
                 this.transform.localPosition -= new Vector3(0.5f, 0, 0);
-            else if (this.transform.localPosition.z < -0.5f)
+            if (this.transform.localPosition.z < -0.5f)
                 this.transform.localPosition += new Vector3(0, 0, 0.5f);
-            else if (this.transform.localPosition.x > 0.5f)
+            else if (this.transform.localPosition.z > 0.5f)
                 this.transform.localPosition -= new Vector3(0, 0, 0.5f);
         }
     }
