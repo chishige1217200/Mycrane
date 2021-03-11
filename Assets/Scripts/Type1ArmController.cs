@@ -32,7 +32,7 @@ public class Type1ArmController : MonoBehaviour
         {
             motor[i].targetVelocity = 150f;
             if (i == 0) motor[i].targetVelocity *= -1;
-            motor[i].force = 1f;
+            motor[i].force = 100f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
         }

@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class Type1Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    float leftCatchArmpower = 0f; //左アームパワー
-    float rightCatchArmpower = 0f; //右アームパワー
-    float armApertures = 80f; //開口率
+    float leftCatchArmpower = 100f; //左アームパワー
+    float rightCatchArmpower = 100f; //右アームパワー
+    float armApertures = 100f; //開口率
     int catchTime = 2000; //キャッチに要する時間(m秒)
     private bool[] instanceFlag = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
@@ -233,7 +233,12 @@ public class Type1Manager : MonoBehaviour
             {
                 instanceFlag[craneStatus] = true;
                 if (craneStatus == 7)
-                    _ArmController.ArmClose(30f);
+                    if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
+                    {
+                        if (leftCatchArmpower >= rightCatchArmpower) _ArmController.ArmClose(leftCatchArmpower);
+                        else _ArmController.ArmClose(rightCatchArmpower);
+                    }
+                    else _ArmController.ArmClose(30f);
             }
             await Task.Delay(catchTime);
             if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
