@@ -148,7 +148,7 @@ public class CreditSystem : MonoBehaviour
     //Probability Function-----------------------------------------------
 
     private int creditProbability = 3; //設定クレジット数
-    private int costProbability = 0; //設定金額
+    private int costProbability = 500; //設定金額
     private int nowPaidforProbability = 0; //確率設定用の投入金額
     private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数
     private int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
