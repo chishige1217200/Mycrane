@@ -85,7 +85,7 @@ public class ArmControllerSupport : MonoBehaviour
         if (num == 2)
             _Type2Manager = transform.parent.gameObject.GetComponent<Type2Manager>();*/
         if (num == 3)
-            _Type3ArmController = transform.parent.gameObject.GetComponent<Type3ArmController>();
+            _Type3ArmController = transform.parent.parent.gameObject.GetComponent<Type3ArmController>();
     }
     public void GetRopeManager(RopeManager r)
     {
