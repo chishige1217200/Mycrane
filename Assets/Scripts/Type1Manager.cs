@@ -9,6 +9,7 @@ public class Type1Manager : MonoBehaviour
     float leftCatchArmpower = 100f; //左アームパワー
     float rightCatchArmpower = 100f; //右アームパワー
     float armApertures = 100f; //開口率
+    int soundType = 0; //BGMの切り替え．0・1
     int catchTime = 2000; //キャッチに要する時間(m秒)
     private bool[] instanceFlag = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
@@ -157,12 +158,12 @@ public class Type1Manager : MonoBehaviour
         {
             //クレーン位置初期化動作;
             //コイン投入無効化;
-            _BGMPlayer.StopBGM(0);
+            _BGMPlayer.StopBGM(soundType);
         }
 
         if (craneStatus == 0)
         {
-            _BGMPlayer.PlayBGM(0);
+            _BGMPlayer.PlayBGM(soundType);
             //コイン投入有効化;
             if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
