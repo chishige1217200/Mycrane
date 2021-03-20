@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,8 +29,8 @@ public class CreditSystem : MonoBehaviour
     {
         rateSet[0, 0] = 100; //temporary
         rateSet[0, 1] = 1; //temporary
-        rateSet[1, 0] = 500; //temporary
-        rateSet[1, 1] = 6; //temporary
+        rateSet[1, 0] = 200; //temporary
+        rateSet[1, 1] = 3; //temporary
 
         if ((float)rateSet[0, 0] / rateSet[0, 1] < (float)rateSet[1, 0] / rateSet[1, 1])
             Debug.Log("rateSet value error."); //高額のレートになるとコストが多くなる設定エラーのとき
@@ -42,8 +43,8 @@ public class CreditSystem : MonoBehaviour
                 timesSet[0].text = rateSet[0, 1].ToString();
                 if (rateSet[0, 0] == rateSet[1, 0] && rateSet[0, 1] == rateSet[1, 1]) // 単一プレイ回数設定時
                 {
-                    priceSet[1].text = "---"; //下段側は-表示
-                    timesSet[1].text = "-";
+                    priceSet[1].text = ""; //下段側は表示しない
+                    timesSet[1].text = "";
                 }
                 else //2つのレート設定があるとき
                 {
@@ -53,12 +54,11 @@ public class CreditSystem : MonoBehaviour
             }
             else //サービスモード時
             {
-                priceSet[0].text = "---";
-                priceSet[1].text = "---";
-                timesSet[0].text = "-";
-                timesSet[1].text = "-";
-                Credit.text = "--";
-                nowPaid.text = "--";
+                priceSet[0].text = "fre";
+                priceSet[1].text = "mod";
+                timesSet[0].text = "e";
+                timesSet[1].text = "e";
+                Credit.text = " F";
                 Debug.Log("サービスモードです");
             }
         }
@@ -70,7 +70,8 @@ public class CreditSystem : MonoBehaviour
         {
             if (!serviceMode) // 通常時
             {
-                Credit.text = creditDisplayed.ToString();
+                if (creditDisplayed >= 100) Credit.text = "99.";
+                else Credit.text = creditDisplayed.ToString();
                 //nowPaid.text = nowpaid.ToString();
             }
             else // サービスモード時
@@ -78,6 +79,7 @@ public class CreditSystem : MonoBehaviour
                 creditOld = 1;
                 creditNew = 0;
                 creditDisplayed = creditOld + creditNew; //表示は更新してない（処理の都合上計算）
+                Credit.text = " F";
             }
         }
 
@@ -97,13 +99,8 @@ public class CreditSystem : MonoBehaviour
             else
                 Debug.Log("あなたは損または保留をしています"); //いずれでも割り切れない場合
 
-            if (probabilityMode == 4 || probabilityMode == 5)   //書き換え可能始め
-                if (nowPaidforProbability % costProbability == 0)
-                    if (nowPaidforProbability / costProbability == 1)
-                    {
-                        creditRemainbyCost = creditOld + creditNew;
-                        if (probabilityMode == 5) creditPlayed = 0; //creditPlayedとcreditRemainbyCostの辻褄あわせ
-                    }                                           //書き換え可能終わり
+            /*if ((probabilityMode == 4 || probabilityMode == 5) && costList.Count > 0)
+                creditRemainbyCost = CreditReproduction();*/
 
             creditDisplayed = creditOld + creditNew; //処理の都合上実行
             if (creditSoundNum != -1) _SEPlayer.ForcePlaySE(creditSoundNum); //サウンド再生
@@ -113,10 +110,16 @@ public class CreditSystem : MonoBehaviour
 
     public void ResetNowPayment()
     {
+        int paid; //今回精算分
         if (!serviceMode && playable)
         {
+            paid = nowpaid; //今回の支払い分
             if (nowpaid % rateSet[1, 0] == 0 || nowpaid % rateSet[0, 0] == 0) nowpaid = 0; //新規クレジット用に投入された金額で割り切れる部分のみ精算
             else nowpaid = nowpaid % rateSet[0, 0];
+            paid -= nowpaid; //未精算分を差し引き
+            if (paid != 0) costList.Add(paid); //精算分を追加
+            if ((probabilityMode == 4 || probabilityMode == 5) && costList.Count > 0)
+                creditRemainbyCost = CreditReproduction();
             creditOld = creditOld + creditNew; //内部クレジットを更新
             creditNew = 0; //新規クレジットを初期化
             if (creditOld > 0) creditOld--; //クレジット1減らす
@@ -146,17 +149,18 @@ public class CreditSystem : MonoBehaviour
 
     //Probability Function-----------------------------------------------
 
-    private int creditProbability = 3; //設定クレジット数
-    private int costProbability = 500; //設定金額
+    private int creditProbability = 5; //設定クレジット数
+    private int costProbability = 200; //設定金額
     private int nowPaidforProbability = 0; //確率設定用の投入金額
     private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数（初期化時-1）
     private int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
     private int n = 3; //ランダム確率設定n
+    private List<int> costList = new List<int>(); //投入された金額をリセット毎に分けて保存
     public int probabilityMode; //0：確率なし，1:ランダム確率，2:クレジット回数天井設定，3:クレジット回数周期設定，4:設定金額天井設定，5:設定金額周期設定
 
     public bool ProbabilityCheck()
     {
-        Debug.Log("creditPlayed" + creditPlayed + " creditRemainbyCost" + creditRemainbyCost);
+        Debug.Log("creditPlayed : " + creditPlayed + " creditRemainbyCost : " + creditRemainbyCost);
         if (probabilityMode == 0) return true; //常に確率
         if (probabilityMode == 1 && UnityEngine.Random.Range(1, n + 1) == 1) return true; // 1/nの確率（nの数値有効）
         if (probabilityMode == 2 && creditPlayed >= creditProbability) return true;
@@ -195,7 +199,45 @@ public class CreditSystem : MonoBehaviour
     public void ResetCostProbability() //設定金額ベースの確率リセット
     {
         creditRemainbyCost = -1;
-        nowPaidforProbability = nowpaidSum - nowPaidforProbability; //既に投入済みの金額を引き継ぎ（引き継ぎできてない）
         creditPlayed = 0;
     }
+
+    int CreditReproduction()
+    {
+        int count = 0; //設定金額に達するまでの要素数
+        int costSum = 0; //金額の合計管理
+        int creditSum = 0; //プレイ回数の合計（確率用）
+        int creditTemp; //creditNewの位置づけ
+        int paid = 0;       //nowPaidの位置づけ
+
+        Debug.Log(costList.Count);
+        for (int i = 0; i < costList.Count; i++)
+            Debug.Log(costList[i]);
+
+        while (true)
+        {
+            if (costSum >= costProbability && creditRemainbyCost == -1) break;
+            if (count >= costList.Count /*|| creditRemainbyCost != -1*/) return -1; //合計金額が確率に満たないとき
+            costSum += costList[count];
+            count++;
+        }
+
+        Debug.Log("First step passed.");
+
+        for (int i = 0; i < count; i++)
+        {
+            creditTemp = 0;
+            Debug.Log("costList[" + i + "] : " + costList[i]);
+            paid = costList[i]; //未精算分がないことに注意
+            if (paid % rateSet[1, 0] == 0 && creditTemp < paid / rateSet[1, 0] * rateSet[1, 1]) //高額レート優先（設定されていない場合は低額レートの値を使用）
+                creditTemp = paid / rateSet[1, 0] * rateSet[1, 1];
+            else if (paid % rateSet[0, 0] == 0 && creditTemp < paid / rateSet[0, 0] * rateSet[0, 1]) //低額レート
+                creditTemp = paid / rateSet[0, 0] * rateSet[0, 1];
+            creditSum += creditTemp;
+        }
+        costList.RemoveRange(0, count - 1);
+        return creditSum;
+    }
+
+    // 1回分だけで設定金額を上回った場合の対策を行うこと
 }
