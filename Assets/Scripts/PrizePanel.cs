@@ -15,7 +15,7 @@ public class PrizePanel : MonoBehaviour
 
     public void SetPrizeName(string name)
     {
-        prizeText.text = "「" + name + "」を獲得しました！";
+        prizeText.text = "「" + name + "」\nを獲得しました！";
     }
 
 
