@@ -297,7 +297,6 @@ public class Type3Manager : MonoBehaviour
                 await Task.Delay(1000);
                 if (craneStatus == 7) craneStatus = 8;
             }
-
             //アーム下降音再生停止;
             //アーム掴む音再生;
             //アーム掴む;

@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 #elif UNITY_WEBPLAYER
                 Application.OpenURL("http://www.yahoo.co.jp/");
 #else
-                Application.Quit();
+        Application.Quit();
 #endif
     }
 
@@ -47,5 +47,4 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
-
 }

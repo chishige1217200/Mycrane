@@ -242,6 +242,5 @@ public class CreditSystem : MonoBehaviour
         costList.RemoveRange(0, count - 1);
         return creditSum;
     }
-
     // 1回分だけで設定金額を上回った場合の対策を行うこと
 }
