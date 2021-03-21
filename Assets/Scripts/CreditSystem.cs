@@ -216,10 +216,14 @@ public class CreditSystem : MonoBehaviour
 
         while (true)
         {
-            if (costSum >= costProbability && creditRemainbyCost == -1) break;
-            if (count >= costList.Count /*|| creditRemainbyCost != -1*/) return -1; //合計金額が確率に満たないとき
-            costSum += costList[count];
-            count++;
+            if (creditRemainbyCost == -1)
+            {
+                if (costSum >= costProbability) break;
+                if (count >= costList.Count) return -1; //合計金額が確率に満たないとき
+                costSum += costList[count];
+                count++;
+            }
+            else return creditRemainbyCost;
         }
 
         Debug.Log("First step passed.");
