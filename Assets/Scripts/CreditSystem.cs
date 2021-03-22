@@ -117,7 +117,7 @@ public class CreditSystem : MonoBehaviour
             if (nowpaid % rateSet[1, 0] == 0 || nowpaid % rateSet[0, 0] == 0) nowpaid = 0; //新規クレジット用に投入された金額で割り切れる部分のみ精算
             else nowpaid = nowpaid % rateSet[0, 0];
             paid -= nowpaid; //未精算分を差し引き
-            if (paid != 0) costList.Add(paid); //精算分を追加
+            if (paid != 0 && creditPlayed < creditProbability) costList.Add(paid); //精算分を追加
             if ((probabilityMode == 4 || probabilityMode == 5) && costList.Count > 0)
                 creditRemainbyCost = CreditReproduction();
             creditOld = creditOld + creditNew; //内部クレジットを更新
@@ -198,21 +198,56 @@ public class CreditSystem : MonoBehaviour
 
     public void ResetCostProbability() //設定金額ベースの確率リセット
     {
+        /*if (creditPlayed > creditRemainbyCost && probabilityMode == 4) //過剰に消費したクレジット分の代金を引く
+        {
+            int outCredit = creditPlayed - creditRemainbyCost; //確率超過プレイ回数
+            int count = 0; //設定金額に達するまでの要素数
+            int costSum = 0; //金額の合計管理
+            int creditSum = 0; //プレイされるであろう回数の合計（確率用）
+            int creditTemp; //creditNewの位置づけ
+            int paid = 0; //nowPaidの位置づけ
+            int costSumforRemove = 0; //リスト整理のための金額合計管理
+
+            Debug.Log(costList.Count);
+            for (int i = 0; i < costList.Count; i++)
+                Debug.Log("costList[" + i + "] : " + costList[i]);
+
+            for (int i = 0; i < costList.Count; i++)
+            {
+                creditTemp = 0; //creditNewと同じ位置づけのため，毎回初期化
+                paid = costList[i]; //未精算分がないことに注意
+                if (paid % rateSet[1, 0] == 0 && creditTemp < paid / rateSet[1, 0] * rateSet[1, 1]) //高額レート優先（設定されていない場合は低額レートの値を使用）
+                    creditTemp = paid / rateSet[1, 0] * rateSet[1, 1];
+                else if (paid % rateSet[0, 0] == 0 && creditTemp < paid / rateSet[0, 0] * rateSet[0, 1]) //低額レート
+                    creditTemp = paid / rateSet[0, 0] * rateSet[0, 1];
+                creditSum += creditTemp; //クレジット数合計
+                costSumforRemove += paid; //投入金額合計
+                if (costSumforRemove > costProbability) //設定金額より同時に多く投入されている場合の繰越し
+                {
+                    costList[i] = costSumforRemove - costProbability; //繰越金計算
+                    count--; //繰越されたリストが先頭に来るようにする
+                }
+            }
+            costList.RemoveRange(0, count);
+        }*/
+
         creditRemainbyCost = -1;
         creditPlayed = 0;
+        if (creditDisplayed == 0 && probabilityMode == 4) costList.Clear();
     }
 
     int CreditReproduction()
     {
         int count = 0; //設定金額に達するまでの要素数
         int costSum = 0; //金額の合計管理
-        int creditSum = 0; //プレイ回数の合計（確率用）
+        int creditSum = 0; //プレイされるであろう回数の合計（確率用）
         int creditTemp; //creditNewの位置づけ
-        int paid = 0;       //nowPaidの位置づけ
+        int paid = 0; //nowPaidの位置づけ
+        int costSumforRemove = 0; //リスト整理のための金額合計管理
 
         Debug.Log(costList.Count);
         for (int i = 0; i < costList.Count; i++)
-            Debug.Log(costList[i]);
+            Debug.Log("costList[" + i + "] : " + costList[i]);
 
         while (true)
         {
@@ -230,16 +265,22 @@ public class CreditSystem : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            creditTemp = 0;
-            Debug.Log("costList[" + i + "] : " + costList[i]);
+            creditTemp = 0; //creditNewと同じ位置づけのため，毎回初期化
             paid = costList[i]; //未精算分がないことに注意
             if (paid % rateSet[1, 0] == 0 && creditTemp < paid / rateSet[1, 0] * rateSet[1, 1]) //高額レート優先（設定されていない場合は低額レートの値を使用）
                 creditTemp = paid / rateSet[1, 0] * rateSet[1, 1];
             else if (paid % rateSet[0, 0] == 0 && creditTemp < paid / rateSet[0, 0] * rateSet[0, 1]) //低額レート
                 creditTemp = paid / rateSet[0, 0] * rateSet[0, 1];
-            creditSum += creditTemp;
+            creditSum += creditTemp; //クレジット数合計
+            costSumforRemove += paid; //投入金額合計
+            if (costSumforRemove > costProbability) //設定金額より同時に多く投入されている場合の繰越し
+            {
+                costList[i] = costSumforRemove - costProbability; //繰越金計算
+                count--; //繰越されたリストが先頭に来るようにする
+            }
         }
-        costList.RemoveRange(0, count - 1);
+        costList.RemoveRange(0, count);
+        if (creditSum > costProbability / rateSet[1, 0] * rateSet[1, 1]) creditSum = costProbability / rateSet[1, 0] * rateSet[1, 1];
         return creditSum;
     }
     // 1回分だけで設定金額を上回った場合の対策を行うこと
