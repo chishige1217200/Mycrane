@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class Type2Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    float catchArmpower = 60f; //掴むときのアームパワー(%，未確率時)
-    float upArmpower = 30f; //上昇時のアームパワー(%，未確率時)
+    float catchArmpower = 100f; //掴むときのアームパワー(%，未確率時)
+    float upArmpower = 0f; //上昇時のアームパワー(%，未確率時)
     float backArmpower = 0f; //獲得口移動時のアームパワー(%，未確率時)
     float catchArmpowersuccess = 100f; //同確率時
     float upArmpowersuccess = 100f; //同確率時
