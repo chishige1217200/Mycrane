@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CameraChanger : MonoBehaviour
 {
-
     private GameObject mainCamera;      //メインカメラ格納用(0)
     private GameObject rightCamera;     //右カメラ格納用(1)
     private GameObject leftCamera;      //左カメラ格納用(2)
@@ -54,5 +53,4 @@ public class CameraChanger : MonoBehaviour
         if (cameraStatus >= 3) cameraStatus = 0;
         if (cameraStatus <= -1) cameraStatus = 2;
     }
-
 }

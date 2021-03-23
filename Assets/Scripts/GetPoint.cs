@@ -9,6 +9,14 @@ public class GetPoint : MonoBehaviour
     Type3Manager _Type3Manager;
     [SerializeField] int playerNumber = 1;
     int craneType = -1;
+    PrizePanel panel;
+    Prize prize;
+
+    void Start()
+    {
+        GameObject gb = GameObject.Find("GameManager");
+        if (gb.TryGetComponent(out panel)) panel = gb.GetComponent<PrizePanel>();
+    }
 
     public void GetManager(int num)
     {
@@ -21,10 +29,19 @@ public class GetPoint : MonoBehaviour
             _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
     }
 
-    void OnTriggerEnter()
+    void OnTriggerEnter(Collider collider)
     {
-        if (craneType == 1) _Type1Manager.GetPrize();
-        if (craneType == 2) _Type2Manager.GetPrize();
-        if (craneType == 3) _Type3Manager.GetPrize();
+        if (collider.tag == "prize")
+        {
+            Debug.Log("prize");
+            if (craneType == 1) _Type1Manager.GetPrize();
+            if (craneType == 2) _Type2Manager.GetPrize();
+            if (craneType == 3) _Type3Manager.GetPrize();
+            if (collider.gameObject.TryGetComponent(out prize))
+            {
+                panel.SetPrizeName(prize.prizeName);
+                panel.PanelActive(true);
+            }
+        }
     }
 }
