@@ -122,7 +122,6 @@ public class Type2Manager : MonoBehaviour
             if (craneStatus == 1)
             {
                 //コイン投入有効化;
-                instanceFlag[12] = false;
                 _BGMPlayer.StopBGM(2 * soundType);
                 _BGMPlayer.PlayBGM(1 + 2 * soundType);
                 InputKeyCheck(craneStatus);     //右移動ボタン有効化;
@@ -161,7 +160,6 @@ public class Type2Manager : MonoBehaviour
             {
                 _BGMPlayer.StopBGM(2 * soundType);
                 _BGMPlayer.PlayBGM(1 + 2 * soundType);
-                instanceFlag[12] = false;
                 if (!instanceFlag[craneStatus])
                 {
                     instanceFlag[craneStatus] = true;
@@ -443,6 +441,7 @@ public class Type2Manager : MonoBehaviour
                     {
                         creditSystem.ResetNowPayment();
                         creditSystem.AddCreditPlayed();
+                        instanceFlag[12] = false;
                         probability = creditSystem.ProbabilityCheck();
                         Debug.Log("Probability:" + probability);
                     }
@@ -526,6 +525,7 @@ public class Type2Manager : MonoBehaviour
                 craneStatus = 3;
                 creditSystem.ResetNowPayment();
                 creditSystem.AddCreditPlayed();
+                instanceFlag[12] = false;
                 probability = creditSystem.ProbabilityCheck();
                 Debug.Log("Probability:" + probability);
             }
@@ -542,6 +542,7 @@ public class Type2Manager : MonoBehaviour
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
+                    instanceFlag[12] = false;
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
                 }
