@@ -171,7 +171,6 @@ public class Type1Manager : MonoBehaviour
 
         if (craneStatus == 1)
         {
-            instanceFlag[14] = false;
             //コイン投入有効化;
             //右移動ボタン有効化;
             InputKeyCheck(craneStatus);
@@ -433,6 +432,7 @@ public class Type1Manager : MonoBehaviour
                     {
                         creditSystem.ResetNowPayment();
                         creditSystem.AddCreditPlayed();
+                        instanceFlag[14] = false;
                     }
                     craneStatus = 2;
                     _CraneBox.rightMoveFlag = true;
@@ -444,6 +444,7 @@ public class Type1Manager : MonoBehaviour
                     {
                         creditSystem.ResetNowPayment();
                         creditSystem.AddCreditPlayed();
+                        instanceFlag[14] = false;
                     }
                     craneStatus = 2;
                     _CraneBox.leftMoveFlag = true;
@@ -518,6 +519,7 @@ public class Type1Manager : MonoBehaviour
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
+                    instanceFlag[14] = false;
                 }
                 if (craneStatus == 2 && buttonFlag)
                     _CraneBox.rightMoveFlag = true;
@@ -545,6 +547,7 @@ public class Type1Manager : MonoBehaviour
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
+                    instanceFlag[14] = false;
                 }
                 if (craneStatus == 2 && buttonFlag)
                     _CraneBox.leftMoveFlag = true;

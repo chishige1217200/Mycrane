@@ -79,7 +79,7 @@ public class Type3Manager : MonoBehaviour
     async void Update()
     {
         if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
-        //craneStatusdisplayed.text = craneStatus.ToString();
+        craneStatusdisplayed.text = craneStatus.ToString();
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(soundType);
@@ -124,7 +124,6 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == 1)
         {
             //コイン投入有効化;
-            instanceFlag[12] = false;
             _BGMPlayer.StopBGM(soundType);
             InputKeyCheck(craneStatus);     //右移動ボタン有効化;
             switch (soundType)
@@ -517,6 +516,7 @@ public class Type3Manager : MonoBehaviour
                     {
                         creditSystem.ResetNowPayment();
                         creditSystem.AddCreditPlayed();
+                        instanceFlag[12] = false;
                         probability = creditSystem.ProbabilityCheck();
                         Debug.Log("Probability:" + probability);
                     }
@@ -563,6 +563,7 @@ public class Type3Manager : MonoBehaviour
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
+                    instanceFlag[12] = false;
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
                 }
