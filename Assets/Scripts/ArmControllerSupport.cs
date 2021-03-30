@@ -13,6 +13,7 @@ public class ArmControllerSupport : MonoBehaviour
     RopeManager ropeManager;
     int craneType = -1;
     public int pushTime = 0;
+    bool prizeFlag = false;
 
     void OnTriggerEnter(Collider collider)
     {
@@ -25,7 +26,7 @@ public class ArmControllerSupport : MonoBehaviour
                 case 2:
                     break;
                 case 3:
-                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8)
+                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeFlag)
                     {
                         Debug.Log("Released.");
                         _Type3ArmController.Release();
@@ -46,6 +47,20 @@ public class ArmControllerSupport : MonoBehaviour
                     }
                     break;
             }
+        }
+        if (collider.tag == "prize")
+        {
+            Debug.Log("prize inTrigger");
+            prizeFlag = true;
+        }
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (collider.tag == "prize")
+        {
+            Debug.Log("prize outTrigger");
+            prizeFlag = false;
         }
     }
     async void OnCollisionEnter(Collision collision)
