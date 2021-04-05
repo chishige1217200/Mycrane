@@ -4,22 +4,46 @@ using UnityEngine;
 
 public class CameraChanger : MonoBehaviour
 {
-    private GameObject mainCamera;      //メインカメラ格納用(0)
-    private GameObject rightCamera;     //右カメラ格納用(1)
-    private GameObject leftCamera;      //左カメラ格納用(2)
-    private int cameraStatus = 0;       //カメラ選択の管理用
+    GameObject upCamera;
+    GameObject downCamera;
+    List<GameObject> downCameras;
+    List<GameObject> upCameras; // *downCamerasと同じ数存在する必要あり
+    bool cameraSelectFlag = false; // trueなら上方向からのカメラ
+    int cameraStatus = 0;
 
     //呼び出し時に実行される関数
     void Start()
     {
-        //メインカメラとサブカメラをそれぞれ取得
-        mainCamera = GameObject.Find("Main Camera");
-        rightCamera = GameObject.Find("Right Camera");
-        leftCamera = GameObject.Find("Left Camera");
+        downCameras = new List<GameObject>();
+        upCameras = new List<GameObject>();
+        downCamera = this.transform.Find("Camera").Find("DownCamera").gameObject;
+        upCamera = this.transform.Find("Camera").Find("UpCamera").gameObject;
 
-        //サブカメラを非アクティブにする
-        rightCamera.SetActive(false);
-        leftCamera.SetActive(false);
+        foreach (Transform child in downCamera.transform)
+        {
+            downCameras.Add(child.gameObject);
+        }
+
+        foreach (Transform child in upCamera.transform)
+        {
+            upCameras.Add(child.gameObject);
+        }
+
+        for (int i = 0; i < downCameras.Count; i++)
+        {
+            if (i == 0) downCameras[i].SetActive(true);
+            else downCameras[i].SetActive(false);
+        }
+
+        for (int i = 0; i < upCameras.Count; i++)
+        {
+            if (i == 0) upCameras[i].SetActive(true);
+            else upCameras[i].SetActive(false);
+        }
+
+        upCamera.SetActive(cameraSelectFlag);
+
+        if (downCameras.Count != upCameras.Count) Debug.Log("downCamerasとupCamerasの個数が一致しません");
     }
 
     //単位時間ごとに実行される関数
@@ -27,30 +51,35 @@ public class CameraChanger : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6)) ChangeCameraStatus(1);
         else if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) ChangeCameraStatus(-1);
-        if (cameraStatus == 0) //メインカメラ
-        {
-            mainCamera.SetActive(true);
-            rightCamera.SetActive(false);
-            leftCamera.SetActive(false);
-        }
-        else if (cameraStatus == 1) //右カメラ
-        {
-            rightCamera.SetActive(true);
-            mainCamera.SetActive(false);
-            leftCamera.SetActive(false);
-        }
-        else if (cameraStatus == 2) //左カメラ
-        {
-            leftCamera.SetActive(true);
-            mainCamera.SetActive(false);
-            rightCamera.SetActive(false);
-        }
+        if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5)) ChangeCameraStatus(0); // downCameras，upCameras切り替え
     }
 
     public void ChangeCameraStatus(int num)
     {
-        cameraStatus = cameraStatus + num;
-        if (cameraStatus >= 3) cameraStatus = 0;
-        if (cameraStatus <= -1) cameraStatus = 2;
+        if (num == 0) cameraSelectFlag = !cameraSelectFlag; // downCameras，upCameras切り替え
+        else
+        {
+            cameraStatus = cameraStatus + num;
+            if (cameraStatus < 0) cameraStatus = downCameras.Count - 1;
+            if (cameraStatus >= downCameras.Count) cameraStatus = 0;
+        }
+        ActiveCamera();
+    }
+
+    void ActiveCamera()
+    {
+        for (int i = 0; i < downCameras.Count; i++)
+        {
+            if (i == cameraStatus) downCameras[i].SetActive(true);
+            else downCameras[i].SetActive(false);
+        }
+
+        for (int i = 0; i < upCameras.Count; i++)
+        {
+            if (i == cameraStatus) upCameras[i].SetActive(true);
+            else upCameras[i].SetActive(false);
+        }
+
+        upCamera.SetActive(cameraSelectFlag); // downCameras，upCameras切り替え
     }
 }
