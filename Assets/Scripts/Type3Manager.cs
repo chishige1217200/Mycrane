@@ -12,7 +12,7 @@ public class Type3Manager : MonoBehaviour
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
     float backArmpowersuccess = 100; //同確率時
-    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    int soundType = 3; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     float audioPitch = 1f; //サウンドのピッチ
     private bool[] instanceFlag = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
@@ -67,13 +67,17 @@ public class Type3Manager : MonoBehaviour
         await Task.Delay(300);
         _RopeManager.ArmUnitUp();
         if (soundType == 2) _ArmController.ArmOpen();
-        //await Task.Delay(500);
+        else _ArmController.ArmClose();
         _CraneBox.leftMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
-        creditSystem.insertFlag = true;
 
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
+
+        await Task.Delay(4000);
+
+        craneStatus = 0;
+        creditSystem.insertFlag = true;
     }
 
     async void Update()
@@ -83,12 +87,6 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(soundType);
-            //await Task.Delay(1500);
-            if (_CraneBox.CheckPos(1))
-            {
-                craneStatus = 0;
-                _ArmController.ArmClose();
-            }
             //コイン投入無効化;
         }
 

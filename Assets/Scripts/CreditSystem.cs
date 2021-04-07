@@ -29,8 +29,8 @@ public class CreditSystem : MonoBehaviour
     {
         rateSet[0, 0] = 100; //temporary
         rateSet[0, 1] = 1; //temporary
-        rateSet[1, 0] = 100; //temporary
-        rateSet[1, 1] = 1; //temporary
+        rateSet[1, 0] = 200; //temporary
+        rateSet[1, 1] = 3; //temporary
 
         if ((float)rateSet[0, 0] / rateSet[0, 1] < (float)rateSet[1, 0] / rateSet[1, 1])
             Debug.Log("rateSet value error."); //高額のレートになるとコストが多くなる設定エラーのとき

@@ -13,7 +13,7 @@ public class Type2Manager : MonoBehaviour
     float upArmpowersuccess = 100f; //同確率時
     float backArmpowersuccess = 100f; //同確率時
     int operationType = 1; //0:ボタン式，1:レバー式
-    int limitTimeSet = 20; //レバー式の場合，残り時間を設定
+    int limitTimeSet = 15; //レバー式の場合，残り時間を設定
     int limitTimeCount = 0; //実際のカウントダウン
     int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
@@ -91,8 +91,9 @@ public class Type2Manager : MonoBehaviour
 
         _CraneBox.leftMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
-        await Task.Delay(1000);
+        await Task.Delay(2500);
         _ArmController.ArmOpen();
+        craneStatus = 0;
         creditSystem.insertFlag = true;
     }
 
