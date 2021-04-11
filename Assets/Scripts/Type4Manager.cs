@@ -34,6 +34,7 @@ public class Type4Manager : MonoBehaviour
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[2];
     Lever lever;
+    VideoPlay[] _VideoPlay = new VideoPlay[2];
 
     //For test-----------------------------------------
 
@@ -57,6 +58,8 @@ public class Type4Manager : MonoBehaviour
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         //nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
         //nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();
+        _VideoPlay[0] = temp.Find("ArmUnit").Find("Main").Find("Plane1").GetComponent<VideoPlay>();
+        _VideoPlay[1] = temp.Find("ArmUnit").Find("Main").Find("Plane2").GetComponent<VideoPlay>();
 
         // CraneBoxに関する処理
         _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
@@ -195,6 +198,12 @@ public class Type4Manager : MonoBehaviour
         {
             if (craneStatus == 1)
             {
+                if (!instanceFlag[craneStatus])
+                {
+                    instanceFlag[craneStatus] = true;
+                    _VideoPlay[0].PlayVideo(0, 2147483647);
+                    _VideoPlay[1].PlayVideo(0, 2147483647);
+                }
                 InputLeverCheck();
             }
             if (craneStatus == 3)
@@ -278,7 +287,7 @@ public class Type4Manager : MonoBehaviour
         }
     }
 
-    public void InputLeverCheck() // キーボード，UI共通のレバー処理
+    public async void InputLeverCheck() // キーボード，UI共通のレバー処理
     {
         if (!player2)
         {
@@ -286,6 +295,10 @@ public class Type4Manager : MonoBehaviour
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
             {
                 leverFlag = true;
+                _VideoPlay[0].StopVideo(0);
+                _VideoPlay[1].StopVideo(0);
+                _VideoPlay[0].PlayVideo(1, 2147483647);
+                _VideoPlay[1].PlayVideo(1, 2147483647);
                 _SEPlayer.StopSE(2);
                 _SEPlayer.PlaySE(1, 1);
             }
@@ -293,6 +306,10 @@ public class Type4Manager : MonoBehaviour
             && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverFlag)
             {
                 leverFlag = false;
+                _VideoPlay[0].StopVideo(1);
+                _VideoPlay[1].StopVideo(1);
+                _VideoPlay[0].PlayVideo(0, 2147483647);
+                _VideoPlay[1].PlayVideo(0, 2147483647);
                 _SEPlayer.StopSE(1);
                 _SEPlayer.PlaySE(2, 1);
             }
@@ -330,6 +347,10 @@ public class Type4Manager : MonoBehaviour
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
             {
                 leverFlag = true;
+                _VideoPlay[0].StopVideo(0);
+                _VideoPlay[1].StopVideo(0);
+                _VideoPlay[0].PlayVideo(1, 2147483647);
+                _VideoPlay[1].PlayVideo(1, 2147483647);
                 _SEPlayer.StopSE(2);
                 _SEPlayer.PlaySE(1, 1);
             }
@@ -337,6 +358,10 @@ public class Type4Manager : MonoBehaviour
             && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverFlag)
             {
                 leverFlag = false;
+                _VideoPlay[0].StopVideo(1);
+                _VideoPlay[1].StopVideo(1);
+                _VideoPlay[0].PlayVideo(0, 2147483647);
+                _VideoPlay[1].PlayVideo(0, 2147483647);
                 _SEPlayer.StopSE(1);
                 _SEPlayer.PlaySE(2, 1);
             }
