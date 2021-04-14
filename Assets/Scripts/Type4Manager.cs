@@ -104,6 +104,8 @@ public class Type4Manager : MonoBehaviour
         // イニシャル移動とinsertFlagを後に実行
         await Task.Delay(3000);
         //_ArmController.ArmLimit(armApertures);
+        for (int i = 0; i < 2; i++)
+            _VideoPlay[i].randomMode = true;
         if (!player2) _CraneBox.leftMoveFlag = true;
         else _CraneBox.rightMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
@@ -161,7 +163,11 @@ public class Type4Manager : MonoBehaviour
         {
             //コイン投入有効化;
             if (creditSystem.creditDisplayed > 0)
+            {
+                for (int i = 0; i < 2; i++)
+                    _VideoPlay[i].randomMode = false;
                 craneStatus = 1;
+            }
         }
 
         if (operationType == 0)
@@ -295,8 +301,6 @@ public class Type4Manager : MonoBehaviour
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
             {
                 leverFlag = true;
-                _VideoPlay[0].StopVideo(0);
-                _VideoPlay[1].StopVideo(0);
                 _VideoPlay[0].PlayVideo(1);
                 _VideoPlay[1].PlayVideo(1);
                 _SEPlayer.StopSE(2);
@@ -306,8 +310,6 @@ public class Type4Manager : MonoBehaviour
             && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverFlag)
             {
                 leverFlag = false;
-                _VideoPlay[0].StopVideo(1);
-                _VideoPlay[1].StopVideo(1);
                 _VideoPlay[0].PlayVideo(0);
                 _VideoPlay[1].PlayVideo(0);
                 _SEPlayer.StopSE(1);
@@ -347,8 +349,6 @@ public class Type4Manager : MonoBehaviour
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
             {
                 leverFlag = true;
-                _VideoPlay[0].StopVideo(0);
-                _VideoPlay[1].StopVideo(0);
                 _VideoPlay[0].PlayVideo(1);
                 _VideoPlay[1].PlayVideo(1);
                 _SEPlayer.StopSE(2);
@@ -358,8 +358,6 @@ public class Type4Manager : MonoBehaviour
             && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverFlag)
             {
                 leverFlag = false;
-                _VideoPlay[0].StopVideo(1);
-                _VideoPlay[1].StopVideo(1);
                 _VideoPlay[0].PlayVideo(0);
                 _VideoPlay[1].PlayVideo(0);
                 _SEPlayer.StopSE(1);

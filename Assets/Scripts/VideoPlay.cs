@@ -9,7 +9,6 @@ public class VideoPlay : MonoBehaviour
     public bool randomMode = false; //trueのときランダムにビデオを再生
     bool videoPlayFlag = false;
     float playTime = 0; //ビデオ再生時間
-    int videoNumber = 0; //ビデオ番号
     float startTime;
 
     void Update()
@@ -18,8 +17,8 @@ public class VideoPlay : MonoBehaviour
         {
             if (playTime - Time.time + startTime < 0)
             {
-
-                playTime = 1000 * Random.Range(0, 11);
+                Debug.Log("New Video Autoplayed.");
+                playTime = Random.Range(3, 8);
                 startTime = Time.time;
                 PlayVideo(Random.Range(0, videoClips.Length));
             }
@@ -32,16 +31,11 @@ public class VideoPlay : MonoBehaviour
         }
     }
 
-    public async void PlayVideo(int num)
+    public void PlayVideo(int num)
     {
+        videoPlayFlag = false;
         videoPlayer.clip = videoClips[num];
         videoPlayer.Prepare();
         videoPlayFlag = true;
-    }
-
-    public void StopVideo(int num)
-    {
-        //videoPlayFlag = false;
-        //videoPlayer.Stop();
     }
 }
