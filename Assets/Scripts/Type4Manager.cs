@@ -34,7 +34,7 @@ public class Type4Manager : MonoBehaviour
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[2];
     Lever lever;
-    VideoPlay[] _VideoPlay = new VideoPlay[2];
+    VideoPlay videoPlay;
 
     //For test-----------------------------------------
 
@@ -58,8 +58,7 @@ public class Type4Manager : MonoBehaviour
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         //nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
         //nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();
-        _VideoPlay[0] = temp.Find("ArmUnit").Find("Main").Find("Plane1").GetComponent<VideoPlay>();
-        _VideoPlay[1] = temp.Find("ArmUnit").Find("Main").Find("Plane2").GetComponent<VideoPlay>();
+        videoPlay = this.transform.Find("VideoPlay").GetComponent<VideoPlay>();
 
         // CraneBoxに関する処理
         _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
@@ -104,8 +103,7 @@ public class Type4Manager : MonoBehaviour
         // イニシャル移動とinsertFlagを後に実行
         await Task.Delay(3000);
         //_ArmController.ArmLimit(armApertures);
-        for (int i = 0; i < 2; i++)
-            _VideoPlay[i].randomMode = true;
+        videoPlay.randomMode = true;
         if (!player2) _CraneBox.leftMoveFlag = true;
         else _CraneBox.rightMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
@@ -164,8 +162,7 @@ public class Type4Manager : MonoBehaviour
             //コイン投入有効化;
             if (creditSystem.creditDisplayed > 0)
             {
-                for (int i = 0; i < 2; i++)
-                    _VideoPlay[i].randomMode = false;
+                videoPlay.randomMode = false;
                 craneStatus = 1;
             }
         }
@@ -207,8 +204,7 @@ public class Type4Manager : MonoBehaviour
                 if (!instanceFlag[craneStatus])
                 {
                     instanceFlag[craneStatus] = true;
-                    _VideoPlay[0].PlayVideo(0);
-                    _VideoPlay[1].PlayVideo(0);
+                    videoPlay.PlayVideo(0);
                 }
                 InputLeverCheck();
             }
@@ -301,8 +297,7 @@ public class Type4Manager : MonoBehaviour
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
             {
                 leverFlag = true;
-                _VideoPlay[0].PlayVideo(1);
-                _VideoPlay[1].PlayVideo(1);
+                videoPlay.PlayVideo(1);
                 _SEPlayer.StopSE(2);
                 _SEPlayer.PlaySE(1, 1);
             }
@@ -310,8 +305,7 @@ public class Type4Manager : MonoBehaviour
             && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverFlag)
             {
                 leverFlag = false;
-                _VideoPlay[0].PlayVideo(0);
-                _VideoPlay[1].PlayVideo(0);
+                videoPlay.PlayVideo(0);
                 _SEPlayer.StopSE(1);
                 _SEPlayer.PlaySE(2, 1);
             }
@@ -349,8 +343,7 @@ public class Type4Manager : MonoBehaviour
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
             {
                 leverFlag = true;
-                _VideoPlay[0].PlayVideo(1);
-                _VideoPlay[1].PlayVideo(1);
+                videoPlay.PlayVideo(1);
                 _SEPlayer.StopSE(2);
                 _SEPlayer.PlaySE(1, 1);
             }
@@ -358,8 +351,7 @@ public class Type4Manager : MonoBehaviour
             && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverFlag)
             {
                 leverFlag = false;
-                _VideoPlay[0].PlayVideo(0);
-                _VideoPlay[1].PlayVideo(0);
+                videoPlay.PlayVideo(0);
                 _SEPlayer.StopSE(1);
                 _SEPlayer.PlaySE(2, 1);
             }

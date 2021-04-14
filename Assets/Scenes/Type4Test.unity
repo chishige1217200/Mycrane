@@ -27661,7 +27661,6 @@ GameObject:
   - component: {fileID: 736612389}
   - component: {fileID: 736612393}
   - component: {fileID: 736612392}
-  - component: {fileID: 736612391}
   - component: {fileID: 736612390}
   m_Layer: 9
   m_Name: Plane2
@@ -27718,28 +27717,6 @@ VideoPlayer:
   m_Looping: 1
   m_WaitForFirstFrame: 0
   m_FrameReadyEventEnabled: 0
---- !u!114 &736612391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 736612388}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c8d77c003f4cf14ea7cc26fbf13fc03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  videoPlayer: {fileID: 736612390}
-  videoClips:
-  - {fileID: 32900000, guid: e7ea7fcfd2b4ca745ba4f5411ca729c4, type: 3}
-  - {fileID: 32900000, guid: 775524a33a88445409a9ef10f66a1e30, type: 3}
-  - {fileID: 32900000, guid: 7543ddfad00bc854996bc1050408bb96, type: 3}
-  - {fileID: 32900000, guid: 710c9601202428e4d8bb31b57cdc9964, type: 3}
-  - {fileID: 32900000, guid: 1f974e4fe4e1b434081374c947a62e08, type: 3}
-  - {fileID: 32900000, guid: 192e9719dbcc62e4bbef571ff6e0cb3c, type: 3}
-  - {fileID: 32900000, guid: bfef7d669ad1d5f4f85e887de432f848, type: 3}
-  randomMode: 0
 --- !u!23 &736612392
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -34012,7 +33989,7 @@ Transform:
   - {fileID: 602909862}
   - {fileID: 1806567374682697277}
   m_Father: {fileID: 1153012474}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &900693429
 PrefabInstance:
@@ -43006,6 +42983,7 @@ Transform:
   - {fileID: 1221861809}
   - {fileID: 610914194}
   - {fileID: 458537452}
+  - {fileID: 1780392009}
   - {fileID: 899444996}
   m_Father: {fileID: 723372134}
   m_RootOrder: 0
@@ -45915,6 +45893,7 @@ Transform:
   - {fileID: 1322292768}
   - {fileID: 200931932}
   - {fileID: 1357079120}
+  - {fileID: 1872531007}
   - {fileID: 1827210485}
   m_Father: {fileID: 723372134}
   m_RootOrder: 1
@@ -45935,7 +45914,7 @@ MonoBehaviour:
   buttonFlag: 0
   leverFlag: 0
   player2: 1
-  playable: 1
+  playable: 0
   button3: 1
   prizezoneType: 9
   craneStatusdisplayed: {fileID: 0}
@@ -61870,7 +61849,6 @@ GameObject:
   - component: {fileID: 1640155157}
   - component: {fileID: 1640155161}
   - component: {fileID: 1640155160}
-  - component: {fileID: 1640155159}
   - component: {fileID: 1640155158}
   m_Layer: 9
   m_Name: Plane1
@@ -61927,28 +61905,6 @@ VideoPlayer:
   m_Looping: 1
   m_WaitForFirstFrame: 0
   m_FrameReadyEventEnabled: 0
---- !u!114 &1640155159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1640155156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c8d77c003f4cf14ea7cc26fbf13fc03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  videoPlayer: {fileID: 1640155158}
-  videoClips:
-  - {fileID: 32900000, guid: e7ea7fcfd2b4ca745ba4f5411ca729c4, type: 3}
-  - {fileID: 32900000, guid: 775524a33a88445409a9ef10f66a1e30, type: 3}
-  - {fileID: 32900000, guid: 7543ddfad00bc854996bc1050408bb96, type: 3}
-  - {fileID: 32900000, guid: 710c9601202428e4d8bb31b57cdc9964, type: 3}
-  - {fileID: 32900000, guid: 1f974e4fe4e1b434081374c947a62e08, type: 3}
-  - {fileID: 32900000, guid: 192e9719dbcc62e4bbef571ff6e0cb3c, type: 3}
-  - {fileID: 32900000, guid: bfef7d669ad1d5f4f85e887de432f848, type: 3}
-  randomMode: 0
 --- !u!23 &1640155160
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -64499,7 +64455,6 @@ GameObject:
   - component: {fileID: 1714832148}
   - component: {fileID: 1714832152}
   - component: {fileID: 1714832151}
-  - component: {fileID: 1714832150}
   - component: {fileID: 1714832149}
   m_Layer: 9
   m_Name: Plane2
@@ -64556,28 +64511,6 @@ VideoPlayer:
   m_Looping: 1
   m_WaitForFirstFrame: 0
   m_FrameReadyEventEnabled: 0
---- !u!114 &1714832150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1714832147}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c8d77c003f4cf14ea7cc26fbf13fc03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  videoPlayer: {fileID: 1714832149}
-  videoClips:
-  - {fileID: 32900000, guid: e7ea7fcfd2b4ca745ba4f5411ca729c4, type: 3}
-  - {fileID: 32900000, guid: 775524a33a88445409a9ef10f66a1e30, type: 3}
-  - {fileID: 32900000, guid: 7543ddfad00bc854996bc1050408bb96, type: 3}
-  - {fileID: 32900000, guid: 710c9601202428e4d8bb31b57cdc9964, type: 3}
-  - {fileID: 32900000, guid: 1f974e4fe4e1b434081374c947a62e08, type: 3}
-  - {fileID: 32900000, guid: 192e9719dbcc62e4bbef571ff6e0cb3c, type: 3}
-  - {fileID: 32900000, guid: bfef7d669ad1d5f4f85e887de432f848, type: 3}
-  randomMode: 0
 --- !u!23 &1714832151
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -66552,6 +66485,61 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1775417005}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1780392008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1780392009}
+  - component: {fileID: 1780392010}
+  m_Layer: 0
+  m_Name: VideoPlay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1780392009
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780392008}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1153012474}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1780392010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780392008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c8d77c003f4cf14ea7cc26fbf13fc03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  videoPlayer:
+  - {fileID: 2056238443}
+  - {fileID: 736612390}
+  videoClips:
+  - {fileID: 32900000, guid: e7ea7fcfd2b4ca745ba4f5411ca729c4, type: 3}
+  - {fileID: 32900000, guid: 775524a33a88445409a9ef10f66a1e30, type: 3}
+  - {fileID: 32900000, guid: 7543ddfad00bc854996bc1050408bb96, type: 3}
+  - {fileID: 32900000, guid: 710c9601202428e4d8bb31b57cdc9964, type: 3}
+  - {fileID: 32900000, guid: 1f974e4fe4e1b434081374c947a62e08, type: 3}
+  - {fileID: 32900000, guid: 192e9719dbcc62e4bbef571ff6e0cb3c, type: 3}
+  - {fileID: 32900000, guid: bfef7d669ad1d5f4f85e887de432f848, type: 3}
+  randomMode: 0
 --- !u!1 &1782136120
 GameObject:
   m_ObjectHideFlags: 0
@@ -68173,7 +68161,7 @@ Transform:
   - {fileID: 1964195362}
   - {fileID: 566587399}
   m_Father: {fileID: 1202480570}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1829589158
 GameObject:
@@ -69597,6 +69585,61 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1254441607}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1872531006
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1872531007}
+  - component: {fileID: 1872531008}
+  m_Layer: 0
+  m_Name: VideoPlay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1872531007
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872531006}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1202480570}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1872531008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872531006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c8d77c003f4cf14ea7cc26fbf13fc03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  videoPlayer:
+  - {fileID: 1640155158}
+  - {fileID: 1714832149}
+  videoClips:
+  - {fileID: 32900000, guid: e7ea7fcfd2b4ca745ba4f5411ca729c4, type: 3}
+  - {fileID: 32900000, guid: 775524a33a88445409a9ef10f66a1e30, type: 3}
+  - {fileID: 32900000, guid: 7543ddfad00bc854996bc1050408bb96, type: 3}
+  - {fileID: 32900000, guid: 710c9601202428e4d8bb31b57cdc9964, type: 3}
+  - {fileID: 32900000, guid: 1f974e4fe4e1b434081374c947a62e08, type: 3}
+  - {fileID: 32900000, guid: 192e9719dbcc62e4bbef571ff6e0cb3c, type: 3}
+  - {fileID: 32900000, guid: bfef7d669ad1d5f4f85e887de432f848, type: 3}
+  randomMode: 0
 --- !u!1001 &1874335681
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -75291,7 +75334,6 @@ GameObject:
   - component: {fileID: 2056238442}
   - component: {fileID: 2056238445}
   - component: {fileID: 2056238444}
-  - component: {fileID: 2056238452}
   - component: {fileID: 2056238443}
   m_Layer: 9
   m_Name: Plane1
@@ -75395,28 +75437,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2056238441}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &2056238452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056238441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c8d77c003f4cf14ea7cc26fbf13fc03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  videoPlayer: {fileID: 2056238443}
-  videoClips:
-  - {fileID: 32900000, guid: e7ea7fcfd2b4ca745ba4f5411ca729c4, type: 3}
-  - {fileID: 32900000, guid: 775524a33a88445409a9ef10f66a1e30, type: 3}
-  - {fileID: 32900000, guid: 7543ddfad00bc854996bc1050408bb96, type: 3}
-  - {fileID: 32900000, guid: 710c9601202428e4d8bb31b57cdc9964, type: 3}
-  - {fileID: 32900000, guid: 1f974e4fe4e1b434081374c947a62e08, type: 3}
-  - {fileID: 32900000, guid: 192e9719dbcc62e4bbef571ff6e0cb3c, type: 3}
-  - {fileID: 32900000, guid: bfef7d669ad1d5f4f85e887de432f848, type: 3}
-  randomMode: 0
 --- !u!1 &2061914360
 GameObject:
   m_ObjectHideFlags: 0
