@@ -201,8 +201,8 @@ public class Type4Manager : MonoBehaviour
                 if (!instanceFlag[craneStatus])
                 {
                     instanceFlag[craneStatus] = true;
-                    _VideoPlay[0].PlayVideo(0, 2147483647);
-                    _VideoPlay[1].PlayVideo(0, 2147483647);
+                    _VideoPlay[0].PlayVideo(0);
+                    _VideoPlay[1].PlayVideo(0);
                 }
                 InputLeverCheck();
             }
@@ -297,8 +297,8 @@ public class Type4Manager : MonoBehaviour
                 leverFlag = true;
                 _VideoPlay[0].StopVideo(0);
                 _VideoPlay[1].StopVideo(0);
-                _VideoPlay[0].PlayVideo(1, 2147483647);
-                _VideoPlay[1].PlayVideo(1, 2147483647);
+                _VideoPlay[0].PlayVideo(1);
+                _VideoPlay[1].PlayVideo(1);
                 _SEPlayer.StopSE(2);
                 _SEPlayer.PlaySE(1, 1);
             }
@@ -308,8 +308,8 @@ public class Type4Manager : MonoBehaviour
                 leverFlag = false;
                 _VideoPlay[0].StopVideo(1);
                 _VideoPlay[1].StopVideo(1);
-                _VideoPlay[0].PlayVideo(0, 2147483647);
-                _VideoPlay[1].PlayVideo(0, 2147483647);
+                _VideoPlay[0].PlayVideo(0);
+                _VideoPlay[1].PlayVideo(0);
                 _SEPlayer.StopSE(1);
                 _SEPlayer.PlaySE(2, 1);
             }
@@ -349,8 +349,8 @@ public class Type4Manager : MonoBehaviour
                 leverFlag = true;
                 _VideoPlay[0].StopVideo(0);
                 _VideoPlay[1].StopVideo(0);
-                _VideoPlay[0].PlayVideo(1, 2147483647);
-                _VideoPlay[1].PlayVideo(1, 2147483647);
+                _VideoPlay[0].PlayVideo(1);
+                _VideoPlay[1].PlayVideo(1);
                 _SEPlayer.StopSE(2);
                 _SEPlayer.PlaySE(1, 1);
             }
@@ -360,8 +360,8 @@ public class Type4Manager : MonoBehaviour
                 leverFlag = false;
                 _VideoPlay[0].StopVideo(1);
                 _VideoPlay[1].StopVideo(1);
-                _VideoPlay[0].PlayVideo(0, 2147483647);
-                _VideoPlay[1].PlayVideo(0, 2147483647);
+                _VideoPlay[0].PlayVideo(0);
+                _VideoPlay[1].PlayVideo(0);
                 _SEPlayer.StopSE(1);
                 _SEPlayer.PlaySE(2, 1);
             }

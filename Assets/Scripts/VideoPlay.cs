@@ -1,45 +1,47 @@
-using System;
 using UnityEngine;
 using UnityEngine.Video;
+using System.Threading.Tasks;
 
 public class VideoPlay : MonoBehaviour
 {
-    public VideoPlayer[] _VideoSource; //オーディオ情報の格納
+    public VideoPlayer videoPlayer; //オーディオ情報の格納
+    public VideoClip[] videoClips;
     public bool randomMode = false; //trueのときランダムにビデオを再生
-    private int[] _RepeatCount; //リピート再生回数
-
-    void Start()
-    {
-        _VideoSource = this.transform.GetComponents<VideoPlayer>();
-        _RepeatCount = new int[_VideoSource.Length];
-        for (int i = 0; i < _VideoSource.Length; i++)
-        {
-            _RepeatCount[i] = 0; //すべてのリピート再生回数を0にする
-        }
-    }
+    bool videoPlayFlag = false;
+    float playTime = 0; //ビデオ再生時間
+    int videoNumber = 0; //ビデオ番号
+    float startTime;
 
     void Update()
     {
-        for (int i = 0; i < _VideoSource.Length; i++)
+        if (randomMode)
         {
-            if (_RepeatCount[i] > 0 && _VideoSource[i].isPlaying == false)
+            if (playTime - Time.time + startTime < 0)
             {
-                _VideoSource[i].enabled = true;
-                _VideoSource[i].Play();
-                _RepeatCount[i]--;
+
+                playTime = 1000 * Random.Range(0, 11);
+                startTime = Time.time;
+                PlayVideo(Random.Range(0, videoClips.Length));
             }
+        }
+
+        if (videoPlayer.isPrepared && videoPlayFlag)
+        {
+            videoPlayer.Play();
+            return;
         }
     }
 
-    public void PlayVideo(int num, int repeatcount)
+    public async void PlayVideo(int num)
     {
-        _RepeatCount[num] = repeatcount;
+        videoPlayer.clip = videoClips[num];
+        videoPlayer.Prepare();
+        videoPlayFlag = true;
     }
 
     public void StopVideo(int num)
     {
-        _VideoSource[num].enabled = false;
-        _VideoSource[num].Stop();
-        _RepeatCount[num] = 0;
+        //videoPlayFlag = false;
+        //videoPlayer.Stop();
     }
 }
