@@ -36,6 +36,7 @@ public class Type4Manager : MonoBehaviour
     ArmNail[] nail = new ArmNail[2];
     Lever lever;
     VideoPlay videoPlay;
+    ArmunitRoter roter;
 
     //For test-----------------------------------------
 
@@ -60,6 +61,7 @@ public class Type4Manager : MonoBehaviour
         //nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
         //nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();
         videoPlay = this.transform.Find("VideoPlay").GetComponent<VideoPlay>();
+        roter = temp.Find("ArmUnit").Find("Main").GetComponent<ArmunitRoter>();
 
         // CraneBoxに関する処理
         _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
@@ -75,6 +77,7 @@ public class Type4Manager : MonoBehaviour
         creditSystem.GetSEPlayer(_SEPlayer);
         support.GetManager(4);
         support.GetRopeManager(_RopeManager);
+        roter.GetSEPlayer(_SEPlayer);
         //support.pushTime = 300; // 押し込みパワーの調整
         /*for (int i = 0; i < 2; i++)
         {
