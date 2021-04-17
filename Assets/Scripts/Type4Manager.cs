@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,15 +8,17 @@ public class Type4Manager : MonoBehaviour
     float leftCatchArmpower = 100f; //左アームパワー
     float rightCatchArmpower = 100f; //右アームパワー
     float armApertures = 100f; //開口率
-    int operationType = 1; //0:ボタン式，1:レバー式
-    int soundType = 0; //BGMの切り替え．0・1
-    int catchTime = 2000; //キャッチに要する時間(m秒)
-    private bool[] instanceFlag = new bool[17]; //各craneStatusで1度しか実行しない処理の管理
+    int operationType = 0; //0:ボタン式，1:レバー式
+    int catchLong = 2000; //キャッチに要する時間(m秒)
+    int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
+    int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
+    private bool[] instanceFlag = new bool[16]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool leverFlag = false; //trueならレバーがアクティブ
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
-    [SerializeField] bool button3 = true; //button3の使用可否
+    [SerializeField] bool rotation = true; //回転機能の使用可否
+    [SerializeField] bool downStop = true; //下降停止機能の使用可否
     private Vector2 startPoint; // 開始位置座標定義
     private Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
     private Vector2 vec2offset = new Vector2(0.05f, 0.1f); // <=0.5, <=0.6 座標設定用Temp
@@ -74,14 +75,14 @@ public class Type4Manager : MonoBehaviour
         creditSystem.GetSEPlayer(_SEPlayer);
         support.GetManager(4);
         support.GetRopeManager(_RopeManager);
-        support.pushTime = 300; // 押し込みパワーの調整
+        //support.pushTime = 300; // 押し込みパワーの調整
         /*for (int i = 0; i < 2; i++)
         {
             nail[i].GetManager(4);
             nail[i].GetRopeManager(_RopeManager);
         }*/
 
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 16; i++)
             instanceFlag[i] = false;
 
         // ControlGroupの制御
@@ -97,8 +98,6 @@ public class Type4Manager : MonoBehaviour
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
         }
-
-        if (!button3) this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
 
         // イニシャル移動とinsertFlagを後に実行
         await Task.Delay(3000);
@@ -171,6 +170,12 @@ public class Type4Manager : MonoBehaviour
         {
             if (craneStatus == 1)
             {
+                if (!instanceFlag[craneStatus])
+                {
+                    instanceFlag[craneStatus] = true;
+                    if (Random.Range(0, 2) == 0 && !player2) videoPlay.PlayVideo(4);
+                    else videoPlay.PlayVideo(0);
+                }
                 InputKeyCheck(craneStatus);         //右移動ボタン有効化;
             }
 
@@ -189,11 +194,6 @@ public class Type4Manager : MonoBehaviour
             { //奥移動中
                 InputKeyCheck(craneStatus);
                 //クレーン奥移動;
-            }
-
-            if (craneStatus == 5)
-            {
-                craneStatus = 6;
             }
         }
 
@@ -214,6 +214,51 @@ public class Type4Manager : MonoBehaviour
                 //InputKeyCheck(5);
             }
         }
+
+        if (craneStatus == 5)
+        {
+            //InputKeyCheck(number);
+        }
+        if (craneStatus == 6)
+        {
+
+        }
+        if (craneStatus == 7)
+        {
+
+        }
+        if (craneStatus == 8)
+        {
+
+        }
+        if (craneStatus == 9)
+        {
+
+        }
+        if (craneStatus == 10)
+        {
+
+        }
+        if (craneStatus == 11)
+        {
+
+        }
+        if (craneStatus == 12)
+        {
+
+        }
+        if (craneStatus == 13)
+        {
+
+        }
+        if (craneStatus == 14)
+        {
+
+        }
+        if (craneStatus == 15)
+        {
+
+        }
     }
 
     public void GetPrize()
@@ -226,70 +271,103 @@ public class Type4Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonFlag)
+                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonFlag && !player2)
                 {
                     buttonFlag = true;
                     if (craneStatus == 1)
                     {
                         creditSystem.ResetNowPayment();
                         creditSystem.AddCreditPlayed();
-                        instanceFlag[12] = false;
+                        videoPlay.PlayVideo(1);
+                        instanceFlag[15] = false;
                     }
                     craneStatus = 2;
-                    _CraneBox.rightMoveFlag = true;
+                    _SEPlayer.PlaySE(1, 1);
+                    if (!player2) _CraneBox.rightMoveFlag = true;
+                }
+                if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonFlag && player2)
+                {
+                    buttonFlag = true;
+                    if (craneStatus == 1)
+                    {
+                        creditSystem.ResetNowPayment();
+                        creditSystem.AddCreditPlayed();
+                        videoPlay.PlayVideo(1);
+                        instanceFlag[15] = false;
+                    }
+                    craneStatus = 2;
+                    _SEPlayer.PlaySE(1, 1);
+                    _CraneBox.leftMoveFlag = true;
                 }
                 break;
             //投入を無効化
             case 2:
-                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonFlag)
+                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonFlag && !player2)
                 {
                     craneStatus = 3;
                     _CraneBox.rightMoveFlag = false;
+                    _SEPlayer.StopSE(1);
+                    _SEPlayer.PlaySE(2, 1);
+                    buttonFlag = false;
+                }
+                if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonFlag && player2)
+                {
+                    craneStatus = 3;
+                    _CraneBox.leftMoveFlag = false;
+                    _SEPlayer.StopSE(1);
+                    _SEPlayer.PlaySE(2, 1);
                     buttonFlag = false;
                 }
                 break;
             case 3:
-                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonFlag)
+                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonFlag && !player2)
                 {
                     buttonFlag = true;
                     craneStatus = 4;
+                    _SEPlayer.PlaySE(1, 1);
+                    _CraneBox.backMoveFlag = true;
+                }
+                if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonFlag && player2)
+                {
+                    buttonFlag = true;
+                    craneStatus = 4;
+                    _SEPlayer.PlaySE(1, 1);
                     _CraneBox.backMoveFlag = true;
                 }
                 break;
             case 4:
-                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonFlag)
+                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonFlag && !player2)
                 {
                     craneStatus = 5;
+                    _SEPlayer.StopSE(1);
+                    _SEPlayer.PlaySE(2, 1);
+                    _CraneBox.backMoveFlag = false;
+                    buttonFlag = false;
+                }
+                if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonFlag && player2)
+                {
+                    craneStatus = 5;
+                    _SEPlayer.StopSE(1);
+                    _SEPlayer.PlaySE(2, 1);
                     _CraneBox.backMoveFlag = false;
                     buttonFlag = false;
                 }
                 break;
-            case 5: // レバー操作時に使用
-                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && craneStatus == 3)
-                    craneStatus = 6;
-                break;
             case 6:
-                if (operationType == 0)
+                if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2 && downStop)
                 {
-                    if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)))
-                    {
-                        _RopeManager.ArmUnitDownForceStop();
-                        craneStatus = 7;
-                    }
+                    _RopeManager.ArmUnitDownForceStop();
+                    craneStatus = 7;
                 }
-                else if (operationType == 1) // レバー操作時
+                if ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2 && downStop)
                 {
-                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)))
-                    {
-                        _RopeManager.ArmUnitDownForceStop();
-                        craneStatus = 7;
-                    }
+                    _RopeManager.ArmUnitDownForceStop();
+                    craneStatus = 7;
                 }
                 break;
         }
     }
-
-    public async void InputLeverCheck() // キーボード，UI共通のレバー処理
+    public void InputLeverCheck() // キーボード，UI共通のレバー処理
     {
         if (!player2)
         {
@@ -334,7 +412,7 @@ public class Type4Manager : MonoBehaviour
                     craneStatus = 3;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
-                    instanceFlag[12] = false;
+                    instanceFlag[15] = false;
                 }
         }
         if (player2)
@@ -380,8 +458,103 @@ public class Type4Manager : MonoBehaviour
                     craneStatus = 3;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
-                    instanceFlag[12] = false;
+                    instanceFlag[15] = false;
                 }
+        }
+    }
+
+    public void ButtonDown(int num)
+    {
+        switch (num)
+        {
+            case 1:
+                if (craneStatus == 1 && !buttonFlag)
+                {
+                    buttonFlag = true;
+                    craneStatus = 2;
+                    creditSystem.ResetNowPayment();
+                    creditSystem.AddCreditPlayed();
+                    videoPlay.PlayVideo(1);
+                    _SEPlayer.PlaySE(1, 1);
+                    instanceFlag[15] = false;
+                }
+                if (craneStatus == 2 && buttonFlag)
+                {
+                    _SEPlayer.PlaySE(1, 1);
+                    _CraneBox.rightMoveFlag = true;
+                }
+                break;
+            case 2:
+                if ((craneStatus == 3 && !buttonFlag) || (craneStatus == 4 && buttonFlag))
+                {
+                    buttonFlag = true;
+                    craneStatus = 4;
+                    _SEPlayer.PlaySE(1, 1);
+                    _CraneBox.backMoveFlag = true;
+                }
+                break;
+            case 3:
+                if (craneStatus == 6)
+                {
+                    //buttonFlag = true;
+                    _RopeManager.ArmUnitDownForceStop();
+                    craneStatus = 7;
+                }
+                break;
+            case 4: // player2 case 1:
+                if (craneStatus == 1 && !buttonFlag)
+                {
+                    buttonFlag = true;
+                    craneStatus = 2;
+                    creditSystem.ResetNowPayment();
+                    creditSystem.AddCreditPlayed();
+                    videoPlay.PlayVideo(1);
+                    _SEPlayer.PlaySE(1, 1);
+                    instanceFlag[15] = false;
+                }
+                if (craneStatus == 2 && buttonFlag)
+                {
+                    _SEPlayer.PlaySE(1, 1);
+                    _CraneBox.leftMoveFlag = true;
+                }
+                break;
+        }
+    }
+
+    public void ButtonUp(int num)
+    {
+        switch (num)
+        {
+            case 1:
+                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonFlag))
+                {
+                    craneStatus = 3;
+                    _SEPlayer.StopSE(1);
+                    _SEPlayer.PlaySE(2, 1);
+                    _CraneBox.rightMoveFlag = false;
+                    buttonFlag = false;
+                }
+                break;
+            case 2:
+                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonFlag))
+                {
+                    craneStatus = 5;
+                    _SEPlayer.StopSE(1);
+                    _SEPlayer.PlaySE(2, 1);
+                    _CraneBox.backMoveFlag = false;
+                    buttonFlag = false;
+                }
+                break;
+            case 4: // player2 case 1:
+                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonFlag))
+                {
+                    craneStatus = 3;
+                    _SEPlayer.StopSE(1);
+                    _SEPlayer.PlaySE(2, 1);
+                    _CraneBox.leftMoveFlag = false;
+                    buttonFlag = false;
+                }
+                break;
         }
     }
 }
