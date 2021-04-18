@@ -11,7 +11,7 @@ public class ArmunitRoter : MonoBehaviour
     SEPlayer _SEPlayer;
     public float rotateSpeed = 20f;
     bool rotationFlag = false; //回転中
-    [SerializeField] bool rotationDirection = true; //trueなら時計回りに回転
+    bool rotationDirection = true; //trueなら時計回りに回転
     bool instanceFlag = false; //1回だけ実行するのに使用
 
     // Start is called before the first frame update
@@ -29,7 +29,7 @@ public class ArmunitRoter : MonoBehaviour
     {
         if (rotationFlag)
         {
-            Debug.Log(this.transform.localRotation.z);
+            Debug.Log(this.transform.localEulerAngles.z);
             if (this.transform.localEulerAngles.z <= 270 && this.transform.localEulerAngles.z >= 90)
             {
                 Debug.Log("Reached limit.");
@@ -70,10 +70,16 @@ public class ArmunitRoter : MonoBehaviour
 
     public void RotateStop()
     {
+        int low;
+        int high;
         rotationFlag = false;
         motor.targetVelocity = 0f;
         joint.motor = motor;
-        SetLimit(Mathf.FloorToInt(this.transform.localRotation.z), Mathf.CeilToInt(this.transform.localRotation.z));
+        low = Mathf.FloorToInt(this.transform.localEulerAngles.z);
+        high = Mathf.CeilToInt(this.transform.localEulerAngles.z);
+        if (low < 0) low -= 360;
+        if (high < 0) high -= 360;
+        SetLimit(low, high);
         _SEPlayer.StopSE(3);
         _SEPlayer.StopSE(4);
     }
