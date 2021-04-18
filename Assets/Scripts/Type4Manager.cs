@@ -220,7 +220,7 @@ public class Type4Manager : MonoBehaviour
 
         if (craneStatus == 5)
         {
-            //InputKeyCheck(number);
+            InputKeyCheck(craneStatus);
         }
         if (craneStatus == 6)
         {
@@ -356,7 +356,16 @@ public class Type4Manager : MonoBehaviour
                     buttonFlag = false;
                 }
                 break;
-            case 6:
+            case 5:
+                if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3) && player2) ||
+                (Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9) && !player2))
+                {
+                    craneStatus = 6;
+                    roter.RotateStart();
+                    videoPlay.PlayVideo(2);
+                }
+                break;
+            case 8:
                 if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2 && downStop)
                 {
                     _RopeManager.ArmUnitDownForceStop();
@@ -504,7 +513,7 @@ public class Type4Manager : MonoBehaviour
                     craneStatus = 7;
                 }
                 break;
-            case 4: // player2 case 1:
+            case 10: // player2 case 1:
                 if (craneStatus == 1 && !buttonFlag)
                 {
                     buttonFlag = true;
@@ -548,7 +557,7 @@ public class Type4Manager : MonoBehaviour
                     buttonFlag = false;
                 }
                 break;
-            case 4: // player2 case 1:
+            case 10: // player2 case 1:
                 if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonFlag))
                 {
                     craneStatus = 3;

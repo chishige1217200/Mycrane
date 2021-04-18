@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Threading.Tasks;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,17 +13,24 @@ public class Type4Selecter : MonoBehaviour
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
     }
 
-    void Update()
+    async void Update()
     {
         if (manager[0].craneStatus == 0 && manager[1].craneStatus == 0)
         {
-            _BGMPlayer.StopBGM(1);
-            _BGMPlayer.PlayBGM(0);
+            if (!_BGMPlayer._AudioSource[0].isPlaying)
+            {
+                _BGMPlayer.StopBGM(1);
+                _BGMPlayer.PlayBGM(0);
+            }
         }
         else if (manager[0].craneStatus > 0 || manager[1].craneStatus > 0)
         {
-            _BGMPlayer.StopBGM(0);
-            _BGMPlayer.PlayBGM(1);
+            await Task.Delay(500);
+            if (!_BGMPlayer._AudioSource[1].isPlaying)
+            {
+                _BGMPlayer.StopBGM(0);
+                _BGMPlayer.PlayBGM(1);
+            }
         }
     }
 

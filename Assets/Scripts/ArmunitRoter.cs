@@ -11,7 +11,7 @@ public class ArmunitRoter : MonoBehaviour
     SEPlayer _SEPlayer;
     public float rotateSpeed = 20f;
     bool rotationFlag = false; //回転中
-    bool rotationDirection = true; //trueなら時計回りに回転
+    [SerializeField] bool rotationDirection = true; //trueなら時計回りに回転
     bool instanceFlag = false; //1回だけ実行するのに使用
 
     // Start is called before the first frame update
@@ -29,8 +29,10 @@ public class ArmunitRoter : MonoBehaviour
     {
         if (rotationFlag)
         {
-            if (this.transform.localRotation.z <= -90 || this.transform.localRotation.z >= 90)
+            Debug.Log(this.transform.localRotation.z);
+            if (this.transform.localEulerAngles.z <= 270 && this.transform.localEulerAngles.z >= 90)
             {
+                Debug.Log("Reached limit.");
                 if (!instanceFlag)
                 {
                     instanceFlag = true;
@@ -38,11 +40,17 @@ public class ArmunitRoter : MonoBehaviour
                     await Task.Delay(500);
                     RotateDirection(rotationDirection);
                 }
-
             }
-            if (this.transform.localRotation.z >= -89 && this.transform.localRotation.z <= 89)
+            else instanceFlag = false;
+            if (rotationDirection)
             {
-                instanceFlag = false;
+                _SEPlayer.StopSE(4);
+                _SEPlayer.PlaySE(3, 2147483647);
+            }
+            else
+            {
+                _SEPlayer.StopSE(3);
+                _SEPlayer.PlaySE(4, 2147483647);
             }
         }
     }
@@ -54,7 +62,7 @@ public class ArmunitRoter : MonoBehaviour
 
     public void RotateStart()
     {
-        SetLimit(-90, 90);
+        SetLimit(-91, 91);
         rotationDirection = true;
         RotateDirection(rotationDirection);
         rotationFlag = true;
@@ -66,6 +74,8 @@ public class ArmunitRoter : MonoBehaviour
         motor.targetVelocity = 0f;
         joint.motor = motor;
         SetLimit(Mathf.FloorToInt(this.transform.localRotation.z), Mathf.CeilToInt(this.transform.localRotation.z));
+        _SEPlayer.StopSE(3);
+        _SEPlayer.StopSE(4);
     }
 
     public void RotateToHome()
@@ -78,8 +88,8 @@ public class ArmunitRoter : MonoBehaviour
 
     void RotateDirection(bool direction)
     {
-        if (direction) motor.targetVelocity = rotateSpeed;
-        else motor.targetVelocity = -rotateSpeed;
+        if (direction) motor.targetVelocity = -rotateSpeed;
+        else motor.targetVelocity = rotateSpeed;
         joint.motor = motor;
     }
 
