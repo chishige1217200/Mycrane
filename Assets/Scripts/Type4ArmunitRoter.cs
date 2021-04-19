@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArmunitRoter : MonoBehaviour
+public class Type4ArmunitRoter : MonoBehaviour
 {
     HingeJoint joint;
     JointMotor motor;
@@ -29,7 +29,6 @@ public class ArmunitRoter : MonoBehaviour
     {
         if (rotationFlag)
         {
-            Debug.Log(this.transform.localEulerAngles.z);
             if (this.transform.localEulerAngles.z <= 270 && this.transform.localEulerAngles.z >= 90)
             {
                 Debug.Log("Reached limit.");

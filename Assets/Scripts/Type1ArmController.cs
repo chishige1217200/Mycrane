@@ -8,6 +8,7 @@ public class Type1ArmController : MonoBehaviour
     HingeJoint[] joint;
     JointMotor[] motor;
     JointLimits[] limit;
+    [SerializeField] float armAperturesBase = 40f;
 
     void Start()
     {
@@ -82,8 +83,8 @@ public class Type1ArmController : MonoBehaviour
 
     public void ArmLimit(float armApertures)
     {
-        limit[0].min = -40 * armApertures / 100;
-        limit[1].max = 40 * armApertures / 100;
+        limit[0].min = -armAperturesBase * armApertures / 100;
+        limit[1].max = armAperturesBase * armApertures / 100;
         for (int i = 0; i < 2; i++)
             joint[i].limits = limit[i];
     }

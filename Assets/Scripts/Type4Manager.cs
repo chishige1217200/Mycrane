@@ -8,7 +8,7 @@ public class Type4Manager : MonoBehaviour
     float leftCatchArmpower = 100f; //左アームパワー
     float rightCatchArmpower = 100f; //右アームパワー
     float armApertures = 100f; //開口率
-    int operationType = 0; //0:ボタン式，1:レバー式
+    int operationType = 1; //0:ボタン式，1:レバー式
     int catchLong = 2000; //キャッチに要する時間(m秒)
     int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
     int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
@@ -27,7 +27,7 @@ public class Type4Manager : MonoBehaviour
     Vector2 craneHost; //クレーンゲームの中心位置定義
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     SEPlayer _SEPlayer;
-    //Type4ArmController _ArmController;
+    Type1ArmController _ArmController;
     Transform temp;
     CraneBox _CraneBox;
     GetPoint _GetPoint;
@@ -36,7 +36,7 @@ public class Type4Manager : MonoBehaviour
     ArmNail[] nail = new ArmNail[2];
     Lever lever;
     VideoPlay videoPlay;
-    ArmunitRoter roter;
+    Type4ArmunitRoter roter;
 
     //For test-----------------------------------------
 
@@ -56,12 +56,12 @@ public class Type4Manager : MonoBehaviour
 
         // ロープとアームコントローラに関する処理
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
-        //_ArmController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
+        _ArmController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         //nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
         //nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();
         videoPlay = this.transform.Find("VideoPlay").GetComponent<VideoPlay>();
-        roter = temp.Find("ArmUnit").Find("Main").GetComponent<ArmunitRoter>();
+        roter = temp.Find("ArmUnit").Find("Main").GetComponent<Type4ArmunitRoter>();
 
         // CraneBoxに関する処理
         _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
@@ -104,7 +104,8 @@ public class Type4Manager : MonoBehaviour
 
         // イニシャル移動とinsertFlagを後に実行
         await Task.Delay(3000);
-        //_ArmController.ArmLimit(armApertures);
+        _ArmController.ArmLimit(armApertures);
+        _ArmController.ArmFinalClose();
         videoPlay.randomMode = true;
         if (!player2) _CraneBox.leftMoveFlag = true;
         else _CraneBox.rightMoveFlag = true;
@@ -214,7 +215,7 @@ public class Type4Manager : MonoBehaviour
             if (craneStatus == 3)
             {
                 InputLeverCheck();
-                //InputKeyCheck(5);
+                InputKeyCheck(4);
             }
         }
 
@@ -444,7 +445,7 @@ public class Type4Manager : MonoBehaviour
                     instanceFlag[15] = false;
                 }
         }
-        if (player2)
+        else
         {
             if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
@@ -523,7 +524,7 @@ public class Type4Manager : MonoBehaviour
                 }
                 break;
             case 3:
-                if (craneStatus == 5)
+                if ((craneStatus == 5 && operationType == 0) || (craneStatus == 3 && operationType == 1))
                 {
                     craneStatus = 6;
                     roter.RotateStart();

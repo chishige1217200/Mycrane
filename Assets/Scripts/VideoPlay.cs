@@ -17,7 +17,6 @@ public class VideoPlay : MonoBehaviour
         {
             if (playTime - Time.time + startTime < 0)
             {
-                Debug.Log("New Video Autoplayed.");
                 playTime = Random.Range(3, 8);
                 startTime = Time.time;
                 PlayVideo(Random.Range(0, videoClips.Length));

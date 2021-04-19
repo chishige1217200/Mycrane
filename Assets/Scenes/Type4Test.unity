@@ -3442,7 +3442,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 113766278}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cde5eb0b87620c499b5d2b3046941ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 267e7c3d79fddc24ea932fb91f58525f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 20
@@ -21902,6 +21902,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 566587399}
+  - component: {fileID: 566587400}
   m_Layer: 0
   m_Name: ArmUnit
   m_TagString: Untagged
@@ -21926,6 +21927,19 @@ Transform:
   m_Father: {fileID: 1827210485}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &566587400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566587398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15469ecd69d16ed41b91266fc81d02b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  armAperturesBase: 40
 --- !u!1 &567308214
 GameObject:
   m_ObjectHideFlags: 0
@@ -22465,15 +22479,15 @@ HingeJoint:
     spring: 0
     damper: 0
     targetPosition: 0
-  m_UseMotor: 1
+  m_UseMotor: 0
   m_Motor:
     targetVelocity: 100
     force: 1
     freeSpin: 0
   m_UseLimits: 1
   m_Limits:
-    min: -50
-    max: 0
+    min: 0
+    max: 50
     bounciness: 0
     bounceMinVelocity: 0.2
     contactDistance: 0
@@ -31996,9 +32010,9 @@ HingeJoint:
     spring: 0
     damper: 0
     targetPosition: 0
-  m_UseMotor: 1
+  m_UseMotor: 0
   m_Motor:
-    targetVelocity: 100
+    targetVelocity: -100
     force: 1
     freeSpin: 0
   m_UseLimits: 1
@@ -45970,7 +45984,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1191119265}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cde5eb0b87620c499b5d2b3046941ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 267e7c3d79fddc24ea932fb91f58525f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 20
@@ -49772,15 +49786,15 @@ HingeJoint:
     spring: 0
     damper: 0
     targetPosition: 0
-  m_UseMotor: 1
+  m_UseMotor: 0
   m_Motor:
     targetVelocity: 100
     force: 1
     freeSpin: 0
   m_UseLimits: 1
   m_Limits:
-    min: -50
-    max: 0
+    min: 0
+    max: 50
     bounciness: 0
     bounceMinVelocity: 0.2
     contactDistance: 0
@@ -57180,9 +57194,9 @@ HingeJoint:
     spring: 0
     damper: 0
     targetPosition: 0
-  m_UseMotor: 1
+  m_UseMotor: 0
   m_Motor:
-    targetVelocity: 100
+    targetVelocity: -100
     force: 1
     freeSpin: 0
   m_UseLimits: 1
@@ -80072,6 +80086,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1806567374682697277}
+  - component: {fileID: 1322342881523266696}
   m_Layer: 0
   m_Name: ArmUnit
   m_TagString: Untagged
@@ -80079,6 +80094,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1322342881523266696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1322342881523266695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15469ecd69d16ed41b91266fc81d02b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  armAperturesBase: 40
 --- !u!4 &1427205609402435076
 Transform:
   m_ObjectHideFlags: 0
