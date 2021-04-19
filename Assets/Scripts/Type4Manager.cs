@@ -19,10 +19,6 @@ public class Type4Manager : MonoBehaviour
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     [SerializeField] bool rotation = true; //回転機能の使用可否
     [SerializeField] bool downStop = true; //下降停止機能の使用可否
-    private Vector2 startPoint; // 開始位置座標定義
-    private Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
-    private Vector2 vec2offset = new Vector2(0.05f, 0.1f); // <=0.5, <=0.6 座標設定用Temp
-    public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
     bool prizeGetFlag = false;
     Vector2 craneHost; //クレーンゲームの中心位置定義
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
@@ -78,7 +74,7 @@ public class Type4Manager : MonoBehaviour
         support.GetManager(4);
         support.GetRopeManager(_RopeManager);
         roter.GetSEPlayer(_SEPlayer);
-        //support.pushTime = 300; // 押し込みパワーの調整
+        support.pushTime = 300; // 押し込みパワーの調整
         /*for (int i = 0; i < 2; i++)
         {
             nail[i].GetManager(4);
@@ -111,46 +107,11 @@ public class Type4Manager : MonoBehaviour
         else _CraneBox.rightMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
 
-        if (!player2)
-        {
-            startPoint = new Vector2(-0.65f + vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
-            homePoint = new Vector2(-0.65f + vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
-        }
-        else
-        {
-            startPoint = new Vector2(0.65f - vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
-            homePoint = new Vector2(0.65f - vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
-        }
+        await Task.Delay(3000);
 
-        while (true)
-        {
-            if (!player2 && _CraneBox.CheckPos(1))
-            {
-                _CraneBox.goPoint = startPoint;
-                _CraneBox.goPositionFlag = true;
-                break;
-            }
-            if (player2 && _CraneBox.CheckPos(3))
-            {
-                _CraneBox.goPoint = startPoint;
-                _CraneBox.goPositionFlag = true;
-                break;
-            }
-            await Task.Delay(1000);
-        }
+        creditSystem.insertFlag = true;
+        craneStatus = 0;
 
-        await Task.Delay(500);
-
-        while (true)
-        {
-            if (_CraneBox.CheckPos(9))
-            {
-                creditSystem.insertFlag = true;
-                craneStatus = 0;
-                break;
-            }
-            await Task.Delay(1000);
-        }
     }
 
     // Update is called once per frame
@@ -168,6 +129,7 @@ public class Type4Manager : MonoBehaviour
                 videoPlay.randomMode = false;
                 craneStatus = 1;
             }
+            else videoPlay.randomMode = true;
         }
 
         if (operationType == 0)
@@ -229,38 +191,109 @@ public class Type4Manager : MonoBehaviour
         }
         if (craneStatus == 7)
         {
-
+            if (!instanceFlag[craneStatus])
+            {
+                instanceFlag[craneStatus] = true;
+                _ArmController.ArmOpen();
+                await Task.Delay(2000);
+                if (craneStatus == 7) craneStatus = 8;
+            }
+            //アーム開く音再生;
+            //アーム開く;
         }
         if (craneStatus == 8)
-        {
-
+        {   //アーム下降中
+            if (!instanceFlag[craneStatus])
+            {
+                instanceFlag[craneStatus] = true;
+                _SEPlayer.PlaySE(5, 1);
+                if (craneStatus == 8) _RopeManager.ArmUnitDown(); //awaitによる時差実行を防止
+            }
+            InputKeyCheck(craneStatus);
         }
         if (craneStatus == 9)
-        {
-
+        {   //アーム掴む
+            if (!instanceFlag[craneStatus])
+            {
+                instanceFlag[craneStatus] = true;
+                await Task.Delay(catchTiming);
+                if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
+                {
+                    if (leftCatchArmpower >= rightCatchArmpower) _ArmController.ArmClose(leftCatchArmpower);
+                    else _ArmController.ArmClose(rightCatchArmpower);
+                }
+                else _ArmController.ArmClose(30f);
+                await Task.Delay(catchLong);
+                if (craneStatus == 9) craneStatus = 10;
+            }
         }
         if (craneStatus == 10)
-        {
-
+        {   //アーム上昇中
+            {
+                instanceFlag[craneStatus] = true;
+                _RopeManager.ArmUnitUp();
+                await Task.Delay(1000);
+                _ArmController.MotorPower(leftCatchArmpower, 0);
+                _ArmController.MotorPower(rightCatchArmpower, 1);
+            }
         }
         if (craneStatus == 11)
-        {
-
+        {   //アーム上昇停止
+            if (!instanceFlag[craneStatus])
+            {
+                await Task.Delay(backTime);
+                if (!player2) _CraneBox.leftMoveFlag = true;
+                else _CraneBox.rightMoveFlag = true;
+                _CraneBox.forwardMoveFlag = true;
+                craneStatus = 12;
+            }
         }
         if (craneStatus == 12)
         {
-
+            if (_CraneBox.CheckPos(1) && craneStatus == 12 & !player2) craneStatus = 13;
+            if (_CraneBox.CheckPos(3) && craneStatus == 12 & player2) craneStatus = 13;
         }
         if (craneStatus == 13)
         {
-
+            if (!instanceFlag[craneStatus])
+            {
+                instanceFlag[craneStatus] = true;
+                _ArmController.ArmLimit(100f); // アーム開口度を100に
+                _ArmController.ArmOpen();
+                await Task.Delay(2000);
+                if (craneStatus == 13) craneStatus = 14;
+                //アーム開く音再生;
+                //アーム開く;
+                //1秒待機;
+            }
         }
         if (craneStatus == 14)
         {
-
+            if (!instanceFlag[craneStatus])
+            {
+                _ArmController.ArmFinalClose();
+                await Task.Delay(1000);
+                if (craneStatus == 14) craneStatus = 15;
+            }
+            //アーム閉じる音再生;
+            //アーム閉じる;
+            //1秒待機;
         }
         if (craneStatus == 15)
         {
+            if (!instanceFlag[craneStatus])
+            {
+                instanceFlag[craneStatus] = true;
+                for (int i = 0; i < 14; i++)
+                    instanceFlag[i] = false;
+                _ArmController.ArmLimit(armApertures); //アーム開口度リセット
+            }
+            await Task.Delay(500);
+
+            if (creditSystem.creditDisplayed > 0)
+                craneStatus = 1;
+            else
+                craneStatus = 0;
 
         }
     }
