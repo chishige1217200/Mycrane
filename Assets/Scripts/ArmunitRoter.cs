@@ -77,8 +77,9 @@ public class ArmunitRoter : MonoBehaviour
         joint.motor = motor;
         low = Mathf.FloorToInt(this.transform.localEulerAngles.z);
         high = Mathf.CeilToInt(this.transform.localEulerAngles.z);
-        if (low < 0) low -= 360;
-        if (high < 0) high -= 360;
+        if (low > 180) low -= 360;
+        if (high > 180) high -= 360;
+        Debug.Log(low + " " + high);
         SetLimit(low, high);
         _SEPlayer.StopSE(3);
         _SEPlayer.StopSE(4);
