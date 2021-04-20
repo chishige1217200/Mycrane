@@ -26,7 +26,7 @@ public class Type4Selecter : MonoBehaviour
         else if (manager[0].craneStatus == 15 || manager[1].craneStatus == 15) _BGMPlayer.StopBGM(1);
         else if ((manager[0].craneStatus > 0 || manager[1].craneStatus > 0) && (manager[0].craneStatus < 15 || manager[1].craneStatus < 15))
         {
-            await Task.Delay(500);
+            if (_BGMPlayer._AudioSource[0].isPlaying) await Task.Delay(500);
             if (!_BGMPlayer._AudioSource[1].isPlaying)
             {
                 _BGMPlayer.StopBGM(0);
