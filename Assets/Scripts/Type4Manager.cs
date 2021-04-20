@@ -195,7 +195,7 @@ public class Type4Manager : MonoBehaviour
             {
                 instanceFlag[craneStatus] = true;
                 _ArmController.ArmOpen();
-                await Task.Delay(2000);
+                await Task.Delay(1000);
                 if (craneStatus == 7) craneStatus = 8;
             }
             //アーム開く音再生;
@@ -216,14 +216,14 @@ public class Type4Manager : MonoBehaviour
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
-                await Task.Delay(catchTiming);
+                if (catchTiming > 0) await Task.Delay(catchTiming);
                 if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
                 {
                     if (leftCatchArmpower >= rightCatchArmpower) _ArmController.ArmClose(leftCatchArmpower);
                     else _ArmController.ArmClose(rightCatchArmpower);
                 }
                 else _ArmController.ArmClose(30f);
-                await Task.Delay(catchLong);
+                if (catchLong > 0) await Task.Delay(catchLong);
                 if (craneStatus == 9) craneStatus = 10;
             }
         }
@@ -241,7 +241,7 @@ public class Type4Manager : MonoBehaviour
         {   //アーム上昇停止
             if (!instanceFlag[craneStatus])
             {
-                await Task.Delay(backTime);
+                if (backTime > 0) await Task.Delay(backTime);
                 if (!player2) _CraneBox.leftMoveFlag = true;
                 else _CraneBox.rightMoveFlag = true;
                 _CraneBox.forwardMoveFlag = true;
@@ -258,6 +258,7 @@ public class Type4Manager : MonoBehaviour
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
+                videoPlay.PlayVideo(5);
                 _ArmController.ArmLimit(100f); // アーム開口度を100に
                 _ArmController.ArmOpen();
                 await Task.Delay(2000);
@@ -287,14 +288,16 @@ public class Type4Manager : MonoBehaviour
                 for (int i = 0; i < 14; i++)
                     instanceFlag[i] = false;
                 _ArmController.ArmLimit(armApertures); //アーム開口度リセット
+                if (prizeGetFlag) _SEPlayer.PlaySE(6, 1);
+                else _SEPlayer.PlaySE(7, 1);
+                await Task.Delay(5000);
+
+                prizeGetFlag = false;
+                if (creditSystem.creditDisplayed > 0)
+                    craneStatus = 1;
+                else
+                    craneStatus = 0;
             }
-            await Task.Delay(500);
-
-            if (creditSystem.creditDisplayed > 0)
-                craneStatus = 1;
-            else
-                craneStatus = 0;
-
         }
     }
 
@@ -425,7 +428,7 @@ public class Type4Manager : MonoBehaviour
                 if ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2 && downStop)
                 {
                     _RopeManager.ArmUnitDownForceStop();
-                    craneStatus = 7;
+                    craneStatus = 9;
                 }
                 break;
         }
@@ -573,7 +576,7 @@ public class Type4Manager : MonoBehaviour
                 {
                     //buttonFlag = true;
                     _RopeManager.ArmUnitDownForceStop();
-                    craneStatus = 7;
+                    craneStatus = 9;
                 }
                 break;
             case 4: // player2 case 1:

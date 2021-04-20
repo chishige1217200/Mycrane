@@ -31,7 +31,6 @@ public class Type4ArmunitRoter : MonoBehaviour
         {
             if (this.transform.localEulerAngles.z <= 270 && this.transform.localEulerAngles.z >= 90)
             {
-                Debug.Log("Reached limit.");
                 if (!instanceFlag)
                 {
                     instanceFlag = true;
@@ -61,7 +60,7 @@ public class Type4ArmunitRoter : MonoBehaviour
 
     public void RotateStart()
     {
-        SetLimit(-91, 91);
+        SetLimit(-90, 90);
         rotationDirection = true;
         RotateDirection(rotationDirection);
         rotationFlag = true;
