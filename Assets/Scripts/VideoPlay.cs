@@ -30,7 +30,7 @@ public class VideoPlay : MonoBehaviour
 
     }
 
-    public void PlayVideo(int num)
+    public void PlayVideo(int num) // videoPlayer.isPreparedがfalseのときに呼び出してはいけない可能性
     {
         videoPlayFlag = false;
         videoPlayer[0].clip = videoClips[num];
