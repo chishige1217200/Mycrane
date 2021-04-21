@@ -8,7 +8,7 @@ public class Type4Manager : MonoBehaviour
     float leftCatchArmpower = 100f; //左アームパワー
     float rightCatchArmpower = 100f; //右アームパワー
     float armApertures = 100f; //開口率
-    int operationType = 1; //0:ボタン式，1:レバー式
+    int operationType = 0; //0:ボタン式，1:レバー式
     int catchLong = 2000; //キャッチに要する時間(m秒)
     int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
     int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
@@ -420,12 +420,8 @@ public class Type4Manager : MonoBehaviour
                     buttonFlag = false; //バグりそう
                 break;
             case 8:
-                if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2 && downStop)
-                {
-                    _RopeManager.ArmUnitDownForceStop();
-                    craneStatus = 7;
-                }
-                if ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2 && downStop)
+                if (((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2) ||
+                    ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2) && downStop)
                 {
                     _RopeManager.ArmUnitDownForceStop();
                     craneStatus = 9;
