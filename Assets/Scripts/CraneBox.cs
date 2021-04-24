@@ -33,6 +33,11 @@ public class CraneBox : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (rightRefusedFlag && rightMoveFlag) rightMoveFlag = false;
+        if (leftRefusedFlag && leftMoveFlag) leftMoveFlag = false;
+        if (backRefusedFlag && backMoveFlag) backMoveFlag = false;
+        if (forwardRefusedFlag && forwardMoveFlag) forwardMoveFlag = false;
+
         if (rightMoveFlag && !rightRefusedFlag) RightMove();
         if (leftMoveFlag && !leftRefusedFlag) LeftMove();
         if (backMoveFlag && !backRefusedFlag) BackMove();
