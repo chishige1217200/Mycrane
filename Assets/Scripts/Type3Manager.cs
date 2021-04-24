@@ -87,7 +87,7 @@ public class Type3Manager : MonoBehaviour
     async void Update()
     {
         if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
-        craneStatusdisplayed.text = craneStatus.ToString();
+        //craneStatusdisplayed.text = craneStatus.ToString();
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(soundType);
