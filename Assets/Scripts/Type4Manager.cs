@@ -8,7 +8,7 @@ public class Type4Manager : MonoBehaviour
     float leftCatchArmpower = 100f; //左アームパワー
     float rightCatchArmpower = 100f; //右アームパワー
     float armApertures = 100f; //開口率
-    int operationType = 0; //0:ボタン式，1:レバー式
+    int operationType = 1; //0:ボタン式，1:レバー式
     int catchLong = 2000; //キャッチに要する時間(m秒)
     int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
     int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
@@ -33,6 +33,8 @@ public class Type4Manager : MonoBehaviour
     Lever lever;
     VideoPlay videoPlay;
     Type4ArmunitRoter roter;
+    KeyCode downButtonAlpha;
+    KeyCode downButtonNumpad;
 
     //For test-----------------------------------------
 
@@ -90,12 +92,32 @@ public class Type4Manager : MonoBehaviour
             this.transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(false);
+            if (!player2)
+            {
+                downButtonAlpha = KeyCode.Alpha3;
+                downButtonNumpad = KeyCode.Keypad3;
+            }
+            if (player2)
+            {
+                downButtonAlpha = KeyCode.Alpha9;
+                downButtonNumpad = KeyCode.Keypad9;
+            }
         }
         else if (operationType == 1)
         {
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
+            if (!player2)
+            {
+                downButtonAlpha = KeyCode.Alpha2;
+                downButtonNumpad = KeyCode.Keypad2;
+            }
+            if (player2)
+            {
+                downButtonAlpha = KeyCode.Alpha8;
+                downButtonNumpad = KeyCode.Keypad8;
+            }
         }
 
         // イニシャル移動とinsertFlagを後に実行
@@ -177,7 +199,7 @@ public class Type4Manager : MonoBehaviour
             if (craneStatus == 3)
             {
                 InputLeverCheck();
-                InputKeyCheck(4);
+                if (!leverFlag) InputKeyCheck(5);
             }
         }
 
@@ -396,34 +418,24 @@ public class Type4Manager : MonoBehaviour
                 }
                 break;
             case 5:
-                if (((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3) && player2) ||
-                    (Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9) && !player2)) && !buttonFlag)
+                if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonFlag)
                 {
-                    //buttonFlag = true;
                     craneStatus = 6;
                     roter.RotateStart();
                     videoPlay.PlayVideo(2);
                 }
-                /*else if (((Input.GetKeyUp(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3) && player2) ||
-                        (Input.GetKeyUp(KeyCode.Keypad9) || Input.GetKeyUp(KeyCode.Alpha9) && !player2)) && buttonFlag)
-                    buttonFlag = false;*/
+
                 break;
             case 6:
-                if (((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3) && player2) ||
-                    (Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9) && !player2)) && !buttonFlag)
+                if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonFlag)
                 {
-                    //buttonFlag = true;
                     craneStatus = 7;
                     roter.RotateStop();
                     videoPlay.PlayVideo(3);
                 }
-                /*else if (((Input.GetKeyUp(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3) && player2) ||
-                        (Input.GetKeyUp(KeyCode.Keypad9) || Input.GetKeyUp(KeyCode.Alpha9) && !player2)) && buttonFlag)
-                    buttonFlag = false; //バグりそう*/
                 break;
             case 8:
-                if (((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2) ||
-                    ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2) && downStop)
+                if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && downStop)
                 {
                     _RopeManager.ArmUnitDownForceStop();
                     craneStatus = 9;
