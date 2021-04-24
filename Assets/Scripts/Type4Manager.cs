@@ -187,7 +187,8 @@ public class Type4Manager : MonoBehaviour
         }
         if (craneStatus == 6)
         {
-            InputKeyCheck(craneStatus);
+            await Task.Delay(10);
+            if (craneStatus == 6) InputKeyCheck(craneStatus);
         }
         if (craneStatus == 7)
         {
@@ -290,6 +291,7 @@ public class Type4Manager : MonoBehaviour
                 _ArmController.ArmLimit(armApertures); //アーム開口度リセット
                 if (prizeGetFlag) _SEPlayer.PlaySE(6, 1);
                 else _SEPlayer.PlaySE(7, 1);
+                roter.RotateToHome();
                 await Task.Delay(5000);
 
                 prizeGetFlag = false;
@@ -397,27 +399,27 @@ public class Type4Manager : MonoBehaviour
                 if (((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3) && player2) ||
                     (Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9) && !player2)) && !buttonFlag)
                 {
-                    buttonFlag = true;
+                    //buttonFlag = true;
                     craneStatus = 6;
                     roter.RotateStart();
                     videoPlay.PlayVideo(2);
                 }
-                else if (((Input.GetKeyUp(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3) && player2) ||
+                /*else if (((Input.GetKeyUp(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3) && player2) ||
                         (Input.GetKeyUp(KeyCode.Keypad9) || Input.GetKeyUp(KeyCode.Alpha9) && !player2)) && buttonFlag)
-                    buttonFlag = false;
+                    buttonFlag = false;*/
                 break;
             case 6:
                 if (((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3) && player2) ||
                     (Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9) && !player2)) && !buttonFlag)
                 {
-                    buttonFlag = true;
+                    //buttonFlag = true;
                     craneStatus = 7;
                     roter.RotateStop();
                     videoPlay.PlayVideo(3);
                 }
-                else if (((Input.GetKeyUp(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3) && player2) ||
+                /*else if (((Input.GetKeyUp(KeyCode.Keypad3) || Input.GetKeyUp(KeyCode.Alpha3) && player2) ||
                         (Input.GetKeyUp(KeyCode.Keypad9) || Input.GetKeyUp(KeyCode.Alpha9) && !player2)) && buttonFlag)
-                    buttonFlag = false; //バグりそう
+                    buttonFlag = false; //バグりそう*/
                 break;
             case 8:
                 if (((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2) ||
@@ -556,7 +558,7 @@ public class Type4Manager : MonoBehaviour
                 }
                 break;
             case 3:
-                if ((craneStatus == 5 && operationType == 0) || (craneStatus == 3 && operationType == 1))
+                if ((craneStatus == 5 && operationType == 0) || (craneStatus == 3 && operationType == 1 && !leverFlag))
                 {
                     craneStatus = 6;
                     roter.RotateStart();
