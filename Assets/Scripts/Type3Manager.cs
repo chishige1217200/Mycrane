@@ -7,7 +7,7 @@ public class Type3Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
-    float upArmpower = 50; //上昇時のアームパワー(%，未確率時)
+    float upArmpower = 80; //上昇時のアームパワー(%，未確率時)
     float backArmpower = 0; //獲得口移動時のアームパワー(%，未確率時)
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
