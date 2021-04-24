@@ -23,16 +23,19 @@ public class VideoPlay : MonoBehaviour
             }
         }
 
-        if (videoPlayer[0].isPrepared && videoPlayFlag)
+        if (videoPlayer[0].isPrepared && videoPlayer[1].isPrepared && videoPlayFlag)
+        {
+            videoPlayFlag = false;
             videoPlayer[0].Play();
-        if (videoPlayer[1].isPrepared && videoPlayFlag)
             videoPlayer[1].Play();
-
+        }
     }
 
     public void PlayVideo(int num) // videoPlayer.isPreparedがfalseのときに呼び出してはいけない可能性
     {
         videoPlayFlag = false;
+        videoPlayer[0].Stop();
+        videoPlayer[1].Stop();
         videoPlayer[0].clip = videoClips[num];
         videoPlayer[1].clip = videoClips[num];
         videoPlayer[0].Prepare();
