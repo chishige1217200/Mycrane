@@ -16,7 +16,7 @@ public class ArmControllerSupport : MonoBehaviour
     public int pushTime = 0;
     bool prizeFlag = false;
 
-    void OnTriggerEnter(Collider collider)
+    async void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "ReleaseCheck")
         {
@@ -53,6 +53,31 @@ public class ArmControllerSupport : MonoBehaviour
         {
             Debug.Log("prize inTrigger");
             prizeFlag = true;
+            switch (craneType)
+            {
+                case 3:
+                    if (_Type3Manager.craneStatus == 6)
+                    {
+                        await Task.Delay(500);
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type3Manager.craneStatus = 7;
+                    }
+                    break;
+            }
+        }
+        if (collider.tag == "Shield")
+        {
+            switch (craneType)
+            {
+                case 3:
+                    if (_Type3Manager.craneStatus == 6)
+                    {
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type3Manager.craneStatus = 7;
+                    }
+                    break;
+            }
+
         }
     }
 
