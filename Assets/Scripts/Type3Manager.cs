@@ -352,8 +352,8 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.StopSE(22);
                         break;
                 }
+                if (craneStatus == 9) craneStatus = 10;
             }
-            if (craneStatus == 9) craneStatus = 10;
             //アーム上昇停止音再生;
             //アーム上昇停止;
         }

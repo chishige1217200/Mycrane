@@ -81,7 +81,8 @@ public class RopePoint : MonoBehaviour
             if (moveUpFlag)
             {
                 upRefusedFlag = true;
-                if (last && _Type2Manager.craneStatus == 8) _Type2Manager.craneStatus = 9;
+                if (last && craneType == 2)
+                    if (_Type2Manager.craneStatus == 8) _Type2Manager.craneStatus = 9;
                 moveUpFlag = false;
             }
         if (collider.tag == "UpPoint")

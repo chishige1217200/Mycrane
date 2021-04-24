@@ -17,7 +17,7 @@ public class Type2Manager : MonoBehaviour
     int limitTimeCount = 0; //実際のカウントダウン
     int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
-    float audioPitch = 1f; //サウンドのピッチ
+    float audioPitch = 1.025f; //サウンドのピッチ
     private bool[] instanceFlag = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
@@ -210,7 +210,7 @@ public class Type2Manager : MonoBehaviour
                 CancelTimer();
                 if (craneStatus == 6) _RopeManager.ArmUnitDown(); //awaitによる時差実行を防止
             }
-            if (craneStatus == 6) InputKeyCheck(craneStatus); //awaitによる時差実行を防止
+            if (craneStatus == 6 && instanceFlag[6]) InputKeyCheck(craneStatus); //awaitによる時差実行を防止
             //アーム下降音再生
             //アーム下降;
         }
@@ -236,9 +236,9 @@ public class Type2Manager : MonoBehaviour
                 else armPower = catchArmpower;
                 _ArmController.MotorPower(armPower);
                 _ArmController.ArmClose();
+                await Task.Delay(1000);
+                if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
             }
-            await Task.Delay(1000);
-            if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
             //アーム掴む;
         }
 
@@ -294,8 +294,8 @@ public class Type2Manager : MonoBehaviour
                         _SEPlayer.StopSE(13);
                         break;
                 }
+                if (craneStatus == 9) craneStatus = 10;
             }
-            craneStatus = 10;
             //アーム上昇停止;
         }
 
@@ -379,11 +379,13 @@ public class Type2Manager : MonoBehaviour
             {
                 switch (soundType)
                 {
+                    case 1:
+                        _SEPlayer.PlaySE(7, 1);
+                        break;
                     case 2:
                         _SEPlayer.PlaySE(11, 1);
                         break;
                     default:
-                        _SEPlayer.PlaySE(7, 1);
                         break;
                 }
             }
