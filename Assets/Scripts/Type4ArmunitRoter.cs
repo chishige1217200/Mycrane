@@ -12,6 +12,7 @@ public class Type4ArmunitRoter : MonoBehaviour
     public float rotateSpeed = 20f;
     bool rotationFlag = false; //回転中
     bool rotationDirection = true; //trueなら時計回りに回転
+    bool rotateInitialFlag = false; //trueなら初期化確認
     bool instanceFlag = false; //1回だけ実行するのに使用
 
     // Start is called before the first frame update
@@ -25,7 +26,7 @@ public class Type4ArmunitRoter : MonoBehaviour
     }
 
     // Update is called once per frame
-    async void Update()
+    void Update()
     {
         if (rotationFlag)
         {
@@ -35,7 +36,6 @@ public class Type4ArmunitRoter : MonoBehaviour
                 {
                     instanceFlag = true;
                     rotationDirection = !rotationDirection;
-                    await Task.Delay(500);
                     RotateDirection(rotationDirection);
                 }
             }
@@ -51,6 +51,7 @@ public class Type4ArmunitRoter : MonoBehaviour
                 _SEPlayer.PlaySE(4, 2147483647);
             }
         }
+        //if()
     }
 
     public void GetSEPlayer(SEPlayer s)
@@ -61,34 +62,37 @@ public class Type4ArmunitRoter : MonoBehaviour
     public void RotateStart()
     {
         SetLimit(-90, 90);
-        rotationDirection = true;
+        rotationDirection = true; //時計回りに回転
         RotateDirection(rotationDirection);
         rotationFlag = true;
     }
 
     public void RotateStop()
     {
-        int low;
-        int high;
+        int low; //角度の小さい側
         rotationFlag = false;
         motor.targetVelocity = 0f;
         joint.motor = motor;
         low = Mathf.FloorToInt(this.transform.localEulerAngles.z);
-        high = Mathf.CeilToInt(this.transform.localEulerAngles.z);
         if (low > 180) low -= 360;
-        if (high > 180) high -= 360;
-        Debug.Log(low + " " + high);
-        SetLimit(low, high);
+        SetLimit(low, low + 1);
         _SEPlayer.StopSE(3);
         _SEPlayer.StopSE(4);
     }
 
-    public void RotateToHome()
+    public void RotateToHome() //0度に向かって回転
     {
-
-
-
-        SetLimit(0, 0);
+        if (this.transform.localEulerAngles.z > 1)
+            rotationDirection = true; //時計回りに回転
+        else if (this.transform.localEulerAngles.z < -1)
+            rotationDirection = false;
+        else
+        {
+            SetLimit(-1, 1);
+            return;
+        }
+        RotateDirection(rotationDirection);
+        rotateInitialFlag = true; //初期化用Updateの実行
     }
 
     void RotateDirection(bool direction)
