@@ -329,7 +329,8 @@ public class Type4Manager : MonoBehaviour
     public void GetPrize()
     {
         _SEPlayer.StopSE(7);
-        _SEPlayer.PlaySE(6, 1);
+        if (!_SEPlayer._AudioSource[6].isPlaying)
+            _SEPlayer.PlaySE(6, 1);
     }
 
     public void InputKeyCheck(int num)
