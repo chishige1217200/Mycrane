@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class Type1Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    float leftCatchArmpower = 100f; //左アームパワー
-    float rightCatchArmpower = 100f; //右アームパワー
-    float armApertures = 100f; //開口率
-    int soundType = 1; //BGMの切り替え．0・1
+    float leftCatchArmpower = 10f; //左アームパワー
+    float rightCatchArmpower = 10f; //右アームパワー
+    float armApertures = 80f; //開口率
+    int soundType = 0; //BGMの切り替え．0・1
     int catchTime = 2000; //キャッチに要する時間(m秒)
     private bool[] instanceFlag = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している

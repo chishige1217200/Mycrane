@@ -5,9 +5,9 @@ using UnityEngine.UI;
 public class Type4Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    float leftCatchArmpower = 100f; //左アームパワー
-    float rightCatchArmpower = 100f; //右アームパワー
-    float armApertures = 100f; //開口率
+    float leftCatchArmpower = 10f; //左アームパワー
+    float rightCatchArmpower = 10f; //右アームパワー
+    float armApertures = 80f; //開口率
     int operationType = 1; //0:ボタン式，1:レバー式
     int catchLong = 2000; //キャッチに要する時間(m秒)
     int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
