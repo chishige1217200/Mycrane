@@ -229,6 +229,8 @@ public class Type4Manager : MonoBehaviour
             if (!instanceFlag[craneStatus])
             {
                 instanceFlag[craneStatus] = true;
+                _SEPlayer.StopSE(3);
+                _SEPlayer.StopSE(4);
                 _SEPlayer.PlaySE(5, 1);
                 if (craneStatus == 8) _RopeManager.ArmUnitDown(); //awaitによる時差実行を防止
             }
@@ -311,8 +313,7 @@ public class Type4Manager : MonoBehaviour
                 for (int i = 0; i < 14; i++)
                     instanceFlag[i] = false;
                 _ArmController.ArmLimit(armApertures); //アーム開口度リセット
-                if (prizeGetFlag) _SEPlayer.PlaySE(6, 1);
-                else _SEPlayer.PlaySE(7, 1);
+                if (!_SEPlayer._AudioSource[6].isPlaying) _SEPlayer.PlaySE(7, 1);
                 roter.RotateToHome();
                 await Task.Delay(5000);
 
@@ -327,7 +328,8 @@ public class Type4Manager : MonoBehaviour
 
     public void GetPrize()
     {
-        prizeGetFlag = true;
+        _SEPlayer.StopSE(7);
+        _SEPlayer.PlaySE(6, 1);
     }
 
     public void InputKeyCheck(int num)

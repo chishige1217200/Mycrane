@@ -83,8 +83,6 @@ public class Type4ArmunitRoter : MonoBehaviour
         low = Mathf.FloorToInt(this.transform.localEulerAngles.z); //下方向に丸める
         if (low > 180) low -= 360; //Limitの角度が-180,180でしか設定できないため
         SetLimit(low, low + 1);
-        _SEPlayer.StopSE(3);
-        _SEPlayer.StopSE(4);
     }
 
     public void RotateToHome() //0度に向かって回転
