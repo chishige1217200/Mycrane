@@ -422,9 +422,17 @@ public class Type4Manager : MonoBehaviour
             case 5:
                 if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonFlag)
                 {
-                    craneStatus = 6;
-                    roter.RotateStart();
-                    videoPlay.PlayVideo(2);
+                    if (rotation)
+                    {
+                        craneStatus = 6;
+                        roter.RotateStart();
+                        videoPlay.PlayVideo(2);
+                    }
+                    else
+                    {
+                        craneStatus = 7;
+                        videoPlay.PlayVideo(3);
+                    }
                 }
 
                 break;
@@ -439,8 +447,11 @@ public class Type4Manager : MonoBehaviour
             case 8:
                 if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && downStop)
                 {
-                    _RopeManager.ArmUnitDownForceStop();
-                    craneStatus = 9;
+                    if (downStop)
+                    {
+                        _RopeManager.ArmUnitDownForceStop();
+                        craneStatus = 9;
+                    }
                 }
                 break;
         }
@@ -574,9 +585,17 @@ public class Type4Manager : MonoBehaviour
             case 3:
                 if ((craneStatus == 5 && operationType == 0) || (craneStatus == 3 && operationType == 1 && !leverFlag))
                 {
-                    craneStatus = 6;
-                    roter.RotateStart();
-                    videoPlay.PlayVideo(2);
+                    if (rotation)
+                    {
+                        craneStatus = 6;
+                        roter.RotateStart();
+                        videoPlay.PlayVideo(2);
+                    }
+                    else
+                    {
+                        craneStatus = 7;
+                        videoPlay.PlayVideo(3);
+                    }
                 }
                 else if (craneStatus == 6)
                 {
@@ -586,9 +605,11 @@ public class Type4Manager : MonoBehaviour
                 }
                 else if (craneStatus == 8)
                 {
-                    //buttonFlag = true;
-                    _RopeManager.ArmUnitDownForceStop();
-                    craneStatus = 9;
+                    if (downStop)
+                    {
+                        _RopeManager.ArmUnitDownForceStop();
+                        craneStatus = 9;
+                    }
                 }
                 break;
             case 4: // player2 case 1:
