@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class Type4Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    float leftCatchArmpower = 10f; //左アームパワー
-    float rightCatchArmpower = 10f; //右アームパワー
+    float leftCatchArmpower = 20f; //左アームパワー
+    float rightCatchArmpower = 20f; //右アームパワー
     float armApertures = 80f; //開口率
     int operationType = 1; //0:ボタン式，1:レバー式
     int catchLong = 2000; //キャッチに要する時間(m秒)
@@ -83,8 +83,10 @@ public class Type4Manager : MonoBehaviour
             nail[i].GetRopeManager(_RopeManager);
         }*/
 
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < 15; i++)
             instanceFlag[i] = false;
+
+        instanceFlag[15] = true; //初回処理用
 
         // ControlGroupの制御
         if (operationType == 0)
@@ -461,6 +463,16 @@ public class Type4Manager : MonoBehaviour
     {
         if (!player2)
         {
+            if (instanceFlag[15] && ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
+            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)) // 初回用の処理
+            {
+                leverFlag = true;
+                instanceFlag[15] = false;
+                videoPlay.PlayVideo(1);
+                _SEPlayer.StopSE(2);
+                _SEPlayer.PlaySE(1, 1);
+            }
+
             if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
             {
@@ -496,7 +508,7 @@ public class Type4Manager : MonoBehaviour
                 _CraneBox.forwardMoveFlag = false;
 
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) // 初動時にタイマーを起動
+            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
                 if (craneStatus == 1)
                 {
                     craneStatus = 3;
@@ -505,8 +517,19 @@ public class Type4Manager : MonoBehaviour
                     instanceFlag[15] = false;
                 }
         }
-        else
+        else //2Pレバー
         {
+            if (instanceFlag[15] && ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)
+            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)) // 初回用の処理
+            {
+                leverFlag = true;
+                instanceFlag[15] = false;
+                videoPlay.PlayVideo(1);
+                _SEPlayer.StopSE(2);
+                _SEPlayer.PlaySE(1, 1);
+            }
+
+
             if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
             {
@@ -542,7 +565,7 @@ public class Type4Manager : MonoBehaviour
                 _CraneBox.forwardMoveFlag = false;
 
             if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) // 初動時にタイマーを起動
+            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
                 if (craneStatus == 1)
                 {
                     craneStatus = 3;
