@@ -56,8 +56,8 @@ public class Type4Manager : MonoBehaviour
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
-        //nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
-        //nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();
+        nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
+        nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();
         videoPlay = this.transform.Find("VideoPlay").GetComponent<VideoPlay>();
         roter = temp.Find("ArmUnit").Find("Main").GetComponent<Type4ArmunitRoter>();
 
@@ -77,11 +77,11 @@ public class Type4Manager : MonoBehaviour
         support.GetRopeManager(_RopeManager);
         roter.GetSEPlayer(_SEPlayer);
         support.pushTime = 300; // 押し込みパワーの調整
-        /*for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 2; i++)
         {
             nail[i].GetManager(4);
             nail[i].GetRopeManager(_RopeManager);
-        }*/
+        }
 
         for (int i = 0; i < 15; i++)
             instanceFlag[i] = false;

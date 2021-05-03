@@ -22,10 +22,6 @@ public class ArmControllerSupport : MonoBehaviour
         {
             switch (craneType)
             {
-                case 1:
-                    break;
-                case 2:
-                    break;
                 case 3:
                     if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeFlag)
                     {
@@ -45,6 +41,14 @@ public class ArmControllerSupport : MonoBehaviour
                         Debug.Log("下降制限に接触");
                         ropeManager.ArmUnitDownForceStop();
                         _Type1Manager.craneStatus = 7;
+                    }
+                    break;
+                case 4:
+                    if (_Type4Manager.craneStatus == 8)
+                    {
+                        Debug.Log("下降制限に接触");
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type4Manager.craneStatus = 9;
                     }
                     break;
             }
@@ -93,15 +97,23 @@ public class ArmControllerSupport : MonoBehaviour
     {
         if (collision.gameObject.tag == "prize")
         {
+            Debug.Log("景品に接触");
+            await Task.Delay(pushTime); //押し込みパワーの調整
             switch (craneType)
             {
+
                 case 1:
-                    Debug.Log("景品に接触");
-                    await Task.Delay(pushTime); //押し込みパワーの調整
                     if (_Type1Manager.craneStatus == 6)
                     {
                         ropeManager.ArmUnitDownForceStop();
                         _Type1Manager.craneStatus = 7;
+                    }
+                    break;
+                case 4:
+                    if (_Type4Manager.craneStatus == 8)
+                    {
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type4Manager.craneStatus = 9;
                     }
                     break;
             }
