@@ -7,7 +7,7 @@ public class Type3Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
-    float upArmpower = 50; //上昇時のアームパワー(%，未確率時)
+    float upArmpower = 80; //上昇時のアームパワー(%，未確率時)
     float backArmpower = 0; //獲得口移動時のアームパワー(%，未確率時)
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
@@ -28,6 +28,7 @@ public class Type3Manager : MonoBehaviour
     CraneBox _CraneBox;
     GetPoint _GetPoint;
     RopeManager _RopeManager;
+    ArmControllerSupport support;
 
     //For test-----------------------------------------
 
@@ -46,6 +47,7 @@ public class Type3Manager : MonoBehaviour
         // ロープとアームコントローラに関する処理
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
+        support = temp.Find("ArmUnit").Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
 
         // CraneBoxに関する処理
         _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
@@ -55,6 +57,8 @@ public class Type3Manager : MonoBehaviour
         _RopeManager.SetManagerToPoint(3);
         creditSystem.GetSEPlayer(_SEPlayer);
         creditSystem.playable = playable;
+        support.GetManager(3);
+        support.GetRopeManager(_RopeManager);
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);
@@ -67,28 +71,26 @@ public class Type3Manager : MonoBehaviour
         await Task.Delay(300);
         _RopeManager.ArmUnitUp();
         if (soundType == 2) _ArmController.ArmOpen();
-        //await Task.Delay(500);
+        else _ArmController.ArmClose();
         _CraneBox.leftMoveFlag = true;
         _CraneBox.forwardMoveFlag = true;
-        creditSystem.insertFlag = true;
 
         for (int i = 0; i < 12; i++)
             instanceFlag[i] = false;
+
+        await Task.Delay(4000);
+
+        craneStatus = 0;
+        creditSystem.insertFlag = true;
     }
 
     async void Update()
     {
         if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
-        craneStatusdisplayed.text = craneStatus.ToString();
+        //craneStatusdisplayed.text = craneStatus.ToString();
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(soundType);
-            //await Task.Delay(1500);
-            if (_CraneBox.CheckPos(1))
-            {
-                craneStatus = 0;
-                _ArmController.ArmClose();
-            }
             //コイン投入無効化;
         }
 
@@ -354,8 +356,8 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.StopSE(22);
                         break;
                 }
+                if (craneStatus == 9) craneStatus = 10;
             }
-            if (craneStatus == 9) craneStatus = 10;
             //アーム上昇停止音再生;
             //アーム上昇停止;
         }

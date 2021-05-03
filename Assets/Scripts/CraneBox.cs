@@ -20,6 +20,7 @@ public class CraneBox : MonoBehaviour
     Type1Manager _Type1Manager;
     Type2Manager _Type2Manager;
     Type3Manager _Type3Manager;
+    Type4Manager _Type4Manager;
     public Vector2 goPoint; // GoPosition関数の目的地
     public bool goPositionFlag = false; // GoPosition関数の実行フラグ
     int craneType = -1;
@@ -32,6 +33,11 @@ public class CraneBox : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (rightRefusedFlag && rightMoveFlag) rightMoveFlag = false;
+        if (leftRefusedFlag && leftMoveFlag) leftMoveFlag = false;
+        if (backRefusedFlag && backMoveFlag) backMoveFlag = false;
+        if (forwardRefusedFlag && forwardMoveFlag) forwardMoveFlag = false;
+
         if (rightMoveFlag && !rightRefusedFlag) RightMove();
         if (leftMoveFlag && !leftRefusedFlag) LeftMove();
         if (backMoveFlag && !backRefusedFlag) BackMove();
@@ -43,14 +49,10 @@ public class CraneBox : MonoBehaviour
     public void GetManager(int num) // 筐体のマネージャー情報取得
     {
         craneType = num;
-        if (craneType == 1)
-        {
-            _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber); // 関数に変更になる
-        }
-        if (craneType == 2)
-            _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
-        if (craneType == 3)
-            _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
+        if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
+        if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
+        if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
+        if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
     }
 
     void OnTriggerEnter(Collider collider)
@@ -87,6 +89,12 @@ public class CraneBox : MonoBehaviour
                     _Type3Manager.craneStatus = 3;
                     _Type3Manager.buttonFlag = false;
                 }
+            if (craneType == 4)
+                if (_Type4Manager.craneStatus == 2)
+                {
+                    _Type4Manager.craneStatus = 3;
+                    _Type4Manager.buttonFlag = false;
+                }
         }
         if (collider.tag == "BackgroundLimit")
         {
@@ -106,6 +114,11 @@ public class CraneBox : MonoBehaviour
             {
                 if (_Type3Manager.craneStatus == 4) _Type3Manager.craneStatus = 5;
                 _Type3Manager.buttonFlag = false;
+            }
+            if (craneType == 4)
+            {
+                if (_Type4Manager.craneStatus == 4) _Type4Manager.craneStatus = 5;
+                _Type4Manager.buttonFlag = false;
             }
         }
         if (collider.tag == "ForegroundLimit")

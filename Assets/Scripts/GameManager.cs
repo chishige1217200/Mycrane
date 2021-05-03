@@ -45,6 +45,9 @@ public class GameManager : MonoBehaviour
             case 3:
                 SceneManager.LoadScene("Type3Test");
                 break;
+            case 4:
+                SceneManager.LoadScene("Type4Test");
+                break;
         }
     }
 }

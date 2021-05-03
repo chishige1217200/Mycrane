@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class Type1Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    float leftCatchArmpower = 100f; //左アームパワー
-    float rightCatchArmpower = 100f; //右アームパワー
-    float armApertures = 100f; //開口率
+    float leftCatchArmpower = 10f; //左アームパワー
+    float rightCatchArmpower = 10f; //右アームパワー
+    float armApertures = 80f; //開口率
     int soundType = 0; //BGMの切り替え．0・1
     int catchTime = 2000; //キャッチに要する時間(m秒)
     private bool[] instanceFlag = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
@@ -205,11 +205,11 @@ public class Type1Manager : MonoBehaviour
             {
                 instanceFlag[craneStatus] = true;
                 _ArmController.ArmOpen();
+                await Task.Delay(1000);
+                if (craneStatus == 5) craneStatus = 6;
             }
             //アーム開く音再生;
             //アーム開く;
-            await Task.Delay(1000);
-            if (craneStatus == 5) craneStatus = 6;
         }
 
         if (craneStatus == 6)
@@ -239,10 +239,10 @@ public class Type1Manager : MonoBehaviour
                         else _ArmController.ArmClose(rightCatchArmpower);
                     }
                     else _ArmController.ArmClose(30f);
+                await Task.Delay(catchTime);
+                if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
             }
-            await Task.Delay(catchTime);
-            if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
-                                                   //アーム掴む;
+            //アーム掴む;
         }
 
         if (craneStatus == 8)

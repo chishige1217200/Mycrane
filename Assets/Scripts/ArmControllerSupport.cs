@@ -8,6 +8,7 @@ public class ArmControllerSupport : MonoBehaviour
     Type1Manager _Type1Manager;
     Type2Manager _Type2Manager;
     Type3Manager _Type3Manager;
+    Type4Manager _Type4Manager;
     Type3ArmController _Type3ArmController;
     [SerializeField] int playerNumber = 1;
     RopeManager ropeManager;
@@ -15,16 +16,12 @@ public class ArmControllerSupport : MonoBehaviour
     public int pushTime = 0;
     bool prizeFlag = false;
 
-    void OnTriggerEnter(Collider collider)
+    async void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "ReleaseCheck")
         {
             switch (craneType)
             {
-                case 1:
-                    break;
-                case 2:
-                    break;
                 case 3:
                     if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeFlag)
                     {
@@ -46,12 +43,45 @@ public class ArmControllerSupport : MonoBehaviour
                         _Type1Manager.craneStatus = 7;
                     }
                     break;
+                case 4:
+                    if (_Type4Manager.craneStatus == 8)
+                    {
+                        Debug.Log("下降制限に接触");
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type4Manager.craneStatus = 9;
+                    }
+                    break;
             }
         }
         if (collider.tag == "prize")
         {
             Debug.Log("prize inTrigger");
             prizeFlag = true;
+            switch (craneType)
+            {
+                case 3:
+                    if (_Type3Manager.craneStatus == 6)
+                    {
+                        await Task.Delay(200);
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type3Manager.craneStatus = 7;
+                    }
+                    break;
+            }
+        }
+        if (collider.tag == "Shield")
+        {
+            switch (craneType)
+            {
+                case 3:
+                    if (_Type3Manager.craneStatus == 6)
+                    {
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type3Manager.craneStatus = 7;
+                    }
+                    break;
+            }
+
         }
     }
 
@@ -67,30 +97,36 @@ public class ArmControllerSupport : MonoBehaviour
     {
         if (collision.gameObject.tag == "prize")
         {
+            Debug.Log("景品に接触");
+            await Task.Delay(pushTime); //押し込みパワーの調整
             switch (craneType)
             {
+
                 case 1:
-                    Debug.Log("景品に接触");
-                    await Task.Delay(pushTime); //押し込みパワーの調整
                     if (_Type1Manager.craneStatus == 6)
                     {
                         ropeManager.ArmUnitDownForceStop();
                         _Type1Manager.craneStatus = 7;
                     }
                     break;
+                case 4:
+                    if (_Type4Manager.craneStatus == 8)
+                    {
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type4Manager.craneStatus = 9;
+                    }
+                    break;
             }
         }
     }
 
-    public void GetManager(int num)
+    public void GetManager(int num) // 筐体のマネージャー情報取得
     {
         craneType = num;
-        if (craneType == 1)
-            _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
-        if (craneType == 2)
-            _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
-        if (craneType == 3)
-            _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
+        if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
+        if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
+        if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
+        if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
     }
 
     public void GetArmController(int num)

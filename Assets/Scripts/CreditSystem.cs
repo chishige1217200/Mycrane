@@ -29,8 +29,8 @@ public class CreditSystem : MonoBehaviour
     {
         rateSet[0, 0] = 100; //temporary
         rateSet[0, 1] = 1; //temporary
-        rateSet[1, 0] = 100; //temporary
-        rateSet[1, 1] = 1; //temporary
+        rateSet[1, 0] = 200; //temporary
+        rateSet[1, 1] = 3; //temporary
 
         if ((float)rateSet[0, 0] / rateSet[0, 1] < (float)rateSet[1, 0] / rateSet[1, 1])
             Debug.Log("rateSet value error."); //高額のレートになるとコストが多くなる設定エラーのとき
@@ -146,7 +146,7 @@ public class CreditSystem : MonoBehaviour
 
     //Probability Function-----------------------------------------------
 
-    private int creditProbability = 5; //設定クレジット数
+    private int creditProbability = 3; //設定クレジット数
     //private int costProbability = 200; //設定金額
     private int nowPaidforProbability = 0; //確率設定用の投入金額
     private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数（初期化時-1）
