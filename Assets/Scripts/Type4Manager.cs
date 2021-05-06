@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class Type4Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
+    public int[] priceSet = new int[2];
+    public int[] timesSet = new int[2];
     float leftCatchArmpower = 20f; //左アームパワー
     float rightCatchArmpower = 20f; //右アームパワー
     float armApertures = 80f; //開口率
@@ -19,7 +21,6 @@ public class Type4Manager : MonoBehaviour
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     [SerializeField] bool rotation = true; //回転機能の使用可否
     [SerializeField] bool downStop = true; //下降停止機能の使用可否
-    bool prizeGetFlag = false;
     Vector2 craneHost; //クレーンゲームの中心位置定義
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     SEPlayer _SEPlayer;
@@ -51,6 +52,12 @@ public class Type4Manager : MonoBehaviour
         temp = this.transform.parent;
         craneHost = new Vector2(temp.position.x, temp.position.z);
         temp = this.transform.Find("CraneUnit").transform;
+
+        // クレジット情報登録
+        creditSystem.rateSet[0, 0] = priceSet[0];
+        creditSystem.rateSet[1, 0] = priceSet[1];
+        creditSystem.rateSet[0, 1] = timesSet[0];
+        creditSystem.rateSet[1, 1] = timesSet[1];
 
         // ロープとアームコントローラに関する処理
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -319,7 +326,6 @@ public class Type4Manager : MonoBehaviour
                 roter.RotateToHome();
                 await Task.Delay(5000);
 
-                prizeGetFlag = false;
                 if (creditSystem.creditDisplayed > 0)
                     craneStatus = 1;
                 else

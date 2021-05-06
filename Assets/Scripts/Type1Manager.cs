@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class Type1Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
+    public int[] priceSet = new int[2];
+    public int[] timesSet = new int[2];
     float leftCatchArmpower = 10f; //左アームパワー
     float rightCatchArmpower = 10f; //右アームパワー
     float armApertures = 80f; //開口率
@@ -47,6 +49,12 @@ public class Type1Manager : MonoBehaviour
         temp = this.transform.parent;
         craneHost = new Vector2(temp.position.x, temp.position.z);
         temp = this.transform.Find("CraneUnit").transform;
+
+        // クレジット情報登録
+        creditSystem.rateSet[0, 0] = priceSet[0];
+        creditSystem.rateSet[1, 0] = priceSet[1];
+        creditSystem.rateSet[0, 1] = timesSet[0];
+        creditSystem.rateSet[1, 1] = timesSet[1];
 
         // ロープとアームコントローラに関する処理
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class CreditSystem : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class CreditSystem : MonoBehaviour
     public bool insertFlag = false; //trueならコイン投入可能，初期化処理用
     public bool segUpdateFlag = true; //trueならクレジット情報を7セグに表示，タイマー共存時用
     public bool playable = true; // trueならプレイ可能，ユーザ指定用
-    private int[,] rateSet = new int[2, 2]; //100円1PLAY，500円6PLAYなどのプリセット?
+    public int[,] rateSet = new int[2, 2]; //100円1PLAY，500円6PLAYなどのプリセット?
     private int creditSoundNum = -1; //投入時サウンド番号
     public Text[] priceSet = new Text[2]; //プレイ回数に対応する金額表示(timesSetと連携)
     public Text[] timesSet = new Text[2]; //プレイ回数対応表示
@@ -25,15 +26,21 @@ public class CreditSystem : MonoBehaviour
     public Text nowPaid; //試験用
     public Text Credit; //残クレジット
     //-------------------------------------------------
-    void Start()
+    async void Start()
     {
-        rateSet[0, 0] = 100; //temporary
-        rateSet[0, 1] = 1; //temporary
-        rateSet[1, 0] = 200; //temporary
-        rateSet[1, 1] = 3; //temporary
+        await Task.Delay(100);
 
-        if ((float)rateSet[0, 0] / rateSet[0, 1] < (float)rateSet[1, 0] / rateSet[1, 1])
-            Debug.Log("rateSet value error."); //高額のレートになるとコストが多くなる設定エラーのとき
+        if (rateSet[0, 0] == 0 || rateSet[0, 1] == 0)
+        {
+            rateSet[0, 0] = 100;
+            rateSet[0, 1] = 1;
+        }
+        if (rateSet[1, 0] == 0 || rateSet[1, 1] == 0 || (float)rateSet[0, 0] / rateSet[0, 1] < (float)rateSet[1, 0] / rateSet[1, 1])
+        // 未入力の場合，低価格設定を反映 //高額のレートになるとコストが多くなる設定エラーのとき
+        {
+            rateSet[1, 0] = rateSet[0, 0];
+            rateSet[1, 1] = rateSet[0, 1];
+        }
 
         if (playable) //プレイ可能のとき
         {

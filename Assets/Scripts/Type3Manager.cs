@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class Type3Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
+    public int[] priceSet = new int[2];
+    public int[] timesSet = new int[2];
     float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
     float upArmpower = 80; //上昇時のアームパワー(%，未確率時)
     float backArmpower = 0; //獲得口移動時のアームパワー(%，未確率時)
@@ -44,6 +46,13 @@ public class Type3Manager : MonoBehaviour
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
+
+        // クレジット情報登録
+        creditSystem.rateSet[0, 0] = priceSet[0];
+        creditSystem.rateSet[1, 0] = priceSet[1];
+        creditSystem.rateSet[0, 1] = timesSet[0];
+        creditSystem.rateSet[1, 1] = timesSet[1];
+
         // ロープとアームコントローラに関する処理
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
         _ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
