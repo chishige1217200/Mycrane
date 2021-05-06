@@ -62,7 +62,7 @@ public class ArmControllerSupport : MonoBehaviour
                 case 3:
                     if (_Type3Manager.craneStatus == 6)
                     {
-                        await Task.Delay(200);
+                        await Task.Delay(500);
                         ropeManager.ArmUnitDownForceStop();
                         _Type3Manager.craneStatus = 7;
                     }
@@ -83,6 +83,12 @@ public class ArmControllerSupport : MonoBehaviour
             }
 
         }
+    }
+
+    void OnTriggerStay(Collider collider)
+    {
+        if (collider.tag == "prize")
+            prizeFlag = true;
     }
 
     void OnTriggerExit(Collider collider)

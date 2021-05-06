@@ -156,7 +156,7 @@ public class CreditSystem : MonoBehaviour
     private int creditProbability = 3; //設定クレジット数
     //private int costProbability = 200; //設定金額
     private int nowPaidforProbability = 0; //確率設定用の投入金額
-    private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数（初期化時-1）
+    //private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数（初期化時-1）
     private int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
     private int n = 3; //ランダム確率設定n
     //private List<int> costList = new List<int>(); //投入された金額をリセット毎に分けて保存
@@ -164,7 +164,6 @@ public class CreditSystem : MonoBehaviour
 
     public bool ProbabilityCheck()
     {
-        Debug.Log("creditPlayed : " + creditPlayed + " creditRemainbyCost : " + creditRemainbyCost);
         if (probabilityMode == 0) return true; //常に確率
         if (probabilityMode == 1 && UnityEngine.Random.Range(1, n + 1) == 1) return true; // 1/nの確率（nの数値有効）
         if (probabilityMode == 2 && creditPlayed >= creditProbability) return true;

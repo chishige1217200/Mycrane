@@ -8,8 +8,8 @@ public class Type3Manager : MonoBehaviour
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
     float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
-    float upArmpower = 80; //上昇時のアームパワー(%，未確率時)
-    float backArmpower = 0; //獲得口移動時のアームパワー(%，未確率時)
+    float upArmpower = 100; //上昇時のアームパワー(%，未確率時)
+    float backArmpower = 100; //獲得口移動時のアームパワー(%，未確率時)
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
     float backArmpowersuccess = 100; //同確率時
