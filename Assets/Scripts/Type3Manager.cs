@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,6 +51,8 @@ public class Type3Manager : MonoBehaviour
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
+
+        soundType = soundType = UnityEngine.Random.Range(0, 4);
 
         // ロープとアームコントローラに関する処理
         _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
