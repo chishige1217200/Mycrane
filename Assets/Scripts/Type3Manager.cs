@@ -14,7 +14,7 @@ public class Type3Manager : MonoBehaviour
     float backArmpowersuccess = 100; //同確率時
     int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     float audioPitch = 1f; //サウンドのピッチ
-    private bool[] instanceFlag = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
+    private bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
     public int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
@@ -76,7 +76,7 @@ public class Type3Manager : MonoBehaviour
         _CraneBox.forwardMoveFlag = true;
 
         for (int i = 0; i < 12; i++)
-            instanceFlag[i] = false;
+            isExecuted[i] = false;
 
         await Task.Delay(4000);
 
@@ -99,9 +99,9 @@ public class Type3Manager : MonoBehaviour
             //コイン投入有効化;
             if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
-            /*if (!instanceFlag[craneStatus])
+            /*if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;*/
+                isExecuted[craneStatus] = true;*/
             creditSystem.insertFlag = true;
             switch (soundType)
             {
@@ -146,9 +146,9 @@ public class Type3Manager : MonoBehaviour
 
             InputKeyCheck(craneStatus);
             //コイン投入無効化;
-            /*if (!instanceFlag[craneStatus])
+            /*if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
             }*/
             switch (soundType)
             {
@@ -182,9 +182,9 @@ public class Type3Manager : MonoBehaviour
                     _SEPlayer.StopSE(18);
                     break;
             }
-            /*if (!instanceFlag[craneStatus])
+            /*if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
 
             }*/
             //右移動効果音ループ再生停止;
@@ -211,9 +211,9 @@ public class Type3Manager : MonoBehaviour
                     _SEPlayer.PlaySE(19, 2147483647);
                     break;
             }
-            /*if (!instanceFlag[craneStatus])
+            /*if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
 
             }*/
             //奥移動効果音ループ再生;
@@ -221,9 +221,9 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 5)
         {
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 if (soundType != 2) _ArmController.ArmOpen();
                 switch (soundType)
                 {
@@ -254,9 +254,9 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 6)
         {
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 switch (soundType)
                 {
                     case 2:
@@ -282,9 +282,9 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 7)
         {
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 switch (soundType)
                 {
                     case 3:
@@ -305,9 +305,9 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 8)
         {
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 switch (soundType)
                 {
                     case 0:
@@ -347,9 +347,9 @@ public class Type3Manager : MonoBehaviour
             if (probability) armPower = upArmpowersuccess;
             else armPower = upArmpower;
             _ArmController.MotorPower(armPower);
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 switch (soundType)
                 {
                     case 3:
@@ -365,9 +365,9 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == 10)
         {
             //アーム獲得口ポジション移動音再生;
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 _CraneBox.leftMoveFlag = true;
                 _CraneBox.forwardMoveFlag = true;
                 switch (soundType)
@@ -401,9 +401,9 @@ public class Type3Manager : MonoBehaviour
 
         if (craneStatus == 11)
         {
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 _ArmController.ArmOpen();
                 switch (soundType)
                 {
@@ -423,9 +423,9 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == 12)
         {
 
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 //_ArmController.MotorPower(0f);
                 if (soundType != 2) _ArmController.ArmFinalClose();
                 switch (soundType)
@@ -440,7 +440,7 @@ public class Type3Manager : MonoBehaviour
                         break;
                 }
                 for (int i = 0; i < 12; i++)
-                    instanceFlag[i] = false;
+                    isExecuted[i] = false;
                 await Task.Delay(1000);
                 if (soundType == 3) await Task.Delay(1000);
                 switch (soundType)
@@ -518,7 +518,7 @@ public class Type3Manager : MonoBehaviour
                     {
                         creditSystem.ResetNowPayment();
                         creditSystem.AddCreditPlayed();
-                        instanceFlag[12] = false;
+                        isExecuted[12] = false;
                         probability = creditSystem.ProbabilityCheck();
                         Debug.Log("Probability:" + probability);
                     }
@@ -565,7 +565,7 @@ public class Type3Manager : MonoBehaviour
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
-                    instanceFlag[12] = false;
+                    isExecuted[12] = false;
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
                 }

@@ -18,7 +18,7 @@ public class Type2Manager : MonoBehaviour
     int soundType = 1; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1.0f; //サウンドのピッチ
-    private bool[] instanceFlag = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
+    private bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
@@ -73,7 +73,7 @@ public class Type2Manager : MonoBehaviour
         _RopeManager.ArmUnitUp();
 
         for (int i = 0; i < 12; i++)
-            instanceFlag[i] = false;
+            isExecuted[i] = false;
 
         // ControlGroupの制御
         if (operationType == 0)
@@ -161,9 +161,9 @@ public class Type2Manager : MonoBehaviour
             {
                 _BGMPlayer.StopBGM(2 * soundType);
                 _BGMPlayer.PlayBGM(1 + 2 * soundType);
-                if (!instanceFlag[craneStatus])
+                if (!isExecuted[craneStatus])
                 {
-                    instanceFlag[craneStatus] = true;
+                    isExecuted[craneStatus] = true;
                     limitTimeCount = limitTimeSet;
                 }
 
@@ -173,9 +173,9 @@ public class Type2Manager : MonoBehaviour
             }
             if (craneStatus == 3)
             {
-                if (!instanceFlag[craneStatus] && !timerFlag)
+                if (!isExecuted[craneStatus] && !timerFlag)
                 {
-                    instanceFlag[craneStatus] = true;
+                    isExecuted[craneStatus] = true;
                     timerFlag = true;
                     StartTimer();
                 }
@@ -186,9 +186,9 @@ public class Type2Manager : MonoBehaviour
 
         if (craneStatus == 6)
         {
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 _CraneBox.rightMoveFlag = false;
                 _CraneBox.leftMoveFlag = false;
                 _CraneBox.backMoveFlag = false;
@@ -210,7 +210,7 @@ public class Type2Manager : MonoBehaviour
                 CancelTimer();
                 if (craneStatus == 6) _RopeManager.ArmUnitDown(); //awaitによる時差実行を防止
             }
-            if (craneStatus == 6 && instanceFlag[6]) InputKeyCheck(craneStatus); //awaitによる時差実行を防止
+            if (craneStatus == 6 && isExecuted[6]) InputKeyCheck(craneStatus); //awaitによる時差実行を防止
             //アーム下降音再生
             //アーム下降;
         }
@@ -254,9 +254,9 @@ public class Type2Manager : MonoBehaviour
                     break;
             }
 
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 _RopeManager.ArmUnitUp();
             }
             if (probability && armPower > upArmpowersuccess)
@@ -278,9 +278,9 @@ public class Type2Manager : MonoBehaviour
             if (probability) armPower = upArmpowersuccess;
             else armPower = upArmpower;
             _ArmController.MotorPower(armPower);
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 switch (soundType)
                 {
                     case 0:
@@ -301,9 +301,9 @@ public class Type2Manager : MonoBehaviour
 
         if (craneStatus == 10)
         {
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 _CraneBox.leftMoveFlag = true;
                 _CraneBox.forwardMoveFlag = true;
             }
@@ -324,9 +324,9 @@ public class Type2Manager : MonoBehaviour
 
         if (craneStatus == 11)
         {
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
-                instanceFlag[craneStatus] = true;
+                isExecuted[craneStatus] = true;
                 _ArmController.ArmOpen();
                 if (soundType == 0) _SEPlayer.PlaySE(4, 1);
                 await Task.Delay(1000);
@@ -340,11 +340,11 @@ public class Type2Manager : MonoBehaviour
         if (craneStatus == 12)
         {
             //1秒待機;
-            if (!instanceFlag[craneStatus])
+            if (!isExecuted[craneStatus])
             {
                 timerFlag = false;
                 for (int i = 0; i < 12; i++)
-                    instanceFlag[i] = false;
+                    isExecuted[i] = false;
             }
 
             if (creditSystem.creditDisplayed > 0)
@@ -444,7 +444,7 @@ public class Type2Manager : MonoBehaviour
                     {
                         creditSystem.ResetNowPayment();
                         creditSystem.AddCreditPlayed();
-                        instanceFlag[12] = false;
+                        isExecuted[12] = false;
                         probability = creditSystem.ProbabilityCheck();
                         Debug.Log("Probability:" + probability);
                     }
@@ -528,7 +528,7 @@ public class Type2Manager : MonoBehaviour
                 craneStatus = 3;
                 creditSystem.ResetNowPayment();
                 creditSystem.AddCreditPlayed();
-                instanceFlag[12] = false;
+                isExecuted[12] = false;
                 probability = creditSystem.ProbabilityCheck();
                 Debug.Log("Probability:" + probability);
             }
@@ -545,7 +545,7 @@ public class Type2Manager : MonoBehaviour
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
-                    instanceFlag[12] = false;
+                    isExecuted[12] = false;
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
                 }
