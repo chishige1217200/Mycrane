@@ -89,6 +89,18 @@ public class ArmControllerSupport : MonoBehaviour
     {
         if (collider.tag == "prize")
             prizeFlag = true;
+        if (collider.tag == "ReleaseCheck")
+        {
+            switch (craneType)
+            {
+                case 3:
+                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeFlag)
+                    {
+                        _Type3ArmController.Release();
+                    }
+                    break;
+            }
+        }
     }
 
     void OnTriggerExit(Collider collider)
