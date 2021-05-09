@@ -14,7 +14,7 @@ public class ArmControllerSupport : MonoBehaviour
     RopeManager ropeManager;
     int craneType = -1;
     public int pushTime = 0;
-    bool prizeFlag = false;
+    public bool prizeFlag = false;
 
     async void OnTriggerEnter(Collider collider)
     {
