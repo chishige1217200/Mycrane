@@ -16,7 +16,7 @@ public class Type4Manager : MonoBehaviour
     int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
     private bool[] isExecuted = new bool[16]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
-    public bool leverFlag = false; //trueならレバーがアクティブ
+    public bool leverTilted = false; //trueならレバーがアクティブ
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     [SerializeField] bool rotation = true; //回転機能の使用可否
@@ -208,7 +208,7 @@ public class Type4Manager : MonoBehaviour
             if (craneStatus == 3)
             {
                 InputLeverCheck();
-                if (!leverFlag) InputKeyCheck(5);
+                if (!leverTilted) InputKeyCheck(5);
             }
         }
 
@@ -473,9 +473,9 @@ public class Type4Manager : MonoBehaviour
         if (!player2)
         {
             if (isExecuted[15] && ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)) // 初回用の処理
+            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
             {
-                leverFlag = true;
+                leverTilted = true;
                 isExecuted[15] = false;
                 videoPlay.PlayVideo(1);
                 _SEPlayer.StopSE(2);
@@ -483,17 +483,17 @@ public class Type4Manager : MonoBehaviour
             }
 
             if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
+            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
             {
-                leverFlag = true;
+                leverTilted = true;
                 videoPlay.PlayVideo(1);
                 _SEPlayer.StopSE(2);
                 _SEPlayer.PlaySE(1, 1);
             }
             if ((!Input.GetKey(KeyCode.RightArrow) && !Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow)
-            && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverFlag)
+            && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
             {
-                leverFlag = false;
+                leverTilted = false;
                 videoPlay.PlayVideo(0);
                 _SEPlayer.StopSE(1);
                 _SEPlayer.PlaySE(2, 1);
@@ -529,9 +529,9 @@ public class Type4Manager : MonoBehaviour
         else //2Pレバー
         {
             if (isExecuted[15] && ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)) // 初回用の処理
+            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
             {
-                leverFlag = true;
+                leverTilted = true;
                 isExecuted[15] = false;
                 videoPlay.PlayVideo(1);
                 _SEPlayer.StopSE(2);
@@ -540,17 +540,17 @@ public class Type4Manager : MonoBehaviour
 
 
             if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
+            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
             {
-                leverFlag = true;
+                leverTilted = true;
                 videoPlay.PlayVideo(1);
                 _SEPlayer.StopSE(2);
                 _SEPlayer.PlaySE(1, 1);
             }
             if ((!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S)
-            && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverFlag)
+            && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
             {
-                leverFlag = false;
+                leverTilted = false;
                 videoPlay.PlayVideo(0);
                 _SEPlayer.StopSE(1);
                 _SEPlayer.PlaySE(2, 1);
@@ -616,7 +616,7 @@ public class Type4Manager : MonoBehaviour
                 }
                 break;
             case 3:
-                if ((craneStatus == 5 && operationType == 0) || (craneStatus == 3 && operationType == 1 && !leverFlag))
+                if ((craneStatus == 5 && operationType == 0) || (craneStatus == 3 && operationType == 1 && !leverTilted))
                 {
                     if (rotation)
                     {
