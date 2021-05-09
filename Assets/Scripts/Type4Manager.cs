@@ -264,11 +264,14 @@ public class Type4Manager : MonoBehaviour
         if (craneStatus == 10)
         {   //アーム上昇中
             {
-                isExecuted[craneStatus] = true;
-                _RopeManager.ArmUnitUp();
-                await Task.Delay(1000);
-                _ArmController.MotorPower(leftCatchArmpower, 0);
-                _ArmController.MotorPower(rightCatchArmpower, 1);
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    _RopeManager.ArmUnitUp();
+                    await Task.Delay(1000);
+                    _ArmController.MotorPower(leftCatchArmpower, 0);
+                    _ArmController.MotorPower(rightCatchArmpower, 1);
+                }
             }
         }
         if (craneStatus == 11)
