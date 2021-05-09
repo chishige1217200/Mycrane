@@ -337,6 +337,8 @@ public class Type3Manager : MonoBehaviour
                         break;
                 }
                 _RopeManager.ArmUnitUp();
+                await Task.Delay(1500);
+                if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8) _ArmController.Release(); // 上昇中に離す振り分け
             }
             if (probability && armPower > upArmpowersuccess)
             {
