@@ -20,7 +20,7 @@ public class Type2Manager : MonoBehaviour
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1.0f; //サウンドのピッチ
     private bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
-    public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
+    public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     float armPower; //現在のアームパワー
@@ -29,7 +29,6 @@ public class Type2Manager : MonoBehaviour
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
     Type2ArmController _ArmController;
-    Transform temp;
     CraneBox _CraneBox;
     GetPoint _GetPoint;
     RopeManager _RopeManager;
@@ -44,6 +43,8 @@ public class Type2Manager : MonoBehaviour
 
     async void Start()
     {
+        Transform temp;
+        // 様々なコンポーネントの取得
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
@@ -446,9 +447,9 @@ public class Type2Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonFlag)
+                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonPushed)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     if (craneStatus == 1)
                     {
                         creditSystem.ResetNowPayment();
@@ -463,27 +464,27 @@ public class Type2Manager : MonoBehaviour
                 break;
             //投入を無効化
             case 2:
-                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonFlag)
+                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed)
                 {
                     craneStatus = 3;
                     _CraneBox.rightMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 3:
-                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonFlag)
+                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 4;
                     _CraneBox.backMoveFlag = true;
                 }
                 break;
             case 4:
-                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonFlag)
+                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed)
                 {
                     craneStatus = 5;
                     _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 5: // レバー操作時に使用
@@ -548,9 +549,9 @@ public class Type2Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if (craneStatus == 1 && !buttonFlag)
+                if (craneStatus == 1 && !buttonPushed)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
@@ -558,13 +559,13 @@ public class Type2Manager : MonoBehaviour
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
                 }
-                if (craneStatus == 2 && buttonFlag)
+                if (craneStatus == 2 && buttonPushed)
                     _CraneBox.rightMoveFlag = true;
                 break;
             case 2:
-                if ((craneStatus == 3 && !buttonFlag) || (craneStatus == 4 && buttonFlag))
+                if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 4;
                     _CraneBox.backMoveFlag = true;
                 }
@@ -572,13 +573,12 @@ public class Type2Manager : MonoBehaviour
             case 3:
                 if (craneStatus == 6)
                 {
-                    buttonFlag = true;
                     _RopeManager.ArmUnitDownForceStop();
                     craneStatus = 7;
                 }
                 else if (craneStatus == 3)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 6;
                 }
                 break;
@@ -590,19 +590,19 @@ public class Type2Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonFlag))
+                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
                 {
                     craneStatus = 3;
                     _CraneBox.rightMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 2:
-                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonFlag))
+                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
                 {
                     craneStatus = 5;
                     _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
         }

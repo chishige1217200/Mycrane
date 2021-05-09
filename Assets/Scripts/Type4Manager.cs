@@ -15,7 +15,7 @@ public class Type4Manager : MonoBehaviour
     int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
     int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
     private bool[] isExecuted = new bool[16]; //各craneStatusで1度しか実行しない処理の管理
-    public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
+    public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool leverFlag = false; //trueならレバーがアクティブ
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
@@ -346,9 +346,9 @@ public class Type4Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonFlag && !player2)
+                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonPushed && !player2)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     if (craneStatus == 1)
                     {
                         creditSystem.ResetNowPayment();
@@ -360,9 +360,9 @@ public class Type4Manager : MonoBehaviour
                     _SEPlayer.PlaySE(1, 1);
                     if (!player2) _CraneBox.rightMoveFlag = true;
                 }
-                if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonFlag && player2)
+                if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonPushed && player2)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     if (craneStatus == 1)
                     {
                         creditSystem.ResetNowPayment();
@@ -377,59 +377,59 @@ public class Type4Manager : MonoBehaviour
                 break;
             //投入を無効化
             case 2:
-                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonFlag && !player2)
+                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed && !player2)
                 {
                     craneStatus = 3;
                     _CraneBox.rightMoveFlag = false;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
-                if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonFlag && player2)
+                if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonPushed && player2)
                 {
                     craneStatus = 3;
                     _CraneBox.leftMoveFlag = false;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 3:
-                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonFlag && !player2)
+                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed && !player2)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 4;
                     _SEPlayer.PlaySE(1, 1);
                     _CraneBox.backMoveFlag = true;
                 }
-                if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonFlag && player2)
+                if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonPushed && player2)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 4;
                     _SEPlayer.PlaySE(1, 1);
                     _CraneBox.backMoveFlag = true;
                 }
                 break;
             case 4:
-                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonFlag && !player2)
+                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed && !player2)
                 {
                     craneStatus = 5;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
                     _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
-                if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonFlag && player2)
+                if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonPushed && player2)
                 {
                     craneStatus = 5;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
                     _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 5:
-                if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonFlag)
+                if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonPushed)
                 {
                     if (rotation)
                     {
@@ -446,7 +446,7 @@ public class Type4Manager : MonoBehaviour
 
                 break;
             case 6:
-                if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonFlag)
+                if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonPushed)
                 {
                     craneStatus = 7;
                     roter.RotateStop();
@@ -587,9 +587,9 @@ public class Type4Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if (craneStatus == 1 && !buttonFlag)
+                if (craneStatus == 1 && !buttonPushed)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
@@ -597,16 +597,16 @@ public class Type4Manager : MonoBehaviour
                     _SEPlayer.PlaySE(1, 1);
                     isExecuted[15] = false;
                 }
-                if (craneStatus == 2 && buttonFlag)
+                if (craneStatus == 2 && buttonPushed)
                 {
                     _SEPlayer.PlaySE(1, 1);
                     _CraneBox.rightMoveFlag = true;
                 }
                 break;
             case 2:
-                if ((craneStatus == 3 && !buttonFlag) || (craneStatus == 4 && buttonFlag))
+                if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 4;
                     _SEPlayer.PlaySE(1, 1);
                     _CraneBox.backMoveFlag = true;
@@ -643,9 +643,9 @@ public class Type4Manager : MonoBehaviour
                 }
                 break;
             case 4: // player2 case 1:
-                if (craneStatus == 1 && !buttonFlag)
+                if (craneStatus == 1 && !buttonPushed)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
@@ -653,7 +653,7 @@ public class Type4Manager : MonoBehaviour
                     _SEPlayer.PlaySE(1, 1);
                     isExecuted[15] = false;
                 }
-                if (craneStatus == 2 && buttonFlag)
+                if (craneStatus == 2 && buttonPushed)
                 {
                     _SEPlayer.PlaySE(1, 1);
                     _CraneBox.leftMoveFlag = true;
@@ -667,33 +667,33 @@ public class Type4Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonFlag))
+                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
                 {
                     craneStatus = 3;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
                     _CraneBox.rightMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 2:
-                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonFlag))
+                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
                 {
                     craneStatus = 5;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
                     _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 4: // player2 case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonFlag))
+                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
                 {
                     craneStatus = 3;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
                     _CraneBox.leftMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
         }

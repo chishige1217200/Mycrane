@@ -13,7 +13,7 @@ public class Type1Manager : MonoBehaviour
     int soundType = 0; //BGMの切り替え．0・1
     int catchTime = 2000; //キャッチに要する時間(m秒)
     private bool[] isExecuted = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
-    public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
+    public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     [SerializeField] bool button3 = true; //button3の使用可否
@@ -25,11 +25,10 @@ public class Type1Manager : MonoBehaviour
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
-    Type1ArmController _ArmController;
-    Transform temp;
-    CraneBox _CraneBox;
-    GetPoint _GetPoint;
-    RopeManager _RopeManager;
+    Type1ArmController armController;
+    CraneBox craneBox;
+    GetPoint getPoint;
+    RopeManager ropeManager;
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[2];
 
@@ -41,10 +40,12 @@ public class Type1Manager : MonoBehaviour
 
     async void Start()
     {
+        Transform temp;
+        // 様々なコンポーネントの取得
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
-        _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.parent;
         craneHost = new Vector2(temp.position.x, temp.position.z);
         temp = this.transform.Find("CraneUnit").transform;
@@ -58,31 +59,31 @@ public class Type1Manager : MonoBehaviour
         soundType = Random.Range(0, 2);
 
         // ロープとアームコントローラに関する処理
-        _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
-        _ArmController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
+        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        armController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
         nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();
 
         // CraneBoxに関する処理
-        _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        _CraneBox.GetManager(1);
+        craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
+        craneBox.GetManager(1);
 
         // ロープにマネージャー情報をセット
-        _RopeManager.SetManagerToPoint(1);
+        ropeManager.SetManagerToPoint(1);
         creditSystem.GetSEPlayer(_SEPlayer);
         creditSystem.playable = playable;
-        _GetPoint.GetManager(1);
-        _RopeManager.ArmUnitUp();
+        getPoint.GetManager(1);
+        ropeManager.ArmUnitUp();
         creditSystem.SetCreditSound(0);
         creditSystem.GetSEPlayer(_SEPlayer);
         support.GetManager(1);
-        support.GetRopeManager(_RopeManager);
+        support.GetRopeManager(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
         for (int i = 0; i < 2; i++)
         {
             nail[i].GetManager(1);
-            nail[i].GetRopeManager(_RopeManager);
+            nail[i].GetRopeManager(ropeManager);
         }
 
         for (int i = 0; i < 15; i++)
@@ -92,10 +93,10 @@ public class Type1Manager : MonoBehaviour
 
         // イニシャル移動とinsertFlagを後に実行
         await Task.Delay(3000);
-        _ArmController.ArmLimit(armApertures);
-        if (!player2) _CraneBox.leftMoveFlag = true;
-        else _CraneBox.rightMoveFlag = true;
-        _CraneBox.forwardMoveFlag = true;
+        armController.ArmLimit(armApertures);
+        if (!player2) craneBox.leftMoveFlag = true;
+        else craneBox.rightMoveFlag = true;
+        craneBox.forwardMoveFlag = true;
         if (!player2) _SEPlayer.PlaySE(6, 1);
 
         if (!player2)
@@ -111,16 +112,16 @@ public class Type1Manager : MonoBehaviour
 
         while (true)
         {
-            if (!player2 && _CraneBox.CheckPos(1))
+            if (!player2 && craneBox.CheckPos(1))
             {
-                _CraneBox.goPoint = startPoint;
-                _CraneBox.goPositionFlag = true;
+                craneBox.goPoint = startPoint;
+                craneBox.goPositionFlag = true;
                 break;
             }
-            if (player2 && _CraneBox.CheckPos(3))
+            if (player2 && craneBox.CheckPos(3))
             {
-                _CraneBox.goPoint = startPoint;
-                _CraneBox.goPositionFlag = true;
+                craneBox.goPoint = startPoint;
+                craneBox.goPositionFlag = true;
                 break;
             }
             await Task.Delay(1000);
@@ -130,7 +131,7 @@ public class Type1Manager : MonoBehaviour
 
         while (true)
         {
-            if (_CraneBox.CheckPos(9))
+            if (craneBox.CheckPos(9))
             {
                 creditSystem.insertFlag = true;
                 craneStatus = 0;
@@ -151,14 +152,14 @@ public class Type1Manager : MonoBehaviour
             if (!isExecuted[0])
             {
                 isExecuted[0] = true;
-                _CraneBox.goPoint = new Vector2(-0.3f, 0f);
-                _CraneBox.goPositionFlag = true;
+                craneBox.goPoint = new Vector2(-0.3f, 0f);
+                craneBox.goPositionFlag = true;
             }
             await Task.Delay(500);
             if (isExecuted[0])
-                if (_CraneBox.CheckPos(9))
+                if (craneBox.CheckPos(9))
                 {
-                    _ArmController.ArmOpen();
+                    armController.ArmOpen();
                     Debug.Log("OK");
                 }
         }
@@ -213,7 +214,7 @@ public class Type1Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                _ArmController.ArmOpen();
+                armController.ArmOpen();
                 await Task.Delay(1000);
                 if (craneStatus == 5) craneStatus = 6;
             }
@@ -226,7 +227,7 @@ public class Type1Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                if (craneStatus == 6) _RopeManager.ArmUnitDown(); //awaitによる時差実行を防止
+                if (craneStatus == 6) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
             }
             InputKeyCheck(craneStatus);
             _SEPlayer.PlaySE(2, 2); //アーム下降音再生
@@ -244,10 +245,10 @@ public class Type1Manager : MonoBehaviour
                 if (craneStatus == 7)
                     if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
                     {
-                        if (leftCatchArmpower >= rightCatchArmpower) _ArmController.ArmClose(leftCatchArmpower);
-                        else _ArmController.ArmClose(rightCatchArmpower);
+                        if (leftCatchArmpower >= rightCatchArmpower) armController.ArmClose(leftCatchArmpower);
+                        else armController.ArmClose(rightCatchArmpower);
                     }
-                    else _ArmController.ArmClose(30f);
+                    else armController.ArmClose(30f);
                 await Task.Delay(catchTime);
                 if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
             }
@@ -261,10 +262,10 @@ public class Type1Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                _RopeManager.ArmUnitUp();
+                ropeManager.ArmUnitUp();
                 await Task.Delay(1000);
-                _ArmController.MotorPower(leftCatchArmpower, 0);
-                _ArmController.MotorPower(rightCatchArmpower, 1);
+                armController.MotorPower(leftCatchArmpower, 0);
+                armController.MotorPower(rightCatchArmpower, 1);
             }
             //アーム上昇;
         }
@@ -277,7 +278,7 @@ public class Type1Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                if (prizezoneType == 9) _CraneBox.goPoint = homePoint;
+                if (prizezoneType == 9) craneBox.goPoint = homePoint;
             }
             if (isExecuted[craneStatus] && craneStatus == 9) craneStatus = 10;
         }
@@ -290,47 +291,47 @@ public class Type1Manager : MonoBehaviour
                 switch (prizezoneType) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
                 {
                     case 1:
-                        if (!player2) _CraneBox.leftMoveFlag = true;
-                        else _CraneBox.rightMoveFlag = true;
-                        _CraneBox.forwardMoveFlag = true;
+                        if (!player2) craneBox.leftMoveFlag = true;
+                        else craneBox.rightMoveFlag = true;
+                        craneBox.forwardMoveFlag = true;
                         break;
                     case 2:
-                        if (!player2) _CraneBox.leftMoveFlag = true;
-                        else _CraneBox.rightMoveFlag = true;
-                        _CraneBox.backMoveFlag = true;
+                        if (!player2) craneBox.leftMoveFlag = true;
+                        else craneBox.rightMoveFlag = true;
+                        craneBox.backMoveFlag = true;
                         break;
                     case 3:
-                        if (!player2) _CraneBox.rightMoveFlag = true;
-                        else _CraneBox.leftMoveFlag = true;
-                        _CraneBox.forwardMoveFlag = true;
+                        if (!player2) craneBox.rightMoveFlag = true;
+                        else craneBox.leftMoveFlag = true;
+                        craneBox.forwardMoveFlag = true;
                         break;
                     case 4:
-                        if (!player2) _CraneBox.rightMoveFlag = true;
-                        else _CraneBox.leftMoveFlag = true;
-                        _CraneBox.backMoveFlag = true;
+                        if (!player2) craneBox.rightMoveFlag = true;
+                        else craneBox.leftMoveFlag = true;
+                        craneBox.backMoveFlag = true;
                         break;
                     case 5:
-                        if (!player2) _CraneBox.leftMoveFlag = true;
-                        else _CraneBox.rightMoveFlag = true;
+                        if (!player2) craneBox.leftMoveFlag = true;
+                        else craneBox.rightMoveFlag = true;
                         break;
                     case 6:
-                        _CraneBox.forwardMoveFlag = true;
+                        craneBox.forwardMoveFlag = true;
                         break;
                     case 7:
-                        if (!player2) _CraneBox.rightMoveFlag = true;
-                        else _CraneBox.leftMoveFlag = true;
+                        if (!player2) craneBox.rightMoveFlag = true;
+                        else craneBox.leftMoveFlag = true;
                         break;
                     case 8:
-                        _CraneBox.backMoveFlag = true;
+                        craneBox.backMoveFlag = true;
                         break;
                     case 9:
-                        _CraneBox.goPositionFlag = true;
+                        craneBox.goPositionFlag = true;
                         break;
                 }
             }
             await Task.Delay(500);
             if (isExecuted[craneStatus])
-                if (_CraneBox.CheckPos(9) && craneStatus == 10) craneStatus = 11;
+                if (craneBox.CheckPos(9) && craneStatus == 10) craneStatus = 11;
             //アーム獲得口ポジション移動音再生;
             //アーム獲得口ポジションへ;
         }
@@ -340,8 +341,8 @@ public class Type1Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                _ArmController.ArmLimit(100f); // アーム開口度を100に
-                _ArmController.ArmOpen();
+                armController.ArmLimit(100f); // アーム開口度を100に
+                armController.ArmOpen();
                 await Task.Delay(2000);
                 if (craneStatus == 11) craneStatus = 12;
             }
@@ -354,7 +355,7 @@ public class Type1Manager : MonoBehaviour
         {
             if (!isExecuted[craneStatus])
             {
-                _ArmController.ArmFinalClose();
+                armController.ArmFinalClose();
                 await Task.Delay(1000);
                 if (craneStatus == 12) craneStatus = 13;
             }
@@ -368,11 +369,11 @@ public class Type1Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                if (!player2) _CraneBox.leftMoveFlag = true;
-                else _CraneBox.rightMoveFlag = true;
-                _CraneBox.forwardMoveFlag = true;
+                if (!player2) craneBox.leftMoveFlag = true;
+                else craneBox.rightMoveFlag = true;
+                craneBox.forwardMoveFlag = true;
             }
-            if ((_CraneBox.CheckPos(1) && !player2) || (_CraneBox.CheckPos(3) && player2))
+            if ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2))
             {
                 await Task.Delay(1000);
                 if (craneStatus == 13) craneStatus = 14;
@@ -386,14 +387,14 @@ public class Type1Manager : MonoBehaviour
                 isExecuted[craneStatus] = true;
                 for (int i = 0; i < 14; i++)
                     isExecuted[i] = false;
-                _ArmController.ArmLimit(armApertures); //アーム開口度リセット
-                _CraneBox.goPoint = startPoint;
-                _CraneBox.goPositionFlag = true;
+                armController.ArmLimit(armApertures); //アーム開口度リセット
+                craneBox.goPoint = startPoint;
+                craneBox.goPositionFlag = true;
             }
             await Task.Delay(500);
             if (isExecuted[craneStatus] && craneStatus == 14)
             {
-                if (_CraneBox.CheckPos(9))
+                if (craneBox.CheckPos(9))
                 {
                     if (creditSystem.creditDisplayed > 0)
                         craneStatus = 1;
@@ -434,9 +435,9 @@ public class Type1Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonFlag && !player2)
+                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonPushed && !player2)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     if (craneStatus == 1)
                     {
                         creditSystem.ResetNowPayment();
@@ -444,11 +445,11 @@ public class Type1Manager : MonoBehaviour
                         isExecuted[14] = false;
                     }
                     craneStatus = 2;
-                    _CraneBox.rightMoveFlag = true;
+                    craneBox.rightMoveFlag = true;
                 }
-                if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonFlag && player2)
+                if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonPushed && player2)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     if (craneStatus == 1)
                     {
                         creditSystem.ResetNowPayment();
@@ -456,61 +457,61 @@ public class Type1Manager : MonoBehaviour
                         isExecuted[14] = false;
                     }
                     craneStatus = 2;
-                    _CraneBox.leftMoveFlag = true;
+                    craneBox.leftMoveFlag = true;
                 }
                 break;
             //投入を無効化
             case 2:
-                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonFlag && !player2)
+                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed && !player2)
                 {
                     craneStatus = 3;
-                    _CraneBox.rightMoveFlag = false;
-                    buttonFlag = false;
+                    craneBox.rightMoveFlag = false;
+                    buttonPushed = false;
                 }
-                if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonFlag && player2)
+                if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonPushed && player2)
                 {
                     craneStatus = 3;
-                    _CraneBox.leftMoveFlag = false;
-                    buttonFlag = false;
+                    craneBox.leftMoveFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 3:
-                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonFlag && !player2)
+                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed && !player2)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 4;
-                    _CraneBox.backMoveFlag = true;
+                    craneBox.backMoveFlag = true;
                 }
-                if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonFlag && player2)
+                if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonPushed && player2)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 4;
-                    _CraneBox.backMoveFlag = true;
+                    craneBox.backMoveFlag = true;
                 }
                 break;
             case 4:
-                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonFlag && !player2)
+                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed && !player2)
                 {
                     craneStatus = 5;
-                    _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
+                    craneBox.backMoveFlag = false;
+                    buttonPushed = false;
                 }
-                if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonFlag && player2)
+                if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonPushed && player2)
                 {
                     craneStatus = 5;
-                    _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
+                    craneBox.backMoveFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 6:
                 if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2 && button3)
                 {
-                    _RopeManager.ArmUnitDownForceStop();
+                    ropeManager.ArmUnitDownForceStop();
                     craneStatus = 7;
                 }
                 if ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2 && button3)
                 {
-                    _RopeManager.ArmUnitDownForceStop();
+                    ropeManager.ArmUnitDownForceStop();
                     craneStatus = 7;
                 }
                 break;
@@ -522,44 +523,44 @@ public class Type1Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if (craneStatus == 1 && !buttonFlag)
+                if (craneStatus == 1 && !buttonPushed)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
                     isExecuted[14] = false;
                 }
-                if (craneStatus == 2 && buttonFlag)
-                    _CraneBox.rightMoveFlag = true;
+                if (craneStatus == 2 && buttonPushed)
+                    craneBox.rightMoveFlag = true;
                 break;
             case 2:
-                if ((craneStatus == 3 && !buttonFlag) || (craneStatus == 4 && buttonFlag))
+                if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 4;
-                    _CraneBox.backMoveFlag = true;
+                    craneBox.backMoveFlag = true;
                 }
                 break;
             case 3:
                 if (craneStatus == 6)
                 {
-                    //buttonFlag = true;
-                    _RopeManager.ArmUnitDownForceStop();
+                    //buttonPushed = true;
+                    ropeManager.ArmUnitDownForceStop();
                     craneStatus = 7;
                 }
                 break;
             case 4: // player2 case 1:
-                if (craneStatus == 1 && !buttonFlag)
+                if (craneStatus == 1 && !buttonPushed)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
                     isExecuted[14] = false;
                 }
-                if (craneStatus == 2 && buttonFlag)
-                    _CraneBox.leftMoveFlag = true;
+                if (craneStatus == 2 && buttonPushed)
+                    craneBox.leftMoveFlag = true;
                 break;
         }
     }
@@ -569,27 +570,27 @@ public class Type1Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonFlag))
+                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
                 {
                     craneStatus = 3;
-                    _CraneBox.rightMoveFlag = false;
-                    buttonFlag = false;
+                    craneBox.rightMoveFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 2:
-                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonFlag))
+                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
                 {
                     craneStatus = 5;
-                    _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
+                    craneBox.backMoveFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 4: // player2 case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonFlag))
+                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
                 {
                     craneStatus = 3;
-                    _CraneBox.leftMoveFlag = false;
-                    buttonFlag = false;
+                    craneBox.leftMoveFlag = false;
+                    buttonPushed = false;
                 }
                 break;
         }

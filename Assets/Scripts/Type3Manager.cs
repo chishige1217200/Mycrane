@@ -16,7 +16,7 @@ public class Type3Manager : MonoBehaviour
     int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     float audioPitch = 1f; //サウンドのピッチ
     private bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
-    public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
+    public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
     public int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
@@ -25,7 +25,6 @@ public class Type3Manager : MonoBehaviour
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
     Type3ArmController _ArmController;
-    Transform temp;
     CraneBox _CraneBox;
     GetPoint _GetPoint;
     RopeManager _RopeManager;
@@ -39,6 +38,7 @@ public class Type3Manager : MonoBehaviour
 
     async void Start()
     {
+        Transform temp;
         // 様々なコンポーネントの取得
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
@@ -521,9 +521,9 @@ public class Type3Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonFlag)
+                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonPushed)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     if (craneStatus == 1)
                     {
                         creditSystem.ResetNowPayment();
@@ -538,27 +538,27 @@ public class Type3Manager : MonoBehaviour
                 break;
             //投入を無効化
             case 2:
-                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonFlag)
+                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed)
                 {
                     craneStatus = 3;
                     _CraneBox.rightMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 3:
-                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonFlag)
+                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 4;
                     _CraneBox.backMoveFlag = true;
                 }
                 break;
             case 4:
-                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonFlag)
+                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed)
                 {
                     craneStatus = 5;
                     _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
         }
@@ -569,9 +569,9 @@ public class Type3Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if (craneStatus == 1 && !buttonFlag)
+                if (craneStatus == 1 && !buttonPushed)
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 2;
                     creditSystem.ResetNowPayment();
                     creditSystem.AddCreditPlayed();
@@ -579,13 +579,13 @@ public class Type3Manager : MonoBehaviour
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
                 }
-                if (craneStatus == 2 && buttonFlag)
+                if (craneStatus == 2 && buttonPushed)
                     _CraneBox.rightMoveFlag = true;
                 break;
             case 2:
-                if ((craneStatus == 3 && !buttonFlag) || (craneStatus == 4 && buttonFlag))
+                if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
                 {
-                    buttonFlag = true;
+                    buttonPushed = true;
                     craneStatus = 4;
                     _CraneBox.backMoveFlag = true;
                 }
@@ -598,19 +598,19 @@ public class Type3Manager : MonoBehaviour
         switch (num)
         {
             case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonFlag))
+                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
                 {
                     craneStatus = 3;
                     _CraneBox.rightMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
             case 2:
-                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonFlag))
+                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
                 {
                     craneStatus = 5;
                     _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
+                    buttonPushed = false;
                 }
                 break;
         }

@@ -64,7 +64,7 @@ public class CraneBox : MonoBehaviour
             if (craneType == 1)
             {
                 if (_Type1Manager.craneStatus == 2) _Type1Manager.craneStatus = 3;
-                _Type1Manager.buttonFlag = false;
+                _Type1Manager.buttonPushed = false;
             }
         }
         if (collider.tag == "RightLimit")
@@ -75,25 +75,25 @@ public class CraneBox : MonoBehaviour
                 if (_Type1Manager.craneStatus == 2)
                 {
                     _Type1Manager.craneStatus = 3;
-                    _Type1Manager.buttonFlag = false;
+                    _Type1Manager.buttonPushed = false;
                 }
             if (craneType == 2)
                 if (_Type2Manager.craneStatus == 2)
                 {
                     _Type2Manager.craneStatus = 3;
-                    _Type2Manager.buttonFlag = false;
+                    _Type2Manager.buttonPushed = false;
                 }
             if (craneType == 3)
                 if (_Type3Manager.craneStatus == 2)
                 {
                     _Type3Manager.craneStatus = 3;
-                    _Type3Manager.buttonFlag = false;
+                    _Type3Manager.buttonPushed = false;
                 }
             if (craneType == 4)
                 if (_Type4Manager.craneStatus == 2)
                 {
                     _Type4Manager.craneStatus = 3;
-                    _Type4Manager.buttonFlag = false;
+                    _Type4Manager.buttonPushed = false;
                 }
         }
         if (collider.tag == "BackgroundLimit")
@@ -103,22 +103,22 @@ public class CraneBox : MonoBehaviour
             if (craneType == 1)
             {
                 if (_Type1Manager.craneStatus == 4) _Type1Manager.craneStatus = 5;
-                _Type1Manager.buttonFlag = false;
+                _Type1Manager.buttonPushed = false;
             }
             if (craneType == 2)
             {
                 if (_Type2Manager.craneStatus == 4) _Type2Manager.craneStatus = 5;
-                _Type2Manager.buttonFlag = false;
+                _Type2Manager.buttonPushed = false;
             }
             if (craneType == 3)
             {
                 if (_Type3Manager.craneStatus == 4) _Type3Manager.craneStatus = 5;
-                _Type3Manager.buttonFlag = false;
+                _Type3Manager.buttonPushed = false;
             }
             if (craneType == 4)
             {
                 if (_Type4Manager.craneStatus == 4) _Type4Manager.craneStatus = 5;
-                _Type4Manager.buttonFlag = false;
+                _Type4Manager.buttonPushed = false;
             }
         }
         if (collider.tag == "ForegroundLimit")
