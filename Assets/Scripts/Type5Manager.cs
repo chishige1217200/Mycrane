@@ -10,7 +10,7 @@ public class Type5Manager : MonoBehaviour
     float leftCatchArmpower = 10f; //左アームパワー
     float rightCatchArmpower = 10f; //右アームパワー
     float armApertures = 80f; //開口率
-    public int soundType = 0; //SEの切り替え 0,1: CATCHER 8,9 2: CATCHER 7
+    public int soundType = 0; //SEの切り替え 0,1: CATCHER 8,9 2: CATCHER 7 Selecterで指定すること
     private bool[] isExecuted = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] bool player2 = false; //player2の場合true

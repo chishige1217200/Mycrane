@@ -9,17 +9,18 @@ public class Type5Selecter : MonoBehaviour
     BGMPlayer _BGMPlayer;
     public int soundType = 0;
     int lastPlayed = 6;
-    int[] sound3array = new int[2];
+    bool updateFlag = true; //trueなら更新可能 soundType2用
 
     void Start()
     {
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        sound3array[0] = 4;
-        sound3array[1] = 6;
+        manager[0].soundType = soundType;
+        manager[1].soundType = soundType;
     }
 
     void Update()
     {
+
         if (manager[0].craneStatus == 0 && manager[1].craneStatus == 0)
         {
             switch (soundType)
@@ -34,24 +35,23 @@ public class Type5Selecter : MonoBehaviour
                     break;
                 case 2:
                     _BGMPlayer.StopBGM(6);
-                    if (!_BGMPlayer._AudioSource[lastPlayed].isPlaying)
-                        for (int i = 0; i < 2; i++)
+                    if (!_BGMPlayer._AudioSource[4].isPlaying && !_BGMPlayer._AudioSource[6].isPlaying)
+                    {
+                        if (lastPlayed == 4)
                         {
-                            if (sound3array[i] != lastPlayed)
-                            {
-                                lastPlayed = sound3array[i];
-                                _BGMPlayer.PlayBGM(lastPlayed);
-                                break;
-                            }
+                            _BGMPlayer._AudioSource[6].Play(); //1回しか再生したくないため
+                            lastPlayed = 6;
                         }
+                        else if (lastPlayed == 6)
+                        {
+                            _BGMPlayer._AudioSource[4].Play(); //1回しか再生したくないため
+                            lastPlayed = 4;
+                        }
+                    }
                     break;
             }
         }
-        else if (manager[0].craneStatus == -1 && manager[1].craneStatus == -1)
-        {
-            // Nothing to do.
-        }
-        else
+        else if (manager[0].craneStatus > 0 || manager[1].craneStatus > 0)
         {
             switch (soundType)
             {
