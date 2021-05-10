@@ -24,10 +24,10 @@ public class Type3Manager : MonoBehaviour
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
-    Type3ArmController _ArmController;
-    CraneBox _CraneBox;
-    GetPoint _GetPoint;
-    RopeManager _RopeManager;
+    Type3ArmController armController;
+    CraneBox craneBox;
+    GetPoint getPoint;
+    RopeManager ropeManager;
     ArmControllerSupport support;
 
     //For test-----------------------------------------
@@ -43,7 +43,7 @@ public class Type3Manager : MonoBehaviour
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
-        _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
@@ -55,20 +55,20 @@ public class Type3Manager : MonoBehaviour
         soundType = soundType = UnityEngine.Random.Range(0, 4);
 
         // ロープとアームコントローラに関する処理
-        _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
-        _ArmController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
+        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        armController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
         support = temp.Find("ArmUnit").Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
 
         // CraneBoxに関する処理
-        _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        _CraneBox.GetManager(3);
+        craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
+        craneBox.GetManager(3);
 
         // ロープにマネージャー情報をセット
-        _RopeManager.SetManagerToPoint(3);
+        ropeManager.SetManagerToPoint(3);
         creditSystem.GetSEPlayer(_SEPlayer);
         creditSystem.playable = playable;
         support.GetManager(3);
-        support.GetRopeManager(_RopeManager);
+        support.GetRopeManager(ropeManager);
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);
@@ -76,14 +76,14 @@ public class Type3Manager : MonoBehaviour
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
 
-        _GetPoint.GetManager(3);
+        getPoint.GetManager(3);
 
         await Task.Delay(300);
-        _RopeManager.ArmUnitUp();
-        if (soundType == 2) _ArmController.ArmOpen();
-        else _ArmController.ArmClose();
-        _CraneBox.leftMoveFlag = true;
-        _CraneBox.forwardMoveFlag = true;
+        ropeManager.ArmUnitUp();
+        if (soundType == 2) armController.ArmOpen();
+        else armController.ArmClose();
+        craneBox.leftMoveFlag = true;
+        craneBox.forwardMoveFlag = true;
 
         for (int i = 0; i < 12; i++)
             isExecuted[i] = false;
@@ -234,7 +234,7 @@ public class Type3Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                if (soundType != 2) _ArmController.ArmOpen();
+                if (soundType != 2) armController.ArmOpen();
                 switch (soundType)
                 {
                     case 0:
@@ -254,7 +254,7 @@ public class Type3Manager : MonoBehaviour
                         break;
                 }
                 if (soundType != 2) await Task.Delay(1000);
-                _RopeManager.ArmUnitDown();
+                ropeManager.ArmUnitDown();
                 if (craneStatus == 5) craneStatus = 6;
             }
             //奥移動効果音ループ再生停止;
@@ -281,7 +281,7 @@ public class Type3Manager : MonoBehaviour
                     await Task.Delay(downTime);
                     if (craneStatus == 6)
                     {
-                        _RopeManager.ArmUnitDownForceStop();
+                        ropeManager.ArmUnitDownForceStop();
                         craneStatus = 7;
                     }
                 }
@@ -303,8 +303,8 @@ public class Type3Manager : MonoBehaviour
                 }
                 if (probability) armPower = catchArmpowersuccess;
                 else armPower = catchArmpower;
-                _ArmController.MotorPower(armPower);
-                _ArmController.ArmClose();
+                armController.MotorPower(armPower);
+                armController.ArmClose();
                 await Task.Delay(1000);
                 if (craneStatus == 7) craneStatus = 8;
             }
@@ -336,19 +336,19 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.PlaySE(22, 2147483647);
                         break;
                 }
-                _RopeManager.ArmUnitUp();
+                ropeManager.ArmUnitUp();
                 await Task.Delay(1500);
-                if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeFlag) _ArmController.Release(); // 上昇中に離す振り分け
+                if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeFlag) armController.Release(); // 上昇中に離す振り分け
             }
             if (probability && armPower > upArmpowersuccess)
             {
                 armPower -= 0.5f;
-                _ArmController.MotorPower(armPower);
+                armController.MotorPower(armPower);
             }
             else if (!probability && armPower > upArmpower)
             {
                 armPower -= 0.5f;
-                _ArmController.MotorPower(armPower);
+                armController.MotorPower(armPower);
             }
             //アーム上昇音再生;
             //アーム上昇;
@@ -358,7 +358,7 @@ public class Type3Manager : MonoBehaviour
         {
             if (probability) armPower = upArmpowersuccess;
             else armPower = upArmpower;
-            _ArmController.MotorPower(armPower);
+            armController.MotorPower(armPower);
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
@@ -380,8 +380,8 @@ public class Type3Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                _CraneBox.leftMoveFlag = true;
-                _CraneBox.forwardMoveFlag = true;
+                craneBox.leftMoveFlag = true;
+                craneBox.forwardMoveFlag = true;
                 switch (soundType)
                 {
                     case 0:
@@ -400,14 +400,14 @@ public class Type3Manager : MonoBehaviour
             if (probability && armPower > backArmpowersuccess)
             {
                 armPower -= 0.5f;
-                _ArmController.MotorPower(armPower);
+                armController.MotorPower(armPower);
             }
             else if (!probability && armPower > backArmpower)
             {
                 armPower -= 0.5f;
-                _ArmController.MotorPower(armPower);
+                armController.MotorPower(armPower);
             }
-            if (_CraneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
+            if (craneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
             //アーム獲得口ポジションへ;
         }
 
@@ -416,7 +416,7 @@ public class Type3Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                _ArmController.ArmOpen();
+                armController.ArmOpen();
                 switch (soundType)
                 {
                     case 3:
@@ -438,8 +438,8 @@ public class Type3Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                //_ArmController.MotorPower(0f);
-                if (soundType != 2) _ArmController.ArmFinalClose();
+                //armController.MotorPower(0f);
+                if (soundType != 2) armController.ArmFinalClose();
                 switch (soundType)
                 {
                     case 2:
@@ -535,7 +535,7 @@ public class Type3Manager : MonoBehaviour
                         Debug.Log("Probability:" + probability);
                     }
                     craneStatus = 2;
-                    _CraneBox.rightMoveFlag = true;
+                    craneBox.rightMoveFlag = true;
                 }
                 break;
             //投入を無効化
@@ -543,7 +543,7 @@ public class Type3Manager : MonoBehaviour
                 if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed)
                 {
                     craneStatus = 3;
-                    _CraneBox.rightMoveFlag = false;
+                    craneBox.rightMoveFlag = false;
                     buttonPushed = false;
                 }
                 break;
@@ -552,14 +552,14 @@ public class Type3Manager : MonoBehaviour
                 {
                     buttonPushed = true;
                     craneStatus = 4;
-                    _CraneBox.backMoveFlag = true;
+                    craneBox.backMoveFlag = true;
                 }
                 break;
             case 4:
                 if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed)
                 {
                     craneStatus = 5;
-                    _CraneBox.backMoveFlag = false;
+                    craneBox.backMoveFlag = false;
                     buttonPushed = false;
                 }
                 break;
@@ -582,14 +582,14 @@ public class Type3Manager : MonoBehaviour
                     Debug.Log("Probability:" + probability);
                 }
                 if (craneStatus == 2 && buttonPushed)
-                    _CraneBox.rightMoveFlag = true;
+                    craneBox.rightMoveFlag = true;
                 break;
             case 2:
                 if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
                 {
                     buttonPushed = true;
                     craneStatus = 4;
-                    _CraneBox.backMoveFlag = true;
+                    craneBox.backMoveFlag = true;
                 }
                 break;
         }
@@ -603,7 +603,7 @@ public class Type3Manager : MonoBehaviour
                 if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
                 {
                     craneStatus = 3;
-                    _CraneBox.rightMoveFlag = false;
+                    craneBox.rightMoveFlag = false;
                     buttonPushed = false;
                 }
                 break;
@@ -611,7 +611,7 @@ public class Type3Manager : MonoBehaviour
                 if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
                 {
                     craneStatus = 5;
-                    _CraneBox.backMoveFlag = false;
+                    craneBox.backMoveFlag = false;
                     buttonPushed = false;
                 }
                 break;

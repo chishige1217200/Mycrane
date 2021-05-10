@@ -24,11 +24,10 @@ public class Type4Manager : MonoBehaviour
     Vector2 craneHost; //クレーンゲームの中心位置定義
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     SEPlayer _SEPlayer;
-    Type1ArmController _ArmController;
-    Transform temp;
-    CraneBox _CraneBox;
-    GetPoint _GetPoint;
-    RopeManager _RopeManager;
+    Type1ArmController armController;
+    CraneBox craneBox;
+    GetPoint getPoint;
+    RopeManager ropeManager;
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[2];
     Lever lever;
@@ -45,10 +44,12 @@ public class Type4Manager : MonoBehaviour
 
     async void Start()
     {
+        Transform temp;
+        // 様々なコンポーネントの取得
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
-        _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.parent;
         craneHost = new Vector2(temp.position.x, temp.position.z);
         temp = this.transform.Find("CraneUnit").transform;
@@ -60,8 +61,8 @@ public class Type4Manager : MonoBehaviour
         creditSystem.rateSet[1, 1] = timesSet[1];
 
         // ロープとアームコントローラに関する処理
-        _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
-        _ArmController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
+        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        armController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
         nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();
@@ -69,25 +70,25 @@ public class Type4Manager : MonoBehaviour
         roter = temp.Find("ArmUnit").Find("Main").GetComponent<Type4ArmunitRoter>();
 
         // CraneBoxに関する処理
-        _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        _CraneBox.GetManager(4);
+        craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
+        craneBox.GetManager(4);
 
         // ロープにマネージャー情報をセット
-        _RopeManager.SetManagerToPoint(4);
+        ropeManager.SetManagerToPoint(4);
         creditSystem.GetSEPlayer(_SEPlayer);
         creditSystem.playable = playable;
-        _GetPoint.GetManager(4);
-        _RopeManager.ArmUnitUp();
+        getPoint.GetManager(4);
+        ropeManager.ArmUnitUp();
         creditSystem.SetCreditSound(0);
         creditSystem.GetSEPlayer(_SEPlayer);
         support.GetManager(4);
-        support.GetRopeManager(_RopeManager);
+        support.GetRopeManager(ropeManager);
         roter.GetSEPlayer(_SEPlayer);
         support.pushTime = 300; // 押し込みパワーの調整
         for (int i = 0; i < 2; i++)
         {
             nail[i].GetManager(4);
-            nail[i].GetRopeManager(_RopeManager);
+            nail[i].GetRopeManager(ropeManager);
         }
 
         for (int i = 0; i < 15; i++)
@@ -131,12 +132,12 @@ public class Type4Manager : MonoBehaviour
 
         // イニシャル移動とinsertFlagを後に実行
         await Task.Delay(3000);
-        _ArmController.ArmLimit(armApertures);
-        _ArmController.ArmFinalClose();
+        armController.ArmLimit(armApertures);
+        armController.ArmFinalClose();
         videoPlay.randomMode = true;
-        if (!player2) _CraneBox.leftMoveFlag = true;
-        else _CraneBox.rightMoveFlag = true;
-        _CraneBox.forwardMoveFlag = true;
+        if (!player2) craneBox.leftMoveFlag = true;
+        else craneBox.rightMoveFlag = true;
+        craneBox.forwardMoveFlag = true;
 
         await Task.Delay(3000);
 
@@ -226,7 +227,7 @@ public class Type4Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                _ArmController.ArmOpen();
+                armController.ArmOpen();
                 await Task.Delay(1000);
                 if (craneStatus == 7) craneStatus = 8;
             }
@@ -241,7 +242,7 @@ public class Type4Manager : MonoBehaviour
                 _SEPlayer.StopSE(3);
                 _SEPlayer.StopSE(4);
                 _SEPlayer.PlaySE(5, 1);
-                if (craneStatus == 8) _RopeManager.ArmUnitDown(); //awaitによる時差実行を防止
+                if (craneStatus == 8) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
             }
             InputKeyCheck(craneStatus);
         }
@@ -253,10 +254,10 @@ public class Type4Manager : MonoBehaviour
                 if (catchTiming > 0) await Task.Delay(catchTiming);
                 if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
                 {
-                    if (leftCatchArmpower >= rightCatchArmpower) _ArmController.ArmClose(leftCatchArmpower);
-                    else _ArmController.ArmClose(rightCatchArmpower);
+                    if (leftCatchArmpower >= rightCatchArmpower) armController.ArmClose(leftCatchArmpower);
+                    else armController.ArmClose(rightCatchArmpower);
                 }
-                else _ArmController.ArmClose(30f);
+                else armController.ArmClose(30f);
                 if (catchLong > 0) await Task.Delay(catchLong);
                 if (craneStatus == 9) craneStatus = 10;
             }
@@ -267,10 +268,10 @@ public class Type4Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _RopeManager.ArmUnitUp();
+                    ropeManager.ArmUnitUp();
                     await Task.Delay(1000);
-                    _ArmController.MotorPower(leftCatchArmpower, 0);
-                    _ArmController.MotorPower(rightCatchArmpower, 1);
+                    armController.MotorPower(leftCatchArmpower, 0);
+                    armController.MotorPower(rightCatchArmpower, 1);
                 }
             }
         }
@@ -279,16 +280,16 @@ public class Type4Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 if (backTime > 0) await Task.Delay(backTime);
-                if (!player2) _CraneBox.leftMoveFlag = true;
-                else _CraneBox.rightMoveFlag = true;
-                _CraneBox.forwardMoveFlag = true;
+                if (!player2) craneBox.leftMoveFlag = true;
+                else craneBox.rightMoveFlag = true;
+                craneBox.forwardMoveFlag = true;
                 craneStatus = 12;
             }
         }
         if (craneStatus == 12)
         {
-            if (_CraneBox.CheckPos(1) && craneStatus == 12 & !player2) craneStatus = 13;
-            if (_CraneBox.CheckPos(3) && craneStatus == 12 & player2) craneStatus = 13;
+            if (craneBox.CheckPos(1) && craneStatus == 12 & !player2) craneStatus = 13;
+            if (craneBox.CheckPos(3) && craneStatus == 12 & player2) craneStatus = 13;
         }
         if (craneStatus == 13)
         {
@@ -296,8 +297,8 @@ public class Type4Manager : MonoBehaviour
             {
                 isExecuted[craneStatus] = true;
                 videoPlay.PlayVideo(5);
-                _ArmController.ArmLimit(100f); // アーム開口度を100に
-                _ArmController.ArmOpen();
+                armController.ArmLimit(100f); // アーム開口度を100に
+                armController.ArmOpen();
                 await Task.Delay(2000);
                 if (craneStatus == 13) craneStatus = 14;
                 //アーム開く音再生;
@@ -309,7 +310,7 @@ public class Type4Manager : MonoBehaviour
         {
             if (!isExecuted[craneStatus])
             {
-                _ArmController.ArmFinalClose();
+                armController.ArmFinalClose();
                 await Task.Delay(1000);
                 if (craneStatus == 14) craneStatus = 15;
             }
@@ -324,7 +325,7 @@ public class Type4Manager : MonoBehaviour
                 isExecuted[craneStatus] = true;
                 for (int i = 0; i < 14; i++)
                     isExecuted[i] = false;
-                _ArmController.ArmLimit(armApertures); //アーム開口度リセット
+                armController.ArmLimit(armApertures); //アーム開口度リセット
                 if (!_SEPlayer._AudioSource[6].isPlaying) _SEPlayer.PlaySE(7, 1);
                 roter.RotateToHome();
                 await Task.Delay(5000);
@@ -361,7 +362,7 @@ public class Type4Manager : MonoBehaviour
                     }
                     craneStatus = 2;
                     _SEPlayer.PlaySE(1, 1);
-                    if (!player2) _CraneBox.rightMoveFlag = true;
+                    if (!player2) craneBox.rightMoveFlag = true;
                 }
                 if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonPushed && player2)
                 {
@@ -375,7 +376,7 @@ public class Type4Manager : MonoBehaviour
                     }
                     craneStatus = 2;
                     _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.leftMoveFlag = true;
+                    craneBox.leftMoveFlag = true;
                 }
                 break;
             //投入を無効化
@@ -383,7 +384,7 @@ public class Type4Manager : MonoBehaviour
                 if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed && !player2)
                 {
                     craneStatus = 3;
-                    _CraneBox.rightMoveFlag = false;
+                    craneBox.rightMoveFlag = false;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
                     buttonPushed = false;
@@ -391,7 +392,7 @@ public class Type4Manager : MonoBehaviour
                 if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonPushed && player2)
                 {
                     craneStatus = 3;
-                    _CraneBox.leftMoveFlag = false;
+                    craneBox.leftMoveFlag = false;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
                     buttonPushed = false;
@@ -403,14 +404,14 @@ public class Type4Manager : MonoBehaviour
                     buttonPushed = true;
                     craneStatus = 4;
                     _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.backMoveFlag = true;
+                    craneBox.backMoveFlag = true;
                 }
                 if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonPushed && player2)
                 {
                     buttonPushed = true;
                     craneStatus = 4;
                     _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.backMoveFlag = true;
+                    craneBox.backMoveFlag = true;
                 }
                 break;
             case 4:
@@ -419,7 +420,7 @@ public class Type4Manager : MonoBehaviour
                     craneStatus = 5;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
-                    _CraneBox.backMoveFlag = false;
+                    craneBox.backMoveFlag = false;
                     buttonPushed = false;
                 }
                 if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonPushed && player2)
@@ -427,7 +428,7 @@ public class Type4Manager : MonoBehaviour
                     craneStatus = 5;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
-                    _CraneBox.backMoveFlag = false;
+                    craneBox.backMoveFlag = false;
                     buttonPushed = false;
                 }
                 break;
@@ -461,7 +462,7 @@ public class Type4Manager : MonoBehaviour
                 {
                     if (downStop)
                     {
-                        _RopeManager.ArmUnitDownForceStop();
+                        ropeManager.ArmUnitDownForceStop();
                         craneStatus = 9;
                     }
                 }
@@ -500,21 +501,21 @@ public class Type4Manager : MonoBehaviour
             }
 
             if (Input.GetKey(KeyCode.RightArrow) || lever.rightFlag)
-                _CraneBox.rightMoveFlag = true;
+                craneBox.rightMoveFlag = true;
             else if (Input.GetKeyUp(KeyCode.RightArrow) || !lever.rightFlag)
-                _CraneBox.rightMoveFlag = false;
+                craneBox.rightMoveFlag = false;
             if (Input.GetKey(KeyCode.LeftArrow) || lever.leftFlag)
-                _CraneBox.leftMoveFlag = true;
+                craneBox.leftMoveFlag = true;
             else if (Input.GetKeyUp(KeyCode.LeftArrow) || !lever.leftFlag)
-                _CraneBox.leftMoveFlag = false;
+                craneBox.leftMoveFlag = false;
             if (Input.GetKey(KeyCode.UpArrow) || lever.backFlag)
-                _CraneBox.backMoveFlag = true;
+                craneBox.backMoveFlag = true;
             else if (Input.GetKeyUp(KeyCode.UpArrow) || !lever.backFlag)
-                _CraneBox.backMoveFlag = false;
+                craneBox.backMoveFlag = false;
             if (Input.GetKey(KeyCode.DownArrow) || lever.forwardFlag)
-                _CraneBox.forwardMoveFlag = true;
+                craneBox.forwardMoveFlag = true;
             else if (Input.GetKeyUp(KeyCode.DownArrow) || !lever.forwardFlag)
-                _CraneBox.forwardMoveFlag = false;
+                craneBox.forwardMoveFlag = false;
 
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
@@ -557,21 +558,21 @@ public class Type4Manager : MonoBehaviour
             }
 
             if (Input.GetKey(KeyCode.D) || lever.rightFlag)
-                _CraneBox.rightMoveFlag = true;
+                craneBox.rightMoveFlag = true;
             else if (Input.GetKeyUp(KeyCode.D) || !lever.rightFlag)
-                _CraneBox.rightMoveFlag = false;
+                craneBox.rightMoveFlag = false;
             if (Input.GetKey(KeyCode.A) || lever.leftFlag)
-                _CraneBox.leftMoveFlag = true;
+                craneBox.leftMoveFlag = true;
             else if (Input.GetKeyUp(KeyCode.A) || !lever.leftFlag)
-                _CraneBox.leftMoveFlag = false;
+                craneBox.leftMoveFlag = false;
             if (Input.GetKey(KeyCode.W) || lever.backFlag)
-                _CraneBox.backMoveFlag = true;
+                craneBox.backMoveFlag = true;
             else if (Input.GetKeyUp(KeyCode.W) || !lever.backFlag)
-                _CraneBox.backMoveFlag = false;
+                craneBox.backMoveFlag = false;
             if (Input.GetKey(KeyCode.S) || lever.forwardFlag)
-                _CraneBox.forwardMoveFlag = true;
+                craneBox.forwardMoveFlag = true;
             else if (Input.GetKeyUp(KeyCode.S) || !lever.forwardFlag)
-                _CraneBox.forwardMoveFlag = false;
+                craneBox.forwardMoveFlag = false;
 
             if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
@@ -603,7 +604,7 @@ public class Type4Manager : MonoBehaviour
                 if (craneStatus == 2 && buttonPushed)
                 {
                     _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.rightMoveFlag = true;
+                    craneBox.rightMoveFlag = true;
                 }
                 break;
             case 2:
@@ -612,7 +613,7 @@ public class Type4Manager : MonoBehaviour
                     buttonPushed = true;
                     craneStatus = 4;
                     _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.backMoveFlag = true;
+                    craneBox.backMoveFlag = true;
                 }
                 break;
             case 3:
@@ -640,7 +641,7 @@ public class Type4Manager : MonoBehaviour
                 {
                     if (downStop)
                     {
-                        _RopeManager.ArmUnitDownForceStop();
+                        ropeManager.ArmUnitDownForceStop();
                         craneStatus = 9;
                     }
                 }
@@ -659,7 +660,7 @@ public class Type4Manager : MonoBehaviour
                 if (craneStatus == 2 && buttonPushed)
                 {
                     _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.leftMoveFlag = true;
+                    craneBox.leftMoveFlag = true;
                 }
                 break;
         }
@@ -675,7 +676,7 @@ public class Type4Manager : MonoBehaviour
                     craneStatus = 3;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
-                    _CraneBox.rightMoveFlag = false;
+                    craneBox.rightMoveFlag = false;
                     buttonPushed = false;
                 }
                 break;
@@ -685,7 +686,7 @@ public class Type4Manager : MonoBehaviour
                     craneStatus = 5;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
-                    _CraneBox.backMoveFlag = false;
+                    craneBox.backMoveFlag = false;
                     buttonPushed = false;
                 }
                 break;
@@ -695,7 +696,7 @@ public class Type4Manager : MonoBehaviour
                     craneStatus = 3;
                     _SEPlayer.StopSE(1);
                     _SEPlayer.PlaySE(2, 1);
-                    _CraneBox.leftMoveFlag = false;
+                    craneBox.leftMoveFlag = false;
                     buttonPushed = false;
                 }
                 break;
