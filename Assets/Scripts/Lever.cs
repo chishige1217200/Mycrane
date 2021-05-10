@@ -8,7 +8,7 @@ public class Lever : MonoBehaviour
 {
     public Canvas canvas; // Canvasの変数
     public RectTransform canvasRect; // キャンバス内のレクトトランスフォーム
-    public Vector2 MousePos; // マウスの位置の最終的な格納先
+    public Vector2 mousePos; // マウスの位置の最終的な格納先
     public RectTransform pointer; // 自身のゲームオブジェクトのRectTransform
     public bool rightFlag = false; // 右に倒しているとき
     public bool leftFlag = false; // 左に倒しているとき
@@ -35,20 +35,20 @@ public class Lever : MonoBehaviour
             /*
              * CanvasのRectTransform内にあるマウスの位置をRectTransformのローカルポジションに変換する
              * canvas.worldCameraはカメラ
-             * 出力先はMousePos
+             * 出力先はmousePos
              */
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, Input.mousePosition, canvas.worldCamera, out MousePos);
-            radian = (float)Math.Atan2(MousePos.y - init.y, MousePos.x - init.x); //x-z平面のtanの値計算
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, Input.mousePosition, canvas.worldCamera, out mousePos);
+            radian = (float)Math.Atan2(mousePos.y - init.y, mousePos.x - init.x); //x-z平面のtanの値計算
             // RectTransformの座標を更新
-            if (Vector2.Distance(init, MousePos) <= leverRange)
-                pointer.anchoredPosition = new Vector2(MousePos.x, MousePos.y);
-            else if (Vector2.Distance(init, MousePos) > leverRange) // 可動域よりも外側にカーソルがある場合
+            if (Vector2.Distance(init, mousePos) <= leverRange)
+                pointer.anchoredPosition = new Vector2(mousePos.x, mousePos.y);
+            else if (Vector2.Distance(init, mousePos) > leverRange) // 可動域よりも外側にカーソルがある場合
             {
                 pointer.anchoredPosition = new Vector2(init.x + (leverRange * (float)Math.Cos(radian)), init.y + (leverRange * (float)Math.Sin(radian))); // 基準値にオフセットを足して座標とする
             }
 
             //Flagの処理
-            if (Vector2.Distance(init, MousePos) >= leverRange / 2.0f)
+            if (Vector2.Distance(init, mousePos) >= leverRange / 2.0f)
             {
                 //Debug.Log(radian / Math.PI + "pi");
                 InitializeFlag();                       // 事前に方向を初期化
