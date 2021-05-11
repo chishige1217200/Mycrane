@@ -55,9 +55,9 @@ public class Type5Manager : MonoBehaviour
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
-        /*armController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
+        armController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
-        nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
+        /*nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
         nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();*/
 
         // CraneBoxに関する処理
@@ -70,11 +70,13 @@ public class Type5Manager : MonoBehaviour
         creditSystem.playable = playable;
         getPoint.GetManager(5);
         ropeManager.ArmUnitUp();
-        creditSystem.SetCreditSound(0);
+        await Task.Delay(500);
+        if(soundType == 0 || soundType == 1) creditSystem.SetCreditSound(0);
+        else creditSystem.SetCreditSound(8);
         creditSystem.GetSEPlayer(_SEPlayer);
-        //support.GetManager(5);
-        //support.GetRopeManager(ropeManager);
-        //support.pushTime = 300; // 押し込みパワーの調整
+        /*support.GetManager(5);
+        support.GetRopeManager(ropeManager);
+        support.pushTime = 300; // 押し込みパワーの調整
         /*for (int i = 0; i < 2; i++)
         {
             nail[i].GetManager(5);
@@ -88,7 +90,7 @@ public class Type5Manager : MonoBehaviour
 
         // イニシャル移動とinsertFlagを後に実行
         await Task.Delay(3000);
-        //armController.ArmLimit(armApertures);
+        armController.ArmLimit(armApertures);
         if (!player2) craneBox.leftMoveFlag = true;
         else craneBox.rightMoveFlag = true;
         craneBox.forwardMoveFlag = true;
@@ -177,21 +179,51 @@ public class Type5Manager : MonoBehaviour
             //コイン投入無効化;
             InputKeyCheck(craneStatus);
             //クレーン右移動;
-            _SEPlayer.PlaySE(1, 2); //右移動効果音ループ再生;
+            switch (soundType)
+            {
+                case 0:
+                case 1:
+                    _SEPlayer.PlaySE(1, 2147483647);
+                    break;
+                case 2:
+                    _SEPlayer.PlaySE(9, 2147483647);
+                    break;
+            }
+            //右移動効果音ループ再生;
         }
 
         if (craneStatus == 3)
         {
             InputKeyCheck(craneStatus);
-            _SEPlayer.StopSE(1); //右移動効果音ループ再生停止;
+            switch (soundType)
+            {
+                case 0:
+                case 1:
+                    _SEPlayer.StopSE(1);
+                    break;
+                case 2:
+                    _SEPlayer.StopSE(9);
+                    break;
+            }
+            //右移動効果音ループ再生停止;
             //奥移動ボタン有効化;
         }
 
         if (craneStatus == 4)
         { //奥移動中
-            //クレーン奥移動;
             InputKeyCheck(craneStatus);
-            _SEPlayer.PlaySE(1, 2); //奥移動効果音ループ再生;
+            //クレーン奥移動;
+            switch (soundType)
+            {
+                case 0:
+                case 1:
+                    _SEPlayer.PlaySE(2, 2147483647);
+                    break;
+                case 2:
+                    _SEPlayer.PlaySE(10, 2147483647);
+                    break;
+            }
+            //奥移動効果音ループ再生;
         }
 
         if (craneStatus == 5)
@@ -201,6 +233,18 @@ public class Type5Manager : MonoBehaviour
             {
                 isExecuted[craneStatus] = true;
                 armController.ArmOpen();
+                switch (soundType)
+                {
+                    case 0:
+                    case 1:
+                        _SEPlayer.StopSE(2);
+                        _SEPlayer.PlaySE(3, 1);
+                        break;
+                    case 2:
+                        _SEPlayer.StopSE(10);
+                        _SEPlayer.PlaySE(11, 1);
+                        break;
+                }
                 await Task.Delay(1000);
                 if (craneStatus == 5) craneStatus = 6;
             }
@@ -213,21 +257,51 @@ public class Type5Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
+                switch (soundType)
+                {
+                    case 0:
+                    case 1:
+                        _SEPlayer.PlaySE(4, 2147483647);
+                        break;
+                    case 2:
+                        _SEPlayer.PlaySE(12, 2147483647);
+                        break;
+                }
                 if (craneStatus == 6) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
             }
             InputKeyCheck(craneStatus);
-            _SEPlayer.PlaySE(2, 2); //アーム下降音再生
+            //アーム下降音再生
             //アーム下降;
         }
 
         if (craneStatus == 7)
         {
-            _SEPlayer.StopSE(2); //アーム下降音再生停止;
+            switch (soundType)
+            {
+                case 0:
+                case 1:
+                    _SEPlayer.StopSE(4);
+                    break;
+                case 2:
+                    _SEPlayer.StopSE(12);
+                    break;
+            }
+            //アーム下降音再生停止;
             await Task.Delay(1000);
-            if (craneStatus == 7) _SEPlayer.PlaySE(3, 2); //アーム掴む音再生;
+            //アーム掴む音再生;
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
+                switch (soundType)
+                {
+                    case 0:
+                    case 1:
+                        _SEPlayer.PlaySE(5, 1);
+                        break;
+                    case 2:
+                        _SEPlayer.PlaySE(13, 1);
+                        break;
+                }
                 if (craneStatus == 7)
                     if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
                     {
@@ -235,6 +309,8 @@ public class Type5Manager : MonoBehaviour
                         else armController.ArmClose(rightCatchArmpower);
                     }
                     else armController.ArmClose(30f);
+
+                await Task.Delay(3000);
                 if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
             }
             //アーム掴む;
@@ -242,11 +318,20 @@ public class Type5Manager : MonoBehaviour
 
         if (craneStatus == 8)
         {
-            _SEPlayer.StopSE(3);
-            _SEPlayer.PlaySE(4, 2); //アーム上昇音再生;
+            //アーム上昇音再生;
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
+                switch (soundType)
+                {
+                    case 0:
+                    case 1:
+                        _SEPlayer.PlaySE(4, 2147483647);
+                        break;
+                    case 2:
+                        _SEPlayer.PlaySE(14, 2147483647);
+                        break;
+                }
                 ropeManager.ArmUnitUp();
                 await Task.Delay(1000);
                 armController.MotorPower(leftCatchArmpower, 0);
@@ -257,7 +342,6 @@ public class Type5Manager : MonoBehaviour
 
         if (craneStatus == 9)
         {
-            _SEPlayer.StopSE(4);
             //アーム上昇停止音再生;
             //アーム上昇停止;
             if (!isExecuted[craneStatus])
@@ -273,6 +357,18 @@ public class Type5Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
+                switch (soundType)
+                {
+                    case 0:
+                    case 1:
+                        _SEPlayer.StopSE(4);
+                        _SEPlayer.PlaySE(6, 2147483647);
+                        break;
+                    case 2:
+                        _SEPlayer.StopSE(14);
+                        _SEPlayer.PlaySE(9, 2147483647);
+                        break;
+                }
                 switch (prizezoneType) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
                 {
                     case 1:
@@ -326,6 +422,18 @@ public class Type5Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
+                switch (soundType)
+                {
+                    case 0:
+                    case 1:
+                        _SEPlayer.StopSE(6);
+                        _SEPlayer.PlaySE(3, 1);
+                        break;
+                    case 2:
+                        _SEPlayer.StopSE(9);
+                        _SEPlayer.PlaySE(11, 1);
+                        break;
+                }
                 armController.ArmLimit(100f); // アーム開口度を100に
                 armController.ArmOpen();
                 await Task.Delay(2000);
@@ -340,6 +448,17 @@ public class Type5Manager : MonoBehaviour
         {
             if (!isExecuted[craneStatus])
             {
+                isExecuted[craneStatus] = true;
+                switch (soundType)
+                {
+                    case 0:
+                    case 1:
+                        _SEPlayer.PlaySE(5, 1);
+                        break;
+                    case 2:
+                        _SEPlayer.PlaySE(13, 1);
+                        break;
+                }
                 armController.ArmFinalClose();
                 await Task.Delay(1000);
                 if (craneStatus == 12) craneStatus = 13;
@@ -354,12 +473,26 @@ public class Type5Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
+                switch (soundType)
+                {
+                    case 0:
+                    case 1:
+                        _SEPlayer.PlaySE(6, 2147483647);
+                        break;
+                }
                 if (!player2) craneBox.leftMoveFlag = true;
                 else craneBox.rightMoveFlag = true;
                 craneBox.forwardMoveFlag = true;
             }
             if ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2))
             {
+                switch (soundType)
+                {
+                    case 0:
+                    case 1:
+                        _SEPlayer.StopSE(6);
+                        break;
+                }
                 await Task.Delay(1000);
                 if (craneStatus == 13) craneStatus = 14;
             }
@@ -370,6 +503,13 @@ public class Type5Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
+                switch (soundType)
+                {
+                    case 0:
+                    case 1:
+                        _SEPlayer.PlaySE(6, 2147483647);
+                        break;
+                }
                 for (int i = 0; i < 14; i++)
                     isExecuted[i] = false;
                 armController.ArmLimit(armApertures); //アーム開口度リセット
@@ -381,6 +521,13 @@ public class Type5Manager : MonoBehaviour
             {
                 if (craneBox.CheckPos(9))
                 {
+                    switch (soundType)
+                    {
+                        case 0:
+                        case 1:
+                            _SEPlayer.StopSE(6);
+                            break;
+                    }
                     if (creditSystem.creditDisplayed > 0)
                         craneStatus = 1;
                     else

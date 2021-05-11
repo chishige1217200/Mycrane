@@ -63,6 +63,8 @@ public class RopePoint : MonoBehaviour
                         if (_Type3Manager.craneStatus == 8) _Type3Manager.craneStatus = 9;
                     if (craneType == 4)
                         if (_Type4Manager.craneStatus == 10) _Type4Manager.craneStatus = 11;
+                    if (craneType == 5)
+                        if (_Type5Manager.craneStatus == 8) _Type5Manager.craneStatus = 9;
                 }
             }
         }
@@ -113,6 +115,8 @@ public class RopePoint : MonoBehaviour
                         if (_Type3Manager.craneStatus == 6) _Type3Manager.craneStatus = 7;
                     if (craneType == 4)
                         if (_Type4Manager.craneStatus == 8) _Type4Manager.craneStatus = 9;
+                    if (craneType == 5)
+                        if (_Type5Manager.craneStatus == 6) _Type5Manager.craneStatus = 7;
                 }
             }
             if (!parent)

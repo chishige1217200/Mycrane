@@ -355,6 +355,7 @@ public class Type1Manager : MonoBehaviour
         {
             if (!isExecuted[craneStatus])
             {
+                isExecuted[craneStatus] = true;
                 armController.ArmFinalClose();
                 await Task.Delay(1000);
                 if (craneStatus == 12) craneStatus = 13;
