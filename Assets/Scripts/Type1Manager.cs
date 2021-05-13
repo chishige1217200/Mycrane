@@ -7,8 +7,8 @@ public class Type1Manager : MonoBehaviour
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
-    float leftCatchArmpower = 100f; //左アームパワー
-    float rightCatchArmpower = 100f; //右アームパワー
+    float leftCatchArmpower = 10f; //左アームパワー
+    float rightCatchArmpower = 10f; //右アームパワー
     float armApertures = 80f; //開口率
     int soundType = 0; //BGMの切り替え．0・1
     int catchTime = 2000; //キャッチに要する時間(m秒)
