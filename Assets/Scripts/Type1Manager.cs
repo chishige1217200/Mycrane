@@ -17,8 +17,8 @@ public class Type1Manager : MonoBehaviour
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     [SerializeField] bool button3 = true; //button3の使用可否
-    private Vector2 startPoint; // 開始位置座標定義
-    private Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
+    public Vector2 startPoint; // 開始位置座標定義
+    public Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
     private Vector2 vec2offset = new Vector2(0.05f, 0.1f); // <=0.5, <=0.6 座標設定用Temp
     public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
     Vector2 craneHost; //クレーンゲームの中心位置定義
@@ -101,13 +101,13 @@ public class Type1Manager : MonoBehaviour
 
         if (!player2)
         {
-            startPoint = new Vector2(-0.65f + vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
-            homePoint = new Vector2(-0.65f + vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
+            startPoint = new Vector2(-0.65f + startPoint.x + craneHost.x, -0.3f + startPoint.y + craneHost.y);
+            homePoint = new Vector2(-0.65f + homePoint.x + craneHost.x, -0.3f + homePoint.y + craneHost.y);
         }
         else
         {
-            startPoint = new Vector2(0.65f - vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
-            homePoint = new Vector2(0.65f - vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
+            startPoint = new Vector2(0.65f - startPoint.x + craneHost.x, -0.3f + startPoint.y + craneHost.y);
+            homePoint = new Vector2(0.65f - homePoint.x + craneHost.x, -0.3f + homePoint.y + craneHost.y);
         }
 
         while (true)
