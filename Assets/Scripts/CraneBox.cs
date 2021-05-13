@@ -128,7 +128,7 @@ public class CraneBox : MonoBehaviour
                 if (_Type4Manager.craneStatus == 4) _Type4Manager.craneStatus = 5;
                 _Type4Manager.buttonPushed = false;
             }
-            if (craneType == 1)
+            if (craneType == 5)
             {
                 if (_Type5Manager.craneStatus == 4) _Type5Manager.craneStatus = 5;
                 _Type5Manager.buttonPushed = false;
