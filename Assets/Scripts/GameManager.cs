@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
                 SceneManager.LoadScene("Title");
                 break;
             case 1:
-                SceneManager.LoadScene("Type1Test");
+                SceneManager.LoadScene("KroonTest");
                 break;
             case 2:
                 SceneManager.LoadScene("Type2Test");
@@ -47,6 +47,9 @@ public class GameManager : MonoBehaviour
                 break;
             case 4:
                 SceneManager.LoadScene("Type4Test");
+                break;
+            case 5:
+                SceneManager.LoadScene("Type5Test");
                 break;
         }
     }
