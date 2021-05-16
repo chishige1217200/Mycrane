@@ -270,8 +270,11 @@ public class Type4Manager : MonoBehaviour
                     isExecuted[craneStatus] = true;
                     ropeManager.ArmUnitUp();
                     await Task.Delay(1000);
-                    armController.MotorPower(leftCatchArmpower, 0);
-                    armController.MotorPower(rightCatchArmpower, 1);
+                    if (craneStatus < 13)
+                    {
+                        armController.MotorPower(leftCatchArmpower, 0);
+                        armController.MotorPower(rightCatchArmpower, 1);
+                    }
                 }
             }
         }
