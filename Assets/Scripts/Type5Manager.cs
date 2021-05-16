@@ -23,7 +23,7 @@ public class Type5Manager : MonoBehaviour
     Vector2 craneHost; //クレーンゲームの中心位置定義
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     SEPlayer _SEPlayer;
-    Type1ArmController armController;
+    Type5ArmController armController;
     CraneBox craneBox;
     GetPoint getPoint;
     RopeManager ropeManager;
@@ -55,7 +55,7 @@ public class Type5Manager : MonoBehaviour
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
-        armController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
+        armController = temp.Find("ArmUnit").GetComponent<Type5ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         /*nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
         nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();*/
@@ -71,7 +71,7 @@ public class Type5Manager : MonoBehaviour
         getPoint.GetManager(5);
         ropeManager.ArmUnitUp();
         await Task.Delay(500);
-        if(soundType == 0 || soundType == 1) creditSystem.SetCreditSound(0);
+        if (soundType == 0 || soundType == 1) creditSystem.SetCreditSound(0);
         else creditSystem.SetCreditSound(8);
         creditSystem.GetSEPlayer(_SEPlayer);
         /*support.GetManager(5);
@@ -459,7 +459,7 @@ public class Type5Manager : MonoBehaviour
                         _SEPlayer.PlaySE(13, 1);
                         break;
                 }
-                armController.ArmFinalClose();
+                armController.ArmClose(100f);
                 await Task.Delay(1000);
                 if (craneStatus == 12) craneStatus = 13;
             }
