@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GetPoint : MonoBehaviour
@@ -30,7 +31,7 @@ public class GetPoint : MonoBehaviour
         if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
     }
 
-    void OnTriggerEnter(Collider collider)
+    async void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "prize")
         {
@@ -44,6 +45,8 @@ public class GetPoint : MonoBehaviour
             {
                 panel.SetPrizeName(prize.prizeName);
                 panel.PanelActive(true);
+                await Task.Delay(5000);
+                Destroy(collider.transform.root.gameObject);
             }
         }
     }
