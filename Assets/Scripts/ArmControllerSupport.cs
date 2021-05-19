@@ -10,6 +10,7 @@ public class ArmControllerSupport : MonoBehaviour
     Type3Manager _Type3Manager;
     Type4Manager _Type4Manager;
     Type5Manager _Type5Manager;
+    Type7Manager _Type7Manager;
     Type3ArmController _Type3ArmController;
     [SerializeField] int playerNumber = 1;
     RopeManager ropeManager;
@@ -147,6 +148,7 @@ public class ArmControllerSupport : MonoBehaviour
         if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
         if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
         if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
+        if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
     }
 
     public void GetArmController(int num)

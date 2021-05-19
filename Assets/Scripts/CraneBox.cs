@@ -22,6 +22,7 @@ public class CraneBox : MonoBehaviour
     Type3Manager _Type3Manager;
     Type4Manager _Type4Manager;
     Type5Manager _Type5Manager;
+    Type7Manager _Type7Manager;
     public Vector2 goPoint; // GoPosition関数の目的地
     public bool goPositionFlag = false; // GoPosition関数の実行フラグ
     int craneType = -1;
@@ -55,6 +56,7 @@ public class CraneBox : MonoBehaviour
         if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
         if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
         if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
+        if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
     }
 
     void OnTriggerEnter(Collider collider)

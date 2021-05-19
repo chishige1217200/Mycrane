@@ -18,6 +18,7 @@ public class RopePoint : MonoBehaviour
     Type3Manager _Type3Manager;
     Type4Manager _Type4Manager;
     Type5Manager _Type5Manager;
+    Type7Manager _Type7Manager;
     [SerializeField] int playerNumber = 1;
     int craneType = -1;
     bool upRefusedFlag = false; // 上昇拒否フラグ trueなら上昇禁止
@@ -41,6 +42,7 @@ public class RopePoint : MonoBehaviour
         if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
         if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
         if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
+        if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
     }
 
     void OnTriggerEnter(Collider collider)

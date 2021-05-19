@@ -10,8 +10,9 @@ public class Type3ArmController : MonoBehaviour
     JointMotor[] motor;
     ArmControllerSupport support;
     Type3Manager _Type3Manager;
+    Type7Manager _Type7Manager;
     public bool releaseFlag = true; //trueなら強制射出
-
+    int craneType = 3;
     void Start()
     {
         arm = new GameObject[3];
@@ -20,10 +21,6 @@ public class Type3ArmController : MonoBehaviour
         arm[0] = this.transform.Find("Arm1").gameObject;
         arm[1] = this.transform.Find("Arm2").gameObject;
         arm[2] = this.transform.Find("Arm3").gameObject;
-        support = this.transform.Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
-        support.GetManager(3);
-        support.GetArmController(3);
-        _Type3Manager = this.transform.root.GetComponent<Type3Manager>();
 
         for (int i = 0; i < 3; i++)
         {
@@ -67,7 +64,7 @@ public class Type3ArmController : MonoBehaviour
 
     public async void Release()
     {
-        _Type3Manager.armPower = 0f;
+        if (craneType == 3) _Type3Manager.armPower = 0f;
         if (releaseFlag)
         {
             for (int i = 0; i < 3; i++)
@@ -103,5 +100,15 @@ public class Type3ArmController : MonoBehaviour
                 joint[i].motor = motor[i];
             }
         }
+    }
+
+    public void GetManager(int num) // 筐体のマネージャー情報取得
+    {
+        craneType = num;
+        if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
+        if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
+        support = this.transform.Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
+        support.GetManager(craneType);
+        support.GetArmController(craneType);
     }
 }
