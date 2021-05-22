@@ -14,8 +14,7 @@ public class Type2Manager : MonoBehaviour
     float upArmpowersuccess = 100f; //同確率時
     float backArmpowersuccess = 100f; //同確率時
     int operationType = 1; //0:ボタン式，1:レバー式
-    int limitTimeSet = 15; //レバー式の場合，残り時間を設定
-    int limitTimeCount = 0; //実際のカウントダウン
+    [SerializeField] int limitTimeSet = 15; //レバー式の場合，残り時間を設定
     int soundType = 2; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1.0f; //サウンドのピッチ
@@ -33,6 +32,7 @@ public class Type2Manager : MonoBehaviour
     GetPoint getPoint;
     RopeManager ropeManager;
     Lever lever;
+    Timer timer;
 
     //For test-----------------------------------------
 
@@ -50,6 +50,7 @@ public class Type2Manager : MonoBehaviour
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        timer = this.transform.Find("Timer").GetComponent<Timer>();
         temp = this.transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
@@ -72,10 +73,21 @@ public class Type2Manager : MonoBehaviour
         ropeManager.SetManagerToPoint(2);
         creditSystem.GetSEPlayer(_SEPlayer);
         creditSystem.playable = playable;
+        timer.limitTimeNow = limitTimeSet;
+        timer.GetSEPlayer(_SEPlayer);
 
-        if (soundType == 0) creditSystem.SetCreditSound(0);
-        if (soundType == 1) creditSystem.SetCreditSound(6);
-        if (soundType == 2) creditSystem.SetCreditSound(10);
+        if (soundType == 0)
+            creditSystem.SetCreditSound(0);
+        if (soundType == 1)
+        {
+            creditSystem.SetCreditSound(6);
+            timer.SetAlertSound(7);
+        }
+        if (soundType == 2)
+        {
+            creditSystem.SetCreditSound(10);
+            timer.SetAlertSound(11);
+        }
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
 
@@ -111,7 +123,7 @@ public class Type2Manager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
         //craneStatusdisplayed.text = craneStatus.ToString();
-        //limitTimedisplayed.text = limitTimeCount.ToString();
+        //limitTimedisplayed.text = timer.limitTimeNow.ToString();
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(2 * soundType);
@@ -171,11 +183,11 @@ public class Type2Manager : MonoBehaviour
             {
                 _BGMPlayer.StopBGM(2 * soundType);
                 _BGMPlayer.PlayBGM(1 + 2 * soundType);
-                if (!isExecuted[craneStatus])
+                /*if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    limitTimeCount = limitTimeSet;
-                }
+                    timer.limitTimeNow = limitTimeSet;
+                }*/
 
                 //レバー操作有効化;
                 //降下ボタン有効化;
@@ -187,10 +199,12 @@ public class Type2Manager : MonoBehaviour
                 {
                     isExecuted[craneStatus] = true;
                     timerFlag = true;
-                    StartTimer();
+                    timer.StartTimer();
+                    creditSystem.segUpdateFlag = false;
                 }
                 InputLeverCheck();
                 InputKeyCheck(5);
+                if (isExecuted[craneStatus] && timer.limitTimeNow <= 0) craneStatus = 6;
             }
         }
 
@@ -217,7 +231,8 @@ public class Type2Manager : MonoBehaviour
                         break;
                 }
                 await Task.Delay(300);
-                CancelTimer();
+                timer.CancelTimer();
+                creditSystem.segUpdateFlag = true;
                 if (craneStatus == 6) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
             }
             if (craneStatus == 6 && isExecuted[6]) InputKeyCheck(craneStatus); //awaitによる時差実行を防止
@@ -365,27 +380,27 @@ public class Type2Manager : MonoBehaviour
 
         if (!creditSystem.segUpdateFlag) // Timer表示用
         {
-            if (limitTimeCount >= 0)
-                limitTimedisplayed.text = limitTimeCount.ToString();
+            if (timer.limitTimeNow >= 0)
+                limitTimedisplayed.text = timer.limitTimeNow.ToString();
             else
                 limitTimedisplayed.text = "0";
         }
     }
 
 
-    async void StartTimer()
+    /*async void StartTimer()
     {
         creditSystem.segUpdateFlag = false;
-        while (limitTimeCount >= 0)
+        while (timer.limitTimeNow >= 0)
         {
-            if (limitTimeCount == 0)
+            if (timer.limitTimeNow == 0)
             {
                 craneStatus = 6;
                 await Task.Delay(1000);
                 //creditSystem.segUpdateFlag = true;
                 break;
             }
-            if (limitTimeCount <= 10)
+            if (timer.limitTimeNow <= 10)
             {
                 switch (soundType)
                 {
@@ -400,15 +415,15 @@ public class Type2Manager : MonoBehaviour
                 }
             }
             await Task.Delay(1000);
-            limitTimeCount--;
+            timer.limitTimeNow--;
         }
-    }
+    }*/
 
-    void CancelTimer()
+    /*void CancelTimer()
     {
-        limitTimeCount = -1;
+        timer.limitTimeNow = -1;
         creditSystem.segUpdateFlag = true;
-    }
+    }*/
 
     public void GetPrize()
     {

@@ -56,7 +56,7 @@ public class Type1Manager : MonoBehaviour
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
 
-        soundType = Random.Range(0, 2);
+        //soundType = Random.Range(0, 2);
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
