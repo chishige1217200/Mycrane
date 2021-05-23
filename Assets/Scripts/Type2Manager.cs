@@ -15,7 +15,7 @@ public class Type2Manager : MonoBehaviour
     float backArmpowersuccess = 100f; //同確率時
     int operationType = 1; //0:ボタン式，1:レバー式
     [SerializeField] int limitTimeSet = 15; //レバー式の場合，残り時間を設定
-    int soundType = 2; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
+    int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1.0f; //サウンドのピッチ
     private bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
@@ -59,7 +59,7 @@ public class Type2Manager : MonoBehaviour
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
 
-        soundType = soundType = UnityEngine.Random.Range(0, 3);
+        //soundType = soundType = UnityEngine.Random.Range(0, 3);
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
