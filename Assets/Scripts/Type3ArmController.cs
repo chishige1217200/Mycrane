@@ -69,7 +69,7 @@ public class Type3ArmController : MonoBehaviour
         {
             for (int i = 0; i < 3; i++)
             {
-                motor[i].targetVelocity = -130f;
+                motor[i].targetVelocity = -100f;
                 //motor[i].force = 1f;
                 joint[i].motor = motor[i];
             }
