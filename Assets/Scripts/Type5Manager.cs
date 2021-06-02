@@ -245,7 +245,7 @@ public class Type5Manager : MonoBehaviour
                         _SEPlayer.PlaySE(11, 1);
                         break;
                 }
-                await Task.Delay(1000);
+                await Task.Delay(1700);
                 if (craneStatus == 5) craneStatus = 6;
             }
             //アーム開く音再生;
@@ -439,7 +439,7 @@ public class Type5Manager : MonoBehaviour
                 }
                 armController.ArmLimit(100f); // アーム開口度を100に
                 armController.ArmOpen();
-                await Task.Delay(2000);
+                await Task.Delay(2500);
                 if (craneStatus == 11) craneStatus = 12;
             }
             //アーム開く音再生;
