@@ -71,7 +71,7 @@ public class Type4Manager : MonoBehaviour
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        craneBox.GetManager(4);
+        //craneBox.GetManager(4);
 
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(4);
