@@ -74,7 +74,7 @@ public class Type3ArmController : MonoBehaviour
                 joint[i].motor = motor[i];
             }
             while (support.prizeFlag)
-                await Task.Delay(100);
+                await Task.Delay(50);
             for (int i = 0; i < 3; i++)
             {
                 motor[i].targetVelocity = 0f;
