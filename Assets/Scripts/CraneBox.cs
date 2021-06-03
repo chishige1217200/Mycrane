@@ -25,7 +25,7 @@ public class CraneBox : MonoBehaviour
     //Type7Manager _Type7Manager;
     public Vector2 goPoint; // GoPosition関数の目的地
     public bool goPositionFlag = false; // GoPosition関数の実行フラグ
-    int craneType = -1;
+    //int craneType = -1;
 
     void Start()
     {
@@ -50,7 +50,7 @@ public class CraneBox : MonoBehaviour
 
     public void GetManager(int num) // 筐体のマネージャー情報取得
     {
-        craneType = num;
+        //craneType = num;
         //if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
         //if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
         //if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
