@@ -19,7 +19,7 @@ public class CraneBox : MonoBehaviour
     GameObject ropeHost;
     Type1Manager _Type1Manager;
     Type2Manager _Type2Manager;
-    Type3Manager _Type3Manager;
+    //Type3Manager _Type3Manager;
     Type4Manager _Type4Manager;
     Type5Manager _Type5Manager;
     Type7Manager _Type7Manager;
@@ -53,7 +53,7 @@ public class CraneBox : MonoBehaviour
         craneType = num;
         if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
         if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
-        if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
+        //if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
         if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
         if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
         if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
@@ -87,12 +87,12 @@ public class CraneBox : MonoBehaviour
                     _Type2Manager.craneStatus = 3;
                     _Type2Manager.buttonPushed = false;
                 }
-            if (craneType == 3)
+            /*if (craneType == 3)
                 if (_Type3Manager.craneStatus == 2)
                 {
                     _Type3Manager.craneStatus = 3;
                     _Type3Manager.buttonPushed = false;
-                }
+                }*/
             if (craneType == 4)
                 if (_Type4Manager.craneStatus == 2)
                 {
@@ -120,11 +120,11 @@ public class CraneBox : MonoBehaviour
                 if (_Type2Manager.craneStatus == 4) _Type2Manager.craneStatus = 5;
                 _Type2Manager.buttonPushed = false;
             }
-            if (craneType == 3)
+            /*if (craneType == 3)
             {
                 if (_Type3Manager.craneStatus == 4) _Type3Manager.craneStatus = 5;
                 _Type3Manager.buttonPushed = false;
-            }
+            }*/
             if (craneType == 4)
             {
                 if (_Type4Manager.craneStatus == 4) _Type4Manager.craneStatus = 5;

@@ -13,7 +13,7 @@ public class Type3Manager : MonoBehaviour
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
     float backArmpowersuccess = 100; //同確率時
-    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    public int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     float audioPitch = 1f; //サウンドのピッチ
     private bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
@@ -52,7 +52,7 @@ public class Type3Manager : MonoBehaviour
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
 
-        soundType = soundType = UnityEngine.Random.Range(0, 4);
+        //soundType = soundType = UnityEngine.Random.Range(0, 4);
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -61,7 +61,7 @@ public class Type3Manager : MonoBehaviour
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        craneBox.GetManager(3);
+        //craneBox.GetManager(3);
 
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(3);
@@ -177,6 +177,11 @@ public class Type3Manager : MonoBehaviour
                     _SEPlayer.PlaySE(18, 2147483647);
                     break;
             }
+            if (craneBox.CheckPos(7))
+            {
+                buttonPushed = false;
+                craneStatus = 3;
+            }
             //クレーン右移動;
             //右移動効果音ループ再生;
         }
@@ -222,6 +227,11 @@ public class Type3Manager : MonoBehaviour
                     _SEPlayer.PlaySE(19, 2147483647);
                     break;
             }
+            if (craneBox.CheckPos(8))
+            {
+                buttonPushed = false;
+                craneStatus = 5;
+            }
             /*if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
@@ -254,7 +264,11 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.PlaySE(20, 1);
                         break;
                 }
-                if (soundType != 2) await Task.Delay(1000);
+                if (soundType != 2)
+                {
+                    if (soundType == 3) await Task.Delay(2000);
+                    else await Task.Delay(1000);
+                }
                 ropeManager.ArmUnitDown();
                 if (craneStatus == 5) craneStatus = 6;
             }
