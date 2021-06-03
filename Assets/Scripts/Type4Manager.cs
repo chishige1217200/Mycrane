@@ -10,7 +10,7 @@ public class Type4Manager : MonoBehaviour
     float leftCatchArmpower = 20f; //左アームパワー
     float rightCatchArmpower = 20f; //右アームパワー
     float armApertures = 80f; //開口率
-    int operationType = 1; //0:ボタン式，1:レバー式
+    int operationType = 0; //0:ボタン式，1:レバー式
     int catchLong = 2000; //キャッチに要する時間(m秒)
     int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
     int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
@@ -81,7 +81,7 @@ public class Type4Manager : MonoBehaviour
         ropeManager.ArmUnitUp();
         creditSystem.SetCreditSound(0);
         creditSystem.GetSEPlayer(_SEPlayer);
-        support.GetManager(4);
+        //support.GetManager(4);
         support.GetRopeManager(ropeManager);
         roter.GetSEPlayer(_SEPlayer);
         support.pushTime = 300; // 押し込みパワーの調整
@@ -180,6 +180,20 @@ public class Type4Manager : MonoBehaviour
             if (craneStatus == 2)
             { //右移動中
                 InputKeyCheck(craneStatus);
+                if (!player2 & craneBox.CheckPos(7))
+                {
+                    _SEPlayer.StopSE(1);
+                    _SEPlayer.PlaySE(2, 1);
+                    buttonPushed = false;
+                    craneStatus = 3;
+                }
+                if (player2 & craneBox.CheckPos(5))
+                {
+                    _SEPlayer.StopSE(1);
+                    _SEPlayer.PlaySE(2, 1);
+                    buttonPushed = false;
+                    craneStatus = 3;
+                }
                 //クレーン右移動;
             }
 
@@ -191,6 +205,13 @@ public class Type4Manager : MonoBehaviour
             if (craneStatus == 4)
             { //奥移動中
                 InputKeyCheck(craneStatus);
+                if (craneBox.CheckPos(8))
+                {
+                    _SEPlayer.StopSE(1);
+                    _SEPlayer.PlaySE(2, 1);
+                    buttonPushed = false;
+                    craneStatus = 5;
+                }
                 //クレーン奥移動;
             }
         }

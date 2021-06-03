@@ -62,7 +62,7 @@ public class Type5Manager : MonoBehaviour
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        craneBox.GetManager(5);
+        //craneBox.GetManager(5);
 
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(5);
@@ -189,6 +189,16 @@ public class Type5Manager : MonoBehaviour
                     _SEPlayer.PlaySE(9, 2147483647);
                     break;
             }
+            if (!player2 & craneBox.CheckPos(7))
+            {
+                buttonPushed = false;
+                craneStatus = 3;
+            }
+            if (player2 & craneBox.CheckPos(5))
+            {
+                buttonPushed = false;
+                craneStatus = 3;
+            }
             //右移動効果音ループ再生;
         }
 
@@ -222,6 +232,11 @@ public class Type5Manager : MonoBehaviour
                 case 2:
                     _SEPlayer.PlaySE(10, 2147483647);
                     break;
+            }
+            if (craneBox.CheckPos(8))
+            {
+                buttonPushed = false;
+                craneStatus = 5;
             }
             //奥移動効果音ループ再生;
         }

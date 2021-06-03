@@ -10,7 +10,7 @@ public class Type1Manager : MonoBehaviour
     float leftCatchArmpower = 10f; //左アームパワー
     float rightCatchArmpower = 10f; //右アームパワー
     public float armApertures = 80f; //開口率
-    int soundType = 0; //BGMの切り替え．0・1
+    public int soundType = 0; //BGMの切り替え．0・1
     int catchTime = 2000; //キャッチに要する時間(m秒)
     private bool[] isExecuted = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
@@ -67,7 +67,7 @@ public class Type1Manager : MonoBehaviour
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        craneBox.GetManager(1);
+        //craneBox.GetManager(1);
 
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(1);
@@ -191,7 +191,18 @@ public class Type1Manager : MonoBehaviour
             //コイン投入無効化;
             InputKeyCheck(craneStatus);
             //クレーン右移動;
-            _SEPlayer.PlaySE(1, 2); //右移動効果音ループ再生;
+            _SEPlayer.PlaySE(1, 2);
+            if (!player2 & craneBox.CheckPos(7))
+            {
+                buttonPushed = false;
+                craneStatus = 3;
+            }
+            if (player2 & craneBox.CheckPos(5))
+            {
+                buttonPushed = false;
+                craneStatus = 3;
+            }
+            //右移動効果音ループ再生;
         }
 
         if (craneStatus == 3)
@@ -205,7 +216,13 @@ public class Type1Manager : MonoBehaviour
         { //奥移動中
             //クレーン奥移動;
             InputKeyCheck(craneStatus);
-            _SEPlayer.PlaySE(1, 2); //奥移動効果音ループ再生;
+            _SEPlayer.PlaySE(1, 2);
+            if (craneBox.CheckPos(8))
+            {
+                buttonPushed = false;
+                craneStatus = 5;
+            }
+            //奥移動効果音ループ再生;
         }
 
         if (craneStatus == 5)

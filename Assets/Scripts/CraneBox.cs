@@ -17,12 +17,12 @@ public class CraneBox : MonoBehaviour
     [SerializeField] int playerNumber = 1;
     GameObject craneBoxSupport;
     GameObject ropeHost;
-    Type1Manager _Type1Manager;
-    Type2Manager _Type2Manager;
+    //Type1Manager _Type1Manager;
+    //Type2Manager _Type2Manager;
     //Type3Manager _Type3Manager;
-    Type4Manager _Type4Manager;
-    Type5Manager _Type5Manager;
-    Type7Manager _Type7Manager;
+    //Type4Manager _Type4Manager;
+    //Type5Manager _Type5Manager;
+    //Type7Manager _Type7Manager;
     public Vector2 goPoint; // GoPosition関数の目的地
     public bool goPositionFlag = false; // GoPosition関数の実行フラグ
     int craneType = -1;
@@ -51,12 +51,12 @@ public class CraneBox : MonoBehaviour
     public void GetManager(int num) // 筐体のマネージャー情報取得
     {
         craneType = num;
-        if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
-        if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
+        //if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
+        //if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
         //if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
-        if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
-        if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
-        if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
+        //if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
+        //if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
+        //if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
     }
 
     void OnTriggerEnter(Collider collider)
@@ -65,76 +65,76 @@ public class CraneBox : MonoBehaviour
         {
             leftMoveFlag = false;
             leftRefusedFlag = true;
-            if (craneType == 1)
+            /*if (craneType == 1)
             {
                 if (_Type1Manager.craneStatus == 2) _Type1Manager.craneStatus = 3;
                 _Type1Manager.buttonPushed = false;
-            }
+            }*/
         }
         if (collider.tag == "RightLimit")
         {
             rightMoveFlag = false;
             rightRefusedFlag = true;
-            if (craneType == 1)
+            /*if (craneType == 1)
                 if (_Type1Manager.craneStatus == 2)
                 {
                     _Type1Manager.craneStatus = 3;
                     _Type1Manager.buttonPushed = false;
-                }
-            if (craneType == 2)
+                }*/
+            /*if (craneType == 2)
                 if (_Type2Manager.craneStatus == 2)
                 {
                     _Type2Manager.craneStatus = 3;
                     _Type2Manager.buttonPushed = false;
-                }
+                }*/
             /*if (craneType == 3)
                 if (_Type3Manager.craneStatus == 2)
                 {
                     _Type3Manager.craneStatus = 3;
                     _Type3Manager.buttonPushed = false;
                 }*/
-            if (craneType == 4)
+            /*if (craneType == 4)
                 if (_Type4Manager.craneStatus == 2)
                 {
                     _Type4Manager.craneStatus = 3;
                     _Type4Manager.buttonPushed = false;
-                }
-            if (craneType == 5)
+                }*/
+            /*if (craneType == 5)
                 if (_Type5Manager.craneStatus == 2)
                 {
                     _Type5Manager.craneStatus = 3;
                     _Type5Manager.buttonPushed = false;
-                }
+                }*/
         }
         if (collider.tag == "BackgroundLimit")
         {
             backMoveFlag = false;
             backRefusedFlag = true;
-            if (craneType == 1)
+            /*if (craneType == 1)
             {
                 if (_Type1Manager.craneStatus == 4) _Type1Manager.craneStatus = 5;
                 _Type1Manager.buttonPushed = false;
-            }
-            if (craneType == 2)
+            }*/
+            /*if (craneType == 2)
             {
                 if (_Type2Manager.craneStatus == 4) _Type2Manager.craneStatus = 5;
                 _Type2Manager.buttonPushed = false;
-            }
+            }*/
             /*if (craneType == 3)
             {
                 if (_Type3Manager.craneStatus == 4) _Type3Manager.craneStatus = 5;
                 _Type3Manager.buttonPushed = false;
             }*/
-            if (craneType == 4)
+            /*if (craneType == 4)
             {
                 if (_Type4Manager.craneStatus == 4) _Type4Manager.craneStatus = 5;
                 _Type4Manager.buttonPushed = false;
-            }
-            if (craneType == 5)
+            }*/
+            /*if (craneType == 5)
             {
                 if (_Type5Manager.craneStatus == 4) _Type5Manager.craneStatus = 5;
                 _Type5Manager.buttonPushed = false;
-            }
+            }*/
         }
         if (collider.tag == "ForegroundLimit")
         {

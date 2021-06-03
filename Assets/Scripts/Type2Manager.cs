@@ -13,9 +13,9 @@ public class Type2Manager : MonoBehaviour
     float catchArmpowersuccess = 100f; //同確率時
     float upArmpowersuccess = 100f; //同確率時
     float backArmpowersuccess = 100f; //同確率時
-    int operationType = 1; //0:ボタン式，1:レバー式
+    int operationType = 0; //0:ボタン式，1:レバー式
     [SerializeField] int limitTimeSet = 15; //レバー式の場合，残り時間を設定
-    int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
+    public int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1.0f; //サウンドのピッチ
     private bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
@@ -59,7 +59,7 @@ public class Type2Manager : MonoBehaviour
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
 
-        soundType = soundType = UnityEngine.Random.Range(0, 3);
+        //soundType = soundType = UnityEngine.Random.Range(0, 3);
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -67,7 +67,7 @@ public class Type2Manager : MonoBehaviour
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        craneBox.GetManager(2);
+        //craneBox.GetManager(2);
 
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(2);
@@ -153,6 +153,11 @@ public class Type2Manager : MonoBehaviour
             if (craneStatus == 2)
             { //右移動中
                 InputKeyCheck(craneStatus);
+                if (craneBox.CheckPos(7))
+                {
+                    buttonPushed = false;
+                    craneStatus = 3;
+                }
                 //コイン投入無効化;
                 //クレーン右移動;
                 //右移動効果音ループ再生;
@@ -167,6 +172,11 @@ public class Type2Manager : MonoBehaviour
             if (craneStatus == 4)
             { //奥移動中
                 InputKeyCheck(craneStatus);
+                if (craneBox.CheckPos(8))
+                {
+                    buttonPushed = false;
+                    craneStatus = 5;
+                }
                 //クレーン奥移動;
                 //奥移動効果音ループ再生;
             }
