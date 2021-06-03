@@ -64,7 +64,7 @@ public class ArmControllerSupport : MonoBehaviour
                 case 3:
                     if (_Type3Manager.craneStatus == 6)
                     {
-                        await Task.Delay(500);
+                        await Task.Delay(700);
                         ropeManager.ArmUnitDownForceStop();
                         _Type3Manager.craneStatus = 7;
                     }
@@ -78,6 +78,7 @@ public class ArmControllerSupport : MonoBehaviour
                 case 3:
                     if (_Type3Manager.craneStatus == 6)
                     {
+                        await Task.Delay(1000);
                         ropeManager.ArmUnitDownForceStop();
                         _Type3Manager.craneStatus = 7;
                     }
