@@ -72,7 +72,6 @@ public class Type2Manager : MonoBehaviour
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(2);
         creditSystem.GetSEPlayer(_SEPlayer);
-        creditSystem.playable = playable;
         timer.limitTimeNow = limitTimeSet;
         timer.GetSEPlayer(_SEPlayer);
 
@@ -116,7 +115,6 @@ public class Type2Manager : MonoBehaviour
         await Task.Delay(3000);
         armController.ArmOpen();
         craneStatus = 0;
-        creditSystem.insertFlag = true;
     }
 
     async void Update()

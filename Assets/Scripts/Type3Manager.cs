@@ -66,7 +66,6 @@ public class Type3Manager : MonoBehaviour
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(3);
         creditSystem.GetSEPlayer(_SEPlayer);
-        creditSystem.playable = playable;
         support.GetManager(3);
         support.GetRopeManager(ropeManager);
         if (soundType == 0) creditSystem.SetCreditSound(0);
@@ -92,7 +91,6 @@ public class Type3Manager : MonoBehaviour
         await Task.Delay(4000);
 
         craneStatus = 0;
-        creditSystem.insertFlag = true;
     }
 
     async void Update()
@@ -113,7 +111,6 @@ public class Type3Manager : MonoBehaviour
             /*if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;*/
-            creditSystem.insertFlag = true;
             switch (soundType)
             {
                 case 0:

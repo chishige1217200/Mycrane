@@ -72,7 +72,6 @@ public class Type1Manager : MonoBehaviour
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(1);
         creditSystem.GetSEPlayer(_SEPlayer);
-        creditSystem.playable = playable;
         getPoint.GetManager(1);
         ropeManager.ArmUnitUp();
         creditSystem.SetCreditSound(0);
@@ -133,7 +132,6 @@ public class Type1Manager : MonoBehaviour
         {
             if (craneBox.CheckPos(9))
             {
-                creditSystem.insertFlag = true;
                 craneStatus = 0;
                 break;
             }

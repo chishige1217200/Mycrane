@@ -13,9 +13,9 @@ public class CreditSystem : MonoBehaviour
     private int nowpaidSum = 0; //投入金額合計
     private int creditPlayedSum = 0; //プレイされたクレジット数
     private bool serviceMode = false; //trueならサービスモード
-    public bool insertFlag = false; //trueならコイン投入可能，初期化処理用
+    //public bool insertFlag = false; //trueならコイン投入可能，初期化処理用
     public bool segUpdateFlag = true; //trueならクレジット情報を7セグに表示，タイマー共存時用
-    public bool playable = true; // trueならプレイ可能，ユーザ指定用
+    //public bool playable = true; // trueならプレイ可能，ユーザ指定用
     public int[,] rateSet = new int[2, 2]; //100円1PLAY，500円6PLAYなどのプリセット?
     private int creditSoundNum = -1; //投入時サウンド番号
     public Text[] priceSet = new Text[2]; //プレイ回数に対応する金額表示(timesSetと連携)
@@ -42,38 +42,35 @@ public class CreditSystem : MonoBehaviour
             rateSet[1, 1] = rateSet[0, 1];
         }
 
-        if (playable) //プレイ可能のとき
+        if (!serviceMode) //非サービスモード時に，7セグに表示を反映
         {
-            if (!serviceMode) //非サービスモード時に，7セグに表示を反映
+            priceSet[0].text = rateSet[0, 0].ToString();
+            timesSet[0].text = rateSet[0, 1].ToString();
+            if (rateSet[0, 0] == rateSet[1, 0] && rateSet[0, 1] == rateSet[1, 1]) // 単一プレイ回数設定時
             {
-                priceSet[0].text = rateSet[0, 0].ToString();
-                timesSet[0].text = rateSet[0, 1].ToString();
-                if (rateSet[0, 0] == rateSet[1, 0] && rateSet[0, 1] == rateSet[1, 1]) // 単一プレイ回数設定時
-                {
-                    priceSet[1].text = ""; //下段側は表示しない
-                    timesSet[1].text = "";
-                }
-                else //2つのレート設定があるとき
-                {
-                    priceSet[1].text = rateSet[1, 0].ToString();
-                    timesSet[1].text = rateSet[1, 1].ToString();
-                }
+                priceSet[1].text = ""; //下段側は表示しない
+                timesSet[1].text = "";
             }
-            else //サービスモード時
+            else //2つのレート設定があるとき
             {
-                priceSet[0].text = "fre";
-                priceSet[1].text = "mod";
-                timesSet[0].text = "e";
-                timesSet[1].text = "e";
-                Credit.text = " F";
-                Debug.Log("サービスモードです");
+                priceSet[1].text = rateSet[1, 0].ToString();
+                timesSet[1].text = rateSet[1, 1].ToString();
             }
+        }
+        else //サービスモード時
+        {
+            priceSet[0].text = "fre";
+            priceSet[1].text = "mod";
+            timesSet[0].text = "e";
+            timesSet[1].text = "e";
+            Credit.text = " F";
+            Debug.Log("サービスモードです");
         }
     }
 
     void Update()
     {
-        if (segUpdateFlag && playable) // segUpdateFlagはタイマー存在機種のみ使用 falseにすると7セグの表示を更新しない
+        if (segUpdateFlag) // segUpdateFlagはタイマー存在機種のみ使用 falseにすると7セグの表示を更新しない
         {
             if (!serviceMode) // 通常時
             {
@@ -94,7 +91,7 @@ public class CreditSystem : MonoBehaviour
 
     public void GetPayment(int cost)
     {
-        if (!serviceMode && insertFlag && playable) //プレイ可能かつサービスモードでないとき
+        if (!serviceMode) //プレイ可能かつサービスモードでないとき
         {
             nowpaid += cost;
             nowpaidSum += cost;
@@ -115,7 +112,7 @@ public class CreditSystem : MonoBehaviour
     public void ResetNowPayment()
     {
         //int paid; //今回精算分
-        if (!serviceMode && playable)
+        if (!serviceMode)
         {
             //paid = nowpaid; //今回の支払い分
             if (nowpaid % rateSet[1, 0] == 0 || nowpaid % rateSet[0, 0] == 0) nowpaid = 0; //新規クレジット用に投入された金額で割り切れる部分のみ精算
@@ -133,7 +130,7 @@ public class CreditSystem : MonoBehaviour
 
     public void ServiceButton()
     {
-        if (!serviceMode && playable)
+        if (!serviceMode)
         {
             creditOld++;
             creditDisplayed = creditOld + creditNew; //クレジット表示を更新

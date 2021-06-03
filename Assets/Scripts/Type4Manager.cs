@@ -76,7 +76,6 @@ public class Type4Manager : MonoBehaviour
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(4);
         creditSystem.GetSEPlayer(_SEPlayer);
-        creditSystem.playable = playable;
         getPoint.GetManager(4);
         ropeManager.ArmUnitUp();
         creditSystem.SetCreditSound(0);
@@ -141,9 +140,7 @@ public class Type4Manager : MonoBehaviour
 
         await Task.Delay(3000);
 
-        creditSystem.insertFlag = true;
         craneStatus = 0;
-
     }
 
     // Update is called once per frame

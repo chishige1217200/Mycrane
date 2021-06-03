@@ -66,7 +66,6 @@ public class Type7Manager : MonoBehaviour
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(7);
         creditSystem.GetSEPlayer(_SEPlayer);
-        creditSystem.playable = playable;
         support.GetManager(7);
         support.GetRopeManager(ropeManager);
         creditSystem.SetCreditSound(0);
@@ -87,7 +86,6 @@ public class Type7Manager : MonoBehaviour
         await Task.Delay(4000);
 
         craneStatus = 0;
-        creditSystem.insertFlag = true;
     }
 
     async void Update()
@@ -109,7 +107,6 @@ public class Type7Manager : MonoBehaviour
             /*if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;*/
-            creditSystem.insertFlag = true;
             //}
         }
 

@@ -67,7 +67,6 @@ public class Type5Manager : MonoBehaviour
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(5);
         creditSystem.GetSEPlayer(_SEPlayer);
-        creditSystem.playable = playable;
         getPoint.GetManager(5);
         ropeManager.ArmUnitUp();
         await Task.Delay(500);
@@ -129,7 +128,6 @@ public class Type5Manager : MonoBehaviour
         {
             if (craneBox.CheckPos(9))
             {
-                creditSystem.insertFlag = true;
                 craneStatus = 0;
                 break;
             }
