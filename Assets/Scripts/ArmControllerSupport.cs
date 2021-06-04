@@ -31,6 +31,13 @@ public class ArmControllerSupport : MonoBehaviour
                         _Type3ArmController.Release();
                     }
                     break;
+                case 7:
+                    if (!_Type7Manager.probability && prizeFlag)
+                    {
+                        Debug.Log("Released.");
+                        _Type3ArmController.Release();
+                    }
+                    break;
             }
         }
         if (collider.tag == "DownLimit")
@@ -158,7 +165,7 @@ public class ArmControllerSupport : MonoBehaviour
             _Type1Manager = transform.parent.gameObject.GetComponent<Type1Manager>();
         if (num == 2)
             _Type2Manager = transform.parent.gameObject.GetComponent<Type2Manager>();*/
-        if (num == 3)
+        if (num == 3 || num == 7)
             _Type3ArmController = transform.parent.parent.gameObject.GetComponent<Type3ArmController>();
     }
     public void GetRopeManager(RopeManager r)
