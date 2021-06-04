@@ -126,6 +126,7 @@ public class Type7Manager : MonoBehaviour
                 isExecuted[craneStatus] = true;
                 await Task.Delay(3000);
                 isExecuted[12] = false;
+                creditSystem.AddCreditPlayed();
                 probability = creditSystem.ProbabilityCheck();
                 Debug.Log("Probability:" + probability);
                 _SEPlayer.PlaySE(1, 1);
@@ -163,7 +164,6 @@ public class Type7Manager : MonoBehaviour
                 _SEPlayer.StopSE(3);
                 _SEPlayer.PlaySE(5, 1);
                 creditSystem.ResetNowPayment();
-                creditSystem.AddCreditPlayed();
                 craneBox.rightMoveFlag = false;
                 craneBox.leftMoveFlag = false;
                 craneBox.backMoveFlag = false;
@@ -296,6 +296,8 @@ public class Type7Manager : MonoBehaviour
         }
         if (!_SEPlayer._AudioSource[4].isPlaying)
             _SEPlayer.PlaySE(4, 1);
+        probability = creditSystem.ProbabilityCheck();
+        Debug.Log("Probability:" + probability);
     }
 
     public void InputLeverCheck() // キーボード，UI共通のレバー処理
@@ -319,27 +321,29 @@ public class Type7Manager : MonoBehaviour
 
         if ((Input.GetKeyDown(KeyCode.I) || lever[1].backFlag) && leverState != 2)
         {
+            Debug.Log("Up");
             leverState = 2;
             ropeManager.ArmUnitUp();
         }
         else if ((Input.GetKeyUp(KeyCode.I) || !lever[1].backFlag) && leverState == 2)
         {
+            Debug.Log("Up Stop");
             leverState = 0;
             ropeManager.ArmUnitUpForceStop();
         }
 
         if ((Input.GetKeyDown(KeyCode.K) || lever[1].forwardFlag) && leverState != 1)
         {
+            Debug.Log("Down");
             leverState = 1;
             ropeManager.ArmUnitDown();
         }
         else if ((Input.GetKeyUp(KeyCode.I) || !lever[1].forwardFlag) && leverState == 1)
         {
+            Debug.Log("Down Stop");
             leverState = 0;
             ropeManager.ArmUnitDownForceStop();
         }
-
-        Debug.Log(leverState);
     }
 
     public void InputKeyCheck()
