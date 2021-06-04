@@ -95,7 +95,7 @@ public class Type7Manager : MonoBehaviour
 
     async void Update()
     {
-        limitTimedisplayed.text = timer.limitTimeNow.ToString();
+        limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
 
         if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
         //craneStatusdisplayed.text = craneStatus.ToString();
