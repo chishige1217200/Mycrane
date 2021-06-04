@@ -263,6 +263,7 @@ public class Type4Manager : MonoBehaviour
                 if (craneStatus == 8) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
             }
             InputKeyCheck(craneStatus);
+            if (ropeManager.DownFinished() && craneStatus == 8) craneStatus = 9;
         }
         if (craneStatus == 9)
         {   //アーム掴む
@@ -294,6 +295,7 @@ public class Type4Manager : MonoBehaviour
                         armController.MotorPower(rightCatchArmpower, 1);
                     }
                 }
+                if (ropeManager.UpFinished() && craneStatus == 10) craneStatus = 11;
             }
         }
         if (craneStatus == 11)

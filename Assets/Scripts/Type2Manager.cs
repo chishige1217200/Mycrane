@@ -244,6 +244,7 @@ public class Type2Manager : MonoBehaviour
                 if (craneStatus == 6) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
             }
             if (craneStatus == 6 && isExecuted[6]) InputKeyCheck(craneStatus); //awaitによる時差実行を防止
+            if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
             //アーム下降音再生
             //アーム下降;
         }
@@ -302,6 +303,7 @@ public class Type2Manager : MonoBehaviour
                 armPower -= 0.5f;
                 armController.MotorPower(armPower);
             }
+            if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
             //アーム上昇音再生;
             //アーム上昇;
         }
