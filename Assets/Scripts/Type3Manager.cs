@@ -298,6 +298,7 @@ public class Type3Manager : MonoBehaviour
                     }
                 }
             }
+            if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
             //アーム下降音再生
             //アーム下降;
         }
@@ -362,6 +363,7 @@ public class Type3Manager : MonoBehaviour
                 armPower -= 0.5f;
                 armController.MotorPower(armPower);
             }
+            if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
             //アーム上昇音再生;
             //アーム上昇;
         }

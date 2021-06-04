@@ -9,19 +9,17 @@ public class RopePoint : MonoBehaviour
     Rigidbody rb; //Rigidbody情報
     public bool moveUpFlag = false; //上昇中か
     public bool moveDownFlag = false; //下降中か
-    public bool upCompleteFlag = false; //上昇終了時
-    public bool downCompleteFlag = false; //下降終了時
     public float upSpeed = 0.001f; //上昇速度
     public float downSpeed = 0.001f; //下降速度
     Type1Manager _Type1Manager;
     Type2Manager _Type2Manager;
-    Type3Manager _Type3Manager;
+    //Type3Manager _Type3Manager;
     Type4Manager _Type4Manager;
     Type5Manager _Type5Manager;
     Type7Manager _Type7Manager;
     [SerializeField] int playerNumber = 1;
     int craneType = -1;
-    bool upRefusedFlag = false; // 上昇拒否フラグ trueなら上昇禁止
+    public bool upRefusedFlag { get; private set; } = false; // 上昇拒否フラグ trueなら上昇禁止
 
     void Start()
     {
@@ -39,7 +37,7 @@ public class RopePoint : MonoBehaviour
         craneType = num;
         if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
         if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
-        if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
+        //if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
         if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
         if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
         if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
@@ -52,6 +50,7 @@ public class RopePoint : MonoBehaviour
             if (moveUpFlag)
             {
                 moveUpFlag = false;
+                upRefusedFlag = true;
                 this.transform.localPosition = new Vector3(0, this.transform.localPosition.y, 0);
                 this.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 if (last)
@@ -61,8 +60,8 @@ public class RopePoint : MonoBehaviour
                         if (_Type1Manager.craneStatus == 8) _Type1Manager.craneStatus = 9;
                     if (craneType == 2)
                         if (_Type2Manager.craneStatus == 8) _Type2Manager.craneStatus = 9;
-                    if (craneType == 3)
-                        if (_Type3Manager.craneStatus == 8) _Type3Manager.craneStatus = 9;
+                    /*if (craneType == 3)
+                        if (_Type3Manager.craneStatus == 8) _Type3Manager.craneStatus = 9;*/
                     if (craneType == 4)
                         if (_Type4Manager.craneStatus == 10) _Type4Manager.craneStatus = 11;
                     if (craneType == 5)
@@ -113,8 +112,8 @@ public class RopePoint : MonoBehaviour
                         if (_Type1Manager.craneStatus == 6) _Type1Manager.craneStatus = 7;
                     if (craneType == 2)
                         if (_Type2Manager.craneStatus == 6) _Type2Manager.craneStatus = 7;
-                    if (craneType == 3)
-                        if (_Type3Manager.craneStatus == 6) _Type3Manager.craneStatus = 7;
+                    /*if (craneType == 3)
+                        if (_Type3Manager.craneStatus == 6) _Type3Manager.craneStatus = 7;*/
                     if (craneType == 4)
                         if (_Type4Manager.craneStatus == 8) _Type4Manager.craneStatus = 9;
                     if (craneType == 5)

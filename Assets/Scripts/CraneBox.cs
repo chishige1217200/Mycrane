@@ -14,7 +14,6 @@ public class CraneBox : MonoBehaviour
     public bool forwardRefusedFlag = false;
     public float moveSpeed = 0.001f;
     [SerializeField] bool supportDirectionChanger = false; // true:x-move false:z-move
-    [SerializeField] int playerNumber = 1;
     GameObject craneBoxSupport;
     GameObject ropeHost;
     //Type1Manager _Type1Manager;
