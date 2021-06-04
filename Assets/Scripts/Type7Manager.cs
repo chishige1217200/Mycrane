@@ -15,12 +15,10 @@ public class Type7Manager : MonoBehaviour
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
     float backArmpowersuccess = 100; //同確率時
-    int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
-    float audioPitch = 1f; //サウンドのピッチ
+    public int limitTimeSet = 60; //操作制限時間
     private bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
-    public int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     public float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
@@ -31,10 +29,14 @@ public class Type7Manager : MonoBehaviour
     GetPoint getPoint;
     RopeManager ropeManager;
     ArmControllerSupport support;
+    Lever[] lever = new Lever[2];
+    Timer timer;
+    private int leverState = 0; // 0:ニュートラル，1:下降中，2:上昇中
 
     //For test-----------------------------------------
 
     public Text craneStatusdisplayed;
+    public TextMesh limitTimedisplayed;
 
     //-------------------------------------------------
 
@@ -45,8 +47,11 @@ public class Type7Manager : MonoBehaviour
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        lever[0] = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
+        lever[1] = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").GetComponent<Lever>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
+        timer = this.transform.Find("Timer").GetComponent<Timer>();
 
         // クレジット情報登録
         creditSystem.rateSet[0, 0] = priceSet[0];
@@ -66,11 +71,11 @@ public class Type7Manager : MonoBehaviour
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(7);
         creditSystem.GetSEPlayer(_SEPlayer);
+        timer.limitTimeNow = limitTimeSet;
+        timer.limitTime = limitTimeSet;
         support.GetManager(7);
         support.GetRopeManager(ropeManager);
         creditSystem.SetCreditSound(0);
-        _BGMPlayer.SetAudioPitch(audioPitch);
-        _SEPlayer.SetAudioPitch(audioPitch);
         armController.GetManager(7);
 
         getPoint.GetManager(7);
@@ -90,11 +95,13 @@ public class Type7Manager : MonoBehaviour
 
     async void Update()
     {
+        limitTimedisplayed.text = timer.limitTimeNow.ToString();
+
         if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
         //craneStatusdisplayed.text = craneStatus.ToString();
         if (craneStatus == -1)
         {
-            _BGMPlayer.StopBGM(soundType);
+            _BGMPlayer.StopBGM(0);
             //コイン投入無効化;
         }
 
@@ -118,8 +125,13 @@ public class Type7Manager : MonoBehaviour
             {
                 isExecuted[craneStatus] = true;
                 await Task.Delay(3000);
+                isExecuted[12] = false;
+                probability = creditSystem.ProbabilityCheck();
+                Debug.Log("Probability:" + probability);
                 _SEPlayer.PlaySE(1, 1);
                 await Task.Delay(3000);
+                timer.StartTimer();
+                _BGMPlayer.PlayBGM(1);
                 if (craneStatus == 1) craneStatus = 2;
             }
 
@@ -128,71 +140,19 @@ public class Type7Manager : MonoBehaviour
 
         if (craneStatus == 2)
         { //移動可能
-            _BGMPlayer.PlayBGM(1);
-            InputKeyCheck(craneStatus);
-            //コイン投入無効化;
-            /*if (!isExecuted[craneStatus])
+            if (timer.limitTimeNow <= 10)
             {
-                isExecuted[craneStatus] = true;
-            }*/
-            //クレーン右移動;
-            //右移動効果音ループ再生;
-        }
-
-        if (craneStatus == 3)
-        {
-            InputKeyCheck(craneStatus);         //奥移動ボタン有効化;
-            /*if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-
-            }*/
-            //右移動効果音ループ再生停止;
-        }
-
-        if (craneStatus == 4)
-        { //奥移動中
-            InputKeyCheck(craneStatus);
-            //クレーン奥移動;
-            /*if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-
-            }*/
-            //奥移動効果音ループ再生;
-        }
-
-        if (craneStatus == 5)
-        {
-            if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-                await Task.Delay(1000);
-                ropeManager.ArmUnitDown();
-                if (craneStatus == 5) craneStatus = 6;
-            }
-            //奥移動効果音ループ再生停止;
-            //アーム開く音再生;
-            //アーム開く;
-        }
-
-        if (craneStatus == 6)
-        {
-            if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-                if (downTime > 0 && downTime <= 4600)
+                if (!isExecuted[craneStatus])
                 {
-                    await Task.Delay(downTime);
-                    if (craneStatus == 6)
-                    {
-                        ropeManager.ArmUnitDownForceStop();
-                        craneStatus = 7;
-                    }
+                    isExecuted[craneStatus] = true;
+                    _BGMPlayer.StopBGM(1);
+                    _SEPlayer.PlaySE(2, 1);
                 }
+                if (!_SEPlayer._AudioSource[2].isPlaying && timer.limitTimeNow <= 9) _SEPlayer.PlaySE(3, 2147483647);
             }
-            //アーム下降音再生
-            //アーム下降;
+            if (timer.limitTimeNow == 0) craneStatus = 7;
+            InputKeyCheck();
+            InputLeverCheck();
         }
 
         if (craneStatus == 7)
@@ -200,6 +160,18 @@ public class Type7Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
+                _SEPlayer.StopSE(3);
+                _SEPlayer.PlaySE(5, 1);
+                creditSystem.ResetNowPayment();
+                creditSystem.AddCreditPlayed();
+                craneBox.rightMoveFlag = false;
+                craneBox.leftMoveFlag = false;
+                craneBox.backMoveFlag = false;
+                craneBox.forwardMoveFlag = false;
+                ropeManager.ArmUnitDownForceStop();
+                ropeManager.ArmUnitUpForceStop();
+                leverState = 0;
+
                 if (probability) armPower = catchArmpowersuccess;
                 else armPower = catchArmpower;
                 armController.MotorPower(armPower);
@@ -231,6 +203,7 @@ public class Type7Manager : MonoBehaviour
                 armPower -= 0.5f;
                 armController.MotorPower(armPower);
             }
+            if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
             //アーム上昇音再生;
             //アーム上昇;
         }
@@ -297,6 +270,7 @@ public class Type7Manager : MonoBehaviour
                 for (int i = 0; i < 12; i++)
                     isExecuted[i] = false;
                 await Task.Delay(1000);
+                timer.limitTimeNow = limitTimeSet;
                 if (creditSystem.creditDisplayed > 0)
                     craneStatus = 1;
                 else
@@ -320,111 +294,66 @@ public class Type7Manager : MonoBehaviour
                 creditSystem.ResetCostProbability();
                 break;
         }
-        /*
-                if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
-                {
-                    if (getSoundNum != -1)
-                        _SEPlayer.PlaySE(getSoundNum, 1);
-                }*/ //getSoundNumに定数を入れる
+        if (!_SEPlayer._AudioSource[4].isPlaying)
+            _SEPlayer.PlaySE(4, 1);
     }
 
-    public void InputKeyCheck(int num)
+    public void InputLeverCheck() // キーボード，UI共通のレバー処理
     {
-        switch (num)
+        if (Input.GetKey(KeyCode.H) || lever[0].rightFlag)
+            craneBox.rightMoveFlag = true;
+        else if (Input.GetKeyUp(KeyCode.H) || !lever[0].rightFlag)
+            craneBox.rightMoveFlag = false;
+        if (Input.GetKey(KeyCode.F) || lever[0].leftFlag)
+            craneBox.leftMoveFlag = true;
+        else if (Input.GetKeyUp(KeyCode.F) || !lever[0].leftFlag)
+            craneBox.leftMoveFlag = false;
+        if (Input.GetKey(KeyCode.T) || lever[0].backFlag)
+            craneBox.backMoveFlag = true;
+        else if (Input.GetKeyUp(KeyCode.T) || !lever[0].backFlag)
+            craneBox.backMoveFlag = false;
+        if (Input.GetKey(KeyCode.G) || lever[0].forwardFlag)
+            craneBox.forwardMoveFlag = true;
+        else if (Input.GetKeyUp(KeyCode.G) || !lever[0].forwardFlag)
+            craneBox.forwardMoveFlag = false;
+
+        if ((Input.GetKeyDown(KeyCode.I) || lever[1].backFlag) && leverState != 2)
         {
-            case 1:
-                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonPushed)
-                {
-                    buttonPushed = true;
-                    if (craneStatus == 1)
-                    {
-                        creditSystem.ResetNowPayment();
-                        creditSystem.AddCreditPlayed();
-                        isExecuted[12] = false;
-                        probability = creditSystem.ProbabilityCheck();
-                        Debug.Log("Probability:" + probability);
-                    }
-                    craneStatus = 2;
-                    craneBox.rightMoveFlag = true;
-                }
-                break;
-            //投入を無効化
-            case 2:
-                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed)
-                {
-                    craneStatus = 3;
-                    craneBox.rightMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
-            case 3:
-                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed)
-                {
-                    buttonPushed = true;
-                    craneStatus = 4;
-                    craneBox.backMoveFlag = true;
-                }
-                break;
-            case 4:
-                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed)
-                {
-                    craneStatus = 5;
-                    craneBox.backMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
+            leverState = 2;
+            ropeManager.ArmUnitUp();
         }
+        else if ((Input.GetKeyUp(KeyCode.I) || !lever[1].backFlag) && leverState == 2)
+        {
+            leverState = 0;
+            ropeManager.ArmUnitUpForceStop();
+        }
+
+        if ((Input.GetKeyDown(KeyCode.K) || lever[1].forwardFlag) && leverState != 1)
+        {
+            leverState = 1;
+            ropeManager.ArmUnitDown();
+        }
+        else if ((Input.GetKeyUp(KeyCode.I) || !lever[1].forwardFlag) && leverState == 1)
+        {
+            leverState = 0;
+            ropeManager.ArmUnitDownForceStop();
+        }
+
+        Debug.Log(leverState);
+    }
+
+    public void InputKeyCheck()
+    {
+        if (Input.GetKeyDown(KeyCode.O)) armController.ArmOpen();
+        if (Input.GetKeyDown(KeyCode.L)) armController.ArmClose();
     }
 
     public void ButtonDown(int num)
     {
-        switch (num)
+        if (craneStatus >= 2 && craneStatus <= 3)
         {
-            case 1:
-                if (craneStatus == 1 && !buttonPushed)
-                {
-                    buttonPushed = true;
-                    craneStatus = 2;
-                    creditSystem.ResetNowPayment();
-                    creditSystem.AddCreditPlayed();
-                    isExecuted[12] = false;
-                    probability = creditSystem.ProbabilityCheck();
-                    Debug.Log("Probability:" + probability);
-                }
-                if (craneStatus == 2 && buttonPushed)
-                    craneBox.rightMoveFlag = true;
-                break;
-            case 2:
-                if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
-                {
-                    buttonPushed = true;
-                    craneStatus = 4;
-                    craneBox.backMoveFlag = true;
-                }
-                break;
-        }
-    }
-
-    public void ButtonUp(int num)
-    {
-        switch (num)
-        {
-            case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
-                {
-                    craneStatus = 3;
-                    craneBox.rightMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
-            case 2:
-                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
-                {
-                    craneStatus = 5;
-                    craneBox.backMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
+            if (num == 0) armController.ArmOpen();
+            if (num == 1) armController.ArmClose();
         }
     }
 
