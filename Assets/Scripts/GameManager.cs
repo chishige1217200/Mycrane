@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #elif UNITY_WEBPLAYER
-                Application.OpenURL("http://www.yahoo.co.jp/");
+                Application.OpenURL("http://www.google.com");
 #else
         Application.Quit();
 #endif
@@ -34,25 +34,28 @@ public class GameManager : MonoBehaviour
         switch (num)
         {
             case 0:
-                SceneManager.LoadScene("Title");
+                SceneManager.LoadSceneAsync("Title");
                 break;
             case 1:
-                SceneManager.LoadScene("KroonTest");
+                SceneManager.LoadSceneAsync("KroonTest");
                 break;
             case 2:
-                SceneManager.LoadScene("Type2Test");
+                SceneManager.LoadSceneAsync("Type2Test");
                 break;
             case 3:
-                SceneManager.LoadScene("Type3Test");
+                SceneManager.LoadSceneAsync("Type3Test");
                 break;
             case 4:
-                SceneManager.LoadScene("Type4Test");
+                SceneManager.LoadSceneAsync("Type4Test");
                 break;
             case 5:
-                SceneManager.LoadScene("Type5Test");
+                SceneManager.LoadSceneAsync("Type5Test");
                 break;
             case 7:
-                SceneManager.LoadScene("Type7Test");
+                SceneManager.LoadSceneAsync("Type7Test");
+                break;
+            case 100:
+                SceneManager.LoadSceneAsync("GameCenterTest");
                 break;
         }
     }
