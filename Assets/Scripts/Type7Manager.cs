@@ -325,7 +325,7 @@ public class Type7Manager : MonoBehaviour
             leverState = 2;
             ropeManager.ArmUnitUp();
         }
-        if ((Input.GetKeyDown(KeyCode.K) || lever[1].forwardFlag) && leverState != 1)
+        if ((Input.GetKeyDown(KeyCode.K) || lever[1].forwardFlag) && leverState != 1 && !support.isShieldcollis)
         {
             Debug.Log("Down");
             leverState = 1;
@@ -337,6 +337,8 @@ public class Type7Manager : MonoBehaviour
             ropeManager.ArmUnitUpForceStop();
             ropeManager.ArmUnitDownForceStop();
         }
+
+        if (support.isShieldcollis) ropeManager.ArmUnitDownForceStop();
     }
 
     public void InputKeyCheck()

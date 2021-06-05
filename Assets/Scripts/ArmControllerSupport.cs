@@ -17,6 +17,7 @@ public class ArmControllerSupport : MonoBehaviour
     int craneType = -1;
     public int pushTime = 0;
     public bool prizeFlag = false;
+    public bool isShieldcollis = false; // アームがShieldに衝突しているかどうか
 
     async void OnTriggerEnter(Collider collider)
     {
@@ -91,7 +92,7 @@ public class ArmControllerSupport : MonoBehaviour
                     }
                     break;
             }
-
+            isShieldcollis = true;
         }
     }
 
@@ -119,6 +120,10 @@ public class ArmControllerSupport : MonoBehaviour
         {
             Debug.Log("prize outTrigger");
             prizeFlag = false;
+        }
+        if (collider.tag == "Shield")
+        {
+            isShieldcollis = false;
         }
     }
     async void OnCollisionEnter(Collision collision)
