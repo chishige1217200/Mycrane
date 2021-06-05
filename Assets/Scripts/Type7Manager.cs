@@ -325,23 +325,16 @@ public class Type7Manager : MonoBehaviour
             leverState = 2;
             ropeManager.ArmUnitUp();
         }
-        else if ((Input.GetKeyUp(KeyCode.I) || !lever[1].backFlag) && leverState == 2)
-        {
-            Debug.Log("Up Stop");
-            leverState = 0;
-            ropeManager.ArmUnitUpForceStop();
-        }
-
         if ((Input.GetKeyDown(KeyCode.K) || lever[1].forwardFlag) && leverState != 1)
         {
             Debug.Log("Down");
             leverState = 1;
             ropeManager.ArmUnitDown();
         }
-        else if ((Input.GetKeyUp(KeyCode.I) || !lever[1].forwardFlag) && leverState == 1)
+        if (!Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K) && !lever[1].backFlag && !lever[1].forwardFlag)
         {
-            Debug.Log("Down Stop");
             leverState = 0;
+            ropeManager.ArmUnitUpForceStop();
             ropeManager.ArmUnitDownForceStop();
         }
     }
