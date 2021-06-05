@@ -20,6 +20,7 @@ public class RopePoint : MonoBehaviour
     //[SerializeField] int playerNumber = 1;
     int craneType = -1;
     public bool upRefusedFlag { get; private set; } = false; // 上昇拒否フラグ trueなら上昇禁止
+    public bool downRefusedFlag { get; private set; } = false; // 下降拒否フラグ trueなら下降禁止
 
     void Start()
     {
@@ -28,7 +29,7 @@ public class RopePoint : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (moveDownFlag) RopeDown();
+        if (moveDownFlag && !downRefusedFlag) RopeDown();
         if (moveUpFlag && !upRefusedFlag) RopeUp();
     }
 
@@ -78,6 +79,14 @@ public class RopePoint : MonoBehaviour
                     rb.isKinematic = true;
                 }
         }
+
+        if (collider.tag == "DownStopPoint")
+        {
+            if (parent)
+            {
+                downRefusedFlag = false;
+            }
+        }
     }
 
     void OnTriggerStay(Collider collider)
@@ -108,6 +117,7 @@ public class RopePoint : MonoBehaviour
                 if (moveDownFlag)
                 {
                     moveDownFlag = false;
+                    downRefusedFlag = true;
                     /*if (craneType == 1)
                         if (_Type1Manager.craneStatus == 6) _Type1Manager.craneStatus = 7;*/
                     /*if (craneType == 2)
