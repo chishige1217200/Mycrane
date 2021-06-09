@@ -320,11 +320,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863929305383291
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,7 +339,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4492863929305383290
 Transform:
@@ -494,7 +491,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4492863929332730795
 Transform:
@@ -738,6 +735,7 @@ MonoBehaviour:
   playerNumber: 1
   pushTime: 0
   prizeFlag: 0
+  isShieldcollis: 0
 --- !u!1 &4492863929335858788
 GameObject:
   m_ObjectHideFlags: 0
@@ -1891,11 +1889,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863929359917680
 GameObject:
   m_ObjectHideFlags: 0
@@ -2059,11 +2054,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863929370999044
 GameObject:
   m_ObjectHideFlags: 0
@@ -2455,7 +2447,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844a688a4c4fd5843b1746d8b6144944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ropePointCount: 18
   ropePoint:
   - {fileID: 4492863929896950715}
   - {fileID: 4492863930406901313}
@@ -2745,11 +2736,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863929488353424
 GameObject:
   m_ObjectHideFlags: 0
@@ -2954,7 +2942,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4492863929497690446
 Transform:
@@ -4094,11 +4082,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863929575780101
 GameObject:
   m_ObjectHideFlags: 0
@@ -4369,11 +4354,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863929589477397
 GameObject:
   m_ObjectHideFlags: 0
@@ -4701,7 +4683,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4492863929601853985
 Transform:
@@ -4941,11 +4923,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863929606008761
 GameObject:
   m_ObjectHideFlags: 0
@@ -6139,11 +6118,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863929664403391
 GameObject:
   m_ObjectHideFlags: 0
@@ -6188,9 +6164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creditDisplayed: 0
-  insertFlag: 0
   segUpdateFlag: 1
-  playable: 1
   priceSet:
   - {fileID: 4492863931097440666}
   - {fileID: 4492863930149896370}
@@ -7472,11 +7446,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863929739219459
 GameObject:
   m_ObjectHideFlags: 0
@@ -7858,6 +7829,7 @@ MonoBehaviour:
   priceSet: 64000000f4010000
   timesSet: 0100000006000000
   armApertures: 80
+  soundType: 0
   buttonPushed: 0
   player2: 0
   playable: 1
@@ -7921,11 +7893,12 @@ MonoBehaviour:
   priceSet: 64000000f4010000
   timesSet: 0100000006000000
   armApertures: 80
+  soundType: 0
   buttonPushed: 0
   player2: 1
   playable: 1
   button3: 1
-  startPoint: {x: 0.2, y: 0.2}
+  startPoint: {x: 0, y: 0}
   homePoint: {x: 0, y: 0}
   prizezoneType: 6
   craneStatusdisplayed: {fileID: 0}
@@ -8329,11 +8302,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863929790408328
 GameObject:
   m_ObjectHideFlags: 0
@@ -8497,11 +8467,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863929791125495
 GameObject:
   m_ObjectHideFlags: 0
@@ -8665,11 +8632,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863929791648747
 GameObject:
   m_ObjectHideFlags: 0
@@ -8833,11 +8797,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863929794836272
 GameObject:
   m_ObjectHideFlags: 0
@@ -9001,11 +8962,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863929795427380
 GameObject:
   m_ObjectHideFlags: 0
@@ -9744,11 +9702,8 @@ MonoBehaviour:
   last: 1
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863929858919808
 GameObject:
   m_ObjectHideFlags: 0
@@ -10482,11 +10437,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!59 &4492863929896950712
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -10959,11 +10911,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863929921636858
 GameObject:
   m_ObjectHideFlags: 0
@@ -12261,11 +12210,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863929998658335
 GameObject:
   m_ObjectHideFlags: 0
@@ -14893,7 +14839,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4492863930154331413
 Transform:
@@ -16284,7 +16230,6 @@ MonoBehaviour:
   forwardRefusedFlag: 0
   moveSpeed: 0.002
   supportDirectionChanger: 0
-  playerNumber: 1
   goPoint: {x: 0, y: 0}
   goPositionFlag: 0
 --- !u!1 &4492863930255312680
@@ -16304,7 +16249,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4492863930255312683
 Transform:
@@ -18285,11 +18230,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863930377164874
 GameObject:
   m_ObjectHideFlags: 0
@@ -18333,7 +18275,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844a688a4c4fd5843b1746d8b6144944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ropePointCount: 18
   ropePoint:
   - {fileID: 4492863930565201922}
   - {fileID: 4492863929580824372}
@@ -18588,11 +18529,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!59 &4492863930392728924
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -19084,11 +19022,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863930408128327
 GameObject:
   m_ObjectHideFlags: 0
@@ -19772,9 +19707,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creditDisplayed: 0
-  insertFlag: 0
   segUpdateFlag: 1
-  playable: 1
   priceSet:
   - {fileID: 4492863931164846485}
   - {fileID: 4492863929495063510}
@@ -20480,11 +20413,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863930486521488
 GameObject:
   m_ObjectHideFlags: 0
@@ -21757,11 +21687,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!59 &4492863930565201923
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -22067,11 +21994,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!59 &4492863930591971601
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -22270,11 +22194,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863930613883309
 GameObject:
   m_ObjectHideFlags: 0
@@ -22473,11 +22394,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863930637454295
 GameObject:
   m_ObjectHideFlags: 0
@@ -24560,11 +24478,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863930696602761
 GameObject:
   m_ObjectHideFlags: 0
@@ -25628,11 +25543,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863930752849532
 GameObject:
   m_ObjectHideFlags: 0
@@ -26453,7 +26365,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4492863930818520425}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.35, y: 1.9, z: 0}
+  m_LocalPosition: {x: 0, y: 1.4, z: 0}
   m_LocalScale: {x: 0.19999999, y: 0.049999997, z: 0.19999999}
   m_Children: []
   m_Father: {fileID: 4492863930248853876}
@@ -27747,11 +27659,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863930917637959
 GameObject:
   m_ObjectHideFlags: 0
@@ -28552,11 +28461,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863930975615813
 GameObject:
   m_ObjectHideFlags: 0
@@ -28680,7 +28586,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4492863930986920552
 Transform:
   m_ObjectHideFlags: 0
@@ -29314,11 +29220,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863931036916386
 GameObject:
   m_ObjectHideFlags: 0
@@ -29556,11 +29459,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863931047332649
 GameObject:
   m_ObjectHideFlags: 0
@@ -30188,6 +30088,7 @@ MonoBehaviour:
   playerNumber: 2
   pushTime: 0
   prizeFlag: 0
+  isShieldcollis: 0
 --- !u!1 &4492863931116370998
 GameObject:
   m_ObjectHideFlags: 0
@@ -30444,11 +30345,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863931121139786
 GameObject:
   m_ObjectHideFlags: 0
@@ -31136,11 +31034,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863931144696469
 GameObject:
   m_ObjectHideFlags: 0
@@ -31941,11 +31836,8 @@ MonoBehaviour:
   last: 0
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 1
 --- !u!1 &4492863931216307443
 GameObject:
   m_ObjectHideFlags: 0
@@ -33481,11 +33373,8 @@ MonoBehaviour:
   last: 1
   moveUpFlag: 0
   moveDownFlag: 0
-  upCompleteFlag: 0
-  downCompleteFlag: 0
   upSpeed: 0.002
   downSpeed: 0.002
-  playerNumber: 2
 --- !u!1 &4492863931291733527
 GameObject:
   m_ObjectHideFlags: 0
@@ -33623,7 +33512,6 @@ MonoBehaviour:
   forwardRefusedFlag: 0
   moveSpeed: 0.002
   supportDirectionChanger: 0
-  playerNumber: 2
   goPoint: {x: 0, y: 0}
   goPositionFlag: 0
 --- !u!1 &4492863931295147692
