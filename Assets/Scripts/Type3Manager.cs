@@ -19,7 +19,6 @@ public class Type3Manager : MonoBehaviour
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
     public int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
-    [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     public float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
@@ -29,6 +28,8 @@ public class Type3Manager : MonoBehaviour
     GetPoint getPoint;
     RopeManager ropeManager;
     ArmControllerSupport support;
+    MachineHost host;
+    GameObject canvas;
 
     //For test-----------------------------------------
 
@@ -40,6 +41,8 @@ public class Type3Manager : MonoBehaviour
     {
         Transform temp;
         // 様々なコンポーネントの取得
+        host = this.transform.Find("CP").GetComponent<MachineHost>();
+        canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
@@ -95,7 +98,9 @@ public class Type3Manager : MonoBehaviour
 
     async void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
+        if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
+        if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
         //craneStatusdisplayed.text = craneStatus.ToString();
         if (craneStatus == -1)
         {
@@ -534,104 +539,117 @@ public class Type3Manager : MonoBehaviour
 
     public void InputKeyCheck(int num)
     {
-        switch (num)
+        if (host.playable)
         {
-            case 1:
-                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonPushed)
-                {
-                    buttonPushed = true;
-                    if (craneStatus == 1)
+            switch (num)
+            {
+                case 1:
+                    if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonPushed)
                     {
+                        buttonPushed = true;
+                        if (craneStatus == 1)
+                        {
+                            creditSystem.ResetNowPayment();
+                            creditSystem.AddCreditPlayed();
+                            isExecuted[12] = false;
+                            probability = creditSystem.ProbabilityCheck();
+                            Debug.Log("Probability:" + probability);
+                        }
+                        craneStatus = 2;
+                        craneBox.rightMoveFlag = true;
+                    }
+                    break;
+                //投入を無効化
+                case 2:
+                    if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed)
+                    {
+                        craneStatus = 3;
+                        craneBox.rightMoveFlag = false;
+                        buttonPushed = false;
+                    }
+                    break;
+                case 3:
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed)
+                    {
+                        buttonPushed = true;
+                        craneStatus = 4;
+                        craneBox.backMoveFlag = true;
+                    }
+                    break;
+                case 4:
+                    if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed)
+                    {
+                        craneStatus = 5;
+                        craneBox.backMoveFlag = false;
+                        buttonPushed = false;
+                    }
+                    break;
+            }
+        }
+    }
+
+    public void ButtonDown(int num)
+    {
+        if (host.playable)
+        {
+            switch (num)
+            {
+                case 1:
+                    if (craneStatus == 1 && !buttonPushed)
+                    {
+                        buttonPushed = true;
+                        craneStatus = 2;
                         creditSystem.ResetNowPayment();
                         creditSystem.AddCreditPlayed();
                         isExecuted[12] = false;
                         probability = creditSystem.ProbabilityCheck();
                         Debug.Log("Probability:" + probability);
                     }
-                    craneStatus = 2;
-                    craneBox.rightMoveFlag = true;
-                }
-                break;
-            //投入を無効化
-            case 2:
-                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed)
-                {
-                    craneStatus = 3;
-                    craneBox.rightMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
-            case 3:
-                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed)
-                {
-                    buttonPushed = true;
-                    craneStatus = 4;
-                    craneBox.backMoveFlag = true;
-                }
-                break;
-            case 4:
-                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed)
-                {
-                    craneStatus = 5;
-                    craneBox.backMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
-        }
-    }
-
-    public void ButtonDown(int num)
-    {
-        switch (num)
-        {
-            case 1:
-                if (craneStatus == 1 && !buttonPushed)
-                {
-                    buttonPushed = true;
-                    craneStatus = 2;
-                    creditSystem.ResetNowPayment();
-                    creditSystem.AddCreditPlayed();
-                    isExecuted[12] = false;
-                    probability = creditSystem.ProbabilityCheck();
-                    Debug.Log("Probability:" + probability);
-                }
-                if (craneStatus == 2 && buttonPushed)
-                    craneBox.rightMoveFlag = true;
-                break;
-            case 2:
-                if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
-                {
-                    buttonPushed = true;
-                    craneStatus = 4;
-                    craneBox.backMoveFlag = true;
-                }
-                break;
+                    if (craneStatus == 2 && buttonPushed)
+                        craneBox.rightMoveFlag = true;
+                    break;
+                case 2:
+                    if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
+                    {
+                        buttonPushed = true;
+                        craneStatus = 4;
+                        craneBox.backMoveFlag = true;
+                    }
+                    break;
+            }
         }
     }
 
     public void ButtonUp(int num)
     {
-        switch (num)
+        if (host.playable)
         {
-            case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
-                {
-                    craneStatus = 3;
-                    craneBox.rightMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
-            case 2:
-                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
-                {
-                    craneStatus = 5;
-                    craneBox.backMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
+            switch (num)
+            {
+                case 1:
+                    if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
+                    {
+                        craneStatus = 3;
+                        craneBox.rightMoveFlag = false;
+                        buttonPushed = false;
+                    }
+                    break;
+                case 2:
+                    if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
+                    {
+                        craneStatus = 5;
+                        craneBox.backMoveFlag = false;
+                        buttonPushed = false;
+                    }
+                    break;
+            }
         }
     }
 
+    public void InsertCoin()
+    {
+        if (host.playable) creditSystem.GetPayment(100);
+    }
     public void Testadder()
     {
         Debug.Log("Clicked.");
