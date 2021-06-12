@@ -31,6 +31,9 @@
 - Type4ArmController.cs : Type4のアーム開閉制御
 - Type4Manager.cs : Type4の統括制御
 - Type4Selector : 1P・2PのType4Manager情報を他のクラスに送る
+- Type5ArmController.cs : Type5のアーム開閉制御
+- Type5Manager.cs : Type5の統括制御
+- Type7Manager : Type7の統括制御
 - VideoPlay.cs：ビデオを再生する
 
 ## .gitignoreについて
