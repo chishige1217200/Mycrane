@@ -18,6 +18,7 @@
 - RopeManager.cs : 各RopePointインスタンスに上昇・下降指示を送信
 - RopePoint.cs : ロープの質点の物理演算情報管理・実際の上昇・下降処理を行う
 - SEPlayer.cs : SE再生（Unity組み込みのやつが使いにくかったため）
+- Timer.cs : 共通のタイマー機能
 - Tube.cs : 筒の部分の伸び縮みを制御
 - Type1ArmController.cs : Type1のアーム開閉制御
 - Type1Manager.cs : Type1の統括制御
@@ -26,6 +27,11 @@
 - Type2Manager.cs : Type2の統括制御
 - Type3ArmController.cs : Type3のアーム開閉制御
 - Type3Manager.cs : Type3の統括制御
+- Type4ArmUnitRoter.cs : Type4のアームユニット回転
+- Type4ArmController.cs : Type4のアーム開閉制御
+- Type4Manager.cs : Type4の統括制御
+- Type4Selector : 1P・2PのType4Manager情報を他のクラスに送る
+- VideoPlay.cs：ビデオを再生する
 
 ## .gitignoreについて
 膨大なファイルになるため，音声ファイルと認証関係のファイルを除外しています．
