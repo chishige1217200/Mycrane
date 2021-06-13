@@ -10,7 +10,7 @@ public class Type4Manager : MonoBehaviour
     float leftCatchArmpower = 20f; //左アームパワー
     float rightCatchArmpower = 20f; //右アームパワー
     float armApertures = 80f; //開口率
-    int operationType = 0; //0:ボタン式，1:レバー式
+    int operationType = 1; //0:ボタン式，1:レバー式
     int catchLong = 2000; //キャッチに要する時間(m秒)
     int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
     int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
@@ -496,7 +496,7 @@ public class Type4Manager : MonoBehaviour
     {
         if (!player2)
         {
-            if (isExecuted[15] && ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
+            if (isExecuted[15] && ((Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
             {
                 leverTilted = true;
@@ -506,7 +506,7 @@ public class Type4Manager : MonoBehaviour
                 _SEPlayer.PlaySE(1, 1);
             }
 
-            if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)
+            if ((Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.G)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
             {
                 leverTilted = true;
@@ -514,7 +514,7 @@ public class Type4Manager : MonoBehaviour
                 _SEPlayer.StopSE(2);
                 _SEPlayer.PlaySE(1, 1);
             }
-            if ((!Input.GetKey(KeyCode.RightArrow) && !Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow)
+            if ((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
             && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
             {
                 leverTilted = false;
@@ -523,24 +523,24 @@ public class Type4Manager : MonoBehaviour
                 _SEPlayer.PlaySE(2, 1);
             }
 
-            if (Input.GetKey(KeyCode.RightArrow) || lever.rightFlag)
+            if (Input.GetKey(KeyCode.H) || lever.rightFlag)
                 craneBox.rightMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.RightArrow) || !lever.rightFlag)
+            else if (Input.GetKeyUp(KeyCode.H) || !lever.rightFlag)
                 craneBox.rightMoveFlag = false;
-            if (Input.GetKey(KeyCode.LeftArrow) || lever.leftFlag)
+            if (Input.GetKey(KeyCode.F) || lever.leftFlag)
                 craneBox.leftMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.LeftArrow) || !lever.leftFlag)
+            else if (Input.GetKeyUp(KeyCode.F) || !lever.leftFlag)
                 craneBox.leftMoveFlag = false;
-            if (Input.GetKey(KeyCode.UpArrow) || lever.backFlag)
+            if (Input.GetKey(KeyCode.T) || lever.backFlag)
                 craneBox.backMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.UpArrow) || !lever.backFlag)
+            else if (Input.GetKeyUp(KeyCode.T) || !lever.backFlag)
                 craneBox.backMoveFlag = false;
-            if (Input.GetKey(KeyCode.DownArrow) || lever.forwardFlag)
+            if (Input.GetKey(KeyCode.G) || lever.forwardFlag)
                 craneBox.forwardMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.DownArrow) || !lever.forwardFlag)
+            else if (Input.GetKeyUp(KeyCode.G) || !lever.forwardFlag)
                 craneBox.forwardMoveFlag = false;
 
-            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
+            if (Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
                 if (craneStatus == 1)
                 {
@@ -552,7 +552,7 @@ public class Type4Manager : MonoBehaviour
         }
         else //2Pレバー
         {
-            if (isExecuted[15] && ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)
+            if (isExecuted[15] && ((Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
             {
                 leverTilted = true;
@@ -563,7 +563,7 @@ public class Type4Manager : MonoBehaviour
             }
 
 
-            if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)
+            if ((Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.K)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
             {
                 leverTilted = true;
@@ -571,7 +571,7 @@ public class Type4Manager : MonoBehaviour
                 _SEPlayer.StopSE(2);
                 _SEPlayer.PlaySE(1, 1);
             }
-            if ((!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S)
+            if ((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
             && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
             {
                 leverTilted = false;
@@ -580,24 +580,24 @@ public class Type4Manager : MonoBehaviour
                 _SEPlayer.PlaySE(2, 1);
             }
 
-            if (Input.GetKey(KeyCode.D) || lever.rightFlag)
+            if (Input.GetKey(KeyCode.L) || lever.rightFlag)
                 craneBox.rightMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.D) || !lever.rightFlag)
+            else if (Input.GetKeyUp(KeyCode.L) || !lever.rightFlag)
                 craneBox.rightMoveFlag = false;
-            if (Input.GetKey(KeyCode.A) || lever.leftFlag)
+            if (Input.GetKey(KeyCode.J) || lever.leftFlag)
                 craneBox.leftMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.A) || !lever.leftFlag)
+            else if (Input.GetKeyUp(KeyCode.J) || !lever.leftFlag)
                 craneBox.leftMoveFlag = false;
-            if (Input.GetKey(KeyCode.W) || lever.backFlag)
+            if (Input.GetKey(KeyCode.I) || lever.backFlag)
                 craneBox.backMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.W) || !lever.backFlag)
+            else if (Input.GetKeyUp(KeyCode.I) || !lever.backFlag)
                 craneBox.backMoveFlag = false;
-            if (Input.GetKey(KeyCode.S) || lever.forwardFlag)
+            if (Input.GetKey(KeyCode.K) || lever.forwardFlag)
                 craneBox.forwardMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.S) || !lever.forwardFlag)
+            else if (Input.GetKeyUp(KeyCode.K) || !lever.forwardFlag)
                 craneBox.forwardMoveFlag = false;
 
-            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)
+            if (Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
                 if (craneStatus == 1)
                 {
