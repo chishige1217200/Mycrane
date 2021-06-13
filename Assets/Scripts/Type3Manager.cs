@@ -5,20 +5,20 @@ using UnityEngine.UI;
 public class Type3Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    public int[] priceSet = new int[2];
-    public int[] timesSet = new int[2];
+    [SerializeField] int[] priceSet = new int[2];
+    [SerializeField] int[] timesSet = new int[2];
     float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
     float upArmpower = 100; //上昇時のアームパワー(%，未確率時)
     float backArmpower = 100; //獲得口移動時のアームパワー(%，未確率時)
     float catchArmpowersuccess = 100; //同確率時
     float upArmpowersuccess = 100; //同確率時
     float backArmpowersuccess = 100; //同確率時
-    public int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
-    float audioPitch = 1f; //サウンドのピッチ
-    private bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
-    public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
+    [SerializeField] int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    [SerializeField] float audioPitch = 1f; //サウンドのピッチ
+    bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
+    bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
-    public int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
+    [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
     public float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;

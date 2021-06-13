@@ -150,12 +150,12 @@ public class CreditSystem : MonoBehaviour
 
     //Probability Function-----------------------------------------------
 
-    private int creditProbability = 3; //設定クレジット数
+    [SerializeField] int creditProbability = 3; //設定クレジット数
     //private int costProbability = 200; //設定金額
     private int nowPaidforProbability = 0; //確率設定用の投入金額
     //private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数（初期化時-1）
     private int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
-    private int n = 3; //ランダム確率設定n
+    [SerializeField] int n = 3; //ランダム確率設定n
     //private List<int> costList = new List<int>(); //投入された金額をリセット毎に分けて保存
     public int probabilityMode; //0：確率なし，1:ランダム確率，2:クレジット回数天井設定，3:クレジット回数周期設定，(4:設定金額天井設定，5:設定金額周期設定)
 

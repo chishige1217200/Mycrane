@@ -10,7 +10,7 @@ public class Type4Manager : MonoBehaviour
     float leftCatchArmpower = 20f; //左アームパワー
     float rightCatchArmpower = 20f; //右アームパワー
     float armApertures = 80f; //開口率
-    int operationType = 1; //0:ボタン式，1:レバー式
+    [SerializeField] int operationType = 1; //0:ボタン式，1:レバー式
     int catchLong = 2000; //キャッチに要する時間(m秒)
     int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
     int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
