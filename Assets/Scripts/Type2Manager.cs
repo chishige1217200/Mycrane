@@ -13,7 +13,7 @@ public class Type2Manager : MonoBehaviour
     float catchArmpowersuccess = 100f; //同確率時
     float upArmpowersuccess = 100f; //同確率時
     float backArmpowersuccess = 100f; //同確率時
-    int operationType = 0; //0:ボタン式，1:レバー式
+    int operationType = 1; //0:ボタン式，1:レバー式
     [SerializeField] int limitTimeSet = 15; //レバー式の場合，残り時間を設定
     public int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
@@ -539,24 +539,24 @@ public class Type2Manager : MonoBehaviour
 
     public void InputLeverCheck() // キーボード，UI共通のレバー処理
     {
-        if (Input.GetKey(KeyCode.RightArrow) || lever.rightFlag)
+        if (Input.GetKey(KeyCode.H) || lever.rightFlag)
             craneBox.rightMoveFlag = true;
-        else if (Input.GetKeyUp(KeyCode.RightArrow) || !lever.rightFlag)
+        else if (Input.GetKeyUp(KeyCode.H) || !lever.rightFlag)
             craneBox.rightMoveFlag = false;
-        if (Input.GetKey(KeyCode.LeftArrow) || lever.leftFlag)
+        if (Input.GetKey(KeyCode.F) || lever.leftFlag)
             craneBox.leftMoveFlag = true;
-        else if (Input.GetKeyUp(KeyCode.LeftArrow) || !lever.leftFlag)
+        else if (Input.GetKeyUp(KeyCode.F) || !lever.leftFlag)
             craneBox.leftMoveFlag = false;
-        if (Input.GetKey(KeyCode.UpArrow) || lever.backFlag)
+        if (Input.GetKey(KeyCode.T) || lever.backFlag)
             craneBox.backMoveFlag = true;
-        else if (Input.GetKeyUp(KeyCode.UpArrow) || !lever.backFlag)
+        else if (Input.GetKeyUp(KeyCode.T) || !lever.backFlag)
             craneBox.backMoveFlag = false;
-        if (Input.GetKey(KeyCode.DownArrow) || lever.forwardFlag)
+        if (Input.GetKey(KeyCode.G) || lever.forwardFlag)
             craneBox.forwardMoveFlag = true;
-        else if (Input.GetKeyUp(KeyCode.DownArrow) || !lever.forwardFlag)
+        else if (Input.GetKeyUp(KeyCode.G) || !lever.forwardFlag)
             craneBox.forwardMoveFlag = false;
 
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
+        if (Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
         || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) // 初動時にタイマーを起動
             if (craneStatus == 1)
             {
