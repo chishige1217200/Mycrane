@@ -44,13 +44,13 @@ public class GetPoint : MonoBehaviour
             if (craneType == 4) _Type4Manager.GetPrize();
             if (craneType == 5) _Type5Manager.GetPrize();
             if (craneType == 7) _Type7Manager.GetPrize();
-            if (collider.gameObject.TryGetComponent(out prize))
+            /*if (collider.gameObject.TryGetComponent(out prize))
             {
                 panel.SetPrizeName(prize.prizeName);
                 panel.PanelActive(true);
                 await Task.Delay(5000);
                 Destroy(collider.transform.root.gameObject);
-            }
+            }*/
         }
     }
 }

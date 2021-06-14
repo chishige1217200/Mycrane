@@ -7,7 +7,15 @@ public class RayCaster : MonoBehaviour
     Ray ray; // Ray情報
     RaycastHit hit; // 衝突した物体についての情報
     MachineHost host; // 現在プレイ中の筐体情報
+    PrizePanel panel;
+    Prize prize;
     bool isFirst = true; // 初回時のみtrue
+
+    void Start()
+    {
+        GameObject gb = GameObject.Find("GameManager");
+        if (gb.TryGetComponent(out panel)) panel = gb.GetComponent<PrizePanel>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -26,6 +34,15 @@ public class RayCaster : MonoBehaviour
             host.playable = true;
             isFirst = false;
             Debug.Log("Activate Successfully.");
+        }
+        else if (hit.collider.gameObject.tag == "prize")
+        {
+            if (hit.collider.gameObject.TryGetComponent(out prize))
+            {
+                panel.SetPrizeName(prize.prizeName);
+                panel.PanelActive(true);
+                Destroy(hit.collider.gameObject);
+            }
         }
         else
         {
