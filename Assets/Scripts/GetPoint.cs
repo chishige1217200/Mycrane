@@ -13,6 +13,7 @@ public class GetPoint : MonoBehaviour
     Type7Manager _Type7Manager;
     [SerializeField] int playerNumber = 1;
     int craneType = -1;
+    [SerializeField] bool autoDestroy = false; // 自動的に景品を消去する
     PrizePanel panel;
     Prize prize;
 
@@ -37,20 +38,21 @@ public class GetPoint : MonoBehaviour
     {
         if (collider.tag == "prize")
         {
-            Debug.Log("prize");
+            //Debug.Log("prize");
             if (craneType == 1) _Type1Manager.GetPrize();
             if (craneType == 2) _Type2Manager.GetPrize();
             if (craneType == 3) _Type3Manager.GetPrize();
             if (craneType == 4) _Type4Manager.GetPrize();
             if (craneType == 5) _Type5Manager.GetPrize();
             if (craneType == 7) _Type7Manager.GetPrize();
-            /*if (collider.gameObject.TryGetComponent(out prize))
+            if (collider.gameObject.TryGetComponent(out prize) && autoDestroy)
             {
                 panel.SetPrizeName(prize.prizeName);
                 panel.PanelActive(true);
                 await Task.Delay(5000);
-                Destroy(collider.transform.root.gameObject);
-            }*/
+                if (prize.destroyObject != null) Destroy(prize.destroyObject);
+                else Destroy(collider.gameObject);
+            }
         }
     }
 }

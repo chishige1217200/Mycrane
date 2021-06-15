@@ -41,7 +41,8 @@ public class RayCaster : MonoBehaviour
             {
                 panel.SetPrizeName(prize.prizeName);
                 panel.PanelActive(true);
-                Destroy(hit.collider.gameObject);
+                if (prize.destroyObject != null) Destroy(prize.destroyObject);
+                else Destroy(hit.collider.gameObject);
             }
         }
         else

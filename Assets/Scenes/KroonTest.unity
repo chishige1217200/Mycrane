@@ -3255,6 +3255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 1
+  autoDestroy: 0
 --- !u!65 &86275489
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8422,6 +8423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prizeName: "\u6728\u8C37\u5730 \u821E \u30D5\u30A3\u30AE\u30E5\u30A2"
+  destroyObject: {fileID: 706405383}
 --- !u!1 &174147346
 GameObject:
   m_ObjectHideFlags: 0
@@ -10096,7 +10098,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &220108572
 GameObject:
@@ -13681,7 +13683,7 @@ Transform:
   - {fileID: 872799037}
   - {fileID: 976637392}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &318017380
 GameObject:
@@ -17554,6 +17556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prizeName: "\u9149\u91CE \u862D\u82B1 \u30D5\u30A3\u30AE\u30E5\u30A2"
+  destroyObject: {fileID: 1420720803}
 --- !u!1 &419781528
 GameObject:
   m_ObjectHideFlags: 0
@@ -23606,6 +23609,8 @@ MonoBehaviour:
   - {fileID: 101552668}
   nowPaid: {fileID: 500791459}
   Credit: {fileID: 1664518804}
+  creditProbability: 3
+  n: 3
   probabilityMode: 0
 --- !u!1 &536781336
 GameObject:
@@ -25264,6 +25269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prizeName: "\u666F\u54C1\u3000\u30B0\u30E9\u30E0\u8ABF\u6574"
+  destroyObject: {fileID: 293097959}
 --- !u!54 &563012662
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -29605,6 +29611,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4492863929335858790, guid: 3b435348f7fc8414a9a78368f47ba692,
+        type: 3}
+      propertyPath: autoDestroy
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4492863929606008763, guid: 3b435348f7fc8414a9a78368f47ba692,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -29659,6 +29670,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4492863930812273665, guid: 3b435348f7fc8414a9a78368f47ba692,
+        type: 3}
+      propertyPath: autoDestroy
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4492863931177675204, guid: 3b435348f7fc8414a9a78368f47ba692,
         type: 3}
@@ -31073,7 +31089,7 @@ Transform:
   - {fileID: 172525017}
   - {fileID: 1619262541}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &709177531
 GameObject:
@@ -37648,6 +37664,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prizeName: "\u66AE\u8DEF \u77B3\u5B50 \u30D5\u30A3\u30AE\u30E5\u30A2"
+  destroyObject: {fileID: 316535954}
 --- !u!1 &874840121
 GameObject:
   m_ObjectHideFlags: 0
@@ -48768,6 +48785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prizeName: "\u6728\u8C37\u5730 \u821E \u30D5\u30A3\u30AE\u30E5\u30A2"
+  destroyObject: {fileID: 2034915916}
 --- !u!1 &1151160092
 GameObject:
   m_ObjectHideFlags: 0
@@ -58874,6 +58892,8 @@ MonoBehaviour:
   - {fileID: 323991224}
   nowPaid: {fileID: 500791459}
   Credit: {fileID: 745665453}
+  creditProbability: 3
+  n: 3
   probabilityMode: 0
 --- !u!4 &1322292768
 Transform:
@@ -61388,6 +61408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prizeName: "\u666F\u54C1\u3000\u30B0\u30E9\u30E0\u8ABF\u6574"
+  destroyObject: {fileID: 534121172}
 --- !u!54 &1407417081
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -61867,7 +61888,7 @@ Transform:
   - {fileID: 411089260}
   - {fileID: 420407476}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1424041699
 GameObject:
@@ -64635,6 +64656,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prizeName: "\u666F\u54C1\u3000\u30B0\u30E9\u30E0\u8ABF\u6574"
+  destroyObject: {fileID: 1998207916}
 --- !u!54 &1490133998
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -67550,6 +67572,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 2
+  autoDestroy: 0
 --- !u!65 &1562748872
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -68816,6 +68839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prizeName: "\u666F\u54C1\u3000\u30B0\u30E9\u30E0\u8ABF\u6574"
+  destroyObject: {fileID: 1387676570}
 --- !u!54 &1598005768
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -71350,6 +71374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prizeName: "\u9149\u91CE \u862D\u82B1 \u30D5\u30A3\u30AE\u30E5\u30A2"
+  destroyObject: {fileID: 1746203584}
 --- !u!65 &1648652248
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -80083,6 +80108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prizeName: "\u66AE\u8DEF \u77B3\u5B50 \u30D5\u30A3\u30AE\u30E5\u30A2"
+  destroyObject: {fileID: 1495971183}
 --- !u!65 &1868804892
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -85845,7 +85871,7 @@ Transform:
   - {fileID: 1146796425}
   - {fileID: 1058239408}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2036553425
 GameObject:
