@@ -32,6 +32,7 @@ public class Type7Manager : MonoBehaviour
     Lever[] lever = new Lever[2];
     Timer timer;
     private int leverState = 0; // 0:ニュートラル，1:下降中，2:上昇中
+    private int armState = 0; // 0:閉じている，1:開いている
 
     //For test-----------------------------------------
 
@@ -175,6 +176,7 @@ public class Type7Manager : MonoBehaviour
                 if (probability) armPower = catchArmpowersuccess;
                 else armPower = catchArmpower;
                 armController.MotorPower(armPower);
+                armState = 0;
                 armController.ArmClose();
                 await Task.Delay(1000);
                 if (craneStatus == 7) craneStatus = 8;
@@ -343,16 +345,32 @@ public class Type7Manager : MonoBehaviour
 
     public void InputKeyCheck()
     {
-        if (Input.GetKeyDown(KeyCode.O)) armController.ArmOpen();
-        if (Input.GetKeyDown(KeyCode.L)) armController.ArmClose();
+        if (Input.GetKeyDown(KeyCode.O) && armState == 0)
+        {
+            armState = 1;
+            armController.ArmOpen();
+        }
+        if (Input.GetKeyDown(KeyCode.L) && armState == 1)
+        {
+            armState = 0;
+            armController.ArmClose();
+        }
     }
 
     public void ButtonDown(int num)
     {
         if (craneStatus >= 2 && craneStatus <= 3)
         {
-            if (num == 0) armController.ArmOpen();
-            if (num == 1) armController.ArmClose();
+            if (num == 0 && armState == 0)
+            {
+                armState = 1;
+                armController.ArmOpen();
+            }
+            if (num == 1 && armState == 1)
+            {
+                armState = 0;
+                armController.ArmClose();
+            }
         }
     }
 
