@@ -31,6 +31,8 @@ public class Type7Manager : MonoBehaviour
     ArmControllerSupport support;
     Lever[] lever = new Lever[2];
     Timer timer;
+    MachineHost host;
+    GameObject canvas;
     private int leverState = 0; // 0:ニュートラル，1:下降中，2:上昇中
     private int armState = 0; // 0:閉じている，1:開いている
 
@@ -45,6 +47,8 @@ public class Type7Manager : MonoBehaviour
     {
         Transform temp;
         // 様々なコンポーネントの取得
+        host = this.transform.Find("CP").GetComponent<MachineHost>();
+        canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
@@ -97,8 +101,10 @@ public class Type7Manager : MonoBehaviour
     async void Update()
     {
         limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
+        if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
 
-        if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) creditSystem.GetPayment(100);
+        if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) InsertCoin();
         //craneStatusdisplayed.text = craneStatus.ToString();
         if (craneStatus == -1)
         {
@@ -304,74 +310,86 @@ public class Type7Manager : MonoBehaviour
 
     public void InputLeverCheck() // キーボード，UI共通のレバー処理
     {
-        if (Input.GetKey(KeyCode.H) || lever[0].rightFlag)
-            craneBox.rightMoveFlag = true;
-        else if (Input.GetKeyUp(KeyCode.H) || !lever[0].rightFlag)
-            craneBox.rightMoveFlag = false;
-        if (Input.GetKey(KeyCode.F) || lever[0].leftFlag)
-            craneBox.leftMoveFlag = true;
-        else if (Input.GetKeyUp(KeyCode.F) || !lever[0].leftFlag)
-            craneBox.leftMoveFlag = false;
-        if (Input.GetKey(KeyCode.T) || lever[0].backFlag)
-            craneBox.backMoveFlag = true;
-        else if (Input.GetKeyUp(KeyCode.T) || !lever[0].backFlag)
-            craneBox.backMoveFlag = false;
-        if (Input.GetKey(KeyCode.G) || lever[0].forwardFlag)
-            craneBox.forwardMoveFlag = true;
-        else if (Input.GetKeyUp(KeyCode.G) || !lever[0].forwardFlag)
-            craneBox.forwardMoveFlag = false;
+        if (host.playable)
+        {
+            if (Input.GetKey(KeyCode.H) || lever[0].rightFlag)
+                craneBox.rightMoveFlag = true;
+            else if (Input.GetKeyUp(KeyCode.H) || !lever[0].rightFlag)
+                craneBox.rightMoveFlag = false;
+            if (Input.GetKey(KeyCode.F) || lever[0].leftFlag)
+                craneBox.leftMoveFlag = true;
+            else if (Input.GetKeyUp(KeyCode.F) || !lever[0].leftFlag)
+                craneBox.leftMoveFlag = false;
+            if (Input.GetKey(KeyCode.T) || lever[0].backFlag)
+                craneBox.backMoveFlag = true;
+            else if (Input.GetKeyUp(KeyCode.T) || !lever[0].backFlag)
+                craneBox.backMoveFlag = false;
+            if (Input.GetKey(KeyCode.G) || lever[0].forwardFlag)
+                craneBox.forwardMoveFlag = true;
+            else if (Input.GetKeyUp(KeyCode.G) || !lever[0].forwardFlag)
+                craneBox.forwardMoveFlag = false;
 
-        if ((Input.GetKeyDown(KeyCode.I) || lever[1].backFlag) && leverState != 2)
-        {
-            Debug.Log("Up");
-            leverState = 2;
-            ropeManager.ArmUnitUp();
+            if ((Input.GetKeyDown(KeyCode.I) || lever[1].backFlag) && leverState != 2)
+            {
+                Debug.Log("Up");
+                leverState = 2;
+                ropeManager.ArmUnitUp();
+            }
+            if ((Input.GetKeyDown(KeyCode.K) || lever[1].forwardFlag) && leverState != 1 && !support.isShieldcollis)
+            {
+                Debug.Log("Down");
+                leverState = 1;
+                ropeManager.ArmUnitDown();
+            }
+            if (!Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K) && !lever[1].backFlag && !lever[1].forwardFlag)
+            {
+                leverState = 0;
+                ropeManager.ArmUnitUpForceStop();
+                ropeManager.ArmUnitDownForceStop();
+            }
+            if (support.isShieldcollis) ropeManager.ArmUnitDownForceStop();
         }
-        if ((Input.GetKeyDown(KeyCode.K) || lever[1].forwardFlag) && leverState != 1 && !support.isShieldcollis)
-        {
-            Debug.Log("Down");
-            leverState = 1;
-            ropeManager.ArmUnitDown();
-        }
-        if (!Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K) && !lever[1].backFlag && !lever[1].forwardFlag)
-        {
-            leverState = 0;
-            ropeManager.ArmUnitUpForceStop();
-            ropeManager.ArmUnitDownForceStop();
-        }
-
-        if (support.isShieldcollis) ropeManager.ArmUnitDownForceStop();
     }
 
     public void InputKeyCheck()
     {
-        if (Input.GetKeyDown(KeyCode.O) && armState == 0)
+        if (host.playable)
         {
-            armState = 1;
-            armController.ArmOpen();
-        }
-        if (Input.GetKeyDown(KeyCode.L) && armState == 1)
-        {
-            armState = 0;
-            armController.ArmClose();
-        }
-    }
-
-    public void ButtonDown(int num)
-    {
-        if (craneStatus >= 2 && craneStatus <= 3)
-        {
-            if (num == 0 && armState == 0)
+            if (Input.GetKeyDown(KeyCode.O) && armState == 0)
             {
                 armState = 1;
                 armController.ArmOpen();
             }
-            if (num == 1 && armState == 1)
+            if (Input.GetKeyDown(KeyCode.L) && armState == 1)
             {
                 armState = 0;
                 armController.ArmClose();
             }
         }
+    }
+
+    public void ButtonDown(int num)
+    {
+        if (host.playable)
+        {
+            if (craneStatus >= 2 && craneStatus <= 3)
+            {
+                if (num == 0 && armState == 0)
+                {
+                    armState = 1;
+                    armController.ArmOpen();
+                }
+                if (num == 1 && armState == 1)
+                {
+                    armState = 0;
+                    armController.ArmClose();
+                }
+            }
+        }
+    }
+    public void InsertCoin()
+    {
+        if (host.playable) creditSystem.GetPayment(100);
     }
 
     public void Testadder()
