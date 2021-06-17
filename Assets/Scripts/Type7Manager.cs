@@ -182,8 +182,11 @@ public class Type7Manager : MonoBehaviour
                 if (probability) armPower = catchArmpowersuccess;
                 else armPower = catchArmpower;
                 armController.MotorPower(armPower);
-                armState = 0;
-                armController.ArmClose();
+                if (armState == 1)
+                {
+                    armState = 0;
+                    armController.ArmClose();
+                }
                 await Task.Delay(1000);
                 if (craneStatus == 7) craneStatus = 8;
             }
