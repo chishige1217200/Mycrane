@@ -29,6 +29,8 @@ public class Type5Manager : MonoBehaviour
     RopeManager ropeManager;
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[2];
+    MachineHost host;
+    GameObject canvas;
 
     //For test-----------------------------------------
 
@@ -40,6 +42,8 @@ public class Type5Manager : MonoBehaviour
     {
         Transform temp;
         // 様々なコンポーネントの取得
+        host = this.transform.root.Find("CP").GetComponent<MachineHost>();
+        canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
@@ -137,8 +141,10 @@ public class Type5Manager : MonoBehaviour
 
     async void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) && !player2) creditSystem.GetPayment(100);
-        if ((Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus)) && player2) creditSystem.GetPayment(100);
+        if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
+        if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) && !player2) InsertCoin();
+        if ((Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus)) && player2) InsertCoin();
         //craneStatusdisplayed.text = craneStatus.ToString();
 
         if (craneStatus == -2) // Test
@@ -582,168 +588,182 @@ public class Type5Manager : MonoBehaviour
 
     public void InputKeyCheck(int num)
     {
-        switch (num)
+        if (host.playable)
         {
-            case 1:
-                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonPushed && !player2)
-                {
-                    buttonPushed = true;
-                    if (craneStatus == 1)
+            switch (num)
+            {
+                case 1:
+                    if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonPushed && !player2)
                     {
-                        creditSystem.ResetNowPayment();
-                        creditSystem.AddCreditPlayed();
-                        isExecuted[14] = false;
+                        buttonPushed = true;
+                        if (craneStatus == 1)
+                        {
+                            creditSystem.ResetNowPayment();
+                            creditSystem.AddCreditPlayed();
+                            isExecuted[14] = false;
+                        }
+                        craneStatus = 2;
+                        craneBox.rightMoveFlag = true;
                     }
-                    craneStatus = 2;
-                    craneBox.rightMoveFlag = true;
-                }
-                if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonPushed && player2)
-                {
-                    buttonPushed = true;
-                    if (craneStatus == 1)
+                    if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonPushed && player2)
                     {
-                        creditSystem.ResetNowPayment();
-                        creditSystem.AddCreditPlayed();
-                        isExecuted[14] = false;
+                        buttonPushed = true;
+                        if (craneStatus == 1)
+                        {
+                            creditSystem.ResetNowPayment();
+                            creditSystem.AddCreditPlayed();
+                            isExecuted[14] = false;
+                        }
+                        craneStatus = 2;
+                        craneBox.leftMoveFlag = true;
                     }
-                    craneStatus = 2;
-                    craneBox.leftMoveFlag = true;
-                }
-                break;
-            //投入を無効化
-            case 2:
-                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed && !player2)
-                {
-                    craneStatus = 3;
-                    craneBox.rightMoveFlag = false;
-                    buttonPushed = false;
-                }
-                if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonPushed && player2)
-                {
-                    craneStatus = 3;
-                    craneBox.leftMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
-            case 3:
-                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed && !player2)
-                {
-                    buttonPushed = true;
-                    craneStatus = 4;
-                    craneBox.backMoveFlag = true;
-                }
-                if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonPushed && player2)
-                {
-                    buttonPushed = true;
-                    craneStatus = 4;
-                    craneBox.backMoveFlag = true;
-                }
-                break;
-            case 4:
-                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed && !player2)
-                {
-                    craneStatus = 5;
-                    craneBox.backMoveFlag = false;
-                    buttonPushed = false;
-                }
-                if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonPushed && player2)
-                {
-                    craneStatus = 5;
-                    craneBox.backMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
-            case 6:
-                if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2 && button3)
-                {
-                    ropeManager.ArmUnitDownForceStop();
-                    craneStatus = 7;
-                }
-                if ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2 && button3)
-                {
-                    ropeManager.ArmUnitDownForceStop();
-                    craneStatus = 7;
-                }
-                break;
+                    break;
+                //投入を無効化
+                case 2:
+                    if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed && !player2)
+                    {
+                        craneStatus = 3;
+                        craneBox.rightMoveFlag = false;
+                        buttonPushed = false;
+                    }
+                    if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonPushed && player2)
+                    {
+                        craneStatus = 3;
+                        craneBox.leftMoveFlag = false;
+                        buttonPushed = false;
+                    }
+                    break;
+                case 3:
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed && !player2)
+                    {
+                        buttonPushed = true;
+                        craneStatus = 4;
+                        craneBox.backMoveFlag = true;
+                    }
+                    if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonPushed && player2)
+                    {
+                        buttonPushed = true;
+                        craneStatus = 4;
+                        craneBox.backMoveFlag = true;
+                    }
+                    break;
+                case 4:
+                    if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed && !player2)
+                    {
+                        craneStatus = 5;
+                        craneBox.backMoveFlag = false;
+                        buttonPushed = false;
+                    }
+                    if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonPushed && player2)
+                    {
+                        craneStatus = 5;
+                        craneBox.backMoveFlag = false;
+                        buttonPushed = false;
+                    }
+                    break;
+                case 6:
+                    if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2 && button3)
+                    {
+                        ropeManager.ArmUnitDownForceStop();
+                        craneStatus = 7;
+                    }
+                    if ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2 && button3)
+                    {
+                        ropeManager.ArmUnitDownForceStop();
+                        craneStatus = 7;
+                    }
+                    break;
+            }
         }
     }
 
     public void ButtonDown(int num)
     {
-        switch (num)
+        if (host.playable)
         {
-            case 1:
-                if (craneStatus == 1 && !buttonPushed)
-                {
-                    buttonPushed = true;
-                    craneStatus = 2;
-                    creditSystem.ResetNowPayment();
-                    creditSystem.AddCreditPlayed();
-                    isExecuted[14] = false;
-                }
-                if (craneStatus == 2 && buttonPushed)
-                    craneBox.rightMoveFlag = true;
-                break;
-            case 2:
-                if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
-                {
-                    buttonPushed = true;
-                    craneStatus = 4;
-                    craneBox.backMoveFlag = true;
-                }
-                break;
-            case 3:
-                if (craneStatus == 6)
-                {
-                    //buttonPushed = true;
-                    ropeManager.ArmUnitDownForceStop();
-                    craneStatus = 7;
-                }
-                break;
-            case 4: // player2 case 1:
-                if (craneStatus == 1 && !buttonPushed)
-                {
-                    buttonPushed = true;
-                    craneStatus = 2;
-                    creditSystem.ResetNowPayment();
-                    creditSystem.AddCreditPlayed();
-                    isExecuted[14] = false;
-                }
-                if (craneStatus == 2 && buttonPushed)
-                    craneBox.leftMoveFlag = true;
-                break;
+            switch (num)
+            {
+                case 1:
+                    if (craneStatus == 1 && !buttonPushed)
+                    {
+                        buttonPushed = true;
+                        craneStatus = 2;
+                        creditSystem.ResetNowPayment();
+                        creditSystem.AddCreditPlayed();
+                        isExecuted[14] = false;
+                    }
+                    if (craneStatus == 2 && buttonPushed)
+                        craneBox.rightMoveFlag = true;
+                    break;
+                case 2:
+                    if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
+                    {
+                        buttonPushed = true;
+                        craneStatus = 4;
+                        craneBox.backMoveFlag = true;
+                    }
+                    break;
+                case 3:
+                    if (craneStatus == 6)
+                    {
+                        //buttonPushed = true;
+                        ropeManager.ArmUnitDownForceStop();
+                        craneStatus = 7;
+                    }
+                    break;
+                case 4: // player2 case 1:
+                    if (craneStatus == 1 && !buttonPushed)
+                    {
+                        buttonPushed = true;
+                        craneStatus = 2;
+                        creditSystem.ResetNowPayment();
+                        creditSystem.AddCreditPlayed();
+                        isExecuted[14] = false;
+                    }
+                    if (craneStatus == 2 && buttonPushed)
+                        craneBox.leftMoveFlag = true;
+                    break;
+            }
         }
     }
 
     public void ButtonUp(int num)
     {
-        switch (num)
+        if (host.playable)
         {
-            case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
-                {
-                    craneStatus = 3;
-                    craneBox.rightMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
-            case 2:
-                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
-                {
-                    craneStatus = 5;
-                    craneBox.backMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
-            case 4: // player2 case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
-                {
-                    craneStatus = 3;
-                    craneBox.leftMoveFlag = false;
-                    buttonPushed = false;
-                }
-                break;
+            switch (num)
+            {
+                case 1:
+                    if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
+                    {
+                        craneStatus = 3;
+                        craneBox.rightMoveFlag = false;
+                        buttonPushed = false;
+                    }
+                    break;
+                case 2:
+                    if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
+                    {
+                        craneStatus = 5;
+                        craneBox.backMoveFlag = false;
+                        buttonPushed = false;
+                    }
+                    break;
+                case 4: // player2 case 1:
+                    if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
+                    {
+                        craneStatus = 3;
+                        craneBox.leftMoveFlag = false;
+                        buttonPushed = false;
+                    }
+                    break;
+            }
         }
+    }
+
+    public void InsertCoin()
+    {
+        if (host.playable) creditSystem.GetPayment(100);
     }
 
     public void Testadder()
