@@ -106,12 +106,14 @@ public class Type2Manager : MonoBehaviour
             this.transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(false);
+            this.transform.Find("Floor").Find("Type2B").gameObject.SetActive(true);
         }
         else if (operationType == 1)
         {
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
+            this.transform.Find("Floor").Find("Type2L").gameObject.SetActive(true);
         }
 
         craneBox.leftMoveFlag = true;
