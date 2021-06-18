@@ -7,15 +7,14 @@ public class Type1Manager : MonoBehaviour
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
-    float leftCatchArmpower = 10f; //左アームパワー
-    float rightCatchArmpower = 10f; //右アームパワー
-    public float armApertures = 80f; //開口率
-    public int soundType = 0; //BGMの切り替え．0・1
-    int catchTime = 2000; //キャッチに要する時間(m秒)
-    private bool[] isExecuted = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
+    [SerializeField] float leftCatchArmpower = 10f; //左アームパワー
+    [SerializeField] float rightCatchArmpower = 10f; //右アームパワー
+    [SerializeField] float armApertures = 80f; //開口率
+    [SerializeField] int soundType = 0; //BGMの切り替え．0・1
+    [SerializeField] int catchTime = 2000; //キャッチに要する時間(m秒)
+    bool[] isExecuted = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] bool player2 = false; //player2の場合true
-    [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     [SerializeField] bool button3 = true; //button3の使用可否
     public Vector2 startPoint; // 開始位置座標定義
     public Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）

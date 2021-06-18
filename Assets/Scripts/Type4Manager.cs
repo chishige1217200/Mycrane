@@ -7,18 +7,17 @@ public class Type4Manager : MonoBehaviour
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
-    float leftCatchArmpower = 20f; //左アームパワー
-    float rightCatchArmpower = 20f; //右アームパワー
-    float armApertures = 80f; //開口率
+    [SerializeField] float leftCatchArmpower = 20f; //左アームパワー
+    [SerializeField] float rightCatchArmpower = 20f; //右アームパワー
+    [SerializeField] float armApertures = 80f; //開口率
     [SerializeField] int operationType = 1; //0:ボタン式，1:レバー式
-    int catchLong = 2000; //キャッチに要する時間(m秒)
-    int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
-    int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
-    private bool[] isExecuted = new bool[16]; //各craneStatusで1度しか実行しない処理の管理
+    [SerializeField] int catchLong = 2000; //キャッチに要する時間(m秒)
+    [SerializeField] int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
+    [SerializeField] int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
+    bool[] isExecuted = new bool[16]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool leverTilted = false; //trueならレバーがアクティブ
     [SerializeField] bool player2 = false; //player2の場合true
-    [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     [SerializeField] bool rotation = true; //回転機能の使用可否
     [SerializeField] bool downStop = true; //下降停止機能の使用可否
     Vector2 craneHost; //クレーンゲームの中心位置定義

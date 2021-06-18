@@ -9,18 +9,18 @@ public class Type7Manager : MonoBehaviour
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
-    float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
-    float upArmpower = 100; //上昇時のアームパワー(%，未確率時)
-    float backArmpower = 100; //獲得口移動時のアームパワー(%，未確率時)
-    float catchArmpowersuccess = 100; //同確率時
-    float upArmpowersuccess = 100; //同確率時
-    float backArmpowersuccess = 100; //同確率時
-    public int limitTimeSet = 60; //操作制限時間
-    private bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
+    [SerializeField] float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
+    [SerializeField] float upArmpower = 100; //上昇時のアームパワー(%，未確率時)
+    [SerializeField] float backArmpower = 100; //獲得口移動時のアームパワー(%，未確率時)
+    [SerializeField] float catchArmpowersuccess = 100; //同確率時
+    [SerializeField] float upArmpowersuccess = 100; //同確率時
+    [SerializeField] float backArmpowersuccess = 100; //同確率時
+    [SerializeField] int limitTimeSet = 60; //操作制限時間
+    bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
     [SerializeField] bool playable = true; //playableがtrueのとき操作可能
-    public float armPower; //現在のアームパワー
+    float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
@@ -33,8 +33,8 @@ public class Type7Manager : MonoBehaviour
     Timer timer;
     MachineHost host;
     GameObject canvas;
-    private int leverState = 0; // 0:ニュートラル，1:下降中，2:上昇中
-    private int armState = 0; // 0:閉じている，1:開いている
+    int leverState = 0; // 0:ニュートラル，1:下降中，2:上昇中
+    int armState = 0; // 0:閉じている，1:開いている
 
     //For test-----------------------------------------
 

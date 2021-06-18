@@ -7,18 +7,17 @@ public class Type5Manager : MonoBehaviour
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
-    float leftCatchArmpower = 10f; //左アームパワー
-    float rightCatchArmpower = 10f; //右アームパワー
-    float armApertures = 80f; //開口率
+    [SerializeField] float leftCatchArmpower = 10f; //左アームパワー
+    [SerializeField] float rightCatchArmpower = 10f; //右アームパワー
+    [SerializeField] float armApertures = 80f; //開口率
     public int soundType = 0; //SEの切り替え 0,1: CATCHER 8,9 2: CATCHER 7 Selecterで指定すること
-    private bool[] isExecuted = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
+    bool[] isExecuted = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] bool player2 = false; //player2の場合true
-    [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     [SerializeField] bool button3 = true; //button3の使用可否
-    private Vector2 startPoint; // 開始位置座標定義
-    private Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
-    private Vector2 vec2offset = new Vector2(0.05f, 0.1f); // <=0.5, <=0.6 座標設定用Temp
+    public Vector2 startPoint; // 開始位置座標定義
+    public Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
+    Vector2 vec2offset = new Vector2(0.05f, 0.1f); // <=0.5, <=0.6 座標設定用Temp
     public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
     Vector2 craneHost; //クレーンゲームの中心位置定義
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）

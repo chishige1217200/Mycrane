@@ -7,21 +7,20 @@ public class Type2Manager : MonoBehaviour
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
-    float catchArmpower = 80f; //掴むときのアームパワー(%，未確率時)
-    float upArmpower = 0f; //上昇時のアームパワー(%，未確率時)
-    float backArmpower = 0f; //獲得口移動時のアームパワー(%，未確率時)
-    float catchArmpowersuccess = 100f; //同確率時
-    float upArmpowersuccess = 100f; //同確率時
-    float backArmpowersuccess = 100f; //同確率時
-    int operationType = 1; //0:ボタン式，1:レバー式
+    [SerializeField] float catchArmpower = 80f; //掴むときのアームパワー(%，未確率時)
+    [SerializeField] float upArmpower = 0f; //上昇時のアームパワー(%，未確率時)
+    [SerializeField] float backArmpower = 0f; //獲得口移動時のアームパワー(%，未確率時)
+    [SerializeField] float catchArmpowersuccess = 100f; //同確率時
+    [SerializeField] float upArmpowersuccess = 100f; //同確率時
+    [SerializeField] float backArmpowersuccess = 100f; //同確率時
+    [SerializeField] int operationType = 1; //0:ボタン式，1:レバー式
     [SerializeField] int limitTimeSet = 15; //レバー式の場合，残り時間を設定
-    public int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
+    [SerializeField] int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
     bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1.0f; //サウンドのピッチ
-    private bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
-    public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
+    bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
+    bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
-    [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     float armPower; //現在のアームパワー
 
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
