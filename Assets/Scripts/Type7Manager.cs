@@ -17,9 +17,7 @@ public class Type7Manager : MonoBehaviour
     [SerializeField] float backArmpowersuccess = 100; //同確率時
     [SerializeField] int limitTimeSet = 60; //操作制限時間
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
-    public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
-    [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
