@@ -20,34 +20,39 @@ public class RayCaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1)) Cast(); // 右クリック時
+        if (Input.GetMouseButtonDown(0)) Cast(0); // 左クリック時
+        if (Input.GetMouseButtonDown(1)) Cast(1); // 右クリック時
     }
 
-    void Cast() // Rayを飛ばす
+    void Cast(int num) // Rayを飛ばす
     {
         ray = new Ray(transform.position, transform.forward);
         Physics.Raycast(ray, out hit, 3);
-        if (hit.collider.gameObject.name == "CP") // 操作パネルにRayがあたった場合（要コライダー）
-        {
-            if (!isFirst) host.playable = false; // 古い方の筐体は再度ロック
-            host = hit.collider.gameObject.GetComponent<MachineHost>();
-            host.playable = true;
-            isFirst = false;
-            Debug.Log("Activate Successfully.");
-        }
-        else if (hit.collider.gameObject.tag == "prize")
-        {
-            if (hit.collider.gameObject.TryGetComponent(out prize))
+        if (num == 0)
+            if (hit.collider.gameObject.tag == "prize")
             {
-                panel.SetPrizeName(prize.prizeName);
-                panel.PanelActive(true);
-                if (prize.destroyObject != null) Destroy(prize.destroyObject);
-                else Destroy(hit.collider.gameObject);
+                if (hit.collider.gameObject.TryGetComponent(out prize))
+                {
+                    panel.SetPrizeName(prize.prizeName);
+                    panel.PanelActive(true);
+                    if (prize.destroyObject != null) Destroy(prize.destroyObject);
+                    else Destroy(hit.collider.gameObject);
+                }
             }
-        }
-        else
+        if (num == 1)
         {
-            if (!isFirst) host.playable = false; // 古い方の筐体は再度ロック
+            if (hit.collider.gameObject.name == "CP") // 操作パネルにRayがあたった場合（要コライダー）
+            {
+                if (!isFirst) host.playable = false; // 古い方の筐体は再度ロック
+                host = hit.collider.gameObject.GetComponent<MachineHost>();
+                host.playable = true;
+                isFirst = false;
+                Debug.Log("Activate Successfully.");
+            }
+            else
+            {
+                if (!isFirst) host.playable = false; // 古い方の筐体は再度ロック
+            }
         }
     }
 }
