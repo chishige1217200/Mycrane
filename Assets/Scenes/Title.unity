@@ -1045,6 +1045,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 2
+  autoDestroy: 0
 --- !u!65 &38799891
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15554,11 +15555,16 @@ MonoBehaviour:
   craneStatus: -1
   priceSet: 6400000000000000
   timesSet: 0300000000000000
+  catchArmpower: 80
+  upArmpower: 0
+  backArmpower: 0
+  catchArmpowersuccess: 100
+  upArmpowersuccess: 100
+  backArmpowersuccess: 100
+  operationType: 1
   limitTimeSet: 15
   soundType: 0
-  buttonPushed: 0
   probability: 0
-  playable: 1
   craneStatusdisplayed: {fileID: 0}
   limitTimedisplayed: {fileID: 398649515}
 --- !u!4 &313203044
@@ -16635,6 +16641,8 @@ MonoBehaviour:
   - {fileID: 134019717}
   nowPaid: {fileID: 0}
   Credit: {fileID: 2049310277}
+  creditProbability: 3
+  n: 3
   probabilityMode: 0
 --- !u!4 &326767868
 Transform:
@@ -17261,6 +17269,8 @@ MonoBehaviour:
   - {fileID: 1394083226}
   nowPaid: {fileID: 0}
   Credit: {fileID: 1229288913}
+  creditProbability: 3
+  n: 3
   probabilityMode: 0
 --- !u!4 &330670304
 Transform:
@@ -20221,6 +20231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 2
+  autoDestroy: 0
 --- !u!65 &403195717
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -28225,6 +28236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 1
+  autoDestroy: 0
 --- !u!65 &554704480
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31448,10 +31460,9 @@ MonoBehaviour:
   priceSet: 6400000064000000
   timesSet: 0100000001000000
   soundType: 1
-  buttonPushed: 0
+  audioPitch: 1
   probability: 0
   downTime: 0
-  playable: 1
   armPower: 0
   craneStatusdisplayed: {fileID: 0}
 --- !u!4 &659054565
@@ -31676,7 +31687,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 3c60a1af1fcb05e4087d040a238cb7d6, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 1a343d95eea9a084d995d609cc5e01fa, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -32274,10 +32285,16 @@ MonoBehaviour:
   craneStatus: -1
   priceSet: c8000000f4010000
   timesSet: 0100000003000000
+  leftCatchArmpower: 20
+  rightCatchArmpower: 20
+  armApertures: 80
+  operationType: 1
+  catchLong: 2000
+  catchTiming: 2000
+  backTime: 1000
   buttonPushed: 0
   leverTilted: 0
   player2: 0
-  playable: 1
   rotation: 1
   downStop: 1
   craneStatusdisplayed: {fileID: 0}
@@ -34215,6 +34232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 1
+  autoDestroy: 0
 --- !u!65 &711719911
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36620,6 +36638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 1
+  autoDestroy: 0
 --- !u!65 &747503002
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -54422,7 +54441,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: v0.2.8
+  m_Text: v0.2.9
 --- !u!222 &1120831526
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -57491,6 +57510,8 @@ MonoBehaviour:
   - {fileID: 860189421}
   nowPaid: {fileID: 0}
   Credit: {fileID: 1979793070}
+  creditProbability: 3
+  n: 3
   probabilityMode: 0
 --- !u!4 &1195495921
 Transform:
@@ -73617,6 +73638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 1
+  autoDestroy: 0
 --- !u!65 &1505096435
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -81902,11 +81924,13 @@ MonoBehaviour:
   craneStatus: -1
   priceSet: 2c01000000000000
   timesSet: 0100000000000000
+  leftCatchArmpower: 10
+  rightCatchArmpower: 10
   armApertures: 80
   soundType: 0
+  catchTime: 2000
   buttonPushed: 0
   player2: 0
-  playable: 1
   button3: 1
   startPoint: {x: 0, y: 0}
   homePoint: {x: 0, y: 0}
@@ -84631,6 +84655,8 @@ MonoBehaviour:
   - {fileID: 85204281}
   nowPaid: {fileID: 0}
   Credit: {fileID: 1775004604}
+  creditProbability: 3
+  n: 3
   probabilityMode: 0
 --- !u!1 &1760836586
 GameObject:
@@ -84908,6 +84934,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 1
+  autoDestroy: 0
 --- !u!65 &1765824421
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -86231,6 +86258,8 @@ MonoBehaviour:
   - {fileID: 1814246431}
   nowPaid: {fileID: 0}
   Credit: {fileID: 487288275}
+  creditProbability: 3
+  n: 3
   probabilityMode: 2
 --- !u!4 &1797605763
 Transform:
@@ -86667,6 +86696,8 @@ MonoBehaviour:
   - {fileID: 1241113843}
   nowPaid: {fileID: 0}
   Credit: {fileID: 398649515}
+  creditProbability: 3
+  n: 3
   probabilityMode: 0
 --- !u!4 &1810246672
 Transform:
@@ -97494,10 +97525,16 @@ MonoBehaviour:
   craneStatus: -1
   priceSet: 64000000f4010000
   timesSet: 0100000006000000
+  leftCatchArmpower: 20
+  rightCatchArmpower: 20
+  armApertures: 80
+  operationType: 1
+  catchLong: 2000
+  catchTiming: 2000
+  backTime: 1000
   buttonPushed: 0
   leverTilted: 0
   player2: 1
-  playable: 1
   rotation: 1
   downStop: 1
   craneStatusdisplayed: {fileID: 0}
@@ -98193,11 +98230,13 @@ MonoBehaviour:
   craneStatus: -1
   priceSet: 64000000f4010000
   timesSet: 0100000006000000
+  leftCatchArmpower: 10
+  rightCatchArmpower: 10
   armApertures: 80
   soundType: 0
+  catchTime: 2000
   buttonPushed: 0
   player2: 1
-  playable: 1
   button3: 1
   startPoint: {x: 0, y: 0}
   homePoint: {x: 0, y: 0}
