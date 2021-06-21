@@ -33,12 +33,6 @@ public class Type1Manager : MonoBehaviour
     MachineHost host;
     GameObject canvas;
 
-    //For test-----------------------------------------
-
-    public Text craneStatusdisplayed;
-
-    //-------------------------------------------------
-
     async void Start()
     {
         Transform temp;
@@ -58,8 +52,6 @@ public class Type1Manager : MonoBehaviour
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
-
-        //soundType = Random.Range(0, 2);
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -148,24 +140,6 @@ public class Type1Manager : MonoBehaviour
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) && !player2) InsertCoin();
         if ((Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus)) && player2) InsertCoin();
-        //craneStatusdisplayed.text = craneStatus.ToString();
-
-        if (craneStatus == -2) // Test
-        {
-            if (!isExecuted[0])
-            {
-                isExecuted[0] = true;
-                craneBox.goPoint = new Vector2(-0.3f, 0f);
-                craneBox.goPositionFlag = true;
-            }
-            await Task.Delay(500);
-            if (isExecuted[0])
-                if (craneBox.CheckPos(9))
-                {
-                    armController.ArmOpen();
-                    Debug.Log("OK");
-                }
-        }
 
         if (craneStatus == -1)
         {
@@ -438,18 +412,6 @@ public class Type1Manager : MonoBehaviour
         int getSoundNum = -1;
         getSoundNum = 5;
 
-        /*switch (creditSystem.probabilityMode)
-        {
-            case 2:
-            case 3:
-                creditSystem.ResetCreditProbability();
-                break;
-            case 4:
-            case 5:
-                creditSystem.ResetCostProbability();
-                break;
-        }*/
-
         if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
         {
             if (getSoundNum != -1)
@@ -577,7 +539,6 @@ public class Type1Manager : MonoBehaviour
                 case 3:
                     if (craneStatus == 6)
                     {
-                        //buttonPushed = true;
                         ropeManager.ArmUnitDownForceStop();
                         craneStatus = 7;
                     }
@@ -605,7 +566,7 @@ public class Type1Manager : MonoBehaviour
             switch (num)
             {
                 case 1:
-                    if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
+                    if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
                         craneBox.rightMoveFlag = false;
@@ -613,7 +574,7 @@ public class Type1Manager : MonoBehaviour
                     }
                     break;
                 case 2:
-                    if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
+                    if (craneStatus == 4 && buttonPushed)
                     {
                         craneStatus = 5;
                         craneBox.backMoveFlag = false;
@@ -621,7 +582,7 @@ public class Type1Manager : MonoBehaviour
                     }
                     break;
                 case 4: // player2 case 1:
-                    if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
+                    if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
                         craneBox.leftMoveFlag = false;
@@ -634,17 +595,5 @@ public class Type1Manager : MonoBehaviour
     public void InsertCoin()
     {
         if (host.playable) creditSystem.GetPayment(100);
-    }
-
-    public void Testadder()
-    {
-        Debug.Log("Clicked.");
-        craneStatus++;
-    }
-
-    public void TestSubber()
-    {
-        Debug.Log("Clicked.");
-        craneStatus--;
     }
 }

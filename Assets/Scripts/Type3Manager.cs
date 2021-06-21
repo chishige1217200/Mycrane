@@ -31,12 +31,6 @@ public class Type3Manager : MonoBehaviour
     MachineHost host;
     GameObject canvas;
 
-    //For test-----------------------------------------
-
-    public Text craneStatusdisplayed;
-
-    //-------------------------------------------------
-
     async void Start()
     {
         Transform temp;
@@ -54,8 +48,6 @@ public class Type3Manager : MonoBehaviour
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
-
-        //soundType = soundType = UnityEngine.Random.Range(0, 4);
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -101,7 +93,7 @@ public class Type3Manager : MonoBehaviour
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
-        //craneStatusdisplayed.text = craneStatus.ToString();
+
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(soundType);
@@ -113,9 +105,7 @@ public class Type3Manager : MonoBehaviour
             //コイン投入有効化;
             if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
-            /*if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;*/
+
             switch (soundType)
             {
                 case 0:
@@ -133,7 +123,6 @@ public class Type3Manager : MonoBehaviour
                     _BGMPlayer.PlayBGM(3);
                     break;
             }
-            //}
         }
 
         if (craneStatus == 1)
@@ -159,10 +148,6 @@ public class Type3Manager : MonoBehaviour
 
             InputKeyCheck(craneStatus);
             //コイン投入無効化;
-            /*if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-            }*/
             switch (soundType)
             {
                 case 0:
@@ -200,11 +185,6 @@ public class Type3Manager : MonoBehaviour
                     _SEPlayer.StopSE(18);
                     break;
             }
-            /*if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-
-            }*/
             //右移動効果音ループ再生停止;
         }
 
@@ -234,11 +214,6 @@ public class Type3Manager : MonoBehaviour
                 buttonPushed = false;
                 craneStatus = 5;
             }
-            /*if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-
-            }*/
             //奥移動効果音ループ再生;
         }
 
@@ -457,7 +432,6 @@ public class Type3Manager : MonoBehaviour
             if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;
-                //armController.MotorPower(0f);
                 if (soundType != 2) armController.ArmFinalClose();
                 switch (soundType)
                 {
@@ -627,7 +601,7 @@ public class Type3Manager : MonoBehaviour
             switch (num)
             {
                 case 1:
-                    if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
+                    if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
                         craneBox.rightMoveFlag = false;
@@ -635,7 +609,7 @@ public class Type3Manager : MonoBehaviour
                     }
                     break;
                 case 2:
-                    if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
+                    if (craneStatus == 4 && buttonPushed)
                     {
                         craneStatus = 5;
                         craneBox.backMoveFlag = false;
@@ -649,16 +623,5 @@ public class Type3Manager : MonoBehaviour
     public void InsertCoin()
     {
         if (host.playable) creditSystem.GetPayment(100);
-    }
-    public void Testadder()
-    {
-        Debug.Log("Clicked.");
-        craneStatus++;
-    }
-
-    public void TestSubber()
-    {
-        Debug.Log("Clicked.");
-        craneStatus--;
     }
 }

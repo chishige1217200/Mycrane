@@ -16,7 +16,7 @@ public class Type4Selecter : MonoBehaviour
         _SEPlayer[1] = this.transform.Find("2P").Find("SE").GetComponent<SEPlayer>();
     }
 
-    async void Update()
+    void Update()
     {
         if (manager[0].craneStatus == 0 && manager[1].craneStatus == 0)
         {

@@ -37,12 +37,6 @@ public class Type4Manager : MonoBehaviour
     MachineHost host;
     GameObject canvas;
 
-    //For test-----------------------------------------
-
-    public Text craneStatusdisplayed;
-
-    //-------------------------------------------------
-
     async void Start()
     {
         Transform temp;
@@ -712,7 +706,7 @@ public class Type4Manager : MonoBehaviour
             switch (num)
             {
                 case 1:
-                    if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
+                    if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
                         _SEPlayer.StopSE(1);
@@ -722,7 +716,7 @@ public class Type4Manager : MonoBehaviour
                     }
                     break;
                 case 2:
-                    if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
+                    if (craneStatus == 4 && buttonPushed)
                     {
                         craneStatus = 5;
                         _SEPlayer.StopSE(1);
@@ -732,7 +726,7 @@ public class Type4Manager : MonoBehaviour
                     }
                     break;
                 case 4: // player2 case 1:
-                    if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
+                    if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
                         _SEPlayer.StopSE(1);

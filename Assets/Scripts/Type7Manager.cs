@@ -33,13 +33,7 @@ public class Type7Manager : MonoBehaviour
     GameObject canvas;
     int leverState = 0; // 0:ニュートラル，1:下降中，2:上昇中
     int armState = 0; // 0:閉じている，1:開いている
-
-    //For test-----------------------------------------
-
-    public Text craneStatusdisplayed;
     public TextMesh limitTimedisplayed;
-
-    //-------------------------------------------------
 
     async void Start()
     {
@@ -101,14 +95,7 @@ public class Type7Manager : MonoBehaviour
         limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
-
         if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) InsertCoin();
-        //craneStatusdisplayed.text = craneStatus.ToString();
-        if (craneStatus == -1)
-        {
-            _BGMPlayer.StopBGM(0);
-            //コイン投入無効化;
-        }
 
         if (craneStatus == 0)
         {
@@ -391,17 +378,5 @@ public class Type7Manager : MonoBehaviour
     public void InsertCoin()
     {
         if (host.playable) creditSystem.GetPayment(100);
-    }
-
-    public void Testadder()
-    {
-        Debug.Log("Clicked.");
-        craneStatus++;
-    }
-
-    public void TestSubber()
-    {
-        Debug.Log("Clicked.");
-        craneStatus--;
     }
 }

@@ -34,13 +34,7 @@ public class Type2Manager : MonoBehaviour
     Timer timer;
     MachineHost host;
     GameObject canvas;
-
-    //For test-----------------------------------------
-
-    public Text craneStatusdisplayed;
     public Text limitTimedisplayed;
-
-    //-------------------------------------------------
 
     async void Start()
     {
@@ -61,8 +55,6 @@ public class Type2Manager : MonoBehaviour
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
-
-        //soundType = soundType = UnityEngine.Random.Range(0, 3);
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -127,7 +119,7 @@ public class Type2Manager : MonoBehaviour
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
-        //craneStatusdisplayed.text = craneStatus.ToString();
+
         if (craneStatus == -1)
         {
             _BGMPlayer.StopBGM(2 * soundType);
@@ -179,15 +171,10 @@ public class Type2Manager : MonoBehaviour
                 if (craneBox.CheckPos(8))
                 {
                     buttonPushed = false;
-                    craneStatus = 5;
+                    craneStatus = 6;
                 }
                 //クレーン奥移動;
                 //奥移動効果音ループ再生;
-            }
-
-            if (craneStatus == 5)
-            {
-                craneStatus = 6;
             }
         }
 
@@ -197,11 +184,6 @@ public class Type2Manager : MonoBehaviour
             {
                 _BGMPlayer.StopBGM(2 * soundType);
                 _BGMPlayer.PlayBGM(1 + 2 * soundType);
-                /*if (!isExecuted[craneStatus])
-                {
-                    isExecuted[craneStatus] = true;
-                    timer.limitTimeNow = limitTimeSet;
-                }*/
 
                 //レバー操作有効化;
                 //降下ボタン有効化;
@@ -231,7 +213,6 @@ public class Type2Manager : MonoBehaviour
                 craneBox.leftMoveFlag = false;
                 craneBox.backMoveFlag = false;
                 craneBox.forwardMoveFlag = false;
-                //await Task.Delay(1000);
                 switch (soundType)
                 {
                     case 0:
@@ -402,44 +383,6 @@ public class Type2Manager : MonoBehaviour
                 limitTimedisplayed.text = "0";
         }
     }
-
-
-    /*async void StartTimer()
-    {
-        creditSystem.segUpdateFlag = false;
-        while (timer.limitTimeNow >= 0)
-        {
-            if (timer.limitTimeNow == 0)
-            {
-                craneStatus = 6;
-                await Task.Delay(1000);
-                //creditSystem.segUpdateFlag = true;
-                break;
-            }
-            if (timer.limitTimeNow <= 10)
-            {
-                switch (soundType)
-                {
-                    case 1:
-                        _SEPlayer.PlaySE(7, 1);
-                        break;
-                    case 2:
-                        _SEPlayer.PlaySE(11, 1);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            await Task.Delay(1000);
-            timer.limitTimeNow--;
-        }
-    }*/
-
-    /*void CancelTimer()
-    {
-        timer.limitTimeNow = -1;
-        creditSystem.segUpdateFlag = true;
-    }*/
 
     public void GetPrize()
     {
@@ -632,7 +575,7 @@ public class Type2Manager : MonoBehaviour
             switch (num)
             {
                 case 1:
-                    if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonPushed))
+                    if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
                         craneBox.rightMoveFlag = false;
@@ -640,7 +583,7 @@ public class Type2Manager : MonoBehaviour
                     }
                     break;
                 case 2:
-                    if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonPushed))
+                    if (craneStatus == 4 && buttonPushed)
                     {
                         craneStatus = 5;
                         craneBox.backMoveFlag = false;
@@ -654,17 +597,5 @@ public class Type2Manager : MonoBehaviour
     public void InsertCoin()
     {
         if (host.playable) creditSystem.GetPayment(100);
-    }
-
-    public void Testadder()
-    {
-        Debug.Log("Clicked.");
-        craneStatus++;
-    }
-
-    public void TestSubber()
-    {
-        Debug.Log("Clicked.");
-        craneStatus--;
     }
 }
