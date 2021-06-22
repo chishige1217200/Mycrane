@@ -141,13 +141,6 @@ public class Type1Manager : MonoBehaviour
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) && !player2) InsertCoin();
         if ((Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus)) && player2) InsertCoin();
 
-        if (craneStatus == -1)
-        {
-            //クレーン位置初期化動作;
-            //コイン投入無効化;
-            _BGMPlayer.StopBGM(soundType);
-        }
-
         if (craneStatus == 0)
         {
             _BGMPlayer.PlayBGM(soundType);
@@ -155,255 +148,257 @@ public class Type1Manager : MonoBehaviour
             if (creditSystem.creditDisplayed > 0)
                 craneStatus = 1;
         }
-
-        if (craneStatus == 1)
+        else
         {
-            //コイン投入有効化;
-            //右移動ボタン有効化;
-            InputKeyCheck(craneStatus);
-        }
-
-        if (craneStatus == 2)
-        { //右移動中
-            //コイン投入無効化;
-            InputKeyCheck(craneStatus);
-            //クレーン右移動;
-            _SEPlayer.PlaySE(1, 2);
-            if (!player2 & craneBox.CheckPos(7))
+            if (craneStatus == 1)
             {
-                buttonPushed = false;
-                craneStatus = 3;
+                //コイン投入有効化;
+                //右移動ボタン有効化;
+                InputKeyCheck(craneStatus);
             }
-            if (player2 & craneBox.CheckPos(5))
-            {
-                buttonPushed = false;
-                craneStatus = 3;
+
+            if (craneStatus == 2)
+            { //右移動中
+              //コイン投入無効化;
+                InputKeyCheck(craneStatus);
+                //クレーン右移動;
+                _SEPlayer.PlaySE(1, 2);
+                if (!player2 & craneBox.CheckPos(7))
+                {
+                    buttonPushed = false;
+                    craneStatus = 3;
+                }
+                if (player2 & craneBox.CheckPos(5))
+                {
+                    buttonPushed = false;
+                    craneStatus = 3;
+                }
+                //右移動効果音ループ再生;
             }
-            //右移動効果音ループ再生;
-        }
 
-        if (craneStatus == 3)
-        {
-            InputKeyCheck(craneStatus);
-            _SEPlayer.StopSE(1); //右移動効果音ループ再生停止;
-            //奥移動ボタン有効化;
-        }
-
-        if (craneStatus == 4)
-        { //奥移動中
-            //クレーン奥移動;
-            InputKeyCheck(craneStatus);
-            _SEPlayer.PlaySE(1, 2);
-            if (craneBox.CheckPos(8))
+            if (craneStatus == 3)
             {
-                buttonPushed = false;
-                craneStatus = 5;
+                InputKeyCheck(craneStatus);
+                _SEPlayer.StopSE(1); //右移動効果音ループ再生停止;
+                                     //奥移動ボタン有効化;
             }
-            //奥移動効果音ループ再生;
-        }
 
-        if (craneStatus == 5)
-        {
-            _SEPlayer.StopSE(1); //奥移動効果音ループ再生停止;
-            if (!isExecuted[craneStatus])
+            if (craneStatus == 4)
+            { //奥移動中
+              //クレーン奥移動;
+                InputKeyCheck(craneStatus);
+                _SEPlayer.PlaySE(1, 2);
+                if (craneBox.CheckPos(8))
+                {
+                    buttonPushed = false;
+                    craneStatus = 5;
+                }
+                //奥移動効果音ループ再生;
+            }
+
+            if (craneStatus == 5)
             {
-                isExecuted[craneStatus] = true;
-                armController.ArmOpen();
+                _SEPlayer.StopSE(1); //奥移動効果音ループ再生停止;
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    armController.ArmOpen();
+                    await Task.Delay(1000);
+                    if (craneStatus == 5) craneStatus = 6;
+                }
+                //アーム開く音再生;
+                //アーム開く;
+            }
+
+            if (craneStatus == 6)
+            {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    if (craneStatus == 6) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
+                }
+                InputKeyCheck(craneStatus);
+                _SEPlayer.PlaySE(2, 2);
+                if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
+                //アーム下降音再生
+                //アーム下降;
+            }
+
+            if (craneStatus == 7)
+            {
+                _SEPlayer.StopSE(2); //アーム下降音再生停止;
                 await Task.Delay(1000);
-                if (craneStatus == 5) craneStatus = 6;
+                if (craneStatus == 7) _SEPlayer.PlaySE(3, 2); //アーム掴む音再生;
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    if (craneStatus == 7)
+                        if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
+                        {
+                            if (leftCatchArmpower >= rightCatchArmpower) armController.ArmClose(leftCatchArmpower);
+                            else armController.ArmClose(rightCatchArmpower);
+                        }
+                        else armController.ArmClose(30f);
+                    await Task.Delay(catchTime);
+                    if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
+                }
+                //アーム掴む;
             }
-            //アーム開く音再生;
-            //アーム開く;
-        }
 
-        if (craneStatus == 6)
-        {
-            if (!isExecuted[craneStatus])
+            if (craneStatus == 8)
             {
-                isExecuted[craneStatus] = true;
-                if (craneStatus == 6) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
-            }
-            InputKeyCheck(craneStatus);
-            _SEPlayer.PlaySE(2, 2);
-            if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
-            //アーム下降音再生
-            //アーム下降;
-        }
-
-        if (craneStatus == 7)
-        {
-            _SEPlayer.StopSE(2); //アーム下降音再生停止;
-            await Task.Delay(1000);
-            if (craneStatus == 7) _SEPlayer.PlaySE(3, 2); //アーム掴む音再生;
-            if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-                if (craneStatus == 7)
-                    if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
+                _SEPlayer.StopSE(3);
+                _SEPlayer.PlaySE(4, 2); //アーム上昇音再生;
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    ropeManager.ArmUnitUp();
+                    await Task.Delay(1000);
+                    if (craneStatus < 11)
                     {
-                        if (leftCatchArmpower >= rightCatchArmpower) armController.ArmClose(leftCatchArmpower);
-                        else armController.ArmClose(rightCatchArmpower);
+                        armController.MotorPower(leftCatchArmpower, 0);
+                        armController.MotorPower(rightCatchArmpower, 1);
                     }
-                    else armController.ArmClose(30f);
-                await Task.Delay(catchTime);
-                if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
-            }
-            //アーム掴む;
-        }
-
-        if (craneStatus == 8)
-        {
-            _SEPlayer.StopSE(3);
-            _SEPlayer.PlaySE(4, 2); //アーム上昇音再生;
-            if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-                ropeManager.ArmUnitUp();
-                await Task.Delay(1000);
-                if (craneStatus < 11)
-                {
-                    armController.MotorPower(leftCatchArmpower, 0);
-                    armController.MotorPower(rightCatchArmpower, 1);
                 }
+                if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
+                //アーム上昇;
             }
-            if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
-            //アーム上昇;
-        }
 
-        if (craneStatus == 9)
-        {
-            _SEPlayer.StopSE(4);
-            //アーム上昇停止音再生;
-            //アーム上昇停止;
-            if (!isExecuted[craneStatus])
+            if (craneStatus == 9)
             {
-                isExecuted[craneStatus] = true;
-                if (prizezoneType == 9) craneBox.goPoint = homePoint;
-            }
-            if (isExecuted[craneStatus] && craneStatus == 9) craneStatus = 10;
-        }
-
-        if (craneStatus == 10)
-        {
-            if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-                switch (prizezoneType) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
+                _SEPlayer.StopSE(4);
+                //アーム上昇停止音再生;
+                //アーム上昇停止;
+                if (!isExecuted[craneStatus])
                 {
-                    case 1:
-                        if (!player2) craneBox.leftMoveFlag = true;
-                        else craneBox.rightMoveFlag = true;
-                        craneBox.forwardMoveFlag = true;
-                        break;
-                    case 2:
-                        if (!player2) craneBox.leftMoveFlag = true;
-                        else craneBox.rightMoveFlag = true;
-                        craneBox.backMoveFlag = true;
-                        break;
-                    case 3:
-                        if (!player2) craneBox.rightMoveFlag = true;
-                        else craneBox.leftMoveFlag = true;
-                        craneBox.forwardMoveFlag = true;
-                        break;
-                    case 4:
-                        if (!player2) craneBox.rightMoveFlag = true;
-                        else craneBox.leftMoveFlag = true;
-                        craneBox.backMoveFlag = true;
-                        break;
-                    case 5:
-                        if (!player2) craneBox.leftMoveFlag = true;
-                        else craneBox.rightMoveFlag = true;
-                        break;
-                    case 6:
-                        craneBox.forwardMoveFlag = true;
-                        break;
-                    case 7:
-                        if (!player2) craneBox.rightMoveFlag = true;
-                        else craneBox.leftMoveFlag = true;
-                        break;
-                    case 8:
-                        craneBox.backMoveFlag = true;
-                        break;
-                    case 9:
-                        craneBox.goPositionFlag = true;
-                        break;
+                    isExecuted[craneStatus] = true;
+                    if (prizezoneType == 9) craneBox.goPoint = homePoint;
                 }
+                if (isExecuted[craneStatus] && craneStatus == 9) craneStatus = 10;
             }
-            await Task.Delay(500);
-            if (isExecuted[craneStatus])
-                if (craneBox.CheckPos(9) && craneStatus == 10) craneStatus = 11;
-            //アーム獲得口ポジション移動音再生;
-            //アーム獲得口ポジションへ;
-        }
 
-        if (craneStatus == 11)
-        {
-            if (!isExecuted[craneStatus])
+            if (craneStatus == 10)
             {
-                isExecuted[craneStatus] = true;
-                armController.ArmLimit(100f); // アーム開口度を100に
-                armController.ArmOpen();
-                await Task.Delay(2000);
-                if (craneStatus == 11) craneStatus = 12;
-            }
-            //アーム開く音再生;
-            //アーム開く;
-            //1秒待機;
-        }
-
-        if (craneStatus == 12)
-        {
-            if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-                armController.ArmFinalClose();
-                await Task.Delay(1000);
-                if (craneStatus == 12) craneStatus = 13;
-            }
-            //アーム閉じる音再生;
-            //アーム閉じる;
-            //1秒待機;
-        }
-
-        if (craneStatus == 13)
-        {
-            if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-                if (!player2) craneBox.leftMoveFlag = true;
-                else craneBox.rightMoveFlag = true;
-                craneBox.forwardMoveFlag = true;
-            }
-            if ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2))
-            {
-                await Task.Delay(1000);
-                if (craneStatus == 13) craneStatus = 14;
-            }
-            //アーム初期位置帰還
-        }
-        if (craneStatus == 14)
-        {
-            if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;
-                for (int i = 0; i < 14; i++)
-                    isExecuted[i] = false;
-                armController.ArmLimit(armApertures); //アーム開口度リセット
-                craneBox.goPoint = startPoint;
-                craneBox.goPositionFlag = true;
-            }
-            await Task.Delay(500);
-            if (isExecuted[craneStatus] && craneStatus == 14)
-            {
-                if (craneBox.CheckPos(9))
+                if (!isExecuted[craneStatus])
                 {
-                    if (creditSystem.creditDisplayed > 0)
-                        craneStatus = 1;
-                    else
-                        craneStatus = 0;
+                    isExecuted[craneStatus] = true;
+                    switch (prizezoneType) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
+                    {
+                        case 1:
+                            if (!player2) craneBox.leftMoveFlag = true;
+                            else craneBox.rightMoveFlag = true;
+                            craneBox.forwardMoveFlag = true;
+                            break;
+                        case 2:
+                            if (!player2) craneBox.leftMoveFlag = true;
+                            else craneBox.rightMoveFlag = true;
+                            craneBox.backMoveFlag = true;
+                            break;
+                        case 3:
+                            if (!player2) craneBox.rightMoveFlag = true;
+                            else craneBox.leftMoveFlag = true;
+                            craneBox.forwardMoveFlag = true;
+                            break;
+                        case 4:
+                            if (!player2) craneBox.rightMoveFlag = true;
+                            else craneBox.leftMoveFlag = true;
+                            craneBox.backMoveFlag = true;
+                            break;
+                        case 5:
+                            if (!player2) craneBox.leftMoveFlag = true;
+                            else craneBox.rightMoveFlag = true;
+                            break;
+                        case 6:
+                            craneBox.forwardMoveFlag = true;
+                            break;
+                        case 7:
+                            if (!player2) craneBox.rightMoveFlag = true;
+                            else craneBox.leftMoveFlag = true;
+                            break;
+                        case 8:
+                            craneBox.backMoveFlag = true;
+                            break;
+                        case 9:
+                            craneBox.goPositionFlag = true;
+                            break;
+                    }
                 }
+                await Task.Delay(500);
+                if (isExecuted[craneStatus])
+                    if (craneBox.CheckPos(9) && craneStatus == 10) craneStatus = 11;
+                //アーム獲得口ポジション移動音再生;
+                //アーム獲得口ポジションへ;
             }
-            //アームスタート位置へ
+
+            if (craneStatus == 11)
+            {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    armController.ArmLimit(100f); // アーム開口度を100に
+                    armController.ArmOpen();
+                    await Task.Delay(2000);
+                    if (craneStatus == 11) craneStatus = 12;
+                }
+                //アーム開く音再生;
+                //アーム開く;
+                //1秒待機;
+            }
+
+            if (craneStatus == 12)
+            {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    armController.ArmFinalClose();
+                    await Task.Delay(1000);
+                    if (craneStatus == 12) craneStatus = 13;
+                }
+                //アーム閉じる音再生;
+                //アーム閉じる;
+                //1秒待機;
+            }
+
+            if (craneStatus == 13)
+            {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    if (!player2) craneBox.leftMoveFlag = true;
+                    else craneBox.rightMoveFlag = true;
+                    craneBox.forwardMoveFlag = true;
+                }
+                if ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2))
+                {
+                    await Task.Delay(1000);
+                    if (craneStatus == 13) craneStatus = 14;
+                }
+                //アーム初期位置帰還
+            }
+            if (craneStatus == 14)
+            {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    for (int i = 0; i < 14; i++)
+                        isExecuted[i] = false;
+                    armController.ArmLimit(armApertures); //アーム開口度リセット
+                    craneBox.goPoint = startPoint;
+                    craneBox.goPositionFlag = true;
+                }
+                await Task.Delay(500);
+                if (isExecuted[craneStatus] && craneStatus == 14)
+                {
+                    if (craneBox.CheckPos(9))
+                    {
+                        if (creditSystem.creditDisplayed > 0)
+                            craneStatus = 1;
+                        else
+                            craneStatus = 0;
+                    }
+                }
+                //アームスタート位置へ
+            }
         }
     }
 

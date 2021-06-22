@@ -29801,6 +29801,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2779865986650447601, guid: 3b435348f7fc8414a9a78368f47ba692,
+        type: 3}
+      propertyPath: playable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4492863929335858790, guid: 3b435348f7fc8414a9a78368f47ba692,
         type: 3}
       propertyPath: autoDestroy
@@ -49260,16 +49265,17 @@ MonoBehaviour:
   craneStatus: -1
   priceSet: 2c01000000000000
   timesSet: 0100000000000000
+  leftCatchArmpower: 10
+  rightCatchArmpower: 10
   armApertures: 80
   soundType: 0
+  catchTime: 2000
   buttonPushed: 0
   player2: 0
-  playable: 1
   button3: 1
   startPoint: {x: 0, y: 0}
   homePoint: {x: 0, y: 0}
   prizezoneType: 6
-  craneStatusdisplayed: {fileID: 469009826}
 --- !u!4 &1153012474
 Transform:
   m_ObjectHideFlags: 0
@@ -52261,16 +52267,17 @@ MonoBehaviour:
   craneStatus: -1
   priceSet: 64000000f4010000
   timesSet: 0100000006000000
+  leftCatchArmpower: 10
+  rightCatchArmpower: 10
   armApertures: 30
   soundType: 0
+  catchTime: 2000
   buttonPushed: 0
   player2: 1
-  playable: 1
   button3: 0
   startPoint: {x: 0, y: 0}
   homePoint: {x: 0, y: 0.47}
   prizezoneType: 9
-  craneStatusdisplayed: {fileID: 469009826}
 --- !u!1 &1204134871
 GameObject:
   m_ObjectHideFlags: 0
