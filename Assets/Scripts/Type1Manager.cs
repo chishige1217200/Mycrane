@@ -91,7 +91,6 @@ public class Type1Manager : MonoBehaviour
         if (!player2) craneBox.leftMoveFlag = true;
         else craneBox.rightMoveFlag = true;
         craneBox.forwardMoveFlag = true;
-        if (!player2) _SEPlayer.PlaySE(6, 1);
 
         if (!player2)
         {
