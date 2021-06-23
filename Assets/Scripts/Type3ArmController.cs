@@ -33,7 +33,7 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = -150f;
+            motor[i].targetVelocity = 150f;
             //motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
@@ -44,7 +44,7 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = 50f;
+            motor[i].targetVelocity = -50f;
             //motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
@@ -55,7 +55,7 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = -10f;
+            motor[i].targetVelocity = 10f;
             //motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
@@ -69,7 +69,7 @@ public class Type3ArmController : MonoBehaviour
         {
             for (int i = 0; i < 3; i++)
             {
-                motor[i].targetVelocity = -100f;
+                motor[i].targetVelocity = 70f;
                 //motor[i].force = 1f;
                 joint[i].motor = motor[i];
             }
@@ -90,13 +90,13 @@ public class Type3ArmController : MonoBehaviour
         {
             if (power > 50)
             {
-                motor[i].targetVelocity = power - 50f;
+                motor[i].targetVelocity = 50f - power;
                 //motor[i].force = 1f;
                 joint[i].motor = motor[i];
             }
             else
             {
-                motor[i].targetVelocity = 1.5f * (power - 50f);
+                motor[i].targetVelocity = 1.5f * (50f - power);
                 //motor[i].force = 1f;
                 joint[i].motor = motor[i];
             }
