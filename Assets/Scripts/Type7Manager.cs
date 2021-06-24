@@ -73,7 +73,7 @@ public class Type7Manager : MonoBehaviour
         support.GetManager(7);
         support.GetRopeManager(ropeManager);
         creditSystem.SetCreditSound(0);
-        //armController.GetManager(7);
+        armController.GetManager(7);
 
         getPoint.GetManager(7);
 

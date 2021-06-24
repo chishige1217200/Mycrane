@@ -18,7 +18,7 @@ public class PrizePanel : MonoBehaviour
 
     void Update()
     {
-        if (canvas.activeSelf && Input.GetMouseButton(0)) PanelActive(false);
+        if (canvas.activeSelf && Input.GetKeyDown(KeyCode.LeftShift)) PanelActive(false);
     }
 
     public void SetPrizeName(string name)
