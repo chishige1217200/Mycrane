@@ -7,15 +7,19 @@ public class Type5Selecter : MonoBehaviour
 {
     [SerializeField] Type5Manager[] manager = new Type5Manager[2];
     BGMPlayer _BGMPlayer;
-    public int soundType = 0;
+    [SerializeField] int soundType = 0;
+    [SerializeField] float audioPitch = 1.0f;
     int lastPlayed = 6;
     bool updateFlag = true; //trueなら更新可能 soundType2用
 
     void Start()
     {
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
+        _BGMPlayer.SetAudioPitch(audioPitch);
         manager[0].soundType = soundType;
         manager[1].soundType = soundType;
+        manager[0]._SEPlayer.SetAudioPitch(audioPitch);
+        manager[1]._SEPlayer.SetAudioPitch(audioPitch);
     }
 
     void Update()

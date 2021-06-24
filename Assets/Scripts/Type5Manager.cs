@@ -21,7 +21,7 @@ public class Type5Manager : MonoBehaviour
     public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
     Vector2 craneHost; //クレーンゲームの中心位置定義
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
-    SEPlayer _SEPlayer;
+    public SEPlayer _SEPlayer;
     Type5ArmController armController;
     CraneBox craneBox;
     GetPoint getPoint;
