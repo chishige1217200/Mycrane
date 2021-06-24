@@ -10,7 +10,7 @@ public class Type3ArmController : MonoBehaviour
     JointMotor[] motor;
     ArmControllerSupport support;
     Type3Manager _Type3Manager;
-    Type7Manager _Type7Manager;
+    //Type7Manager _Type7Manager;
     public bool releaseFlag = true; //trueなら強制射出
     int craneType = 3;
     void Start()
@@ -55,7 +55,7 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = 10f;
+            motor[i].targetVelocity = 0f;
             //motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
@@ -69,7 +69,7 @@ public class Type3ArmController : MonoBehaviour
         {
             for (int i = 0; i < 3; i++)
             {
-                motor[i].targetVelocity = 70f;
+                motor[i].targetVelocity = 50f;
                 //motor[i].force = 1f;
                 joint[i].motor = motor[i];
             }
@@ -88,18 +88,9 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            if (power > 50)
-            {
-                motor[i].targetVelocity = 50f - power;
-                //motor[i].force = 1f;
-                joint[i].motor = motor[i];
-            }
-            else
-            {
-                motor[i].targetVelocity = 1.5f * (50f - power);
-                //motor[i].force = 1f;
-                joint[i].motor = motor[i];
-            }
+            motor[i].targetVelocity = 50f - power;
+            //motor[i].force = 1f;
+            joint[i].motor = motor[i];
         }
     }
 
@@ -107,7 +98,7 @@ public class Type3ArmController : MonoBehaviour
     {
         craneType = num;
         if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
-        if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
+        //if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
         support = this.transform.Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
         support.GetManager(craneType);
         support.GetArmController(craneType);
