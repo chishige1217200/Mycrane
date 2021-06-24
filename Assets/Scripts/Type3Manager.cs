@@ -30,6 +30,7 @@ public class Type3Manager : MonoBehaviour
     ArmControllerSupport support;
     MachineHost host;
     GameObject canvas;
+    [SerializeField] TextMesh credit3d;
 
     async void Start()
     {
@@ -93,6 +94,9 @@ public class Type3Manager : MonoBehaviour
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
+
+        if (creditSystem.creditDisplayed < 10) credit3d.text = creditSystem.creditDisplayed.ToString();
+        else credit3d.text = "9.";
 
         if (craneStatus == 0)
         {
