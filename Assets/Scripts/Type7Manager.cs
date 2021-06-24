@@ -379,6 +379,6 @@ public class Type7Manager : MonoBehaviour
     }
     public void InsertCoin()
     {
-        if (host.playable) creditSystem.GetPayment(100);
+        if (host.playable && creditSystem.creditDisplayed == 0) creditSystem.GetPayment(100);
     }
 }

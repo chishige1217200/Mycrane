@@ -36,6 +36,8 @@ public class Type4Manager : MonoBehaviour
     KeyCode downButtonNumpad;
     MachineHost host;
     GameObject canvas;
+    [SerializeField] TextMesh credit3d;
+    [SerializeField] TextMesh[] preset = new TextMesh[4];
 
     async void Start()
     {
@@ -56,6 +58,10 @@ public class Type4Manager : MonoBehaviour
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
+        preset[0].text = priceSet[0].ToString();
+        preset[1].text = priceSet[1].ToString();
+        preset[2].text = timesSet[0].ToString();
+        preset[3].text = timesSet[1].ToString();
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -149,7 +155,9 @@ public class Type4Manager : MonoBehaviour
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) && !player2) InsertCoin();
         if ((Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus)) && player2) InsertCoin();
-        //craneStatusdisplayed.text = craneStatus.ToString();
+
+        if (creditSystem.creditDisplayed < 10) credit3d.text = creditSystem.creditDisplayed.ToString();
+        else credit3d.text = "9.";
 
         if (craneStatus == 0)
         {

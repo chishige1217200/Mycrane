@@ -35,6 +35,8 @@ public class Type2Manager : MonoBehaviour
     MachineHost host;
     GameObject canvas;
     public Text limitTimedisplayed;
+    [SerializeField] TextMesh credit3d;
+    [SerializeField] TextMesh[] preset = new TextMesh[4];
 
     async void Start()
     {
@@ -55,6 +57,10 @@ public class Type2Manager : MonoBehaviour
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
+        preset[0].text = priceSet[0].ToString();
+        preset[1].text = priceSet[1].ToString();
+        preset[2].text = timesSet[0].ToString();
+        preset[3].text = timesSet[1].ToString();
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -119,6 +125,9 @@ public class Type2Manager : MonoBehaviour
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
+
+        if (creditSystem.creditDisplayed < 100) credit3d.text = creditSystem.creditDisplayed.ToString();
+        else credit3d.text = "99.";
 
         if (craneStatus == 0)
         {
