@@ -386,20 +386,23 @@ public class Type3Manager : MonoBehaviour
                             break;
                     }
                 }
-                if (support.prizeFlag)
+                if (!armController.releaseFlag)
                 {
-                    if (probability && armPower > backArmpowersuccess)
+                    if (support.prizeFlag)
                     {
-                        armPower -= 0.5f;
-                        armController.MotorPower(armPower);
+                        if (probability && armPower > backArmpowersuccess)
+                        {
+                            armPower -= 0.5f;
+                            armController.MotorPower(armPower);
+                        }
+                        else if (!probability && armPower > backArmpower)
+                        {
+                            armPower -= 0.5f;
+                            armController.MotorPower(armPower);
+                        }
                     }
-                    else if (!probability && armPower > backArmpower)
-                    {
-                        armPower -= 0.5f;
-                        armController.MotorPower(armPower);
-                    }
+                    else armController.MotorPower(100f);
                 }
-                else armController.MotorPower(100f);
 
                 if (craneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
                 //アーム獲得口ポジションへ;
@@ -432,7 +435,7 @@ public class Type3Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    if (soundType != 2) armController.ArmFinalClose();
+                    if (soundType != 2) armController.ArmClose();
                     switch (soundType)
                     {
                         case 2:
