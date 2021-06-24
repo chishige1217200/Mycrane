@@ -262,7 +262,7 @@ public class Type7Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    armController.ArmFinalClose();
+                    armController.ArmClose();
 
                     for (int i = 0; i < 12; i++)
                         isExecuted[i] = false;

@@ -51,7 +51,7 @@ public class Type3ArmController : MonoBehaviour
         }
     }
 
-    public void ArmFinalClose() // 景品排出後に閉じる時
+    /*public void ArmFinalClose() // 景品排出後に閉じる時
     {
         for (int i = 0; i < 3; i++)
         {
@@ -60,7 +60,7 @@ public class Type3ArmController : MonoBehaviour
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
         }
-    }
+    }*/
 
     public async void Release()
     {
