@@ -145,8 +145,8 @@ public class Type5Manager : MonoBehaviour
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) && !player2) InsertCoin();
         if ((Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus)) && player2) InsertCoin();
 
-        if (creditSystem.creditDisplayed < 10) credit3d.text = creditSystem.creditDisplayed.ToString();
-        else credit3d.text = "9.";
+        if (creditSystem.creditDisplayed < 100) credit3d.text = creditSystem.creditDisplayed.ToString();
+        else credit3d.text = "99.";
 
         if (craneStatus == 0)
         {
