@@ -349,9 +349,12 @@ public class Type3Manager : MonoBehaviour
 
             if (craneStatus == 9)
             {
-                if (probability) armPower = upArmpowersuccess;
-                else armPower = upArmpower;
-                armController.MotorPower(armPower);
+                if (!armController.releaseFlag)
+                {
+                    if (probability) armPower = upArmpowersuccess;
+                    else armPower = upArmpower;
+                    armController.MotorPower(armPower);
+                }
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -361,6 +364,7 @@ public class Type3Manager : MonoBehaviour
                             _SEPlayer.StopSE(22);
                             break;
                     }
+                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeFlag) armController.Release(); // 上昇後に離す振り分け
                     if (craneStatus == 9) craneStatus = 10;
                 }
                 //アーム上昇停止音再生;
