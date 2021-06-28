@@ -40,7 +40,7 @@ public class Type5Manager : MonoBehaviour
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        //_SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.parent;
         craneHost = new Vector2(temp.position.x, temp.position.z);
