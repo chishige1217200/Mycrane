@@ -89,7 +89,12 @@ public class Type1Manager : MonoBehaviour
         for (int i = 0; i < 15; i++)
             isExecuted[i] = false;
 
-        if (!button3) this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
+        if (!button3)
+        {
+            this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
+            this.transform.Find("Floor").Find("Button3").gameObject.SetActive(false);
+            this.transform.Find("Floor").Find("Button3Disabled").gameObject.SetActive(true);
+        }
 
         // イニシャル移動とinsertFlagを後に実行
         await Task.Delay(3000);
