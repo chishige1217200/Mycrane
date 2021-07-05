@@ -124,13 +124,21 @@ public class Type3Manager : MonoBehaviour
             if (craneStatus == 1)
             {
                 //コイン投入有効化;
-                _BGMPlayer.StopBGM(soundType);
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    _BGMPlayer.StopBGM(soundType);
+                }
                 InputKeyCheck(craneStatus);     //右移動ボタン有効化;
                 switch (soundType)
                 {
                     case 1:
                         if (!_SEPlayer._AudioSource[6].isPlaying)
                             _SEPlayer.PlaySE(7, 2147483647);
+                        break;
+                    case 2:
+                        if (!_SEPlayer._AudioSource[13].isPlaying && !_SEPlayer._AudioSource[16].isPlaying && !_SEPlayer._AudioSource[17].isPlaying)
+                            _BGMPlayer.PlayBGM(2);
                         break;
                     case 3:
                         _BGMPlayer.PlayBGM(4);
@@ -141,7 +149,7 @@ public class Type3Manager : MonoBehaviour
 
             if (craneStatus == 2)
             { //右移動中
-
+                _BGMPlayer.StopBGM(soundType);
                 InputKeyCheck(craneStatus);
                 //コイン投入無効化;
                 switch (soundType)
