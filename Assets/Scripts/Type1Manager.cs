@@ -447,6 +447,7 @@ public class Type1Manager : MonoBehaviour
                         buttonPushed = true;
                         if (craneStatus == 1)
                         {
+                            creditSystem.ResetPayment();
                             creditSystem.PlayStart();
                             creditSystem.AddCreditPlayed();
                             isExecuted[14] = false;
