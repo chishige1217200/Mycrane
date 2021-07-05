@@ -126,9 +126,6 @@ public class Type2Manager : MonoBehaviour
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
 
-        if (creditSystem.creditDisplayed < 100) credit3d.text = creditSystem.creditDisplayed.ToString();
-        else credit3d.text = "99.";
-
         if (craneStatus == 0)
         {
             _BGMPlayer.StopBGM(1 + 2 * soundType);
@@ -433,8 +430,9 @@ public class Type2Manager : MonoBehaviour
                         if (craneStatus == 1)
                         {
                             creditSystem.ResetPayment();
-                            creditSystem.PlayStart();
-                            creditSystem.AddCreditPlayed();
+                            int credit = creditSystem.PlayStart();
+                            if (credit < 100) credit3d.text = credit.ToString("D2");
+                            else credit3d.text = "99.";
                             isExecuted[12] = false;
                             probability = creditSystem.ProbabilityCheck();
                             Debug.Log("Probability:" + probability);
@@ -521,8 +519,9 @@ public class Type2Manager : MonoBehaviour
                 {
                     craneStatus = 3;
                     creditSystem.ResetPayment();
-                    creditSystem.PlayStart();
-                    creditSystem.AddCreditPlayed();
+                    int credit = creditSystem.PlayStart();
+                    if (credit < 100) credit3d.text = credit.ToString("D2");
+                    else credit3d.text = "99.";
                     isExecuted[12] = false;
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
@@ -542,8 +541,9 @@ public class Type2Manager : MonoBehaviour
                         buttonPushed = true;
                         craneStatus = 2;
                         creditSystem.ResetPayment();
-                        creditSystem.PlayStart();
-                        creditSystem.AddCreditPlayed();
+                        int credit = creditSystem.PlayStart();
+                        if (credit < 100) credit3d.text = credit.ToString("D2");
+                        else credit3d.text = "99.";
                         isExecuted[12] = false;
                         probability = creditSystem.ProbabilityCheck();
                         Debug.Log("Probability:" + probability);
@@ -603,6 +603,11 @@ public class Type2Manager : MonoBehaviour
 
     public void InsertCoin()
     {
-        if (host.playable) creditSystem.Pay(100);
+        if (host.playable)
+        {
+            int credit = creditSystem.Pay(100);
+            if (credit < 100) credit3d.text = credit.ToString("D2");
+            else credit3d.text = "99.";
+        }
     }
 }

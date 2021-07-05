@@ -153,11 +153,8 @@ public class Type4Manager : MonoBehaviour
     {
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
-        if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) && !player2) InsertCoin();
-        if ((Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus)) && player2) InsertCoin();
-
-        if (creditSystem.creditDisplayed < 10) credit3d.text = creditSystem.creditDisplayed.ToString();
-        else credit3d.text = "9.";
+        if (!player2 && (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
+        else if (player2 && (Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus))) InsertCoin();
 
         if (craneStatus == 0)
         {
@@ -360,10 +357,15 @@ public class Type4Manager : MonoBehaviour
                         isExecuted[i] = false;
                     armController.ArmLimit(armApertures); //アーム開口度リセット
                     if (!_SEPlayer._AudioSource[6].isPlaying) _SEPlayer.PlaySE(7, 1);
+
+                    int credit = creditSystem.PlayStart();
+                    if (credit < 10) credit3d.text = credit.ToString();
+                    else credit3d.text = "9.";
+
                     roter.RotateToHome();
                     await Task.Delay(5000);
 
-                    if (creditSystem.creditDisplayed > 0)
+                    if (credit > 0)
                         craneStatus = 1;
                     else
                         craneStatus = 0;
@@ -392,8 +394,7 @@ public class Type4Manager : MonoBehaviour
                         if (craneStatus == 1)
                         {
                             creditSystem.ResetPayment();
-                            creditSystem.PlayStart();
-                            creditSystem.AddCreditPlayed();
+
                             videoPlay.PlayVideo(1);
                             isExecuted[15] = false;
                         }
@@ -407,8 +408,7 @@ public class Type4Manager : MonoBehaviour
                         if (craneStatus == 1)
                         {
                             creditSystem.ResetPayment();
-                            creditSystem.PlayStart();
-                            creditSystem.AddCreditPlayed();
+
                             videoPlay.PlayVideo(1);
                             isExecuted[15] = false;
                         }
@@ -564,8 +564,6 @@ public class Type4Manager : MonoBehaviour
                     {
                         craneStatus = 3;
                         creditSystem.ResetPayment();
-                        creditSystem.PlayStart();
-                        creditSystem.AddCreditPlayed();
                         isExecuted[15] = false;
                     }
             }
@@ -622,8 +620,6 @@ public class Type4Manager : MonoBehaviour
                     {
                         craneStatus = 3;
                         creditSystem.ResetPayment();
-                        creditSystem.PlayStart();
-                        creditSystem.AddCreditPlayed();
                         isExecuted[15] = false;
                     }
             }
@@ -642,8 +638,6 @@ public class Type4Manager : MonoBehaviour
                         buttonPushed = true;
                         craneStatus = 2;
                         creditSystem.ResetPayment();
-                        creditSystem.PlayStart();
-                        creditSystem.AddCreditPlayed();
                         videoPlay.PlayVideo(1);
                         _SEPlayer.PlaySE(1, 1);
                         isExecuted[15] = false;
@@ -699,8 +693,6 @@ public class Type4Manager : MonoBehaviour
                         buttonPushed = true;
                         craneStatus = 2;
                         creditSystem.ResetPayment();
-                        creditSystem.PlayStart();
-                        creditSystem.AddCreditPlayed();
                         videoPlay.PlayVideo(1);
                         _SEPlayer.PlaySE(1, 1);
                         isExecuted[15] = false;
@@ -756,6 +748,11 @@ public class Type4Manager : MonoBehaviour
     }
     public void InsertCoin()
     {
-        if (host.playable) creditSystem.Pay(100);
+        if (host.playable)
+        {
+            int credit = creditSystem.Pay(100);
+            if (credit < 10) credit3d.text = credit.ToString();
+            else credit3d.text = "9.";
+        }
     }
 }

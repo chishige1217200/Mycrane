@@ -143,11 +143,8 @@ public class Type1Manager : MonoBehaviour
     {
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
-        if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) && !player2) InsertCoin();
-        if ((Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus)) && player2) InsertCoin();
-
-        if (creditSystem.creditDisplayed < 10) credit3d.text = creditSystem.creditDisplayed.ToString();
-        else credit3d.text = "9.";
+        if (!player2 && (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
+        else if (player2 && (Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus))) InsertCoin();
 
         if (craneStatus == 0)
         {
@@ -426,6 +423,7 @@ public class Type1Manager : MonoBehaviour
     {
         if (host.playable)
         {
+            int credit = 0;
             switch (num)
             {
                 case 1:
@@ -435,8 +433,9 @@ public class Type1Manager : MonoBehaviour
                         if (craneStatus == 1)
                         {
                             creditSystem.ResetPayment();
-                            creditSystem.PlayStart();
-                            creditSystem.AddCreditPlayed();
+                            credit = creditSystem.PlayStart();
+                            if (credit < 10) credit3d.text = credit.ToString();
+                            else credit3d.text = "9.";
                             isExecuted[14] = false;
                         }
                         craneStatus = 2;
@@ -448,8 +447,9 @@ public class Type1Manager : MonoBehaviour
                         if (craneStatus == 1)
                         {
                             creditSystem.ResetPayment();
-                            creditSystem.PlayStart();
-                            creditSystem.AddCreditPlayed();
+                            credit = creditSystem.PlayStart();
+                            if (credit < 10) credit3d.text = credit.ToString();
+                            else credit3d.text = "9.";
                             isExecuted[14] = false;
                         }
                         craneStatus = 2;
@@ -519,6 +519,7 @@ public class Type1Manager : MonoBehaviour
     {
         if (host.playable)
         {
+            int credit = 0;
             switch (num)
             {
                 case 1:
@@ -527,8 +528,9 @@ public class Type1Manager : MonoBehaviour
                         buttonPushed = true;
                         craneStatus = 2;
                         creditSystem.ResetPayment();
-                        creditSystem.PlayStart();
-                        creditSystem.AddCreditPlayed();
+                        credit = creditSystem.PlayStart();
+                        if (credit < 10) credit3d.text = credit.ToString();
+                        else credit3d.text = "9.";
                         isExecuted[14] = false;
                     }
                     if (craneStatus == 2 && buttonPushed)
@@ -555,8 +557,9 @@ public class Type1Manager : MonoBehaviour
                         buttonPushed = true;
                         craneStatus = 2;
                         creditSystem.ResetPayment();
-                        creditSystem.PlayStart();
-                        creditSystem.AddCreditPlayed();
+                        credit = creditSystem.PlayStart();
+                        if (credit < 10) credit3d.text = credit.ToString();
+                        else credit3d.text = "9.";
                         isExecuted[14] = false;
                     }
                     if (craneStatus == 2 && buttonPushed)
@@ -601,6 +604,11 @@ public class Type1Manager : MonoBehaviour
     }
     public void InsertCoin()
     {
-        if (host.playable) creditSystem.Pay(100);
+        if (host.playable)
+        {
+            int credit = creditSystem.Pay(100);
+            if (credit < 10) credit3d.text = credit.ToString();
+            else credit3d.text = "9.";
+        }
     }
 }

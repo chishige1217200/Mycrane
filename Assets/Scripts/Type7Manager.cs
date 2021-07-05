@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class Type7Manager : MonoBehaviour
 {
     public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    public int[] priceSet = new int[2];
-    public int[] timesSet = new int[2];
+    public int price = 100;
+    public int times = 1;
     [SerializeField] float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
     [SerializeField] float upArmpower = 100; //上昇時のアームパワー(%，未確率時)
     [SerializeField] float backArmpower = 100; //獲得口移動時のアームパワー(%，未確率時)
@@ -51,10 +51,10 @@ public class Type7Manager : MonoBehaviour
         timer = this.transform.Find("Timer").GetComponent<Timer>();
 
         // クレジット情報登録
-        creditSystem.rateSet[0, 0] = priceSet[0];
-        creditSystem.rateSet[1, 0] = priceSet[1];
-        creditSystem.rateSet[0, 1] = timesSet[0];
-        creditSystem.rateSet[1, 1] = timesSet[1];
+        creditSystem.rateSet[0, 0] = price;
+        creditSystem.rateSet[1, 0] = 0;
+        creditSystem.rateSet[0, 1] = times;
+        creditSystem.rateSet[1, 1] = 0;
 
         // ロープとアームコントローラに関する処理
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -119,7 +119,6 @@ public class Type7Manager : MonoBehaviour
                     isExecuted[craneStatus] = true;
                     await Task.Delay(3000);
                     isExecuted[12] = false;
-                    creditSystem.AddCreditPlayed();
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
                     _SEPlayer.PlaySE(1, 1);

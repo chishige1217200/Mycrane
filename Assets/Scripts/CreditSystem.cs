@@ -12,7 +12,7 @@ public class CreditSystem : MonoBehaviour
     private int nowpaid = 0; //投入金額（開始時リセット）
     private int nowpaidSum = 0; //投入金額合計
     private int creditPlayedSum = 0; //プレイされたクレジット数
-    private bool serviceMode = false; //trueならサービスモード
+    //private bool serviceMode = false; //trueならサービスモード
     //public bool insertFlag = false; //trueならコイン投入可能，初期化処理用
     public bool segUpdateFlag = true; //trueならクレジット情報を7セグに表示，タイマー共存時用
     //public bool playable = true; // trueならプレイ可能，ユーザ指定用
@@ -39,22 +39,22 @@ public class CreditSystem : MonoBehaviour
             rateSet[1, 1] = rateSet[0, 1];
         }
 
-        if (!serviceMode) //非サービスモード時に，7セグに表示を反映
+        //if (!serviceMode) //非サービスモード時に，7セグに表示を反映
+        //{
+        priceSet[0].text = rateSet[0, 0].ToString();
+        timesSet[0].text = rateSet[0, 1].ToString();
+        if (rateSet[0, 0] == rateSet[1, 0] && rateSet[0, 1] == rateSet[1, 1]) // 単一プレイ回数設定時
         {
-            priceSet[0].text = rateSet[0, 0].ToString();
-            timesSet[0].text = rateSet[0, 1].ToString();
-            if (rateSet[0, 0] == rateSet[1, 0] && rateSet[0, 1] == rateSet[1, 1]) // 単一プレイ回数設定時
-            {
-                priceSet[1].text = ""; //下段側は表示しない
-                timesSet[1].text = "";
-            }
-            else //2つのレート設定があるとき
-            {
-                priceSet[1].text = rateSet[1, 0].ToString();
-                timesSet[1].text = rateSet[1, 1].ToString();
-            }
+            priceSet[1].text = ""; //下段側は表示しない
+            timesSet[1].text = "";
         }
-        else //サービスモード時
+        else //2つのレート設定があるとき
+        {
+            priceSet[1].text = rateSet[1, 0].ToString();
+            timesSet[1].text = rateSet[1, 1].ToString();
+        }
+        //}
+        /*else //サービスモード時
         {
             priceSet[0].text = "fre";
             priceSet[1].text = "mod";
@@ -62,12 +62,14 @@ public class CreditSystem : MonoBehaviour
             timesSet[1].text = "e";
             Credit.text = " F";
             Debug.Log("サービスモードです");
-        }
+        }*/
+
+        Credit.text = "00";
     }
 
     void Update()
     {
-        if (segUpdateFlag) // segUpdateFlagはタイマー存在機種のみ使用 falseにすると7セグの表示を更新しない
+        /*if (segUpdateFlag) // segUpdateFlagはタイマー存在機種のみ使用 falseにすると7セグの表示を更新しない
         {
             if (!serviceMode) // 通常時
             {
@@ -82,7 +84,7 @@ public class CreditSystem : MonoBehaviour
                 creditDisplayed = creditOld + creditNew; //表示は更新してない（処理の都合上計算）
                 Credit.text = " F";
             }
-        }
+        }*/
     }
 
     public int Pay(int cost)
@@ -104,6 +106,9 @@ public class CreditSystem : MonoBehaviour
         creditDisplayed = creditOld + creditNew; //内部クレジットを更新
         if (creditSoundNum != -1) _SEPlayer.ForcePlaySE(creditSoundNum); //サウンド再生
 
+        if (creditDisplayed >= 100) Credit.text = "99."; //表示更新
+        else Credit.text = creditDisplayed.ToString("D2");
+
         return creditDisplayed;
     }
 
@@ -120,6 +125,12 @@ public class CreditSystem : MonoBehaviour
     {
         creditOld--;
         creditDisplayed = creditOld;
+        creditPlayed++; //確率用プレイ数を1加算
+        creditPlayedSum++; //合計プレイ数を1加算
+
+        if (creditDisplayed >= 100) Credit.text = "99."; //表示更新
+        else Credit.text = creditDisplayed.ToString("D2");
+
         return creditOld;
     }
 
@@ -164,12 +175,12 @@ public class CreditSystem : MonoBehaviour
 
     public void ServiceButton()
     {
-        if (!serviceMode)
-        {
-            creditOld++;
-            creditDisplayed = creditOld + creditNew; //クレジット表示を更新
-            if (creditSoundNum != -1) _SEPlayer.ForcePlaySE(creditSoundNum);
-        }
+        //if (!serviceMode)
+        //{
+        creditOld++;
+        creditDisplayed = creditOld + creditNew; //クレジット表示を更新
+        if (creditSoundNum != -1) _SEPlayer.ForcePlaySE(creditSoundNum);
+        //}
     }
 
     public void SetCreditSound(int num)
@@ -217,12 +228,6 @@ public class CreditSystem : MonoBehaviour
             }
         }*/
         return false;
-    }
-
-    public void AddCreditPlayed() //プレイ開始時に1加算
-    {
-        creditPlayed++; //確率用プレイ数を1加算
-        creditPlayedSum++; //合計プレイ数を1加算
     }
 
     public void ResetCreditProbability()
