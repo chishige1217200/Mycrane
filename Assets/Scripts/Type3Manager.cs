@@ -180,9 +180,7 @@ public class Type3Manager : MonoBehaviour
                     case 2:
                         _SEPlayer.StopSE(14);
                         break;
-                    case 3:
-                        _SEPlayer.StopSE(18);
-                        break;
+
                 }
                 //右移動効果音ループ再生停止;
             }
@@ -205,6 +203,7 @@ public class Type3Manager : MonoBehaviour
                         _SEPlayer.PlaySE(14, 2147483647);
                         break;
                     case 3:
+                        _SEPlayer.StopSE(18);
                         _SEPlayer.PlaySE(19, 2147483647);
                         break;
                 }
