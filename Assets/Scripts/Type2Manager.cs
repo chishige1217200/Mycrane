@@ -432,7 +432,8 @@ public class Type2Manager : MonoBehaviour
                         buttonPushed = true;
                         if (craneStatus == 1)
                         {
-                            creditSystem.ResetNowPayment();
+                            creditSystem.ResetPayment();
+                            creditSystem.PlayStart();
                             creditSystem.AddCreditPlayed();
                             isExecuted[12] = false;
                             probability = creditSystem.ProbabilityCheck();
@@ -519,7 +520,8 @@ public class Type2Manager : MonoBehaviour
                 if (craneStatus == 1)
                 {
                     craneStatus = 3;
-                    creditSystem.ResetNowPayment();
+                    creditSystem.ResetPayment();
+                    creditSystem.PlayStart();
                     creditSystem.AddCreditPlayed();
                     isExecuted[12] = false;
                     probability = creditSystem.ProbabilityCheck();
@@ -539,7 +541,8 @@ public class Type2Manager : MonoBehaviour
                     {
                         buttonPushed = true;
                         craneStatus = 2;
-                        creditSystem.ResetNowPayment();
+                        creditSystem.ResetPayment();
+                        creditSystem.PlayStart();
                         creditSystem.AddCreditPlayed();
                         isExecuted[12] = false;
                         probability = creditSystem.ProbabilityCheck();
@@ -600,6 +603,6 @@ public class Type2Manager : MonoBehaviour
 
     public void InsertCoin()
     {
-        if (host.playable) creditSystem.GetPayment(100);
+        if (host.playable) creditSystem.Pay(100);
     }
 }

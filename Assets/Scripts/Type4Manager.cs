@@ -391,7 +391,8 @@ public class Type4Manager : MonoBehaviour
                         buttonPushed = true;
                         if (craneStatus == 1)
                         {
-                            creditSystem.ResetNowPayment();
+                            creditSystem.ResetPayment();
+                            creditSystem.PlayStart();
                             creditSystem.AddCreditPlayed();
                             videoPlay.PlayVideo(1);
                             isExecuted[15] = false;
@@ -405,7 +406,8 @@ public class Type4Manager : MonoBehaviour
                         buttonPushed = true;
                         if (craneStatus == 1)
                         {
-                            creditSystem.ResetNowPayment();
+                            creditSystem.ResetPayment();
+                            creditSystem.PlayStart();
                             creditSystem.AddCreditPlayed();
                             videoPlay.PlayVideo(1);
                             isExecuted[15] = false;
@@ -561,7 +563,8 @@ public class Type4Manager : MonoBehaviour
                     if (craneStatus == 1)
                     {
                         craneStatus = 3;
-                        creditSystem.ResetNowPayment();
+                        creditSystem.ResetPayment();
+                        creditSystem.PlayStart();
                         creditSystem.AddCreditPlayed();
                         isExecuted[15] = false;
                     }
@@ -618,7 +621,8 @@ public class Type4Manager : MonoBehaviour
                     if (craneStatus == 1)
                     {
                         craneStatus = 3;
-                        creditSystem.ResetNowPayment();
+                        creditSystem.ResetPayment();
+                        creditSystem.PlayStart();
                         creditSystem.AddCreditPlayed();
                         isExecuted[15] = false;
                     }
@@ -637,7 +641,8 @@ public class Type4Manager : MonoBehaviour
                     {
                         buttonPushed = true;
                         craneStatus = 2;
-                        creditSystem.ResetNowPayment();
+                        creditSystem.ResetPayment();
+                        creditSystem.PlayStart();
                         creditSystem.AddCreditPlayed();
                         videoPlay.PlayVideo(1);
                         _SEPlayer.PlaySE(1, 1);
@@ -693,7 +698,8 @@ public class Type4Manager : MonoBehaviour
                     {
                         buttonPushed = true;
                         craneStatus = 2;
-                        creditSystem.ResetNowPayment();
+                        creditSystem.ResetPayment();
+                        creditSystem.PlayStart();
                         creditSystem.AddCreditPlayed();
                         videoPlay.PlayVideo(1);
                         _SEPlayer.PlaySE(1, 1);
@@ -750,6 +756,6 @@ public class Type4Manager : MonoBehaviour
     }
     public void InsertCoin()
     {
-        if (host.playable) creditSystem.GetPayment(100);
+        if (host.playable) creditSystem.Pay(100);
     }
 }

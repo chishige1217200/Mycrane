@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 public class CreditSystem : MonoBehaviour
 {
-    public int creditDisplayed = 0; //筐体に表示されるクレジット（表示・参照用）
+    public int creditDisplayed { get; private set; } = 0; //筐体に表示されるクレジット（表示・参照用）
     private int creditNew = 0; //新規クレジット（割り算の都合上，新規のみを管理）
     private int creditOld = 0; //全クレジット（プレイ可能なものを合算したもの．常に最新ではないことに注意）
     private int nowpaid = 0; //投入金額（開始時リセット）
@@ -83,10 +83,47 @@ public class CreditSystem : MonoBehaviour
                 Credit.text = " F";
             }
         }
-
     }
 
-    public void GetPayment(int cost)
+    public int Pay(int cost)
+    {
+        if (cost == 0) return creditDisplayed;
+
+        nowpaid += cost;
+        nowpaidSum += cost;
+        if (nowpaid % rateSet[1, 0] == 0 && creditNew < nowpaid / rateSet[1, 0] * rateSet[1, 1]) //高額レート優先（設定されていない場合は低額レートの値を使用）
+        {
+            creditNew = nowpaid / rateSet[1, 0] * rateSet[1, 1];
+            ResetPayment();
+        }
+        else if (nowpaid % rateSet[0, 0] == 0 && creditNew < nowpaid / rateSet[0, 0] * rateSet[0, 1]) //低額レート
+            creditNew = nowpaid / rateSet[0, 0] * rateSet[0, 1];
+        else
+            Debug.Log("あなたは損または保留をしています"); //いずれでも割り切れない場合
+
+        creditDisplayed = creditOld + creditNew; //内部クレジットを更新
+        if (creditSoundNum != -1) _SEPlayer.ForcePlaySE(creditSoundNum); //サウンド再生
+
+        return creditDisplayed;
+    }
+
+    public void ResetPayment()
+    {
+        if (nowpaid % rateSet[1, 0] == 0 || nowpaid % rateSet[0, 0] == 0) nowpaid = 0; //新規クレジット用に投入された金額で割り切れる部分のみ精算
+        else nowpaid = nowpaid % rateSet[0, 0];
+        creditOld = creditOld + creditNew; //内部クレジットを更新
+        creditNew = 0; //新規クレジットを初期化
+        creditDisplayed = creditOld; //creditOldがクレジットの実体（creditNew=0のため）
+    }
+
+    public int PlayStart()
+    {
+        creditOld--;
+        creditDisplayed = creditOld;
+        return creditOld;
+    }
+
+    /*public void GetPayment(int cost)
     {
         if (!serviceMode) //プレイ可能かつサービスモードでないとき
         {
@@ -118,12 +155,12 @@ public class CreditSystem : MonoBehaviour
             /*if (paid != 0 && creditPlayed < creditProbability && (probabilityMode == 4 || probabilityMode == 5)) costList.Add(paid); //精算分を追加
             if ((probabilityMode == 4 || probabilityMode == 5) && costList.Count > 0)
                 creditRemainbyCost = CreditReproduction();*/
-            creditOld = creditOld + creditNew; //内部クレジットを更新
-            creditNew = 0; //新規クレジットを初期化
-            if (creditOld > 0) creditOld--; //クレジット1減らす
-            creditDisplayed = creditOld; //creditOldがクレジットの実体（creditNew=0のため）
-        }
-    }
+    /*creditOld = creditOld + creditNew; //内部クレジットを更新
+    creditNew = 0; //新規クレジットを初期化
+    if (creditOld > 0) creditOld--; //クレジット1減らす
+    creditDisplayed = creditOld; //creditOldがクレジットの実体（creditNew=0のため）
+}
+}*/
 
     public void ServiceButton()
     {
@@ -149,7 +186,7 @@ public class CreditSystem : MonoBehaviour
 
     [SerializeField] int creditProbability = 3; //設定クレジット数
     //private int costProbability = 200; //設定金額
-    private int nowPaidforProbability = 0; //確率設定用の投入金額
+    //private int nowPaidforProbability = 0; //確率設定用の投入金額
     //private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数（初期化時-1）
     private int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
     [SerializeField] int n = 3; //ランダム確率設定n

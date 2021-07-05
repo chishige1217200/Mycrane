@@ -434,7 +434,8 @@ public class Type1Manager : MonoBehaviour
                         buttonPushed = true;
                         if (craneStatus == 1)
                         {
-                            creditSystem.ResetNowPayment();
+                            creditSystem.ResetPayment();
+                            creditSystem.PlayStart();
                             creditSystem.AddCreditPlayed();
                             isExecuted[14] = false;
                         }
@@ -446,7 +447,7 @@ public class Type1Manager : MonoBehaviour
                         buttonPushed = true;
                         if (craneStatus == 1)
                         {
-                            creditSystem.ResetNowPayment();
+                            creditSystem.PlayStart();
                             creditSystem.AddCreditPlayed();
                             isExecuted[14] = false;
                         }
@@ -524,7 +525,8 @@ public class Type1Manager : MonoBehaviour
                     {
                         buttonPushed = true;
                         craneStatus = 2;
-                        creditSystem.ResetNowPayment();
+                        creditSystem.ResetPayment();
+                        creditSystem.PlayStart();
                         creditSystem.AddCreditPlayed();
                         isExecuted[14] = false;
                     }
@@ -551,7 +553,8 @@ public class Type1Manager : MonoBehaviour
                     {
                         buttonPushed = true;
                         craneStatus = 2;
-                        creditSystem.ResetNowPayment();
+                        creditSystem.ResetPayment();
+                        creditSystem.PlayStart();
                         creditSystem.AddCreditPlayed();
                         isExecuted[14] = false;
                     }
@@ -597,6 +600,6 @@ public class Type1Manager : MonoBehaviour
     }
     public void InsertCoin()
     {
-        if (host.playable) creditSystem.GetPayment(100);
+        if (host.playable) creditSystem.Pay(100);
     }
 }

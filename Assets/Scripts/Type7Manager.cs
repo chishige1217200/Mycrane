@@ -95,14 +95,14 @@ public class Type7Manager : MonoBehaviour
         limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
-        if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) InsertCoin();
+
 
         if (craneStatus == 0)
         {
             _BGMPlayer.PlayBGM(0);
             //コイン投入有効化;
-            if (creditSystem.creditDisplayed > 0)
-                craneStatus = 1;
+            if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) InsertCoin();
+
             /*if (!isExecuted[craneStatus])
             {
                 isExecuted[craneStatus] = true;*/
@@ -156,7 +156,8 @@ public class Type7Manager : MonoBehaviour
                     isExecuted[craneStatus] = true;
                     _SEPlayer.StopSE(3);
                     _SEPlayer.PlaySE(5, 1);
-                    creditSystem.ResetNowPayment();
+                    creditSystem.ResetPayment();
+                    creditSystem.PlayStart();
                     craneBox.rightMoveFlag = false;
                     craneBox.leftMoveFlag = false;
                     craneBox.backMoveFlag = false;
@@ -379,6 +380,7 @@ public class Type7Manager : MonoBehaviour
     }
     public void InsertCoin()
     {
-        if (host.playable && creditSystem.creditDisplayed == 0) creditSystem.GetPayment(100);
+        if (host.playable && creditSystem.creditDisplayed == 0)
+            if (creditSystem.Pay(100) >= 1) craneStatus = 1;
     }
 }
