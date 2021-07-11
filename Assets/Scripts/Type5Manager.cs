@@ -552,7 +552,7 @@ public class Type5Manager : MonoBehaviour
     public void GetPrize()
     {
         int getSoundNum = -1;
-        getSoundNum = 5;
+        getSoundNum = 7;
 
         if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
         {
