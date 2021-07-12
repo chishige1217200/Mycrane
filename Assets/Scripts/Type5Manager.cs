@@ -152,8 +152,6 @@ public class Type5Manager : MonoBehaviour
         if (craneStatus == 0)
         {
             //コイン投入有効化;
-            if (creditSystem.creditDisplayed > 0)
-                craneStatus = 1;
         }
         else
         {
@@ -789,6 +787,7 @@ public class Type5Manager : MonoBehaviour
             int credit = creditSystem.Pay(100);
             if (credit < 100) credit3d.text = credit.ToString();
             else credit3d.text = "99.";
+            if (credit > 0 && craneStatus == 0) craneStatus = 1;
         }
     }
 }

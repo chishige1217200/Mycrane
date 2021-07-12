@@ -159,12 +159,7 @@ public class Type4Manager : MonoBehaviour
         if (craneStatus == 0)
         {
             //コイン投入有効化;
-            if (creditSystem.creditDisplayed > 0)
-            {
-                videoPlay.randomMode = false;
-                craneStatus = 1;
-            }
-            else videoPlay.randomMode = true;
+            videoPlay.randomMode = true;
         }
         else
         {
@@ -753,6 +748,11 @@ public class Type4Manager : MonoBehaviour
             int credit = creditSystem.Pay(100);
             if (credit < 10) credit3d.text = credit.ToString();
             else credit3d.text = "9.";
+            if (credit > 0 && craneStatus == 0)
+            {
+                craneStatus = 1;
+                videoPlay.randomMode = false;
+            }
         }
     }
 }

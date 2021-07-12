@@ -131,8 +131,6 @@ public class Type2Manager : MonoBehaviour
             _BGMPlayer.StopBGM(1 + 2 * soundType);
             _BGMPlayer.PlayBGM(2 * soundType);
             //コイン投入有効化;
-            if (creditSystem.creditDisplayed > 0)
-                craneStatus = 1;
         }
         else
         {
@@ -608,6 +606,7 @@ public class Type2Manager : MonoBehaviour
             int credit = creditSystem.Pay(100);
             if (credit < 100) credit3d.text = credit.ToString("D2");
             else credit3d.text = "99.";
+            if (credit > 0 && craneStatus == 0) craneStatus = 1;
         }
     }
 }
