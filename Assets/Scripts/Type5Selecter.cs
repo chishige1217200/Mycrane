@@ -7,10 +7,9 @@ public class Type5Selecter : MonoBehaviour
 {
     [SerializeField] Type5Manager[] manager = new Type5Manager[2];
     BGMPlayer _BGMPlayer;
-    [SerializeField] int soundType = 0;
+    [SerializeField] int soundType = 0; //0:U9_1，1:U9_2，2:U8，3:U7
     [SerializeField] float audioPitch = 1.0f;
-    int lastPlayed = 6;
-    bool updateFlag = true; //trueなら更新可能 soundType2用
+    int nextPlay = 6;
 
     void Start()
     {
@@ -24,7 +23,6 @@ public class Type5Selecter : MonoBehaviour
 
     void Update()
     {
-
         if (manager[0].craneStatus == 0 && manager[1].craneStatus == 0)
         {
             switch (soundType)
@@ -38,18 +36,22 @@ public class Type5Selecter : MonoBehaviour
                     _BGMPlayer.PlayBGM(2);
                     break;
                 case 2:
-                    _BGMPlayer.StopBGM(6);
-                    if (!_BGMPlayer._AudioSource[4].isPlaying && !_BGMPlayer._AudioSource[6].isPlaying)
+                    _BGMPlayer.StopBGM(5);
+                    _BGMPlayer.PlayBGM(4);
+                    break;
+                case 3:
+                    _BGMPlayer.StopBGM(8);
+                    if (!_BGMPlayer._AudioSource[6].isPlaying && !_BGMPlayer._AudioSource[7].isPlaying)
                     {
-                        if (lastPlayed == 4)
+                        if (nextPlay == 6)
                         {
                             _BGMPlayer._AudioSource[6].Play(); //1回しか再生したくないため
-                            lastPlayed = 6;
+                            nextPlay = 7;
                         }
-                        else if (lastPlayed == 6)
+                        else if (nextPlay == 7)
                         {
-                            _BGMPlayer._AudioSource[4].Play(); //1回しか再生したくないため
-                            lastPlayed = 4;
+                            _BGMPlayer._AudioSource[7].Play(); //1回しか再生したくないため
+                            nextPlay = 6;
                         }
                     }
                     break;
@@ -69,8 +71,12 @@ public class Type5Selecter : MonoBehaviour
                     break;
                 case 2:
                     _BGMPlayer.StopBGM(4);
-                    _BGMPlayer.StopBGM(5);
-                    _BGMPlayer.PlayBGM(6);
+                    _BGMPlayer.PlayBGM(5);
+                    break;
+                case 3:
+                    _BGMPlayer.StopBGM(6);
+                    _BGMPlayer.StopBGM(7);
+                    _BGMPlayer.PlayBGM(8);
                     break;
             }
             /*if (_BGMPlayer._AudioSource[0].isPlaying) await Task.Delay(500);

@@ -173,9 +173,10 @@ public class Type5Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
+                    case 2:
                         _SEPlayer.PlaySE(1, 2147483647);
                         break;
-                    case 2:
+                    case 3:
                         _SEPlayer.PlaySE(9, 2147483647);
                         break;
                 }
@@ -199,9 +200,10 @@ public class Type5Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
+                    case 2:
                         _SEPlayer.StopSE(1);
                         break;
-                    case 2:
+                    case 3:
                         _SEPlayer.StopSE(9);
                         break;
                 }
@@ -217,9 +219,10 @@ public class Type5Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
+                    case 2:
                         _SEPlayer.PlaySE(2, 2147483647);
                         break;
-                    case 2:
+                    case 3:
                         _SEPlayer.PlaySE(10, 2147483647);
                         break;
                 }
@@ -242,10 +245,11 @@ public class Type5Manager : MonoBehaviour
                     {
                         case 0:
                         case 1:
+                        case 2:
                             _SEPlayer.StopSE(2);
                             _SEPlayer.PlaySE(3, 1);
                             break;
-                        case 2:
+                        case 3:
                             _SEPlayer.StopSE(10);
                             _SEPlayer.PlaySE(11, 1);
                             break;
@@ -266,9 +270,10 @@ public class Type5Manager : MonoBehaviour
                     {
                         case 0:
                         case 1:
+                        case 2:
                             _SEPlayer.PlaySE(4, 2147483647);
                             break;
-                        case 2:
+                        case 3:
                             _SEPlayer.PlaySE(12, 2147483647);
                             break;
                     }
@@ -286,9 +291,10 @@ public class Type5Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
+                    case 2:
                         _SEPlayer.StopSE(4);
                         break;
-                    case 2:
+                    case 3:
                         _SEPlayer.StopSE(12);
                         break;
                 }
@@ -302,9 +308,10 @@ public class Type5Manager : MonoBehaviour
                     {
                         case 0:
                         case 1:
+                        case 2:
                             _SEPlayer.PlaySE(5, 1);
                             break;
-                        case 2:
+                        case 3:
                             _SEPlayer.PlaySE(13, 1);
                             break;
                     }
@@ -332,9 +339,10 @@ public class Type5Manager : MonoBehaviour
                     {
                         case 0:
                         case 1:
+                        case 2:
                             _SEPlayer.PlaySE(4, 2147483647);
                             break;
-                        case 2:
+                        case 3:
                             _SEPlayer.PlaySE(14, 2147483647);
                             break;
                     }
@@ -371,10 +379,11 @@ public class Type5Manager : MonoBehaviour
                     {
                         case 0:
                         case 1:
+                        case 2:
                             _SEPlayer.StopSE(4);
                             _SEPlayer.PlaySE(6, 2147483647);
                             break;
-                        case 2:
+                        case 3:
                             _SEPlayer.StopSE(14);
                             _SEPlayer.PlaySE(9, 2147483647);
                             break;
@@ -436,10 +445,11 @@ public class Type5Manager : MonoBehaviour
                     {
                         case 0:
                         case 1:
+                        case 2:
                             _SEPlayer.StopSE(6);
                             _SEPlayer.PlaySE(3, 1);
                             break;
-                        case 2:
+                        case 3:
                             _SEPlayer.StopSE(9);
                             _SEPlayer.PlaySE(11, 1);
                             break;
@@ -463,9 +473,10 @@ public class Type5Manager : MonoBehaviour
                     {
                         case 0:
                         case 1:
+                        case 2:
                             _SEPlayer.PlaySE(5, 1);
                             break;
-                        case 2:
+                        case 3:
                             _SEPlayer.PlaySE(13, 1);
                             break;
                     }
@@ -487,6 +498,7 @@ public class Type5Manager : MonoBehaviour
                     {
                         case 0:
                         case 1:
+                        case 2:
                             _SEPlayer.PlaySE(6, 2147483647);
                             break;
                     }
@@ -500,6 +512,7 @@ public class Type5Manager : MonoBehaviour
                     {
                         case 0:
                         case 1:
+                        case 2:
                             _SEPlayer.StopSE(6);
                             break;
                     }
@@ -517,6 +530,7 @@ public class Type5Manager : MonoBehaviour
                     {
                         case 0:
                         case 1:
+                        case 2:
                             _SEPlayer.PlaySE(6, 2147483647);
                             break;
                     }
@@ -535,6 +549,7 @@ public class Type5Manager : MonoBehaviour
                         {
                             case 0:
                             case 1:
+                            case 2:
                                 _SEPlayer.StopSE(6);
                                 break;
                         }
@@ -552,7 +567,29 @@ public class Type5Manager : MonoBehaviour
     public void GetPrize()
     {
         int getSoundNum = -1;
-        getSoundNum = 7;
+        switch (soundType)
+        {
+            case 0:
+            case 1:
+            case 2:
+                getSoundNum = 7;
+                break;
+            case 3:
+                getSoundNum = 15;
+                break;
+        }
+
+        switch (creditSystem.probabilityMode)
+        {
+            case 2:
+            case 3:
+                creditSystem.ResetCreditProbability();
+                break;
+            case 4:
+            case 5:
+                creditSystem.ResetCostProbability();
+                break;
+        }
 
         if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
         {
