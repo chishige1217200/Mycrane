@@ -61,6 +61,14 @@ public class ArmControllerSupport : MonoBehaviour
                         _Type4Manager.craneStatus = 9;
                     }
                     break;
+                case 5:
+                    if (_Type5Manager.craneStatus == 6)
+                    {
+                        Debug.Log("下降制限に接触");
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type5Manager.craneStatus = 7;
+                    }
+                    break;
             }
         }
         if (collider.tag == "prize")
@@ -147,6 +155,13 @@ public class ArmControllerSupport : MonoBehaviour
                     {
                         ropeManager.ArmUnitDownForceStop();
                         _Type4Manager.craneStatus = 9;
+                    }
+                    break;
+                case 5:
+                    if (_Type5Manager.craneStatus == 6)
+                    {
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type5Manager.craneStatus = 7;
                     }
                     break;
             }

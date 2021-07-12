@@ -35,6 +35,14 @@ public class ArmNail : MonoBehaviour
                         _Type4Manager.craneStatus = 9;
                     }
                     break;
+                case 5:
+                    if (_Type5Manager.craneStatus == 6)
+                    {
+                        Debug.Log("床");
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type5Manager.craneStatus = 7;
+                    }
+                    break;
             }
         }
     }

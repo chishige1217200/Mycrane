@@ -60,8 +60,8 @@ public class Type5Manager : MonoBehaviour
         ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
         armController = temp.Find("ArmUnit").GetComponent<Type5ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
-        /*nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
-        nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();*/
+        nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
+        nail[1] = temp.Find("ArmUnit").Find("Arm2").Find("Nail2").GetComponent<ArmNail>();
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
@@ -76,14 +76,14 @@ public class Type5Manager : MonoBehaviour
         if (soundType == 0 || soundType == 1) creditSystem.SetCreditSound(0);
         else creditSystem.SetCreditSound(8);
         creditSystem.GetSEPlayer(_SEPlayer);
-        /*support.GetManager(5);
+        support.GetManager(5);
         support.GetRopeManager(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
-        /*for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 2; i++)
         {
             nail[i].GetManager(5);
             nail[i].GetRopeManager(ropeManager);
-        }*/
+        }
 
         for (int i = 0; i < 15; i++)
             isExecuted[i] = false;
