@@ -17,9 +17,7 @@ public class Type5Manager : MonoBehaviour
     [SerializeField] bool button3 = true; //button3の使用可否
     public Vector2 startPoint; // 開始位置座標定義
     public Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
-    Vector2 vec2offset = new Vector2(0.05f, 0.1f); // <=0.5, <=0.6 座標設定用Temp
     public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
-    Vector2 craneHost; //クレーンゲームの中心位置定義
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     public SEPlayer _SEPlayer;
     Type5ArmController armController;
@@ -42,8 +40,7 @@ public class Type5Manager : MonoBehaviour
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         //_SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
-        temp = this.transform.parent;
-        craneHost = new Vector2(temp.position.x, temp.position.z);
+
         temp = this.transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
@@ -103,13 +100,13 @@ public class Type5Manager : MonoBehaviour
 
         if (!player2)
         {
-            startPoint = new Vector2(-0.65f + vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
-            homePoint = new Vector2(-0.65f + vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
+            startPoint = new Vector2(-0.61f + startPoint.x, -0.31f + startPoint.y);
+            homePoint = new Vector2(-0.61f + homePoint.x, -0.31f + homePoint.y);
         }
         else
         {
-            startPoint = new Vector2(0.65f - vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
-            homePoint = new Vector2(0.65f - vec2offset.x + craneHost.x, -0.3f + vec2offset.y + craneHost.y);
+            startPoint = new Vector2(0.61f - startPoint.x, -0.31f + startPoint.y);
+            homePoint = new Vector2(0.61f - homePoint.x, -0.31f + homePoint.y);
         }
 
         while (true)

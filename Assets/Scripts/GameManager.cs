@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
                 SceneManager.LoadSceneAsync("Title");
                 break;
             case 1:
-                SceneManager.LoadSceneAsync("KroonTest");
+                SceneManager.LoadSceneAsync("TakoyakiTest");
                 break;
             case 2:
                 SceneManager.LoadSceneAsync("Type2Test");
