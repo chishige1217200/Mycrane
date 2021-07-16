@@ -109,7 +109,6 @@ public class Type2Manager : MonoBehaviour
         {
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(false);
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
             this.transform.Find("Floor").Find("Type2L").gameObject.SetActive(true);
         }
 
@@ -480,21 +479,10 @@ public class Type2Manager : MonoBehaviour
                         craneStatus = 6;
                     break;
                 case 6:
-                    if (operationType == 0)
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)))
                     {
-                        if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)))
-                        {
-                            ropeManager.ArmUnitDownForceStop();
-                            craneStatus = 7;
-                        }
-                    }
-                    else if (operationType == 1) // レバー操作時
-                    {
-                        if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)))
-                        {
-                            ropeManager.ArmUnitDownForceStop();
-                            craneStatus = 7;
-                        }
+                        ropeManager.ArmUnitDownForceStop();
+                        craneStatus = 7;
                     }
                     break;
             }
@@ -601,7 +589,7 @@ public class Type2Manager : MonoBehaviour
                 case 2:
                     if (craneStatus == 4 && buttonPushed)
                     {
-                        craneStatus = 5;
+                        craneStatus = 6;
                         craneBox.backMoveFlag = false;
                         buttonPushed = false;
                     }
