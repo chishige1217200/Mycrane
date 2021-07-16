@@ -132,7 +132,10 @@ public class Type4Manager : MonoBehaviour
         }
 
         // イニシャル移動とinsertFlagを後に実行
-        await Task.Delay(3000);
+        while (!ropeManager.UpFinished())
+        {
+            await Task.Delay(100);
+        }
         armController.ArmLimit(armApertures);
         armController.ArmFinalClose();
         videoPlay.randomMode = true;
@@ -140,7 +143,12 @@ public class Type4Manager : MonoBehaviour
         else craneBox.rightMoveFlag = true;
         craneBox.forwardMoveFlag = true;
 
-        await Task.Delay(3000);
+        while (true)
+        {
+            if (!player2 && craneBox.CheckPos(1)) break;
+            if (player2 && craneBox.CheckPos(3)) break;
+            await Task.Delay(1000);
+        }
 
         craneStatus = 0;
     }
@@ -740,7 +748,7 @@ public class Type4Manager : MonoBehaviour
     }
     public void InsertCoin()
     {
-        if (host.playable)
+        if (host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 10) credit3d.text = credit.ToString();

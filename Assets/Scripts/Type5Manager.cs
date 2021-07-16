@@ -92,7 +92,10 @@ public class Type5Manager : MonoBehaviour
         }
 
         // イニシャル移動とinsertFlagを後に実行
-        await Task.Delay(3000);
+        while (!ropeManager.UpFinished())
+        {
+            await Task.Delay(100);
+        }
         armController.ArmLimit(armApertures);
         if (!player2) craneBox.leftMoveFlag = true;
         else craneBox.rightMoveFlag = true;
@@ -779,7 +782,7 @@ public class Type5Manager : MonoBehaviour
 
     public void InsertCoin()
     {
-        if (host.playable)
+        if (host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 100) credit3d.text = credit.ToString();

@@ -79,15 +79,25 @@ public class Type7Manager : MonoBehaviour
 
         await Task.Delay(300);
         ropeManager.ArmUnitUp();
+        while (!ropeManager.UpFinished())
+        {
+            await Task.Delay(100);
+        }
         craneBox.leftMoveFlag = true;
         craneBox.forwardMoveFlag = true;
 
         for (int i = 0; i < 12; i++)
             isExecuted[i] = false;
 
-        await Task.Delay(4000);
-
-        craneStatus = 0;
+        while (true)
+        {
+            if (craneBox.CheckPos(1))
+            {
+                craneStatus = 0;
+                break;
+            }
+            await Task.Delay(1000);
+        }
     }
 
     async void Update()
@@ -379,7 +389,7 @@ public class Type7Manager : MonoBehaviour
     }
     public void InsertCoin()
     {
-        if (host.playable && creditSystem.creditDisplayed == 0)
+        if (host.playable && craneStatus >= 0 && creditSystem.creditDisplayed == 0)
             if (creditSystem.Pay(100) >= 1) craneStatus = 1;
     }
 }

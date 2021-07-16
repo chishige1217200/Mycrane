@@ -113,11 +113,22 @@ public class Type2Manager : MonoBehaviour
             this.transform.Find("Floor").Find("Type2L").gameObject.SetActive(true);
         }
 
+        while (!ropeManager.UpFinished())
+        {
+            await Task.Delay(100);
+        }
         craneBox.leftMoveFlag = true;
         craneBox.forwardMoveFlag = true;
-        await Task.Delay(3000);
         armController.ArmOpen();
-        craneStatus = 0;
+        while (true)
+        {
+            if (craneBox.CheckPos(1))
+            {
+                craneStatus = 0;
+                break;
+            }
+            await Task.Delay(1000);
+        }
     }
 
     async void Update()
@@ -601,7 +612,7 @@ public class Type2Manager : MonoBehaviour
 
     public void InsertCoin()
     {
-        if (host.playable)
+        if (host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 100) credit3d.text = credit.ToString("D2");

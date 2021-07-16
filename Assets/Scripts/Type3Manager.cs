@@ -76,6 +76,10 @@ public class Type3Manager : MonoBehaviour
 
         await Task.Delay(300);
         ropeManager.ArmUnitUp();
+        while (!ropeManager.UpFinished())
+        {
+            await Task.Delay(100);
+        }
         if (soundType == 2) armController.ArmOpen();
         else armController.ArmClose();
         craneBox.leftMoveFlag = true;
@@ -84,9 +88,15 @@ public class Type3Manager : MonoBehaviour
         for (int i = 0; i < 12; i++)
             isExecuted[i] = false;
 
-        await Task.Delay(4000);
-
-        craneStatus = 0;
+        while (true)
+        {
+            if (craneBox.CheckPos(1))
+            {
+                craneStatus = 0;
+                break;
+            }
+            await Task.Delay(1000);
+        }
     }
 
     async void Update()
@@ -639,7 +649,7 @@ public class Type3Manager : MonoBehaviour
 
     public void InsertCoin()
     {
-        if (host.playable)
+        if (host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 10) credit3d.text = credit.ToString();
