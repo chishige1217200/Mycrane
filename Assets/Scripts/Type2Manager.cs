@@ -236,6 +236,17 @@ public class Type2Manager : MonoBehaviour
                     await Task.Delay(300);
                     timer.CancelTimer();
                     creditSystem.segUpdateFlag = true;
+                    int credit = creditSystem.Pay(0);
+                    if (credit < 100)
+                    {
+                        limitTimedisplayed.text = credit.ToString("D2");
+                        credit3d.text = credit.ToString("D2");
+                    }
+                    else
+                    {
+                        limitTimedisplayed.text = "99";
+                        credit3d.text = "99.";
+                    }
                     if (craneStatus == 6) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
                 }
                 if (craneStatus == 6 && isExecuted[6]) InputKeyCheck(craneStatus); //awaitによる時差実行を防止
@@ -386,9 +397,16 @@ public class Type2Manager : MonoBehaviour
             if (!creditSystem.segUpdateFlag) // Timer表示用
             {
                 if (timer.limitTimeNow >= 0)
-                    limitTimedisplayed.text = timer.limitTimeNow.ToString();
+                {
+                    limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
+                    credit3d.text = timer.limitTimeNow.ToString("D2");
+                }
                 else
-                    limitTimedisplayed.text = "0";
+                {
+                    limitTimedisplayed.text = "00";
+                    credit3d.text = "00";
+                }
+
             }
         }
     }
