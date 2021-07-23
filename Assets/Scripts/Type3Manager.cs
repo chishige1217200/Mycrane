@@ -143,10 +143,6 @@ public class Type3Manager : MonoBehaviour
                         if (!_SEPlayer._AudioSource[6].isPlaying)
                             _SEPlayer.PlaySE(7, 2147483647);
                         break;
-                    case 2:
-                        if (!_SEPlayer._AudioSource[13].isPlaying && !_SEPlayer._AudioSource[16].isPlaying && !_SEPlayer._AudioSource[17].isPlaying)
-                            _BGMPlayer.PlayBGM(2);
-                        break;
                     case 3:
                         _BGMPlayer.PlayBGM(4);
                         break;
@@ -187,13 +183,6 @@ public class Type3Manager : MonoBehaviour
             if (craneStatus == 3)
             {
                 InputKeyCheck(craneStatus);         //奥移動ボタン有効化;
-                switch (soundType)
-                {
-                    case 2:
-                        _SEPlayer.StopSE(14);
-                        break;
-
-                }
                 //右移動効果音ループ再生停止;
             }
 
@@ -272,7 +261,7 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 2:
-                            _SEPlayer.PlaySE(15, 2147483647);
+                            _SEPlayer.PlaySE(15, 2);
                             break;
                         case 3:
                             _SEPlayer.PlaySE(21, 2147483647);
@@ -331,10 +320,6 @@ public class Type3Manager : MonoBehaviour
                             _SEPlayer.StopSE(10);
                             _SEPlayer.PlaySE(11, 2147483647);
                             break;
-                        case 2:
-                            _SEPlayer.StopSE(15);
-                            _SEPlayer.PlaySE(14, 2147483647);
-                            break;
                         case 3:
                             _SEPlayer.PlaySE(22, 2147483647);
                             break;
@@ -343,6 +328,9 @@ public class Type3Manager : MonoBehaviour
                     await Task.Delay(1500);
                     if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeFlag) armController.Release(); // 上昇中に離す振り分け
                 }
+                if (soundType == 2)
+                    if (!_SEPlayer._AudioSource[15].isPlaying)
+                        _SEPlayer.PlaySE(14, 2147483647);
                 if (probability && armPower > upArmpowersuccess)
                 {
                     armPower -= 0.5f;
@@ -396,15 +384,14 @@ public class Type3Manager : MonoBehaviour
                             _SEPlayer.StopSE(4);
                             _SEPlayer.PlaySE(1, 2147483647);
                             break;
-                        case 2:
-                            _SEPlayer.StopSE(14);
-                            _SEPlayer.PlaySE(14, 2147483647);
-                            break;
                         case 3:
                             _SEPlayer.PlaySE(23, 2147483647);
                             break;
                     }
                 }
+                if (soundType == 2)
+                    if (!_SEPlayer._AudioSource[15].isPlaying)
+                        _SEPlayer.PlaySE(14, 2147483647);
                 if (!armController.releaseFlag)
                 {
                     if (support.prizeFlag)

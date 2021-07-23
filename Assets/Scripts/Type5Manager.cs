@@ -70,7 +70,7 @@ public class Type5Manager : MonoBehaviour
         getPoint.GetManager(5);
         ropeManager.ArmUnitUp();
         await Task.Delay(500);
-        if (soundType == 0 || soundType == 1) creditSystem.SetCreditSound(0);
+        if (soundType == 0 || soundType == 1 || soundType == 2) creditSystem.SetCreditSound(0);
         else creditSystem.SetCreditSound(8);
         creditSystem.GetSEPlayer(_SEPlayer);
         support.GetManager(5);
