@@ -365,7 +365,7 @@ public class Type4Manager : MonoBehaviour
                     roter.RotateToHome();
                     await Task.Delay(5000);
 
-                    if (credit > 0)
+                    if (creditSystem.creditDisplayed > 0)
                         craneStatus = 1;
                     else
                         craneStatus = 0;
