@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneChanger : MonoBehaviour
 {
     [SerializeField] SceneObject scene;
-    [SerializeField] AudioSource audio;
+    [SerializeField] new AudioSource audio;
 
     public void SceneTransition()
     {
