@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -44771,6 +44771,7 @@ GameObject:
   - component: {fileID: 2105770095}
   - component: {fileID: 2105770094}
   - component: {fileID: 2105770093}
+  - component: {fileID: 2105770096}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -44841,9 +44842,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2070689659}
-        m_MethodName: GoScene
-        m_Mode: 3
+      - m_Target: {fileID: 2105770096}
+        m_MethodName: SceneTransition
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -44889,6 +44890,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2105770091}
   m_CullTransparentMesh: 0
+--- !u!114 &2105770096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105770091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0b65a932408fec4ea680029ff54866a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene:
+    m_SceneName: Title
+  audio: {fileID: 0}
 --- !u!1 &2117068868
 GameObject:
   m_ObjectHideFlags: 0
@@ -51357,6 +51373,11 @@ PrefabInstance:
         type: 3}
       propertyPath: autoDestroy
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8318185914828144773, guid: 56a88544d73d0354da0676c2b8a6414a,
+        type: 3}
+      propertyPath: rotation
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8318185914828144773, guid: 56a88544d73d0354da0676c2b8a6414a,
         type: 3}

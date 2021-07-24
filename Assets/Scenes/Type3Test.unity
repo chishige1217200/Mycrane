@@ -1420,6 +1420,7 @@ GameObject:
   - component: {fileID: 440974969}
   - component: {fileID: 440974968}
   - component: {fileID: 440974967}
+  - component: {fileID: 440974970}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1490,9 +1491,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 601567825}
-        m_MethodName: GoScene
-        m_Mode: 3
+      - m_Target: {fileID: 440974970}
+        m_MethodName: SceneTransition
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1538,6 +1539,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 440974965}
   m_CullTransparentMesh: 0
+--- !u!114 &440974970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440974965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0b65a932408fec4ea680029ff54866a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene:
+    m_SceneName: Title
+  audio: {fileID: 0}
 --- !u!4 &446512613 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2087722608455836585, guid: 9c5817fe0c55feb48bd780106374bedc,
@@ -3656,7 +3672,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &915182414
 Light:
   m_ObjectHideFlags: 0

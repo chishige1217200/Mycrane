@@ -358,13 +358,14 @@ public class Type4Manager : MonoBehaviour
                     armController.ArmLimit(armApertures); //アーム開口度リセット
                     if (!_SEPlayer._AudioSource[6].isPlaying) _SEPlayer.PlaySE(7, 1);
 
+                    creditSystem.ResetPayment();
                     int credit = creditSystem.PlayStart();
                     if (credit < 10) credit3d.text = credit.ToString();
                     else credit3d.text = "9.";
 
                     roter.RotateToHome();
                     await Task.Delay(5000);
-
+                    creditSystem.ResetPayment();
                     if (creditSystem.creditDisplayed > 0)
                         craneStatus = 1;
                     else

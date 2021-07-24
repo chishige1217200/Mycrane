@@ -2457,6 +2457,7 @@ GameObject:
   - component: {fileID: 449414372}
   - component: {fileID: 449414371}
   - component: {fileID: 449414370}
+  - component: {fileID: 449414373}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -2527,9 +2528,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1532290217}
-        m_MethodName: GoScene
-        m_Mode: 3
+      - m_Target: {fileID: 449414373}
+        m_MethodName: SceneTransition
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2575,6 +2576,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449414368}
   m_CullTransparentMesh: 0
+--- !u!114 &449414373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 449414368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0b65a932408fec4ea680029ff54866a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene:
+    m_SceneName: Title
+  audio: {fileID: 0}
 --- !u!1 &459726782
 GameObject:
   m_ObjectHideFlags: 0
