@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Video;
 using System.Threading.Tasks;
 
-public class VideoPlay : MonoBehaviour
+public class Type4VideoPlay : MonoBehaviour
 {
     public VideoPlayer[] videoPlayer; //オーディオ情報の格納
     public VideoClip[] videoClips;

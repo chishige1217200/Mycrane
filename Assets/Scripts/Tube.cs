@@ -6,6 +6,8 @@ public class Tube : MonoBehaviour
 {
     [SerializeField] GameObject tube;
     GameObject craneUnit;
+    public bool parent = false; //一番上の質点かどうか
+    public bool last = false; //下から二番目の質点かどうか
 
     void Start()
     {

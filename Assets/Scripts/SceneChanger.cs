@@ -11,6 +11,6 @@ public class SceneChanger : MonoBehaviour
     public void SceneTransition()
     {
         if (audio != null) audio.PlayOneShot(audio.clip);
-        SceneManager.LoadSceneAsync(scene);
+        SceneManager.LoadScene(scene);
     }
 }

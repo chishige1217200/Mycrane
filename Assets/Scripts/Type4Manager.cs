@@ -29,7 +29,7 @@ public class Type4Manager : MonoBehaviour
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[2];
     Lever lever;
-    VideoPlay videoPlay;
+    Type4VideoPlay videoPlay;
     Type4ArmunitRoter roter;
     KeyCode downButtonAlpha;
     KeyCode downButtonNumpad;
@@ -66,7 +66,7 @@ public class Type4Manager : MonoBehaviour
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
         nail[1] = temp.Find("ArmUnit").Find("Arm2").Find("Nail2").GetComponent<ArmNail>();
-        videoPlay = this.transform.Find("VideoPlay").GetComponent<VideoPlay>();
+        videoPlay = this.transform.Find("VideoPlay").GetComponent<Type4VideoPlay>();
         roter = temp.Find("ArmUnit").Find("Main").GetComponent<Type4ArmunitRoter>();
 
         // CraneBoxに関する処理
