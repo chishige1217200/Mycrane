@@ -20,7 +20,7 @@ public class Type1Manager : MonoBehaviour
     public Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
     public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
-    BGMPlayer _BGMPlayer;
+    //BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
     Type1ArmController armController;
     CraneBox craneBox;
@@ -40,7 +40,7 @@ public class Type1Manager : MonoBehaviour
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
+        //_BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
@@ -152,7 +152,7 @@ public class Type1Manager : MonoBehaviour
 
         if (craneStatus == 0)
         {
-            _BGMPlayer.PlayBGM(soundType);
+            //_BGMPlayer.PlayBGM(soundType);
             //コイン投入有効化;
         }
         else
