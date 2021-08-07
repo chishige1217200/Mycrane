@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class Type3Manager : MonoBehaviour
 {
-    public int craneStatus = -1; //-1:初期化動作，0:待機状態
+    public int craneStatus = -2; //-2:初期化動作，0:待機状態
     [SerializeField] int[] priceSet = new int[2];
     [SerializeField] int[] timesSet = new int[2];
     [SerializeField] float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
@@ -57,7 +57,6 @@ public class Type3Manager : MonoBehaviour
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        //craneBox.GetManager(3);
 
         // ロープにマネージャー情報をセット
         ropeManager.SetManagerToPoint(3);
@@ -82,21 +81,11 @@ public class Type3Manager : MonoBehaviour
         }
         if (soundType == 2) armController.ArmOpen();
         else armController.ArmClose();
-        craneBox.leftMoveFlag = true;
-        craneBox.forwardMoveFlag = true;
 
         for (int i = 0; i < 12; i++)
             isExecuted[i] = false;
 
-        while (true)
-        {
-            if (craneBox.CheckPos(1))
-            {
-                craneStatus = 0;
-                break;
-            }
-            await Task.Delay(1000);
-        }
+        craneStatus = -1;
     }
 
     async void Update()
@@ -104,6 +93,9 @@ public class Type3Manager : MonoBehaviour
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
+
+        if (craneStatus == -1)
+            if (craneBox.CheckPos(1)) craneStatus = 0;
 
         if (craneStatus == 0)
         {
@@ -376,8 +368,6 @@ public class Type3Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    craneBox.leftMoveFlag = true;
-                    craneBox.forwardMoveFlag = true;
                     switch (soundType)
                     {
                         case 0:
@@ -388,6 +378,7 @@ public class Type3Manager : MonoBehaviour
                             _SEPlayer.PlaySE(23, 2147483647);
                             break;
                     }
+
                 }
                 if (soundType == 2)
                     if (!_SEPlayer._AudioSource[15].isPlaying)
@@ -477,6 +468,26 @@ public class Type3Manager : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        if (craneStatus == 0) ;
+        else
+        {
+            if (craneStatus == -1)
+            {
+                craneBox.Left();
+                craneBox.Forward();
+            }
+            else if (craneStatus == 2) craneBox.Right();
+            else if (craneStatus == 4) craneBox.Back();
+            else if (craneStatus == 10)
+            {
+                craneBox.Left();
+                craneBox.Forward();
+            }
+        }
+    }
+
     public void GetPrize()
     {
         int getSoundNum = -1;
@@ -542,7 +553,6 @@ public class Type3Manager : MonoBehaviour
                             Debug.Log("Probability:" + probability);
                         }
                         craneStatus = 2;
-                        craneBox.rightMoveFlag = true;
                     }
                     break;
                 //投入を無効化
@@ -550,7 +560,6 @@ public class Type3Manager : MonoBehaviour
                     if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed)
                     {
                         craneStatus = 3;
-                        craneBox.rightMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
@@ -559,14 +568,12 @@ public class Type3Manager : MonoBehaviour
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        craneBox.backMoveFlag = true;
                     }
                     break;
                 case 4:
                     if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed)
                     {
                         craneStatus = 5;
-                        craneBox.backMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
@@ -593,15 +600,12 @@ public class Type3Manager : MonoBehaviour
                         probability = creditSystem.ProbabilityCheck();
                         Debug.Log("Probability:" + probability);
                     }
-                    if (craneStatus == 2 && buttonPushed)
-                        craneBox.rightMoveFlag = true;
                     break;
                 case 2:
                     if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        craneBox.backMoveFlag = true;
                     }
                     break;
             }
@@ -618,7 +622,6 @@ public class Type3Manager : MonoBehaviour
                     if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
-                        craneBox.rightMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
@@ -626,7 +629,6 @@ public class Type3Manager : MonoBehaviour
                     if (craneStatus == 4 && buttonPushed)
                     {
                         craneStatus = 5;
-                        craneBox.backMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
