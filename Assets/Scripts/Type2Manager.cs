@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class Type2Manager : MonoBehaviour
 {
-    public int craneStatus = -1; //-1:初期化動作，0:待機状態
+    public int craneStatus = -2; //-1:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
     [SerializeField] float catchArmpower = 80f; //掴むときのアームパワー(%，未確率時)
@@ -116,18 +116,8 @@ public class Type2Manager : MonoBehaviour
         {
             await Task.Delay(100);
         }
-        craneBox.leftMoveFlag = true;
-        craneBox.forwardMoveFlag = true;
+        craneStatus = -1;
         armController.ArmOpen();
-        while (true)
-        {
-            if (craneBox.CheckPos(1))
-            {
-                craneStatus = 0;
-                break;
-            }
-            await Task.Delay(1000);
-        }
     }
 
     async void Update()
@@ -135,6 +125,9 @@ public class Type2Manager : MonoBehaviour
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
+
+        if (craneStatus == -1)
+            if (craneBox.CheckPos(1)) craneStatus = 0;
 
         if (craneStatus == 0)
         {
@@ -192,10 +185,8 @@ public class Type2Manager : MonoBehaviour
                 {
                     _BGMPlayer.StopBGM(2 * soundType);
                     _BGMPlayer.PlayBGM(1 + 2 * soundType);
-
                     //レバー操作有効化;
                     //降下ボタン有効化;
-                    InputLeverCheck();
                 }
                 if (craneStatus == 3)
                 {
@@ -206,7 +197,6 @@ public class Type2Manager : MonoBehaviour
                         timer.StartTimer();
                         creditSystem.segUpdateFlag = false;
                     }
-                    InputLeverCheck();
                     InputKeyCheck(5);
                     if (isExecuted[craneStatus] && timer.limitTimeNow <= 0) craneStatus = 6;
                 }
@@ -217,10 +207,6 @@ public class Type2Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    craneBox.rightMoveFlag = false;
-                    craneBox.leftMoveFlag = false;
-                    craneBox.backMoveFlag = false;
-                    craneBox.forwardMoveFlag = false;
                     switch (soundType)
                     {
                         case 0:
@@ -342,12 +328,6 @@ public class Type2Manager : MonoBehaviour
 
             if (craneStatus == 10)
             {
-                if (!isExecuted[craneStatus])
-                {
-                    isExecuted[craneStatus] = true;
-                    craneBox.leftMoveFlag = true;
-                    craneBox.forwardMoveFlag = true;
-                }
                 if (probability && armPower > backArmpowersuccess)
                 {
                     armPower -= 0.5f;
@@ -407,6 +387,32 @@ public class Type2Manager : MonoBehaviour
                     credit3d.text = "00";
                 }
 
+            }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (craneStatus == 0) ;
+        else
+        {
+            if (craneStatus == -1)
+            {
+                craneBox.Left();
+                craneBox.Forward();
+            }
+            if (operationType == 0)
+            {
+                if (craneStatus == 2) craneBox.Right();
+                if (craneStatus == 4) craneBox.Back();
+            }
+            else
+                if (craneStatus == 1 || craneStatus == 3)
+                InputLeverCheck();
+            if (craneStatus == 10)
+            {
+                craneBox.Left();
+                craneBox.Forward();
             }
         }
     }
@@ -512,21 +518,13 @@ public class Type2Manager : MonoBehaviour
         if (host.playable)
         {
             if (Input.GetKey(KeyCode.H) || lever.rightFlag)
-                craneBox.rightMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.H) || !lever.rightFlag)
-                craneBox.rightMoveFlag = false;
+                craneBox.Right();
             if (Input.GetKey(KeyCode.F) || lever.leftFlag)
-                craneBox.leftMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.F) || !lever.leftFlag)
-                craneBox.leftMoveFlag = false;
+                craneBox.Left();
             if (Input.GetKey(KeyCode.T) || lever.backFlag)
-                craneBox.backMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.T) || !lever.backFlag)
-                craneBox.backMoveFlag = false;
+                craneBox.Back();
             if (Input.GetKey(KeyCode.G) || lever.forwardFlag)
-                craneBox.forwardMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.G) || !lever.forwardFlag)
-                craneBox.forwardMoveFlag = false;
+                craneBox.Forward();
 
             if (Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) // 初動時にタイマーを起動
