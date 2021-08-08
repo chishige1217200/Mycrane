@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Type7Manager : MonoBehaviour
 {
-    public int craneStatus = -1; //-1:初期化動作，0:待機状態
+    public int craneStatus = -2; //-2:初期化動作，0:待機状態
     public int price = 100;
     public int times = 1;
     [SerializeField] float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
@@ -83,21 +83,11 @@ public class Type7Manager : MonoBehaviour
         {
             await Task.Delay(100);
         }
-        craneBox.leftMoveFlag = true;
-        craneBox.forwardMoveFlag = true;
 
         for (int i = 0; i < 12; i++)
             isExecuted[i] = false;
 
-        while (true)
-        {
-            if (craneBox.CheckPos(1))
-            {
-                craneStatus = 0;
-                break;
-            }
-            await Task.Delay(1000);
-        }
+        craneStatus = -1;
     }
 
     async void Update()
@@ -106,17 +96,14 @@ public class Type7Manager : MonoBehaviour
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
 
+        if (craneStatus == -1)
+            if (craneBox.CheckPos(1)) craneStatus = 0;
 
         if (craneStatus == 0)
         {
             _BGMPlayer.PlayBGM(0);
             //コイン投入有効化;
             if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) InsertCoin();
-
-            /*if (!isExecuted[craneStatus])
-            {
-                isExecuted[craneStatus] = true;*/
-            //}
         }
         else
         {
@@ -155,7 +142,6 @@ public class Type7Manager : MonoBehaviour
                 }
                 if (timer.limitTimeNow == 0) craneStatus = 7;
                 InputKeyCheck();
-                InputLeverCheck();
             }
 
             if (craneStatus == 7)
@@ -167,10 +153,6 @@ public class Type7Manager : MonoBehaviour
                     _SEPlayer.PlaySE(5, 1);
                     creditSystem.ResetPayment();
                     creditSystem.PlayStart();
-                    craneBox.rightMoveFlag = false;
-                    craneBox.leftMoveFlag = false;
-                    craneBox.backMoveFlag = false;
-                    craneBox.forwardMoveFlag = false;
                     ropeManager.ArmUnitDownForceStop();
                     ropeManager.ArmUnitUpForceStop();
                     leverState = 0;
@@ -232,12 +214,6 @@ public class Type7Manager : MonoBehaviour
             if (craneStatus == 10)
             {
                 //アーム獲得口ポジション移動音再生;
-                if (!isExecuted[craneStatus])
-                {
-                    isExecuted[craneStatus] = true;
-                    craneBox.leftMoveFlag = true;
-                    craneBox.forwardMoveFlag = true;
-                }
                 if (probability && armPower > backArmpowersuccess)
                 {
                     armPower -= 0.5f;
@@ -289,6 +265,20 @@ public class Type7Manager : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        if (craneStatus == 0) ;
+        else
+        {
+            if (craneStatus == -1 || craneStatus == 10)
+            {
+                craneBox.Left();
+                craneBox.Forward();
+            }
+            if (craneStatus == 2) InputLeverCheck();
+        }
+    }
+
     public void GetPrize()
     {
         switch (creditSystem.probabilityMode)
@@ -313,21 +303,13 @@ public class Type7Manager : MonoBehaviour
         if (host.playable)
         {
             if (Input.GetKey(KeyCode.H) || lever[0].rightFlag)
-                craneBox.rightMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.H) || !lever[0].rightFlag)
-                craneBox.rightMoveFlag = false;
+                craneBox.Right();
             if (Input.GetKey(KeyCode.F) || lever[0].leftFlag)
-                craneBox.leftMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.F) || !lever[0].leftFlag)
-                craneBox.leftMoveFlag = false;
+                craneBox.Left();
             if (Input.GetKey(KeyCode.T) || lever[0].backFlag)
-                craneBox.backMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.T) || !lever[0].backFlag)
-                craneBox.backMoveFlag = false;
+                craneBox.Back();
             if (Input.GetKey(KeyCode.G) || lever[0].forwardFlag)
-                craneBox.forwardMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.G) || !lever[0].forwardFlag)
-                craneBox.forwardMoveFlag = false;
+                craneBox.Forward();
 
             if ((Input.GetKeyDown(KeyCode.I) || lever[1].backFlag) && leverState != 2)
             {
