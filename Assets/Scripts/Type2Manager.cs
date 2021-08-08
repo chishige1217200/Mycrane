@@ -396,7 +396,7 @@ public class Type2Manager : MonoBehaviour
         if (craneStatus == 0) ;
         else
         {
-            if (craneStatus == -1)
+            if (craneStatus == -1 || craneStatus == 10)
             {
                 craneBox.Left();
                 craneBox.Forward();
@@ -409,11 +409,6 @@ public class Type2Manager : MonoBehaviour
             else
                 if (craneStatus == 1 || craneStatus == 3)
                 InputLeverCheck();
-            if (craneStatus == 10)
-            {
-                craneBox.Left();
-                craneBox.Forward();
-            }
         }
     }
 

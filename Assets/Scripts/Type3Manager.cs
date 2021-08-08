@@ -473,18 +473,13 @@ public class Type3Manager : MonoBehaviour
         if (craneStatus == 0) ;
         else
         {
-            if (craneStatus == -1)
+            if (craneStatus == -1 || craneStatus == 10)
             {
                 craneBox.Left();
                 craneBox.Forward();
             }
             else if (craneStatus == 2) craneBox.Right();
             else if (craneStatus == 4) craneBox.Back();
-            else if (craneStatus == 10)
-            {
-                craneBox.Left();
-                craneBox.Forward();
-            }
         }
     }
 

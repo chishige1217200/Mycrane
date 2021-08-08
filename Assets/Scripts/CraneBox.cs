@@ -69,23 +69,31 @@ public class CraneBox : MonoBehaviour
     void GoPosition()
     {
         int checker = 0;
-        if (this.transform.localPosition.x < goPoint.x) Right();
-        if (this.transform.localPosition.x > goPoint.x) Left();
-        if (this.transform.localPosition.z < goPoint.y) Back();
-        if (this.transform.localPosition.z > goPoint.y) Forward();
-
         if (Mathf.Abs(this.transform.localPosition.x - goPoint.x) <= moveSpeed)
         {
+            checker++;
             if (this.transform.localPosition.x - goPoint.x != 0)
                 this.transform.localPosition = new Vector3(goPoint.x, this.transform.localPosition.y, this.transform.localPosition.z);
-            checker++;
+        }
+        else
+        {
+            if (this.transform.localPosition.x < goPoint.x) Right();
+            else if (this.transform.localPosition.x > goPoint.x) Left();
         }
         if (Mathf.Abs(this.transform.localPosition.z - goPoint.y) <= moveSpeed)
         {
+            checker++;
             if (this.transform.localPosition.z - goPoint.y != 0)
                 this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y, goPoint.y);
-            checker++;
         }
+        else
+        {
+            if (this.transform.localPosition.z < goPoint.y) Back();
+            else if (this.transform.localPosition.z > goPoint.y) Forward();
+        }
+
+        Debug.Log(Mathf.Abs(this.transform.localPosition.x - goPoint.x) + "," + Mathf.Abs(this.transform.localPosition.z - goPoint.y));
+
         if (checker == 2) goPositionFlag = false;
     }
 
