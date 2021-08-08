@@ -134,7 +134,6 @@ public class Type1Manager : MonoBehaviour
 
         if (craneStatus == 0)
         {
-            //_BGMPlayer.PlayBGM(soundType);
             //コイン投入有効化;
         }
         else

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class Type5Manager : MonoBehaviour
 {
-    public int craneStatus = -1; //-1:初期化動作，0:待機状態
+    public int craneStatus = -3; //-3:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
     [SerializeField] float leftCatchArmpower = 10f; //左アームパワー
@@ -112,34 +112,10 @@ public class Type5Manager : MonoBehaviour
             homePoint = new Vector2(0.61f - homePoint.x, -0.31f + homePoint.y);
         }
 
-        while (true)
-        {
-            if (!player2 && craneBox.CheckPos(1))
-            {
-                craneBox.goPoint = startPoint;
-                craneBox.goPositionFlag = true;
-                break;
-            }
-            if (player2 && craneBox.CheckPos(3))
-            {
-                craneBox.goPoint = startPoint;
-                craneBox.goPositionFlag = true;
-                break;
-            }
-            await Task.Delay(1000);
-        }
+        craneBox.goPoint = startPoint;
 
-        await Task.Delay(500);
+        craneStatus = -2;
 
-        while (true)
-        {
-            if (craneBox.CheckPos(9))
-            {
-                craneStatus = 0;
-                break;
-            }
-            await Task.Delay(1000);
-        }
     }
 
     async void Update()
@@ -148,6 +124,16 @@ public class Type5Manager : MonoBehaviour
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if (!player2 && (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
         else if (player2 && (Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus))) InsertCoin();
+
+        if (((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2)) && craneStatus == -2)
+        {
+            craneStatus = -1;
+            craneBox.goPositionFlag = true;
+        }
+        if (craneStatus == -1)
+        {
+            if (craneBox.CheckPos(9)) craneStatus = 0;
+        }
 
         if (craneStatus == 0)
         {
@@ -363,7 +349,11 @@ public class Type5Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    if (prizezoneType == 9) craneBox.goPoint = homePoint;
+                    if (prizezoneType == 9)
+                    {
+                        craneBox.goPoint = homePoint;
+                        craneBox.goPositionFlag = true;
+                    }
                 }
                 if (isExecuted[craneStatus] && craneStatus == 9) craneStatus = 10;
             }
@@ -386,50 +376,8 @@ public class Type5Manager : MonoBehaviour
                             _SEPlayer.PlaySE(9, 2147483647);
                             break;
                     }
-                    switch (prizezoneType) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
-                    {
-                        case 1:
-                            if (!player2) craneBox.leftMoveFlag = true;
-                            else craneBox.rightMoveFlag = true;
-                            craneBox.forwardMoveFlag = true;
-                            break;
-                        case 2:
-                            if (!player2) craneBox.leftMoveFlag = true;
-                            else craneBox.rightMoveFlag = true;
-                            craneBox.backMoveFlag = true;
-                            break;
-                        case 3:
-                            if (!player2) craneBox.rightMoveFlag = true;
-                            else craneBox.leftMoveFlag = true;
-                            craneBox.forwardMoveFlag = true;
-                            break;
-                        case 4:
-                            if (!player2) craneBox.rightMoveFlag = true;
-                            else craneBox.leftMoveFlag = true;
-                            craneBox.backMoveFlag = true;
-                            break;
-                        case 5:
-                            if (!player2) craneBox.leftMoveFlag = true;
-                            else craneBox.rightMoveFlag = true;
-                            break;
-                        case 6:
-                            craneBox.forwardMoveFlag = true;
-                            break;
-                        case 7:
-                            if (!player2) craneBox.rightMoveFlag = true;
-                            else craneBox.leftMoveFlag = true;
-                            break;
-                        case 8:
-                            craneBox.backMoveFlag = true;
-                            break;
-                        case 9:
-                            craneBox.goPositionFlag = true;
-                            break;
-                    }
                 }
-                await Task.Delay(500);
-                if (isExecuted[craneStatus])
-                    if (craneBox.CheckPos(9) && craneStatus == 10) craneStatus = 11;
+                if (craneBox.CheckPos(prizezoneType)) craneStatus = 11; //ここがバグってる
                 //アーム獲得口ポジション移動音再生;
                 //アーム獲得口ポジションへ;
             }
@@ -500,9 +448,6 @@ public class Type5Manager : MonoBehaviour
                             _SEPlayer.PlaySE(6, 2147483647);
                             break;
                     }
-                    if (!player2) craneBox.leftMoveFlag = true;
-                    else craneBox.rightMoveFlag = true;
-                    craneBox.forwardMoveFlag = true;
                 }
                 if ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2))
                 {
@@ -535,11 +480,11 @@ public class Type5Manager : MonoBehaviour
                     for (int i = 0; i < 14; i++)
                         isExecuted[i] = false;
                     armController.ArmLimit(armApertures); //アーム開口度リセット
+
                     craneBox.goPoint = startPoint;
                     craneBox.goPositionFlag = true;
                 }
-                await Task.Delay(500);
-                if (isExecuted[craneStatus] && craneStatus == 14)
+                if (isExecuted[craneStatus])
                 {
                     if (craneBox.CheckPos(9))
                     {
@@ -559,6 +504,66 @@ public class Type5Manager : MonoBehaviour
                 }
                 //アームスタート位置へ
             }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (craneStatus == 0) ;
+        else
+        {
+            if (craneStatus == -2 || craneStatus == 13)
+            {
+                if (!player2) craneBox.Left();
+                else craneBox.Right();
+                craneBox.Forward();
+            }
+            else if (craneStatus == 10 || craneStatus == 15)
+            {
+                switch (prizezoneType) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
+                {
+                    case 1:
+                        if (!player2) craneBox.Left();
+                        else craneBox.Right();
+                        craneBox.Forward();
+                        break;
+                    case 2:
+                        if (!player2) craneBox.Left();
+                        else craneBox.Right();
+                        craneBox.Back();
+                        break;
+                    case 3:
+                        if (!player2) craneBox.Right();
+                        else craneBox.Left();
+                        craneBox.Forward();
+                        break;
+                    case 4:
+                        if (!player2) craneBox.Right();
+                        else craneBox.Left();
+                        craneBox.Back();
+                        break;
+                    case 5:
+                        if (!player2) craneBox.Left();
+                        else craneBox.Right();
+                        break;
+                    case 6:
+                        craneBox.Forward();
+                        break;
+                    case 7:
+                        if (!player2) craneBox.Right();
+                        else craneBox.Left();
+                        break;
+                    case 8:
+                        craneBox.Back();
+                        break;
+                }
+            }
+            else if (craneStatus == 2)
+            {
+                if (!player2) craneBox.Right();
+                else craneBox.Left();
+            }
+            else if (craneStatus == 4) craneBox.Back();
         }
     }
 
@@ -616,7 +621,6 @@ public class Type5Manager : MonoBehaviour
                             isExecuted[14] = false;
                         }
                         craneStatus = 2;
-                        craneBox.rightMoveFlag = true;
                     }
                     if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonPushed && player2)
                     {
@@ -630,7 +634,6 @@ public class Type5Manager : MonoBehaviour
                             isExecuted[14] = false;
                         }
                         craneStatus = 2;
-                        craneBox.leftMoveFlag = true;
                     }
                     break;
                 //投入を無効化
@@ -638,13 +641,11 @@ public class Type5Manager : MonoBehaviour
                     if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed && !player2)
                     {
                         craneStatus = 3;
-                        craneBox.rightMoveFlag = false;
                         buttonPushed = false;
                     }
                     if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonPushed && player2)
                     {
                         craneStatus = 3;
-                        craneBox.leftMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
@@ -653,26 +654,22 @@ public class Type5Manager : MonoBehaviour
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        craneBox.backMoveFlag = true;
                     }
                     if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonPushed && player2)
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        craneBox.backMoveFlag = true;
                     }
                     break;
                 case 4:
                     if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed && !player2)
                     {
                         craneStatus = 5;
-                        craneBox.backMoveFlag = false;
                         buttonPushed = false;
                     }
                     if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonPushed && player2)
                     {
                         craneStatus = 5;
-                        craneBox.backMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
@@ -710,15 +707,12 @@ public class Type5Manager : MonoBehaviour
                         else credit3d.text = "99.";
                         isExecuted[14] = false;
                     }
-                    if (craneStatus == 2 && buttonPushed)
-                        craneBox.rightMoveFlag = true;
                     break;
                 case 2:
                     if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        craneBox.backMoveFlag = true;
                     }
                     break;
                 case 3:
@@ -739,8 +733,6 @@ public class Type5Manager : MonoBehaviour
                         else credit3d.text = "99.";
                         isExecuted[14] = false;
                     }
-                    if (craneStatus == 2 && buttonPushed)
-                        craneBox.leftMoveFlag = true;
                     break;
             }
         }
@@ -756,7 +748,6 @@ public class Type5Manager : MonoBehaviour
                     if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
-                        craneBox.rightMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
@@ -764,7 +755,6 @@ public class Type5Manager : MonoBehaviour
                     if (craneStatus == 4 && buttonPushed)
                     {
                         craneStatus = 5;
-                        craneBox.backMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
@@ -772,7 +762,6 @@ public class Type5Manager : MonoBehaviour
                     if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
-                        craneBox.leftMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
