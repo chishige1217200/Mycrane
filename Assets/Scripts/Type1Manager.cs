@@ -67,7 +67,6 @@ public class Type1Manager : MonoBehaviour
         //craneBox.GetManager(1);
 
         // ロープにマネージャー情報をセット
-        ropeManager.SetManagerToPoint(1);
         creditSystem.GetSEPlayer(_SEPlayer);
         getPoint.GetManager(1);
         ropeManager.ArmUnitUp();
@@ -89,8 +88,8 @@ public class Type1Manager : MonoBehaviour
         {
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
             this.transform.Find("Floor").Find("Button3").gameObject.SetActive(false);
-            this.transform.Find("Floor").Find("Button3Disabled").gameObject.SetActive(true);
         }
+        else this.transform.Find("Floor").Find("Button3Disabled").gameObject.SetActive(false);
 
         // イニシャル移動とinsertFlagを後に実行
         while (!ropeManager.UpFinished())

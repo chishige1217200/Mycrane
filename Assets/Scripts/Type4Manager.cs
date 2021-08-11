@@ -74,7 +74,6 @@ public class Type4Manager : MonoBehaviour
         //craneBox.GetManager(4);
 
         // ロープにマネージャー情報をセット
-        ropeManager.SetManagerToPoint(4);
         creditSystem.GetSEPlayer(_SEPlayer);
         getPoint.GetManager(4);
         ropeManager.ArmUnitUp();

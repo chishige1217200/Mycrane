@@ -65,7 +65,6 @@ public class Type5Manager : MonoBehaviour
         //craneBox.GetManager(5);
 
         // ロープにマネージャー情報をセット
-        ropeManager.SetManagerToPoint(5);
         creditSystem.GetSEPlayer(_SEPlayer);
         getPoint.GetManager(5);
         ropeManager.ArmUnitUp();

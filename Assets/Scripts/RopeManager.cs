@@ -7,13 +7,12 @@ public class RopeManager : MonoBehaviour
 {
 
     public RopePoint[] ropePoint = new RopePoint[30];
-    private bool checkFlag = false; //マネージャーがセットされたかを確認
     private bool downCheckFlag = false; //降下処理の確認を行うか
     private int ropePointNum; //降下処理用
 
     void FixedUpdate()
     {
-        if (checkFlag && downCheckFlag)
+        if (downCheckFlag)
         {
             if (ropePointNum > 0 && !ropePoint[ropePointNum].KinematicCheck())
             {
@@ -27,13 +26,6 @@ public class RopeManager : MonoBehaviour
                 ArmUnitDownForceStop();
             }
         }
-    }
-
-    public void SetManagerToPoint(int num) //RopePointにマネージャーのインスタンスをセット
-    {
-        for (int i = 0; i < ropePoint.Length; i++)
-            ropePoint[i].GetManager(num);
-        checkFlag = true;
     }
 
     public void ArmUnitDown()

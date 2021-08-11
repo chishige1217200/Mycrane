@@ -59,7 +59,6 @@ public class Type3Manager : MonoBehaviour
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        ropeManager.SetManagerToPoint(3);
         creditSystem.GetSEPlayer(_SEPlayer);
         support.GetManager(3);
         support.GetRopeManager(ropeManager);

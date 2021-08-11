@@ -66,7 +66,6 @@ public class Type7Manager : MonoBehaviour
         //craneBox.GetManager(7);
 
         // ロープにマネージャー情報をセット
-        ropeManager.SetManagerToPoint(7);
         creditSystem.GetSEPlayer(_SEPlayer);
         timer.limitTimeNow = limitTimeSet;
         timer.limitTime = limitTimeSet;

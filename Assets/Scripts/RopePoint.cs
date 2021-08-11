@@ -11,14 +11,6 @@ public class RopePoint : MonoBehaviour
     public bool moveDownFlag = false; //下降中か
     public float upSpeed = 0.001f; //上昇速度
     public float downSpeed = 0.001f; //下降速度
-    //Type1Manager _Type1Manager;
-    //Type2Manager _Type2Manager;
-    //Type3Manager _Type3Manager;
-    //Type4Manager _Type4Manager;
-    //Type5Manager _Type5Manager;
-    //Type7Manager _Type7Manager;
-    //[SerializeField] int playerNumber = 1;
-    int craneType = -1;
     public bool upRefusedFlag { get; private set; } = false; // 上昇拒否フラグ trueなら上昇禁止
     public bool downRefusedFlag { get; private set; } = false; // 下降拒否フラグ trueなら下降禁止
 
@@ -33,17 +25,6 @@ public class RopePoint : MonoBehaviour
         if (moveUpFlag && !upRefusedFlag) RopeUp();
     }
 
-    public void GetManager(int num) // 筐体のマネージャー情報取得
-    {
-        craneType = num;
-        //if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
-        //if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
-        //if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
-        //if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
-        //if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
-        //if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
-    }
-
     void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "UpLimit")
@@ -54,20 +35,6 @@ public class RopePoint : MonoBehaviour
                 upRefusedFlag = true;
                 this.transform.localPosition = new Vector3(0, this.transform.localPosition.y, 0);
                 this.transform.localRotation = new Quaternion(0, 0, 0, 0);
-                if (last)
-                {
-                    //Debug.Log("UpFinished.");
-                    /*if (craneType == 1)
-                        if (_Type1Manager.craneStatus == 8) _Type1Manager.craneStatus = 9;*/
-                    /*if (craneType == 2)
-                        if (_Type2Manager.craneStatus == 8) _Type2Manager.craneStatus = 9;*/
-                    /*if (craneType == 3)
-                        if (_Type3Manager.craneStatus == 8) _Type3Manager.craneStatus = 9;*/
-                    /*if (craneType == 4)
-                        if (_Type4Manager.craneStatus == 10) _Type4Manager.craneStatus = 11;*/
-                    /*if (craneType == 5)
-                        if (_Type5Manager.craneStatus == 8) _Type5Manager.craneStatus = 9;*/
-                }
             }
         }
         else if (collider.tag == "UpPoint")
@@ -95,8 +62,6 @@ public class RopePoint : MonoBehaviour
             if (moveUpFlag)
             {
                 upRefusedFlag = true;
-                /*if (last && craneType == 2)
-                    if (_Type2Manager.craneStatus == 8) _Type2Manager.craneStatus = 9;*/
                 moveUpFlag = false;
             }
         if (collider.tag == "UpPoint")
@@ -118,16 +83,6 @@ public class RopePoint : MonoBehaviour
                 {
                     moveDownFlag = false;
                     downRefusedFlag = true;
-                    /*if (craneType == 1)
-                        if (_Type1Manager.craneStatus == 6) _Type1Manager.craneStatus = 7;*/
-                    /*if (craneType == 2)
-                        if (_Type2Manager.craneStatus == 6) _Type2Manager.craneStatus = 7;*/
-                    /*if (craneType == 3)
-                        if (_Type3Manager.craneStatus == 6) _Type3Manager.craneStatus = 7;*/
-                    /*if (craneType == 4)
-                        if (_Type4Manager.craneStatus == 8) _Type4Manager.craneStatus = 9;
-                    if (craneType == 5)
-                        if (_Type5Manager.craneStatus == 6) _Type5Manager.craneStatus = 7;*/
                 }
             }
             if (!parent)
