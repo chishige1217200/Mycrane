@@ -464,7 +464,6 @@ public class Type2Manager : MonoBehaviour
                             Debug.Log("Probability:" + probability);
                         }
                         craneStatus = 2;
-                        craneBox.rightMoveFlag = true;
                     }
                     break;
                 //投入を無効化
@@ -472,7 +471,6 @@ public class Type2Manager : MonoBehaviour
                     if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed)
                     {
                         craneStatus = 3;
-                        craneBox.rightMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
@@ -481,14 +479,12 @@ public class Type2Manager : MonoBehaviour
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        craneBox.backMoveFlag = true;
                     }
                     break;
                 case 4:
                     if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed)
                     {
                         craneStatus = 6;
-                        craneBox.backMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
@@ -555,15 +551,12 @@ public class Type2Manager : MonoBehaviour
                         probability = creditSystem.ProbabilityCheck();
                         Debug.Log("Probability:" + probability);
                     }
-                    if (craneStatus == 2 && buttonPushed)
-                        craneBox.rightMoveFlag = true;
                     break;
                 case 2:
                     if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        craneBox.backMoveFlag = true;
                     }
                     break;
                 case 3:
@@ -592,7 +585,6 @@ public class Type2Manager : MonoBehaviour
                     if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
-                        craneBox.rightMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;
@@ -600,7 +592,6 @@ public class Type2Manager : MonoBehaviour
                     if (craneStatus == 4 && buttonPushed)
                     {
                         craneStatus = 6;
-                        craneBox.backMoveFlag = false;
                         buttonPushed = false;
                     }
                     break;

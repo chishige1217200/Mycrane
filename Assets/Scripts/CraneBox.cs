@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class CraneBox : MonoBehaviour
 {
-    public bool leftMoveFlag = false;
-    public bool rightMoveFlag = false;
-    public bool backMoveFlag = false;
-    public bool forwardMoveFlag = false;
     public bool rightRefusedFlag = false; // trueなら、その方向に移動禁止
     public bool leftRefusedFlag = false;
     public bool backRefusedFlag = false;
@@ -69,6 +65,7 @@ public class CraneBox : MonoBehaviour
     void GoPosition()
     {
         int checker = 0;
+        if (!limitIgnoreFlag) limitIgnoreFlag = true;
         if (Mathf.Abs(this.transform.localPosition.x - goPoint.x) <= moveSpeed)
         {
             checker++;
@@ -94,7 +91,11 @@ public class CraneBox : MonoBehaviour
 
         Debug.Log(Mathf.Abs(this.transform.localPosition.x - goPoint.x) + "," + Mathf.Abs(this.transform.localPosition.z - goPoint.y));
 
-        if (checker == 2) goPositionFlag = false;
+        if (checker == 2)
+        {
+            goPositionFlag = false;
+            if (limitIgnoreFlag) limitIgnoreFlag = false;
+        }
     }
 
     public void Right()

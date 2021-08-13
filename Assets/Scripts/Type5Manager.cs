@@ -10,6 +10,8 @@ public class Type5Manager : MonoBehaviour
     [SerializeField] float leftCatchArmpower = 10f; //左アームパワー
     [SerializeField] float rightCatchArmpower = 10f; //右アームパワー
     [SerializeField] float armApertures = 80f; //開口率
+    [SerializeField] float[] boxRestrictions = new float[2];
+    [SerializeField] float downRestriction;
     public int soundType = 0; //SEの切り替え 0,1: CATCHER 8,9 2: CATCHER 7 Selecterで指定すること
     bool[] isExecuted = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
@@ -96,9 +98,6 @@ public class Type5Manager : MonoBehaviour
             await Task.Delay(100);
         }
         armController.ArmLimit(armApertures);
-        if (!player2) craneBox.leftMoveFlag = true;
-        else craneBox.rightMoveFlag = true;
-        craneBox.forwardMoveFlag = true;
 
         if (!player2)
         {

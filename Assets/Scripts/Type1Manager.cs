@@ -10,6 +10,8 @@ public class Type1Manager : MonoBehaviour
     [SerializeField] float leftCatchArmpower = 10f; //左アームパワー
     [SerializeField] float rightCatchArmpower = 10f; //右アームパワー
     [SerializeField] float armApertures = 80f; //開口率
+    [SerializeField] float[] boxRestrictions = new float[2];
+    [SerializeField] float downRestriction;
     public int soundType = 0; // CLENA:0,1,BIG CLENA:2
     [SerializeField] int catchTime = 2000; //キャッチに要する時間(m秒)
     bool[] isExecuted = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
