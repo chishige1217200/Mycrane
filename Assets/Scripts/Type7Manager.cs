@@ -310,13 +310,13 @@ public class Type7Manager : MonoBehaviour
             if (Input.GetKey(KeyCode.G) || lever[0].forwardFlag)
                 craneBox.Forward();
 
-            if ((Input.GetKeyDown(KeyCode.I) || lever[1].backFlag) && leverState != 2)
+            if ((Input.GetKey(KeyCode.I) || lever[1].backFlag) && leverState != 2)
             {
                 Debug.Log("Up");
                 leverState = 2;
                 ropeManager.ArmUnitUp();
             }
-            if ((Input.GetKeyDown(KeyCode.K) || lever[1].forwardFlag) && leverState != 1 && !support.isShieldcollis)
+            if ((Input.GetKey(KeyCode.K) || lever[1].forwardFlag) && leverState != 1 && !support.isShieldcollis)
             {
                 Debug.Log("Down");
                 leverState = 1;
