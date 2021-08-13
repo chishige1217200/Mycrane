@@ -17,7 +17,7 @@ public class Type5Manager : MonoBehaviour
     [SerializeField] bool button3 = true; //button3の使用可否
     public Vector2 startPoint; // 開始位置座標定義
     public Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
-    public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
+    public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     public SEPlayer _SEPlayer;
     Type5ArmController armController;
@@ -519,38 +519,32 @@ public class Type5Manager : MonoBehaviour
             }
             else if (craneStatus == 10 || craneStatus == 15)
             {
-                switch (prizezoneType) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標（1P時）2Pは左右反転
+                switch (prizezoneType) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標
                 {
                     case 1:
-                        if (!player2) craneBox.Left();
-                        else craneBox.Right();
+                        craneBox.Left();
                         craneBox.Forward();
                         break;
                     case 2:
-                        if (!player2) craneBox.Left();
-                        else craneBox.Right();
+                        craneBox.Left();
                         craneBox.Back();
                         break;
                     case 3:
-                        if (!player2) craneBox.Right();
-                        else craneBox.Left();
+                        craneBox.Right();
                         craneBox.Forward();
                         break;
                     case 4:
-                        if (!player2) craneBox.Right();
-                        else craneBox.Left();
+                        craneBox.Right();
                         craneBox.Back();
                         break;
                     case 5:
-                        if (!player2) craneBox.Left();
-                        else craneBox.Right();
+                        craneBox.Left();
                         break;
                     case 6:
                         craneBox.Forward();
                         break;
                     case 7:
-                        if (!player2) craneBox.Right();
-                        else craneBox.Left();
+                        craneBox.Right();
                         break;
                     case 8:
                         craneBox.Back();
