@@ -9,13 +9,15 @@ public class Type4Selecter : MonoBehaviour
     [SerializeField] Type4VideoPlay[] videoPlay = new Type4VideoPlay[2];
     BGMPlayer _BGMPlayer;
     SEPlayer[] _SEPlayer = new SEPlayer[2];
-    float playTime = 0; //ビデオ再生時間
 
     void Start()
     {
+        int temp = Random.Range(0, videoPlay[0].videoClips.Length);
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
         _SEPlayer[0] = this.transform.Find("1P").Find("SE").GetComponent<SEPlayer>();
         _SEPlayer[1] = this.transform.Find("2P").Find("SE").GetComponent<SEPlayer>();
+        videoPlay[0].PlayVideo(temp);
+        videoPlay[1].PlayVideo(temp);
         RandomVideoPlay();
     }
 
@@ -43,6 +45,7 @@ public class Type4Selecter : MonoBehaviour
     async void RandomVideoPlay()
     {
         int randomValue;
+        float playTime;
 
         while (true)
         {

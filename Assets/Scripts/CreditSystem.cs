@@ -67,9 +67,9 @@ public class CreditSystem : MonoBehaviour
         Credit.text = "00";
     }
 
-    void Update()
+    /*void Update()
     {
-        /*if (segUpdateFlag) // segUpdateFlagはタイマー存在機種のみ使用 falseにすると7セグの表示を更新しない
+        if (segUpdateFlag) // segUpdateFlagはタイマー存在機種のみ使用 falseにすると7セグの表示を更新しない
         {
             if (!serviceMode) // 通常時
             {
@@ -84,8 +84,8 @@ public class CreditSystem : MonoBehaviour
                 creditDisplayed = creditOld + creditNew; //表示は更新してない（処理の都合上計算）
                 Credit.text = " F";
             }
-        }*/
-    }
+        }
+    }*/
 
     public int Pay(int cost)
     {
@@ -170,8 +170,8 @@ public class CreditSystem : MonoBehaviour
     creditNew = 0; //新規クレジットを初期化
     if (creditOld > 0) creditOld--; //クレジット1減らす
     creditDisplayed = creditOld; //creditOldがクレジットの実体（creditNew=0のため）
-}
-}*/
+    }
+    }*/
 
     public void ServiceButton()
     {
@@ -196,12 +196,12 @@ public class CreditSystem : MonoBehaviour
     //Probability Function-----------------------------------------------
 
     [SerializeField] int creditProbability = 3; //設定クレジット数
-    //private int costProbability = 200; //設定金額
-    //private int nowPaidforProbability = 0; //確率設定用の投入金額
-    //private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数（初期化時-1）
+                                                //private int costProbability = 200; //設定金額
+                                                //private int nowPaidforProbability = 0; //確率設定用の投入金額
+                                                //private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数（初期化時-1）
     private int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
     [SerializeField] int n = 3; //ランダム確率設定n
-    //private List<int> costList = new List<int>(); //投入された金額をリセット毎に分けて保存
+                                //private List<int> costList = new List<int>(); //投入された金額をリセット毎に分けて保存
     public int probabilityMode; //0：確率なし，1:ランダム確率，2:クレジット回数天井設定，3:クレジット回数周期設定，(4:設定金額天井設定，5:設定金額周期設定)
 
     public bool ProbabilityCheck()
