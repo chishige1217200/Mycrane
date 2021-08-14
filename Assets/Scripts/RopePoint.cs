@@ -6,18 +6,13 @@ public class RopePoint : MonoBehaviour
 {
     public bool parent = false; //一番上の質点かどうか
     public bool last = false; //下から二番目の質点かどうか
-    Rigidbody rb; //Rigidbody情報
+    public Rigidbody rb; //Rigidbody情報
     public bool moveUpFlag = false; //上昇中か
     public bool moveDownFlag = false; //下降中か
     public float upSpeed = 0.001f; //上昇速度
     public float downSpeed = 0.001f; //下降速度
     public bool upRefusedFlag { get; private set; } = false; // 上昇拒否フラグ trueなら上昇禁止
     public bool downRefusedFlag { get; private set; } = false; // 下降拒否フラグ trueなら下降禁止
-
-    void Start()
-    {
-        rb = this.GetComponent<Rigidbody>();
-    }
 
     void FixedUpdate()
     {
