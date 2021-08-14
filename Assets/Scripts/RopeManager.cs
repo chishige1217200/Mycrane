@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class RopeManager : MonoBehaviour
 {
-
-    public RopePoint[] ropePoint = new RopePoint[30];
+    [SerializeField] RopePoint[] ropePoint = new RopePoint[30];
     private bool downCheckFlag = false; //降下処理の確認を行うか
     private int ropePointNum; //降下処理用
 
@@ -14,7 +13,7 @@ public class RopeManager : MonoBehaviour
     {
         if (downCheckFlag)
         {
-            if (ropePointNum > 0 && !ropePoint[ropePointNum].KinematicCheck())
+            if (ropePointNum > 0 && !ropePoint[ropePointNum].IsKinematic())
             {
                 //Debug.Log("Next down." + ropePointNum);
                 ropePointNum--;
@@ -40,23 +39,28 @@ public class RopeManager : MonoBehaviour
     {
         downCheckFlag = false;
         for (int i = 0; i < ropePoint.Length; i++)
-        {
             ropePoint[i].moveDownFlag = false;
-        }
     }
 
     public void ArmUnitUp()
     {
+        int checker = 0;
         ArmUnitDownForceStop();
         for (int i = 0; i < ropePoint.Length; i++)
+        {
             ropePoint[i].moveUpFlag = true;
+            if (checker == 0 && !ropePoint[i].IsKinematic())
+            {
+                ropePoint[i].SetKinematic();
+                checker++;
+            }
+        }
     }
+
     public void ArmUnitUpForceStop()
     {
         for (int i = 0; i < ropePoint.Length; i++)
-        {
             ropePoint[i].moveUpFlag = false;
-        }
     }
 
     public bool DownFinished()

@@ -37,26 +37,20 @@ public class RopePoint : MonoBehaviour
                 this.transform.localRotation = new Quaternion(0, 0, 0, 0);
             }
         }
-        else if (collider.tag == "UpPoint")
+
+        if (collider.tag == "UpPoint")
         {
             if (!parent)
-                if (moveUpFlag)
-                {
-                    rb.useGravity = false;
-                    rb.isKinematic = true;
-                }
-        }
-
-        if (collider.tag == "DownStopPoint")
-        {
-            if (parent)
             {
-                downRefusedFlag = false;
+                if (moveUpFlag)
+                    rb.isKinematic = true;
             }
+            else
+                downRefusedFlag = false;
         }
     }
 
-    void OnTriggerStay(Collider collider)
+    /*void OnTriggerStay(Collider collider)
     {
         if (collider.tag == "UpLimit")
             if (moveUpFlag)
@@ -67,7 +61,7 @@ public class RopePoint : MonoBehaviour
         if (collider.tag == "UpPoint")
             if (moveUpFlag && !upRefusedFlag && !rb.isKinematic)
                 rb.isKinematic = true;
-    }
+    }*/
 
     void OnTriggerExit(Collider collider)
     {
@@ -75,31 +69,20 @@ public class RopePoint : MonoBehaviour
             if (moveDownFlag)
                 upRefusedFlag = false;
 
-        if (collider.tag == "DownStopPoint")
+        if (collider.tag == "UpPoint")
         {
-            if (parent)
+            if (moveDownFlag)
             {
-                if (moveDownFlag)
-                {
-                    moveDownFlag = false;
-                    downRefusedFlag = true;
-                }
-            }
-            if (!parent)
-            {
-                if (moveDownFlag)
-                {
-                    rb.useGravity = true;
-                    rb.isKinematic = false;
-                    moveDownFlag = false;
-                }
+                if (!parent) rb.isKinematic = false;
+                else downRefusedFlag = true;
+                moveDownFlag = false;
             }
         }
     }
 
     void RopeUp()
     {
-        this.transform.localPosition += new Vector3(0, upSpeed, 0);
+        if (upRefusedFlag) moveUpFlag = false;
         if (!rb.isKinematic)
         {
             if (this.transform.localPosition.x < -0.01f)
@@ -111,8 +94,9 @@ public class RopePoint : MonoBehaviour
             if (this.transform.localPosition.z > 0.01f)
                 rb.AddForce(new Vector3(0, 0, -upSpeed / 2), ForceMode.Impulse);
         }
-        if (rb.isKinematic)
+        else
         {
+            this.transform.localPosition += new Vector3(0, upSpeed, 0);
             if (this.transform.localPosition.x < -0.5f)
                 this.transform.localPosition += new Vector3(0.5f, 0, 0);
             else if (this.transform.localPosition.x > 0.5f)
@@ -126,16 +110,17 @@ public class RopePoint : MonoBehaviour
 
     void RopeDown()
     {
-        this.transform.localPosition -= new Vector3(0, downSpeed, 0);
+        if (downRefusedFlag) moveDownFlag = false;
+        if (rb.isKinematic) this.transform.localPosition -= new Vector3(0, downSpeed, 0);
     }
 
-    public bool KinematicCheck()
+    public bool IsKinematic()
     {
         return rb.isKinematic;
     }
 
-    public bool GravityCheck()
+    public void SetKinematic()
     {
-        return rb.useGravity;
+        rb.isKinematic = true;
     }
 }
