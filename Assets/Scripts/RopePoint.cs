@@ -16,8 +16,8 @@ public class RopePoint : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (moveDownFlag && !downRefusedFlag) RopeDown();
-        if (moveUpFlag && !upRefusedFlag) RopeUp();
+        if (moveDownFlag) RopeDown();
+        if (moveUpFlag) RopeUp();
     }
 
     void OnTriggerEnter(Collider collider)
@@ -107,11 +107,6 @@ public class RopePoint : MonoBehaviour
     {
         if (downRefusedFlag) moveDownFlag = false;
         if (rb.isKinematic) this.transform.localPosition -= new Vector3(0, downSpeed, 0);
-    }
-
-    public bool IsKinematic()
-    {
-        return rb.isKinematic;
     }
 
     public void SetKinematic()

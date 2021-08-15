@@ -13,7 +13,7 @@ public class RopeManager : MonoBehaviour
     {
         if (downCheckFlag)
         {
-            if (ropePointNum > 0 && !ropePoint[ropePointNum].IsKinematic())
+            if (ropePointNum > 0 && !ropePoint[ropePointNum].rb.isKinematic)
             {
                 //Debug.Log("Next down." + ropePointNum);
                 ropePointNum--;
@@ -48,12 +48,12 @@ public class RopeManager : MonoBehaviour
         ArmUnitDownForceStop();
         for (int i = 0; i < ropePoint.Length; i++)
         {
-            ropePoint[i].moveUpFlag = true;
-            if (checker == 0 && !ropePoint[i].IsKinematic())
+            if (checker == 0 && !ropePoint[i].rb.isKinematic)
             {
                 ropePoint[i].SetKinematic();
                 checker++;
             }
+            ropePoint[i].moveUpFlag = true;
         }
     }
 
