@@ -11,7 +11,7 @@ public class Type5Manager : MonoBehaviour
     [SerializeField] float rightCatchArmpower = 10f; //右アームパワー
     [SerializeField] float armApertures = 80f; //開口率
     [SerializeField] float[] boxRestrictions = new float[2];
-    [SerializeField] float downRestriction;
+    [SerializeField] float downRestriction = 100f;
     public int soundType = 0; //SEの切り替え 0,1: CATCHER 8,9 2: CATCHER 7 Selecterで指定すること
     bool[] isExecuted = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
@@ -104,15 +104,15 @@ public class Type5Manager : MonoBehaviour
         {
             startPoint = new Vector2(-0.61f + startPoint.x, -0.31f + startPoint.y);
             homePoint = new Vector2(-0.61f + homePoint.x, -0.31f + homePoint.y);
-            //if (boxRestrictions[0] != 0) xLimit.localPosition = new Vector3(0, xLimit.localPosition.y, xLimit.localPosition.z);
+            if (boxRestrictions[0] < 100) xLimit.localPosition = new Vector3(-0.5f + 0.004525f * boxRestrictions[0], xLimit.localPosition.y, xLimit.localPosition.z);
         }
         else
         {
             startPoint = new Vector2(0.61f - startPoint.x, -0.31f + startPoint.y);
             homePoint = new Vector2(0.61f - homePoint.x, -0.31f + homePoint.y);
-            //if (boxRestrictions[0] != 0) xLimit.localPosition = new Vector3(0, xLimit.localPosition.y, xLimit.localPosition.z);
+            if (boxRestrictions[0] < 100) xLimit.localPosition = new Vector3(0.5f - 0.004525f * boxRestrictions[0], xLimit.localPosition.y, xLimit.localPosition.z);
         }
-        //if (boxRestrictions[1] != 0) zLimit.localPosition = new Vector3(zLimit.localPosition.x, zLimit.localPosition.y, -0.2f + 0.00615f * boxRestrictions[1]);
+        if (boxRestrictions[1] < 100) zLimit.localPosition = new Vector3(zLimit.localPosition.x, zLimit.localPosition.y, -0.19f + 0.00605f * boxRestrictions[1]);
         craneBox.goPoint = startPoint;
 
         craneStatus = -2;
