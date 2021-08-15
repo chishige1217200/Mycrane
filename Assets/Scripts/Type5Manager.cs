@@ -36,6 +36,8 @@ public class Type5Manager : MonoBehaviour
     async void Start()
     {
         Transform temp;
+        Transform xLimit = this.transform.Find("Floor").Find("XLimit");
+        Transform zLimit = this.transform.Find("Floor").Find("ZLimit");
         // 様々なコンポーネントの取得
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
@@ -64,7 +66,6 @@ public class Type5Manager : MonoBehaviour
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        //craneBox.GetManager(5);
 
         // ロープにマネージャー情報をセット
         creditSystem.GetSEPlayer(_SEPlayer);
@@ -103,17 +104,18 @@ public class Type5Manager : MonoBehaviour
         {
             startPoint = new Vector2(-0.61f + startPoint.x, -0.31f + startPoint.y);
             homePoint = new Vector2(-0.61f + homePoint.x, -0.31f + homePoint.y);
+            //if (boxRestrictions[0] != 0) xLimit.localPosition = new Vector3(0, xLimit.localPosition.y, xLimit.localPosition.z);
         }
         else
         {
             startPoint = new Vector2(0.61f - startPoint.x, -0.31f + startPoint.y);
             homePoint = new Vector2(0.61f - homePoint.x, -0.31f + homePoint.y);
+            //if (boxRestrictions[0] != 0) xLimit.localPosition = new Vector3(0, xLimit.localPosition.y, xLimit.localPosition.z);
         }
-
+        //if (boxRestrictions[1] != 0) zLimit.localPosition = new Vector3(zLimit.localPosition.x, zLimit.localPosition.y, -0.2f + 0.00615f * boxRestrictions[1]);
         craneBox.goPoint = startPoint;
 
         craneStatus = -2;
-
     }
 
     async void Update()

@@ -10,7 +10,7 @@ public class Type1Manager : MonoBehaviour
     [SerializeField] float leftCatchArmpower = 10f; //左アームパワー
     [SerializeField] float rightCatchArmpower = 10f; //右アームパワー
     [SerializeField] float armApertures = 80f; //開口率
-    [SerializeField] float[] boxRestrictions = new float[2];
+    [SerializeField] float[] boxRestrictions = new float[2]; //横・縦の順で移動制限設定
     [SerializeField] float downRestriction;
     public int soundType = 0; // CLENA:0,1,BIG CLENA:2
     [SerializeField] int catchTime = 2000; //キャッチに要する時間(m秒)
@@ -38,6 +38,8 @@ public class Type1Manager : MonoBehaviour
     async void Start()
     {
         Transform temp;
+        Transform xLimit = this.transform.Find("Floor").Find("XLimit");
+        Transform zLimit = this.transform.Find("Floor").Find("ZLimit");
         // 様々なコンポーネントの取得
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
@@ -66,7 +68,6 @@ public class Type1Manager : MonoBehaviour
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        //craneBox.GetManager(1);
 
         // ロープにマネージャー情報をセット
         creditSystem.GetSEPlayer(_SEPlayer);
@@ -104,13 +105,15 @@ public class Type1Manager : MonoBehaviour
         {
             startPoint = new Vector2(-0.65f + startPoint.x, -0.3f + startPoint.y);
             homePoint = new Vector2(-0.65f + homePoint.x, -0.3f + homePoint.y);
+            if (boxRestrictions[0] != 0) xLimit.localPosition = new Vector3(-0.55f + 0.005025f * boxRestrictions[0], xLimit.localPosition.y, xLimit.localPosition.z);
         }
         else
         {
             startPoint = new Vector2(0.65f - startPoint.x, -0.3f + startPoint.y);
             homePoint = new Vector2(0.65f - homePoint.x, -0.3f + homePoint.y);
+            if (boxRestrictions[0] != 0) xLimit.localPosition = new Vector3(0.55f - 0.005025f * boxRestrictions[0], xLimit.localPosition.y, xLimit.localPosition.z);
         }
-
+        if (boxRestrictions[1] != 0) zLimit.localPosition = new Vector3(zLimit.localPosition.x, zLimit.localPosition.y, -0.2f + 0.00615f * boxRestrictions[1]);
         craneBox.goPoint = startPoint;
 
         craneStatus = -2;
