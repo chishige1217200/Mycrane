@@ -10,6 +10,8 @@ public class Type4Manager : MonoBehaviour
     [SerializeField] float leftCatchArmpower = 20f; //左アームパワー
     [SerializeField] float rightCatchArmpower = 20f; //右アームパワー
     [SerializeField] float armApertures = 80f; //開口率
+    [SerializeField] float[] boxRestrictions = new float[2]; //横・縦の順で移動制限設定
+    [SerializeField] float downRestriction = 100f;
     [SerializeField] int operationType = 1; //0:ボタン式，1:レバー式
     [SerializeField] int catchLong = 2000; //キャッチに要する時間(m秒)
     [SerializeField] int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
@@ -41,6 +43,8 @@ public class Type4Manager : MonoBehaviour
     async void Start()
     {
         Transform temp;
+        Transform xLimit = this.transform.Find("Floor").Find("XLimit");
+        Transform zLimit = this.transform.Find("Floor").Find("ZLimit");
         // 様々なコンポーネントの取得
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
@@ -128,6 +132,12 @@ public class Type4Manager : MonoBehaviour
                 downButtonNumpad = KeyCode.Keypad8;
             }
         }
+        if (boxRestrictions[0] < 100)
+        {
+            if (!player2) xLimit.localPosition = new Vector3(-0.52f + 0.0041f * boxRestrictions[0], xLimit.localPosition.y, xLimit.localPosition.z);
+            else xLimit.localPosition = new Vector3(0.52f - 0.0041f * boxRestrictions[0], xLimit.localPosition.y, xLimit.localPosition.z);
+        }
+        if (boxRestrictions[1] < 100) zLimit.localPosition = new Vector3(zLimit.localPosition.x, zLimit.localPosition.y, -0.13f + 0.0048f * boxRestrictions[1]);
 
         // イニシャル移動とinsertFlagを後に実行
         while (!ropeManager.UpFinished())
