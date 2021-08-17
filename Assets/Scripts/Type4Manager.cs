@@ -45,6 +45,7 @@ public class Type4Manager : MonoBehaviour
         Transform temp;
         Transform xLimit = this.transform.Find("Floor").Find("XLimit");
         Transform zLimit = this.transform.Find("Floor").Find("ZLimit");
+        Transform downLimit = this.transform.Find("Floor").Find("DownLimit");
         // 様々なコンポーネントの取得
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
@@ -138,6 +139,7 @@ public class Type4Manager : MonoBehaviour
             else xLimit.localPosition = new Vector3(0.52f - 0.0041f * boxRestrictions[0], xLimit.localPosition.y, xLimit.localPosition.z);
         }
         if (boxRestrictions[1] < 100) zLimit.localPosition = new Vector3(zLimit.localPosition.x, zLimit.localPosition.y, -0.13f + 0.0048f * boxRestrictions[1]);
+        if (downRestriction < 100) downLimit.localPosition = new Vector3(downLimit.localPosition.x, 1.37f - 0.0051f * downRestriction, downLimit.localPosition.z);
 
         // イニシャル移動とinsertFlagを後に実行
         while (!ropeManager.UpFinished())

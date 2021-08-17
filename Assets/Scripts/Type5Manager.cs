@@ -38,6 +38,7 @@ public class Type5Manager : MonoBehaviour
         Transform temp;
         Transform xLimit = this.transform.Find("Floor").Find("XLimit");
         Transform zLimit = this.transform.Find("Floor").Find("ZLimit");
+        Transform downLimit = this.transform.Find("Floor").Find("DownLimit");
         // 様々なコンポーネントの取得
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
@@ -113,6 +114,7 @@ public class Type5Manager : MonoBehaviour
             if (boxRestrictions[0] < 100) xLimit.localPosition = new Vector3(0.5f - 0.004525f * boxRestrictions[0], xLimit.localPosition.y, xLimit.localPosition.z);
         }
         if (boxRestrictions[1] < 100) zLimit.localPosition = new Vector3(zLimit.localPosition.x, zLimit.localPosition.y, -0.19f + 0.00605f * boxRestrictions[1]);
+        if (downRestriction < 100) downLimit.localPosition = new Vector3(downLimit.localPosition.x, 1.4f - 0.005975f * downRestriction, downLimit.localPosition.z);
         craneBox.goPoint = startPoint;
 
         craneStatus = -2;
