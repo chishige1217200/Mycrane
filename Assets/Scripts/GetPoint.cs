@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GetPoint : MonoBehaviour
@@ -8,8 +9,11 @@ public class GetPoint : MonoBehaviour
     Type2Manager _Type2Manager;
     Type3Manager _Type3Manager;
     Type4Manager _Type4Manager;
+    Type5Manager _Type5Manager;
+    Type7Manager _Type7Manager;
     [SerializeField] int playerNumber = 1;
     int craneType = -1;
+    [SerializeField] bool autoDestroy = false; // 自動的に景品を消去する
     PrizePanel panel;
     Prize prize;
 
@@ -26,21 +30,28 @@ public class GetPoint : MonoBehaviour
         if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
         if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
         if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
+        if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
+        if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
     }
 
-    void OnTriggerEnter(Collider collider)
+    async void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "prize")
         {
-            Debug.Log("prize");
+            //Debug.Log("prize");
             if (craneType == 1) _Type1Manager.GetPrize();
             if (craneType == 2) _Type2Manager.GetPrize();
             if (craneType == 3) _Type3Manager.GetPrize();
             if (craneType == 4) _Type4Manager.GetPrize();
-            if (collider.gameObject.TryGetComponent(out prize))
+            if (craneType == 5) _Type5Manager.GetPrize();
+            if (craneType == 7) _Type7Manager.GetPrize();
+            if (collider.gameObject.TryGetComponent(out prize) && autoDestroy)
             {
                 panel.SetPrizeName(prize.prizeName);
                 panel.PanelActive(true);
+                await Task.Delay(5000);
+                if (prize.destroyObject != null) Destroy(prize.destroyObject);
+                else Destroy(collider.gameObject);
             }
         }
     }

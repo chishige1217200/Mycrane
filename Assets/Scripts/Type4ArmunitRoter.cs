@@ -13,7 +13,7 @@ public class Type4ArmunitRoter : MonoBehaviour
     bool rotationFlag = false; //回転中
     bool rotationDirection = true; //trueなら時計回りに回転
     bool rotateInitialFlag = false; //trueなら初期化確認
-    bool instanceFlag = false; //1回だけ実行するのに使用
+    bool isExecuted = false; //1回だけ実行するのに使用
 
     void Start()
     {
@@ -30,14 +30,14 @@ public class Type4ArmunitRoter : MonoBehaviour
         {
             if (this.transform.localEulerAngles.z <= 270 && this.transform.localEulerAngles.z >= 90) //限界に達すると回転方向を反転
             {
-                if (!instanceFlag)
+                if (!isExecuted)
                 {
-                    instanceFlag = true;
+                    isExecuted = true;
                     rotationDirection = !rotationDirection;
                     RotateDirection(rotationDirection);
                 }
             }
-            else instanceFlag = false;
+            else isExecuted = false;
             if (rotationDirection)
             {
                 _SEPlayer.StopSE(4);

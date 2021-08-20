@@ -4,89 +4,99 @@ using UnityEngine.UI;
 
 public class Type4Manager : MonoBehaviour
 {
-    public int craneStatus = -1; //-1:初期化動作，0:待機状態
-    float leftCatchArmpower = 20f; //左アームパワー
-    float rightCatchArmpower = 20f; //右アームパワー
-    float armApertures = 80f; //開口率
-    int operationType = 1; //0:ボタン式，1:レバー式
-    int catchLong = 2000; //キャッチに要する時間(m秒)
-    int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
-    int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
-    private bool[] instanceFlag = new bool[16]; //各craneStatusで1度しか実行しない処理の管理
-    public bool buttonFlag = false; //trueならボタンをクリックしているかキーボードを押下している
-    public bool leverFlag = false; //trueならレバーがアクティブ
+    public int craneStatus = -2; //-2:初期化動作，0:待機状態
+    public int[] priceSet = new int[2];
+    public int[] timesSet = new int[2];
+    [SerializeField] float leftCatchArmpower = 20f; //左アームパワー
+    [SerializeField] float rightCatchArmpower = 20f; //右アームパワー
+    [SerializeField] float armApertures = 80f; //開口率
+    [SerializeField] float[] boxRestrictions = new float[2]; //横・縦の順で移動制限設定
+    [SerializeField] float downRestriction = 100f;
+    [SerializeField] int operationType = 1; //0:ボタン式，1:レバー式
+    [SerializeField] int catchLong = 2000; //キャッチに要する時間(m秒)
+    [SerializeField] int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
+    [SerializeField] int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
+    bool[] isExecuted = new bool[16]; //各craneStatusで1度しか実行しない処理の管理
+    public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
+    public bool leverTilted = false; //trueならレバーがアクティブ
     [SerializeField] bool player2 = false; //player2の場合true
-    [SerializeField] bool playable = true; //playableがtrueのとき操作可能
     [SerializeField] bool rotation = true; //回転機能の使用可否
     [SerializeField] bool downStop = true; //下降停止機能の使用可否
-    bool prizeGetFlag = false;
-    Vector2 craneHost; //クレーンゲームの中心位置定義
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     SEPlayer _SEPlayer;
-    Type1ArmController _ArmController;
-    Transform temp;
-    CraneBox _CraneBox;
-    GetPoint _GetPoint;
-    RopeManager _RopeManager;
+    Type1ArmController armController;
+    CraneBox craneBox;
+    GetPoint getPoint;
+    RopeManager ropeManager;
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[2];
     Lever lever;
-    VideoPlay videoPlay;
+    Type4VideoPlay videoPlay;
     Type4ArmunitRoter roter;
     KeyCode downButtonAlpha;
     KeyCode downButtonNumpad;
-
-    //For test-----------------------------------------
-
-    public Text craneStatusdisplayed;
-
-    //-------------------------------------------------
+    MachineHost host;
+    GameObject canvas;
+    [SerializeField] TextMesh credit3d;
+    [SerializeField] TextMesh[] preset = new TextMesh[4];
 
     async void Start()
     {
+        Transform temp;
+        Transform xLimit = this.transform.Find("Floor").Find("XLimit");
+        Transform zLimit = this.transform.Find("Floor").Find("ZLimit");
+        Transform downLimit = this.transform.Find("Floor").Find("DownLimit");
+        // 様々なコンポーネントの取得
+        host = this.transform.root.Find("CP").GetComponent<MachineHost>();
+        canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
-        _GetPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
-        temp = this.transform.parent;
-        craneHost = new Vector2(temp.position.x, temp.position.z);
+        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
 
+        // クレジット情報登録
+        creditSystem.rateSet[0, 0] = priceSet[0];
+        creditSystem.rateSet[1, 0] = priceSet[1];
+        creditSystem.rateSet[0, 1] = timesSet[0];
+        creditSystem.rateSet[1, 1] = timesSet[1];
+        preset[0].text = priceSet[0].ToString();
+        preset[1].text = priceSet[1].ToString();
+        preset[2].text = timesSet[0].ToString();
+        preset[3].text = timesSet[1].ToString();
+
         // ロープとアームコントローラに関する処理
-        _RopeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
-        _ArmController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
+        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        armController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
-        nail[0] = temp.Find("ArmUnit").Find("Arm1").GetComponent<ArmNail>();
-        nail[1] = temp.Find("ArmUnit").Find("Arm2").GetComponent<ArmNail>();
-        videoPlay = this.transform.Find("VideoPlay").GetComponent<VideoPlay>();
+        nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
+        nail[1] = temp.Find("ArmUnit").Find("Arm2").Find("Nail2").GetComponent<ArmNail>();
+        videoPlay = this.transform.Find("VideoPlay").GetComponent<Type4VideoPlay>();
         roter = temp.Find("ArmUnit").Find("Main").GetComponent<Type4ArmunitRoter>();
 
         // CraneBoxに関する処理
-        _CraneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
-        _CraneBox.GetManager(4);
+        craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        _RopeManager.SetManagerToPoint(4);
         creditSystem.GetSEPlayer(_SEPlayer);
-        creditSystem.playable = playable;
-        _GetPoint.GetManager(4);
-        _RopeManager.ArmUnitUp();
+        getPoint.GetManager(4);
+        ropeManager.ArmUnitUp();
         creditSystem.SetCreditSound(0);
         creditSystem.GetSEPlayer(_SEPlayer);
-        support.GetManager(4);
-        support.GetRopeManager(_RopeManager);
+        //support.GetManager(4);
+        support.GetRopeManager(ropeManager);
         roter.GetSEPlayer(_SEPlayer);
         support.pushTime = 300; // 押し込みパワーの調整
         for (int i = 0; i < 2; i++)
         {
             nail[i].GetManager(4);
-            nail[i].GetRopeManager(_RopeManager);
+            nail[i].GetRopeManager(ropeManager);
         }
 
         for (int i = 0; i < 15; i++)
-            instanceFlag[i] = false;
+            isExecuted[i] = false;
 
-        instanceFlag[15] = true; //初回処理用
+        isExecuted[15] = true; //初回処理用（レバーを倒しっぱなしでプレイし始めるときの対策）
 
         // ControlGroupの制御
         if (operationType == 0)
@@ -94,6 +104,7 @@ public class Type4Manager : MonoBehaviour
             this.transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(false);
+            this.transform.Find("Floor").Find("ButtonUnit").gameObject.SetActive(true);
             if (!player2)
             {
                 downButtonAlpha = KeyCode.Alpha3;
@@ -110,6 +121,7 @@ public class Type4Manager : MonoBehaviour
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(false);
             this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
+            this.transform.Find("Floor").Find("LeverUnit").gameObject.SetActive(true);
             if (!player2)
             {
                 downButtonAlpha = KeyCode.Alpha2;
@@ -121,210 +133,387 @@ public class Type4Manager : MonoBehaviour
                 downButtonNumpad = KeyCode.Keypad8;
             }
         }
+        if (boxRestrictions[0] < 100)
+        {
+            if (!player2) xLimit.localPosition = new Vector3(-0.52f + 0.0041f * boxRestrictions[0], xLimit.localPosition.y, xLimit.localPosition.z);
+            else xLimit.localPosition = new Vector3(0.52f - 0.0041f * boxRestrictions[0], xLimit.localPosition.y, xLimit.localPosition.z);
+        }
+        if (boxRestrictions[1] < 100) zLimit.localPosition = new Vector3(zLimit.localPosition.x, zLimit.localPosition.y, -0.13f + 0.0048f * boxRestrictions[1]);
+        if (downRestriction < 100) downLimit.localPosition = new Vector3(downLimit.localPosition.x, 1.37f - 0.0051f * downRestriction, downLimit.localPosition.z);
 
         // イニシャル移動とinsertFlagを後に実行
-        await Task.Delay(3000);
-        _ArmController.ArmLimit(armApertures);
-        _ArmController.ArmFinalClose();
-        videoPlay.randomMode = true;
-        if (!player2) _CraneBox.leftMoveFlag = true;
-        else _CraneBox.rightMoveFlag = true;
-        _CraneBox.forwardMoveFlag = true;
+        while (!ropeManager.UpFinished())
+        {
+            await Task.Delay(100);
+        }
+        armController.ArmLimit(armApertures);
+        armController.ArmFinalClose();
 
-        await Task.Delay(3000);
-
-        creditSystem.insertFlag = true;
-        craneStatus = 0;
-
+        craneStatus = -1;
     }
 
     // Update is called once per frame
     async void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) && !player2) creditSystem.GetPayment(100);
-        if ((Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus)) && player2) creditSystem.GetPayment(100);
-        //craneStatusdisplayed.text = craneStatus.ToString();
+        if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
+        if (!player2 && (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
+        else if (player2 && (Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus))) InsertCoin();
+
+        if (craneStatus == -1)
+        {
+            if (craneBox.CheckPos(1) && !player2) craneStatus = 0;
+            if (craneBox.CheckPos(3) && player2) craneStatus = 0;
+        }
 
         if (craneStatus == 0)
         {
             //コイン投入有効化;
-            if (creditSystem.creditDisplayed > 0)
-            {
-                videoPlay.randomMode = false;
-                craneStatus = 1;
-            }
-            else videoPlay.randomMode = true;
+            videoPlay.randomMode = true;
         }
-
-        if (operationType == 0)
+        else
         {
-            if (craneStatus == 1)
+            if (operationType == 0)
             {
-                if (!instanceFlag[craneStatus])
+                if (craneStatus == 1)
                 {
-                    instanceFlag[craneStatus] = true;
-                    if (Random.Range(0, 2) == 0 && !player2) videoPlay.PlayVideo(4);
-                    else videoPlay.PlayVideo(0);
+                    if (!isExecuted[craneStatus])
+                    {
+                        isExecuted[craneStatus] = true;
+                        if (Random.Range(0, 2) == 0 && !player2) videoPlay.PlayVideo(4);
+                        else videoPlay.PlayVideo(0);
+                    }
+                    InputKeyCheck(craneStatus);         //右移動ボタン有効化;
                 }
-                InputKeyCheck(craneStatus);         //右移動ボタン有効化;
-            }
 
-            if (craneStatus == 2)
-            { //右移動中
-                InputKeyCheck(craneStatus);
-                //クレーン右移動;
-            }
+                if (craneStatus == 2)
+                { //右移動中
+                    InputKeyCheck(craneStatus);
+                    if (!player2 & craneBox.CheckPos(7))
+                    {
+                        _SEPlayer.StopSE(1);
+                        _SEPlayer.PlaySE(2, 1);
+                        buttonPushed = false;
+                        craneStatus = 3;
+                    }
+                    if (player2 & craneBox.CheckPos(5))
+                    {
+                        _SEPlayer.StopSE(1);
+                        _SEPlayer.PlaySE(2, 1);
+                        buttonPushed = false;
+                        craneStatus = 3;
+                    }
+                    //クレーン右移動;
+                }
 
-            if (craneStatus == 3)
-            {
-                InputKeyCheck(craneStatus);         //奥移動ボタン有効化;
-            }
-
-            if (craneStatus == 4)
-            { //奥移動中
-                InputKeyCheck(craneStatus);
-                //クレーン奥移動;
-            }
-        }
-
-        if (operationType == 1)
-        {
-            if (craneStatus == 1)
-            {
-                if (!instanceFlag[craneStatus])
+                if (craneStatus == 3)
                 {
-                    instanceFlag[craneStatus] = true;
-                    videoPlay.PlayVideo(0);
+                    InputKeyCheck(craneStatus);         //奥移動ボタン有効化;
                 }
-                InputLeverCheck();
-            }
-            if (craneStatus == 3)
-            {
-                InputLeverCheck();
-                if (!leverFlag) InputKeyCheck(5);
-            }
-        }
 
-        if (craneStatus == 5)
-        {
-            InputKeyCheck(craneStatus);
-        }
-        if (craneStatus == 6)
-        {
-            await Task.Delay(10);
-            if (craneStatus == 6) InputKeyCheck(craneStatus);
-        }
-        if (craneStatus == 7)
-        {
-            if (!instanceFlag[craneStatus])
-            {
-                instanceFlag[craneStatus] = true;
-                _ArmController.ArmOpen();
-                await Task.Delay(1000);
-                if (craneStatus == 7) craneStatus = 8;
-            }
-            //アーム開く音再生;
-            //アーム開く;
-        }
-        if (craneStatus == 8)
-        {   //アーム下降中
-            if (!instanceFlag[craneStatus])
-            {
-                instanceFlag[craneStatus] = true;
-                _SEPlayer.StopSE(3);
-                _SEPlayer.StopSE(4);
-                _SEPlayer.PlaySE(5, 1);
-                if (craneStatus == 8) _RopeManager.ArmUnitDown(); //awaitによる時差実行を防止
-            }
-            InputKeyCheck(craneStatus);
-        }
-        if (craneStatus == 9)
-        {   //アーム掴む
-            if (!instanceFlag[craneStatus])
-            {
-                instanceFlag[craneStatus] = true;
-                if (catchTiming > 0) await Task.Delay(catchTiming);
-                if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
-                {
-                    if (leftCatchArmpower >= rightCatchArmpower) _ArmController.ArmClose(leftCatchArmpower);
-                    else _ArmController.ArmClose(rightCatchArmpower);
+                if (craneStatus == 4)
+                { //奥移動中
+                    InputKeyCheck(craneStatus);
+                    if (craneBox.CheckPos(8))
+                    {
+                        _SEPlayer.StopSE(1);
+                        _SEPlayer.PlaySE(2, 1);
+                        buttonPushed = false;
+                        craneStatus = 5;
+                    }
+                    //クレーン奥移動;
                 }
-                else _ArmController.ArmClose(30f);
-                if (catchLong > 0) await Task.Delay(catchLong);
-                if (craneStatus == 9) craneStatus = 10;
             }
-        }
-        if (craneStatus == 10)
-        {   //アーム上昇中
+
+            if (operationType == 1)
             {
-                instanceFlag[craneStatus] = true;
-                _RopeManager.ArmUnitUp();
-                await Task.Delay(1000);
-                _ArmController.MotorPower(leftCatchArmpower, 0);
-                _ArmController.MotorPower(rightCatchArmpower, 1);
+                if (craneStatus == 1)
+                {
+                    if (!isExecuted[craneStatus])
+                    {
+                        isExecuted[craneStatus] = true;
+                        videoPlay.PlayVideo(0);
+                    }
+                    if (!player2)
+                    {
+                        if (isExecuted[15] && ((Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
+                        {
+                            leverTilted = true;
+                            isExecuted[15] = false;
+                            videoPlay.PlayVideo(1);
+                            _SEPlayer.StopSE(2);
+                            _SEPlayer.PlaySE(1, 1);
+                        }
+
+                        if ((Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.G)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
+                        {
+                            leverTilted = true;
+                            videoPlay.PlayVideo(1);
+                            _SEPlayer.StopSE(2);
+                            _SEPlayer.PlaySE(1, 1);
+                        }
+                        if ((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
+                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
+                        {
+                            leverTilted = false;
+                            videoPlay.PlayVideo(0);
+                            _SEPlayer.StopSE(1);
+                            _SEPlayer.PlaySE(2, 1);
+                        }
+                    }
+                    else
+                    {
+                        if (isExecuted[15] && ((Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
+                        {
+                            leverTilted = true;
+                            isExecuted[15] = false;
+                            videoPlay.PlayVideo(1);
+                            _SEPlayer.StopSE(2);
+                            _SEPlayer.PlaySE(1, 1);
+                        }
+
+
+                        if ((Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.K)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
+                        {
+                            leverTilted = true;
+                            videoPlay.PlayVideo(1);
+                            _SEPlayer.StopSE(2);
+                            _SEPlayer.PlaySE(1, 1);
+                        }
+                        if ((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
+                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
+                        {
+                            leverTilted = false;
+                            videoPlay.PlayVideo(0);
+                            _SEPlayer.StopSE(1);
+                            _SEPlayer.PlaySE(2, 1);
+                        }
+                    }
+                }
+                if (craneStatus == 3)
+                {
+                    if (!player2)
+                    {
+                        if (isExecuted[15] && ((Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
+                        {
+                            leverTilted = true;
+                            isExecuted[15] = false;
+                            videoPlay.PlayVideo(1);
+                            _SEPlayer.StopSE(2);
+                            _SEPlayer.PlaySE(1, 1);
+                        }
+
+                        if ((Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.G)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
+                        {
+                            leverTilted = true;
+                            videoPlay.PlayVideo(1);
+                            _SEPlayer.StopSE(2);
+                            _SEPlayer.PlaySE(1, 1);
+                        }
+                        if ((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
+                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
+                        {
+                            leverTilted = false;
+                            videoPlay.PlayVideo(0);
+                            _SEPlayer.StopSE(1);
+                            _SEPlayer.PlaySE(2, 1);
+                        }
+                    }
+                    else
+                    {
+                        if (isExecuted[15] && ((Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
+                        {
+                            leverTilted = true;
+                            isExecuted[15] = false;
+                            videoPlay.PlayVideo(1);
+                            _SEPlayer.StopSE(2);
+                            _SEPlayer.PlaySE(1, 1);
+                        }
+
+
+                        if ((Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.K)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
+                        {
+                            leverTilted = true;
+                            videoPlay.PlayVideo(1);
+                            _SEPlayer.StopSE(2);
+                            _SEPlayer.PlaySE(1, 1);
+                        }
+                        if ((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
+                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
+                        {
+                            leverTilted = false;
+                            videoPlay.PlayVideo(0);
+                            _SEPlayer.StopSE(1);
+                            _SEPlayer.PlaySE(2, 1);
+                        }
+
+                    }
+                    if (!leverTilted) InputKeyCheck(5);
+                }
             }
-        }
-        if (craneStatus == 11)
-        {   //アーム上昇停止
-            if (!instanceFlag[craneStatus])
+
+            if (craneStatus == 5) InputKeyCheck(craneStatus);
+            if (craneStatus == 6)
             {
-                if (backTime > 0) await Task.Delay(backTime);
-                if (!player2) _CraneBox.leftMoveFlag = true;
-                else _CraneBox.rightMoveFlag = true;
-                _CraneBox.forwardMoveFlag = true;
-                craneStatus = 12;
+                await Task.Delay(10);
+                if (craneStatus == 6) InputKeyCheck(craneStatus);
             }
-        }
-        if (craneStatus == 12)
-        {
-            if (_CraneBox.CheckPos(1) && craneStatus == 12 & !player2) craneStatus = 13;
-            if (_CraneBox.CheckPos(3) && craneStatus == 12 & player2) craneStatus = 13;
-        }
-        if (craneStatus == 13)
-        {
-            if (!instanceFlag[craneStatus])
+            if (craneStatus == 7)
             {
-                instanceFlag[craneStatus] = true;
-                videoPlay.PlayVideo(5);
-                _ArmController.ArmLimit(100f); // アーム開口度を100に
-                _ArmController.ArmOpen();
-                await Task.Delay(2000);
-                if (craneStatus == 13) craneStatus = 14;
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    armController.ArmOpen();
+                    await Task.Delay(1000);
+                    if (craneStatus == 7) craneStatus = 8;
+                }
                 //アーム開く音再生;
                 //アーム開く;
+            }
+            if (craneStatus == 8)
+            {   //アーム下降中
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    _SEPlayer.StopSE(3);
+                    _SEPlayer.StopSE(4);
+                    _SEPlayer.PlaySE(5, 1);
+                    if (craneStatus == 8) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
+                }
+                InputKeyCheck(craneStatus);
+                if (ropeManager.DownFinished() && craneStatus == 8) craneStatus = 9;
+            }
+            if (craneStatus == 9)
+            {   //アーム掴む
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    if (catchTiming > 0) await Task.Delay(catchTiming);
+                    if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
+                    {
+                        if (leftCatchArmpower >= rightCatchArmpower) armController.ArmClose(leftCatchArmpower);
+                        else armController.ArmClose(rightCatchArmpower);
+                    }
+                    else armController.ArmClose(30f);
+                    if (catchLong > 0) await Task.Delay(catchLong);
+                    if (craneStatus == 9) craneStatus = 10;
+                }
+            }
+            if (craneStatus == 10)
+            {   //アーム上昇中
+                {
+                    if (!isExecuted[craneStatus])
+                    {
+                        isExecuted[craneStatus] = true;
+                        ropeManager.ArmUnitUp();
+                        await Task.Delay(1000);
+                        if (craneStatus < 13)
+                        {
+                            armController.MotorPower(leftCatchArmpower, 0);
+                            armController.MotorPower(rightCatchArmpower, 1);
+                        }
+                    }
+                    if (ropeManager.UpFinished() && craneStatus == 10) craneStatus = 11;
+                }
+            }
+            if (craneStatus == 11)
+            {   //アーム上昇停止
+                if (!isExecuted[craneStatus])
+                {
+                    if (backTime > 0) await Task.Delay(backTime);
+                    craneStatus = 12;
+                }
+            }
+            if (craneStatus == 12)
+            {
+                if (craneBox.CheckPos(1) && !player2) craneStatus = 13;
+                if (craneBox.CheckPos(3) && player2) craneStatus = 13;
+            }
+            if (craneStatus == 13)
+            {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    videoPlay.PlayVideo(5);
+                    armController.ArmLimit(100f); // アーム開口度を100に
+                    armController.ArmOpen();
+                    await Task.Delay(2000);
+                    if (craneStatus == 13) craneStatus = 14;
+                    //アーム開く音再生;
+                    //アーム開く;
+                    //1秒待機;
+                }
+            }
+            if (craneStatus == 14)
+            {
+                if (!isExecuted[craneStatus])
+                {
+                    armController.ArmFinalClose();
+                    await Task.Delay(1000);
+                    if (craneStatus == 14) craneStatus = 15;
+                }
+                //アーム閉じる音再生;
+                //アーム閉じる;
                 //1秒待機;
             }
-        }
-        if (craneStatus == 14)
-        {
-            if (!instanceFlag[craneStatus])
+            if (craneStatus == 15)
             {
-                _ArmController.ArmFinalClose();
-                await Task.Delay(1000);
-                if (craneStatus == 14) craneStatus = 15;
-            }
-            //アーム閉じる音再生;
-            //アーム閉じる;
-            //1秒待機;
-        }
-        if (craneStatus == 15)
-        {
-            if (!instanceFlag[craneStatus])
-            {
-                instanceFlag[craneStatus] = true;
-                for (int i = 0; i < 14; i++)
-                    instanceFlag[i] = false;
-                _ArmController.ArmLimit(armApertures); //アーム開口度リセット
-                if (!_SEPlayer._AudioSource[6].isPlaying) _SEPlayer.PlaySE(7, 1);
-                roter.RotateToHome();
-                await Task.Delay(5000);
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    for (int i = 0; i < 14; i++)
+                        isExecuted[i] = false;
+                    armController.ArmLimit(armApertures); //アーム開口度リセット
+                    if (!_SEPlayer._AudioSource[6].isPlaying) _SEPlayer.PlaySE(7, 1);
 
-                prizeGetFlag = false;
-                if (creditSystem.creditDisplayed > 0)
-                    craneStatus = 1;
-                else
-                    craneStatus = 0;
+                    creditSystem.ResetPayment();
+                    int credit = creditSystem.PlayStart();
+                    if (credit < 10) credit3d.text = credit.ToString();
+                    else credit3d.text = "9.";
+
+                    roter.RotateToHome();
+                    await Task.Delay(5000);
+                    creditSystem.ResetPayment();
+                    if (creditSystem.creditDisplayed > 0)
+                        craneStatus = 1;
+                    else
+                        craneStatus = 0;
+                }
             }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (craneStatus == 0) ;
+        else
+        {
+            if (craneStatus == -1 || craneStatus == 12)
+            {
+                if (!player2) craneBox.Left();
+                else craneBox.Right();
+                craneBox.Forward();
+            }
+            if (operationType == 0)
+            {
+                if (craneStatus == 2)
+                {
+                    if (!player2) craneBox.Right();
+                    else craneBox.Left();
+                }
+                else if (craneStatus == 4) craneBox.Back();
+            }
+            else
+                if (craneStatus == 1 || craneStatus == 3)
+                InputLeverCheck();
         }
     }
 
@@ -337,359 +526,293 @@ public class Type4Manager : MonoBehaviour
 
     public void InputKeyCheck(int num)
     {
-        switch (num)
+        if (host.playable)
         {
-            case 1:
-                if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonFlag && !player2)
-                {
-                    buttonFlag = true;
-                    if (craneStatus == 1)
+            switch (num)
+            {
+                case 1:
+                    if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonPushed && !player2)
                     {
-                        creditSystem.ResetNowPayment();
-                        creditSystem.AddCreditPlayed();
-                        videoPlay.PlayVideo(1);
-                        instanceFlag[15] = false;
+                        buttonPushed = true;
+                        if (craneStatus == 1)
+                        {
+                            creditSystem.ResetPayment();
+
+                            videoPlay.PlayVideo(1);
+                            isExecuted[15] = false;
+                        }
+                        craneStatus = 2;
+                        _SEPlayer.PlaySE(1, 1);
                     }
-                    craneStatus = 2;
-                    _SEPlayer.PlaySE(1, 1);
-                    if (!player2) _CraneBox.rightMoveFlag = true;
-                }
-                if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonFlag && player2)
-                {
-                    buttonFlag = true;
-                    if (craneStatus == 1)
+                    if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonPushed && player2)
                     {
-                        creditSystem.ResetNowPayment();
-                        creditSystem.AddCreditPlayed();
-                        videoPlay.PlayVideo(1);
-                        instanceFlag[15] = false;
+                        buttonPushed = true;
+                        if (craneStatus == 1)
+                        {
+                            creditSystem.ResetPayment();
+
+                            videoPlay.PlayVideo(1);
+                            isExecuted[15] = false;
+                        }
+                        craneStatus = 2;
+                        _SEPlayer.PlaySE(1, 1);
                     }
-                    craneStatus = 2;
-                    _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.leftMoveFlag = true;
-                }
-                break;
-            //投入を無効化
-            case 2:
-                if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonFlag && !player2)
-                {
-                    craneStatus = 3;
-                    _CraneBox.rightMoveFlag = false;
-                    _SEPlayer.StopSE(1);
-                    _SEPlayer.PlaySE(2, 1);
-                    buttonFlag = false;
-                }
-                if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonFlag && player2)
-                {
-                    craneStatus = 3;
-                    _CraneBox.leftMoveFlag = false;
-                    _SEPlayer.StopSE(1);
-                    _SEPlayer.PlaySE(2, 1);
-                    buttonFlag = false;
-                }
-                break;
-            case 3:
-                if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonFlag && !player2)
-                {
-                    buttonFlag = true;
-                    craneStatus = 4;
-                    _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.backMoveFlag = true;
-                }
-                if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonFlag && player2)
-                {
-                    buttonFlag = true;
-                    craneStatus = 4;
-                    _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.backMoveFlag = true;
-                }
-                break;
-            case 4:
-                if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonFlag && !player2)
-                {
-                    craneStatus = 5;
-                    _SEPlayer.StopSE(1);
-                    _SEPlayer.PlaySE(2, 1);
-                    _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
-                }
-                if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonFlag && player2)
-                {
-                    craneStatus = 5;
-                    _SEPlayer.StopSE(1);
-                    _SEPlayer.PlaySE(2, 1);
-                    _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
-                }
-                break;
-            case 5:
-                if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonFlag)
-                {
-                    if (rotation)
+                    break;
+                //投入を無効化
+                case 2:
+                    if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed && !player2)
                     {
-                        craneStatus = 6;
-                        roter.RotateStart();
-                        videoPlay.PlayVideo(2);
+                        craneStatus = 3;
+                        _SEPlayer.StopSE(1);
+                        _SEPlayer.PlaySE(2, 1);
+                        buttonPushed = false;
                     }
-                    else
+                    if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonPushed && player2)
+                    {
+                        craneStatus = 3;
+                        _SEPlayer.StopSE(1);
+                        _SEPlayer.PlaySE(2, 1);
+                        buttonPushed = false;
+                    }
+                    break;
+                case 3:
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed && !player2)
+                    {
+                        buttonPushed = true;
+                        craneStatus = 4;
+                        _SEPlayer.ForcePlaySE(1);
+                    }
+                    if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonPushed && player2)
+                    {
+                        buttonPushed = true;
+                        craneStatus = 4;
+                        _SEPlayer.ForcePlaySE(1);
+                    }
+                    break;
+                case 4:
+                    if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed && !player2)
+                    {
+                        craneStatus = 5;
+                        _SEPlayer.StopSE(1);
+                        _SEPlayer.ForcePlaySE(2);
+                        buttonPushed = false;
+                    }
+                    if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonPushed && player2)
+                    {
+                        craneStatus = 5;
+                        _SEPlayer.StopSE(1);
+                        _SEPlayer.ForcePlaySE(2);
+                        buttonPushed = false;
+                    }
+                    break;
+                case 5:
+                    if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonPushed)
+                    {
+                        if (rotation)
+                        {
+                            craneStatus = 6;
+                            roter.RotateStart();
+                            videoPlay.PlayVideo(2);
+                        }
+                        else
+                        {
+                            craneStatus = 7;
+                            videoPlay.PlayVideo(3);
+                        }
+                    }
+
+                    break;
+                case 6:
+                    if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonPushed)
                     {
                         craneStatus = 7;
+                        roter.RotateStop();
                         videoPlay.PlayVideo(3);
                     }
-                }
-
-                break;
-            case 6:
-                if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonFlag)
-                {
-                    craneStatus = 7;
-                    roter.RotateStop();
-                    videoPlay.PlayVideo(3);
-                }
-                break;
-            case 8:
-                if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && downStop)
-                {
-                    if (downStop)
+                    break;
+                case 8:
+                    if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && downStop)
                     {
-                        _RopeManager.ArmUnitDownForceStop();
-                        craneStatus = 9;
+                        if (downStop)
+                        {
+                            ropeManager.ArmUnitDownForceStop();
+                            craneStatus = 9;
+                        }
                     }
-                }
-                break;
+                    break;
+            }
         }
     }
     public void InputLeverCheck() // キーボード，UI共通のレバー処理
     {
-        if (!player2)
+        if (host.playable)
         {
-            if (instanceFlag[15] && ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)) // 初回用の処理
+            if (!player2)
             {
-                leverFlag = true;
-                instanceFlag[15] = false;
-                videoPlay.PlayVideo(1);
-                _SEPlayer.StopSE(2);
-                _SEPlayer.PlaySE(1, 1);
-            }
+                if (Input.GetKey(KeyCode.H) || lever.rightFlag)
+                    craneBox.Right();
+                if (Input.GetKey(KeyCode.F) || lever.leftFlag)
+                    craneBox.Left();
+                if (Input.GetKey(KeyCode.T) || lever.backFlag)
+                    craneBox.Back();
+                if (Input.GetKey(KeyCode.G) || lever.forwardFlag)
+                    craneBox.Forward();
 
-            if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
+                if (Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
+                || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
+                    if (craneStatus == 1)
+                    {
+                        craneStatus = 3;
+                        creditSystem.ResetPayment();
+                        isExecuted[15] = false;
+                    }
+            }
+            else //2Pレバー
             {
-                leverFlag = true;
-                videoPlay.PlayVideo(1);
-                _SEPlayer.StopSE(2);
-                _SEPlayer.PlaySE(1, 1);
+                if (Input.GetKey(KeyCode.L) || lever.rightFlag)
+                    craneBox.Right();
+                if (Input.GetKey(KeyCode.J) || lever.leftFlag)
+                    craneBox.Left();
+                if (Input.GetKey(KeyCode.I) || lever.backFlag)
+                    craneBox.Back();
+                if (Input.GetKey(KeyCode.K) || lever.forwardFlag)
+                    craneBox.Forward();
+
+                if (Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
+                || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
+                    if (craneStatus == 1)
+                    {
+                        craneStatus = 3;
+                        creditSystem.ResetPayment();
+                        isExecuted[15] = false;
+                    }
             }
-            if ((!Input.GetKey(KeyCode.RightArrow) && !Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow)
-            && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverFlag)
-            {
-                leverFlag = false;
-                videoPlay.PlayVideo(0);
-                _SEPlayer.StopSE(1);
-                _SEPlayer.PlaySE(2, 1);
-            }
-
-            if (Input.GetKey(KeyCode.RightArrow) || lever.rightFlag)
-                _CraneBox.rightMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.RightArrow) || !lever.rightFlag)
-                _CraneBox.rightMoveFlag = false;
-            if (Input.GetKey(KeyCode.LeftArrow) || lever.leftFlag)
-                _CraneBox.leftMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.LeftArrow) || !lever.leftFlag)
-                _CraneBox.leftMoveFlag = false;
-            if (Input.GetKey(KeyCode.UpArrow) || lever.backFlag)
-                _CraneBox.backMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.UpArrow) || !lever.backFlag)
-                _CraneBox.backMoveFlag = false;
-            if (Input.GetKey(KeyCode.DownArrow) || lever.forwardFlag)
-                _CraneBox.forwardMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.DownArrow) || !lever.forwardFlag)
-                _CraneBox.forwardMoveFlag = false;
-
-            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
-                if (craneStatus == 1)
-                {
-                    craneStatus = 3;
-                    creditSystem.ResetNowPayment();
-                    creditSystem.AddCreditPlayed();
-                    instanceFlag[15] = false;
-                }
-        }
-        else //2Pレバー
-        {
-            if (instanceFlag[15] && ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)) // 初回用の処理
-            {
-                leverFlag = true;
-                instanceFlag[15] = false;
-                videoPlay.PlayVideo(1);
-                _SEPlayer.StopSE(2);
-                _SEPlayer.PlaySE(1, 1);
-            }
-
-
-            if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverFlag)
-            {
-                leverFlag = true;
-                videoPlay.PlayVideo(1);
-                _SEPlayer.StopSE(2);
-                _SEPlayer.PlaySE(1, 1);
-            }
-            if ((!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S)
-            && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverFlag)
-            {
-                leverFlag = false;
-                videoPlay.PlayVideo(0);
-                _SEPlayer.StopSE(1);
-                _SEPlayer.PlaySE(2, 1);
-            }
-
-            if (Input.GetKey(KeyCode.D) || lever.rightFlag)
-                _CraneBox.rightMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.D) || !lever.rightFlag)
-                _CraneBox.rightMoveFlag = false;
-            if (Input.GetKey(KeyCode.A) || lever.leftFlag)
-                _CraneBox.leftMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.A) || !lever.leftFlag)
-                _CraneBox.leftMoveFlag = false;
-            if (Input.GetKey(KeyCode.W) || lever.backFlag)
-                _CraneBox.backMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.W) || !lever.backFlag)
-                _CraneBox.backMoveFlag = false;
-            if (Input.GetKey(KeyCode.S) || lever.forwardFlag)
-                _CraneBox.forwardMoveFlag = true;
-            else if (Input.GetKeyUp(KeyCode.S) || !lever.forwardFlag)
-                _CraneBox.forwardMoveFlag = false;
-
-            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
-                if (craneStatus == 1)
-                {
-                    craneStatus = 3;
-                    creditSystem.ResetNowPayment();
-                    creditSystem.AddCreditPlayed();
-                    instanceFlag[15] = false;
-                }
         }
     }
 
     public void ButtonDown(int num)
     {
-        switch (num)
+        if (host.playable)
         {
-            case 1:
-                if (craneStatus == 1 && !buttonFlag)
-                {
-                    buttonFlag = true;
-                    craneStatus = 2;
-                    creditSystem.ResetNowPayment();
-                    creditSystem.AddCreditPlayed();
-                    videoPlay.PlayVideo(1);
-                    _SEPlayer.PlaySE(1, 1);
-                    instanceFlag[15] = false;
-                }
-                if (craneStatus == 2 && buttonFlag)
-                {
-                    _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.rightMoveFlag = true;
-                }
-                break;
-            case 2:
-                if ((craneStatus == 3 && !buttonFlag) || (craneStatus == 4 && buttonFlag))
-                {
-                    buttonFlag = true;
-                    craneStatus = 4;
-                    _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.backMoveFlag = true;
-                }
-                break;
-            case 3:
-                if ((craneStatus == 5 && operationType == 0) || (craneStatus == 3 && operationType == 1 && !leverFlag))
-                {
-                    if (rotation)
+            switch (num)
+            {
+                case 1:
+                    if (craneStatus == 1 && !buttonPushed)
                     {
-                        craneStatus = 6;
-                        roter.RotateStart();
-                        videoPlay.PlayVideo(2);
+                        buttonPushed = true;
+                        craneStatus = 2;
+                        creditSystem.ResetPayment();
+                        videoPlay.PlayVideo(1);
+                        _SEPlayer.PlaySE(1, 1);
+                        isExecuted[15] = false;
                     }
-                    else
+                    if (craneStatus == 2 && buttonPushed)
+                        _SEPlayer.PlaySE(1, 1);
+
+                    break;
+                case 2:
+                    if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
+                    {
+                        buttonPushed = true;
+                        craneStatus = 4;
+                        _SEPlayer.PlaySE(1, 1);
+                    }
+                    break;
+                case 3:
+                    if ((craneStatus == 5 && operationType == 0) || (craneStatus == 3 && operationType == 1 && !leverTilted))
+                    {
+                        if (rotation)
+                        {
+                            craneStatus = 6;
+                            roter.RotateStart();
+                            videoPlay.PlayVideo(2);
+                        }
+                        else
+                        {
+                            craneStatus = 7;
+                            videoPlay.PlayVideo(3);
+                        }
+                    }
+                    else if (craneStatus == 6)
                     {
                         craneStatus = 7;
+                        roter.RotateStop();
                         videoPlay.PlayVideo(3);
                     }
-                }
-                else if (craneStatus == 6)
-                {
-                    craneStatus = 7;
-                    roter.RotateStop();
-                    videoPlay.PlayVideo(3);
-                }
-                else if (craneStatus == 8)
-                {
-                    if (downStop)
+                    else if (craneStatus == 8)
                     {
-                        _RopeManager.ArmUnitDownForceStop();
-                        craneStatus = 9;
+                        if (downStop)
+                        {
+                            ropeManager.ArmUnitDownForceStop();
+                            craneStatus = 9;
+                        }
                     }
-                }
-                break;
-            case 4: // player2 case 1:
-                if (craneStatus == 1 && !buttonFlag)
-                {
-                    buttonFlag = true;
-                    craneStatus = 2;
-                    creditSystem.ResetNowPayment();
-                    creditSystem.AddCreditPlayed();
-                    videoPlay.PlayVideo(1);
-                    _SEPlayer.PlaySE(1, 1);
-                    instanceFlag[15] = false;
-                }
-                if (craneStatus == 2 && buttonFlag)
-                {
-                    _SEPlayer.PlaySE(1, 1);
-                    _CraneBox.leftMoveFlag = true;
-                }
-                break;
+                    break;
+                case 4: // player2 case 1:
+                    if (craneStatus == 1 && !buttonPushed)
+                    {
+                        buttonPushed = true;
+                        craneStatus = 2;
+                        creditSystem.ResetPayment();
+                        videoPlay.PlayVideo(1);
+                        _SEPlayer.PlaySE(1, 1);
+                        isExecuted[15] = false;
+                    }
+                    if (craneStatus == 2 && buttonPushed)
+                        _SEPlayer.PlaySE(1, 1);
+                    break;
+            }
         }
     }
 
     public void ButtonUp(int num)
     {
-        switch (num)
+        if (host.playable)
         {
-            case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonFlag))
-                {
-                    craneStatus = 3;
-                    _SEPlayer.StopSE(1);
-                    _SEPlayer.PlaySE(2, 1);
-                    _CraneBox.rightMoveFlag = false;
-                    buttonFlag = false;
-                }
-                break;
-            case 2:
-                if (/*craneStatus == 3 ||*/ (craneStatus == 4 && buttonFlag))
-                {
-                    craneStatus = 5;
-                    _SEPlayer.StopSE(1);
-                    _SEPlayer.PlaySE(2, 1);
-                    _CraneBox.backMoveFlag = false;
-                    buttonFlag = false;
-                }
-                break;
-            case 4: // player2 case 1:
-                if (/*craneStatus == 1 ||*/ (craneStatus == 2 && buttonFlag))
-                {
-                    craneStatus = 3;
-                    _SEPlayer.StopSE(1);
-                    _SEPlayer.PlaySE(2, 1);
-                    _CraneBox.leftMoveFlag = false;
-                    buttonFlag = false;
-                }
-                break;
+            switch (num)
+            {
+                case 1:
+                    if (craneStatus == 2 && buttonPushed)
+                    {
+                        craneStatus = 3;
+                        _SEPlayer.StopSE(1);
+                        _SEPlayer.PlaySE(2, 1);
+                        buttonPushed = false;
+                    }
+                    break;
+                case 2:
+                    if (craneStatus == 4 && buttonPushed)
+                    {
+                        craneStatus = 5;
+                        _SEPlayer.StopSE(1);
+                        _SEPlayer.PlaySE(2, 1);
+                        buttonPushed = false;
+                    }
+                    break;
+                case 4: // player2 case 1:
+                    if (craneStatus == 2 && buttonPushed)
+                    {
+                        craneStatus = 3;
+                        _SEPlayer.StopSE(1);
+                        _SEPlayer.PlaySE(2, 1);
+                        buttonPushed = false;
+                    }
+                    break;
+            }
+        }
+    }
+    public void InsertCoin()
+    {
+        if (host.playable && craneStatus >= 0)
+        {
+            int credit = creditSystem.Pay(100);
+            if (credit < 10) credit3d.text = credit.ToString();
+            else credit3d.text = "9.";
+            if (credit > 0 && craneStatus == 0)
+            {
+                craneStatus = 1;
+                videoPlay.randomMode = false;
+            }
         }
     }
 }

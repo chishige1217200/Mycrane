@@ -10,8 +10,9 @@ public class Type3ArmController : MonoBehaviour
     JointMotor[] motor;
     ArmControllerSupport support;
     Type3Manager _Type3Manager;
+    //Type7Manager _Type7Manager;
     public bool releaseFlag = true; //trueなら強制射出
-
+    int craneType = 3;
     void Start()
     {
         arm = new GameObject[3];
@@ -20,10 +21,6 @@ public class Type3ArmController : MonoBehaviour
         arm[0] = this.transform.Find("Arm1").gameObject;
         arm[1] = this.transform.Find("Arm2").gameObject;
         arm[2] = this.transform.Find("Arm3").gameObject;
-        support = this.transform.Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
-        support.GetManager(3);
-        support.GetArmController(3);
-        _Type3Manager = this.transform.root.GetComponent<Type3Manager>();
 
         for (int i = 0; i < 3; i++)
         {
@@ -36,7 +33,7 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = -150f;
+            motor[i].targetVelocity = 150f;
             //motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
@@ -47,36 +44,37 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = 50f;
+            motor[i].targetVelocity = -50f;
             //motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
         }
     }
 
-    public void ArmFinalClose() // 景品排出後に閉じる時
+    /*public void ArmFinalClose() // 景品排出後に閉じる時
     {
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = -10f;
+            motor[i].targetVelocity = 0f;
             //motor[i].force = 1f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
         }
-    }
+    }*/
 
     public async void Release()
     {
-        _Type3Manager.armPower = 0f;
+        if (craneType == 3) _Type3Manager.armPower = 0f;
         if (releaseFlag)
         {
             for (int i = 0; i < 3; i++)
             {
-                motor[i].targetVelocity = -130f;
+                motor[i].targetVelocity = 50f;
                 //motor[i].force = 1f;
                 joint[i].motor = motor[i];
             }
-            await Task.Delay(250);
+            while (support.prizeFlag)
+                await Task.Delay(50);
             for (int i = 0; i < 3; i++)
             {
                 motor[i].targetVelocity = 0f;
@@ -90,18 +88,19 @@ public class Type3ArmController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            if (power > 50)
-            {
-                motor[i].targetVelocity = power - 50f;
-                //motor[i].force = 1f;
-                joint[i].motor = motor[i];
-            }
-            else
-            {
-                motor[i].targetVelocity = 1.5f * (power - 50f);
-                //motor[i].force = 1f;
-                joint[i].motor = motor[i];
-            }
+            motor[i].targetVelocity = 50f - power;
+            //motor[i].force = 1f;
+            joint[i].motor = motor[i];
         }
+    }
+
+    public void GetManager(int num) // 筐体のマネージャー情報取得
+    {
+        craneType = num;
+        if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
+        //if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
+        support = this.transform.Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
+        support.GetManager(craneType);
+        support.GetArmController(craneType);
     }
 }

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 2412246828120334738}
   - component: {fileID: 2816116158425076098}
   - component: {fileID: 3990713273972154913}
+  - component: {fileID: -5683599330931619016}
   m_Layer: 0
   m_Name: BigDice
   m_TagString: prize
@@ -92,7 +93,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5403567054633770353}
-  m_Material: {fileID: 13400000, guid: 1745a4919734875408ffcccaafc8c99d, type: 2}
+  m_Material: {fileID: 13400000, guid: b108e509089746340a92a61d51b14478, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -111,6 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prizeName: "\u5DE8\u5927\u30B5\u30A4\u30B3\u30ED"
+  destroyObject: {fileID: 5403567054633770353}
 --- !u!54 &2465256295621363947
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -134,7 +136,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5403567054633770353}
-  m_Material: {fileID: 13400000, guid: 1745a4919734875408ffcccaafc8c99d, type: 2}
+  m_Material: {fileID: 13400000, guid: b108e509089746340a92a61d51b14478, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.125
@@ -148,7 +150,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5403567054633770353}
-  m_Material: {fileID: 13400000, guid: 1745a4919734875408ffcccaafc8c99d, type: 2}
+  m_Material: {fileID: 13400000, guid: b108e509089746340a92a61d51b14478, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.125
@@ -162,10 +164,24 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5403567054633770353}
-  m_Material: {fileID: 13400000, guid: 1745a4919734875408ffcccaafc8c99d, type: 2}
+  m_Material: {fileID: 13400000, guid: b108e509089746340a92a61d51b14478, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.125
   m_Height: 0.28
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-5683599330931619016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5403567054633770353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 801f0e7fdc28a8945b592e52e322d374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prizeName: "\u30D3\u30C3\u30B0\u30B5\u30A4\u30B3\u30ED"
+  destroyObject: {fileID: 0}

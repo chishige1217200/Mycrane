@@ -4,26 +4,17 @@ using UnityEngine;
 
 public class CraneBox : MonoBehaviour
 {
-    public bool rightMoveFlag = false; // trueのとき，その方向に移動
-    public bool leftMoveFlag = false;
-    public bool backMoveFlag = false;
-    public bool forwardMoveFlag = false;
     public bool rightRefusedFlag = false; // trueなら、その方向に移動禁止
     public bool leftRefusedFlag = false;
     public bool backRefusedFlag = false;
     public bool forwardRefusedFlag = false;
     public float moveSpeed = 0.001f;
     [SerializeField] bool supportDirectionChanger = false; // true:x-move false:z-move
-    [SerializeField] int playerNumber = 1;
     GameObject craneBoxSupport;
     GameObject ropeHost;
-    Type1Manager _Type1Manager;
-    Type2Manager _Type2Manager;
-    Type3Manager _Type3Manager;
-    Type4Manager _Type4Manager;
     public Vector2 goPoint; // GoPosition関数の目的地
     public bool goPositionFlag = false; // GoPosition関数の実行フラグ
-    int craneType = -1;
+    public bool limitIgnoreFlag = false; // trueのとき，refusedFlagの影響を受けない
 
     void Start()
     {
@@ -33,99 +24,15 @@ public class CraneBox : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (rightRefusedFlag && rightMoveFlag) rightMoveFlag = false;
-        if (leftRefusedFlag && leftMoveFlag) leftMoveFlag = false;
-        if (backRefusedFlag && backMoveFlag) backMoveFlag = false;
-        if (forwardRefusedFlag && forwardMoveFlag) forwardMoveFlag = false;
-
-        if (rightMoveFlag && !rightRefusedFlag) RightMove();
-        if (leftMoveFlag && !leftRefusedFlag) LeftMove();
-        if (backMoveFlag && !backRefusedFlag) BackMove();
-        if (forwardMoveFlag && !forwardRefusedFlag) ForwardMove();
         if (goPositionFlag) GoPosition();
-        if (!leftMoveFlag && !backMoveFlag && !forwardMoveFlag && !rightMoveFlag) goPositionFlag = false;
-    }
-
-    public void GetManager(int num) // 筐体のマネージャー情報取得
-    {
-        craneType = num;
-        if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
-        if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
-        if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
-        if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
     }
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.tag == "LeftLimit")
-        {
-            leftMoveFlag = false;
-            leftRefusedFlag = true;
-            if (craneType == 1)
-            {
-                if (_Type1Manager.craneStatus == 2) _Type1Manager.craneStatus = 3;
-                _Type1Manager.buttonFlag = false;
-            }
-        }
-        if (collider.tag == "RightLimit")
-        {
-            rightMoveFlag = false;
-            rightRefusedFlag = true;
-            if (craneType == 1)
-                if (_Type1Manager.craneStatus == 2)
-                {
-                    _Type1Manager.craneStatus = 3;
-                    _Type1Manager.buttonFlag = false;
-                }
-            if (craneType == 2)
-                if (_Type2Manager.craneStatus == 2)
-                {
-                    _Type2Manager.craneStatus = 3;
-                    _Type2Manager.buttonFlag = false;
-                }
-            if (craneType == 3)
-                if (_Type3Manager.craneStatus == 2)
-                {
-                    _Type3Manager.craneStatus = 3;
-                    _Type3Manager.buttonFlag = false;
-                }
-            if (craneType == 4)
-                if (_Type4Manager.craneStatus == 2)
-                {
-                    _Type4Manager.craneStatus = 3;
-                    _Type4Manager.buttonFlag = false;
-                }
-        }
-        if (collider.tag == "BackgroundLimit")
-        {
-            backMoveFlag = false;
-            backRefusedFlag = true;
-            if (craneType == 1)
-            {
-                if (_Type1Manager.craneStatus == 4) _Type1Manager.craneStatus = 5;
-                _Type1Manager.buttonFlag = false;
-            }
-            if (craneType == 2)
-            {
-                if (_Type2Manager.craneStatus == 4) _Type2Manager.craneStatus = 5;
-                _Type2Manager.buttonFlag = false;
-            }
-            if (craneType == 3)
-            {
-                if (_Type3Manager.craneStatus == 4) _Type3Manager.craneStatus = 5;
-                _Type3Manager.buttonFlag = false;
-            }
-            if (craneType == 4)
-            {
-                if (_Type4Manager.craneStatus == 4) _Type4Manager.craneStatus = 5;
-                _Type4Manager.buttonFlag = false;
-            }
-        }
-        if (collider.tag == "ForegroundLimit")
-        {
-            forwardMoveFlag = false;
-            forwardRefusedFlag = true;
-        }
+        if (collider.tag == "LeftLimit") leftRefusedFlag = true;
+        if (collider.tag == "RightLimit") rightRefusedFlag = true;
+        if (collider.tag == "BackgroundLimit") backRefusedFlag = true;
+        if (collider.tag == "ForegroundLimit") forwardRefusedFlag = true;
     }
 
     void OnTriggerExit(Collider collider) // 限界に達すると，RefusedFlagをTrueに
@@ -136,23 +43,19 @@ public class CraneBox : MonoBehaviour
         if (collider.tag == "ForegroundLimit") forwardRefusedFlag = false;
     }
 
-    public bool CheckPos(int mode) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：停止状態の移動確認
+    public bool CheckPos(int mode) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：GoPosition用
     {
         int checker = 0; // 復帰チェック用
         if (mode == 1 || mode == 2 || mode == 5)
-            if (!leftMoveFlag || leftRefusedFlag) checker++;
+            if (leftRefusedFlag) checker++;
         if (mode == 2 || mode == 4 || mode == 8)
-            if (!backMoveFlag || backRefusedFlag) checker++;
+            if (backRefusedFlag) checker++;
         if (mode == 1 || mode == 3 || mode == 6)
-            if (!forwardMoveFlag || forwardRefusedFlag) checker++;
+            if (forwardRefusedFlag) checker++;
         if (mode == 3 || mode == 4 || mode == 7)
-            if (!rightMoveFlag || rightRefusedFlag) checker++;
+            if (rightRefusedFlag) checker++;
         if (mode == 9)
-            if (!leftMoveFlag && !backMoveFlag && !forwardMoveFlag && !rightMoveFlag)
-            {
-                checker++;
-                goPositionFlag = false;
-            }
+            if (!goPositionFlag) checker++; //Bad?
 
         if (mode <= 4 && checker == 2) return true;         // 該当箇所に復帰したとみなす
         else if (mode >= 5 && checker == 1) return true;    // 該当箇所に復帰したとみなす
@@ -161,68 +64,77 @@ public class CraneBox : MonoBehaviour
 
     void GoPosition()
     {
-        if (this.transform.position.x < goPoint.x)
+        int checker = 0;
+        if (!limitIgnoreFlag) limitIgnoreFlag = true;
+        if (Mathf.Abs(this.transform.localPosition.x - goPoint.x) <= moveSpeed)
         {
-            leftMoveFlag = false;
-            rightMoveFlag = true;
+            checker++;
+            if (this.transform.localPosition.x - goPoint.x != 0)
+                this.transform.localPosition = new Vector3(goPoint.x, this.transform.localPosition.y, this.transform.localPosition.z);
         }
-        if (this.transform.position.x > goPoint.x)
+        else
         {
-            rightMoveFlag = false;
-            leftMoveFlag = true;
+            if (this.transform.localPosition.x < goPoint.x) Right();
+            else if (this.transform.localPosition.x > goPoint.x) Left();
         }
-        if (this.transform.position.z < goPoint.y)
+        if (Mathf.Abs(this.transform.localPosition.z - goPoint.y) <= moveSpeed)
         {
-            forwardMoveFlag = false;
-            backMoveFlag = true;
+            checker++;
+            if (this.transform.localPosition.z - goPoint.y != 0)
+                this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y, goPoint.y);
         }
-        if (this.transform.position.z > goPoint.y)
+        else
         {
-            backMoveFlag = false;
-            forwardMoveFlag = true;
+            if (this.transform.localPosition.z < goPoint.y) Back();
+            else if (this.transform.localPosition.z > goPoint.y) Forward();
         }
 
-        if (Mathf.Abs(this.transform.position.x - goPoint.x) <= moveSpeed)
+        Debug.Log(Mathf.Abs(this.transform.localPosition.x - goPoint.x) + "," + Mathf.Abs(this.transform.localPosition.z - goPoint.y));
+
+        if (checker == 2)
         {
-            if (this.transform.position.x - goPoint.x != 0)
-                this.transform.position = new Vector3(goPoint.x, this.transform.position.y, this.transform.position.z);
-            leftMoveFlag = false;
-            rightMoveFlag = false;
-        }
-        if (Mathf.Abs(this.transform.position.z - goPoint.y) <= moveSpeed)
-        {
-            if (this.transform.position.z - goPoint.y != 0)
-                this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, goPoint.y);
-            backMoveFlag = false;
-            forwardMoveFlag = false;
+            goPositionFlag = false;
+            if (limitIgnoreFlag) limitIgnoreFlag = false;
         }
     }
 
-    void RightMove()
+    public void Right()
     {
-        this.transform.localPosition += new Vector3(moveSpeed, 0, 0);
-        ropeHost.transform.localPosition += new Vector3(moveSpeed, 0, 0);
-        if (!supportDirectionChanger) craneBoxSupport.transform.localPosition += new Vector3(moveSpeed, 0, 0);
+        if (!rightRefusedFlag || limitIgnoreFlag)
+        {
+            this.transform.localPosition += new Vector3(moveSpeed, 0, 0);
+            ropeHost.transform.localPosition += new Vector3(moveSpeed, 0, 0);
+            if (!supportDirectionChanger) craneBoxSupport.transform.localPosition += new Vector3(moveSpeed, 0, 0);
+        }
     }
 
-    void LeftMove()
+    public void Left()
     {
-        this.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
-        ropeHost.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
-        if (!supportDirectionChanger) craneBoxSupport.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
+        if (!leftRefusedFlag || limitIgnoreFlag)
+        {
+            this.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
+            ropeHost.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
+            if (!supportDirectionChanger) craneBoxSupport.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
+        }
     }
 
-    void BackMove()
+    public void Back()
     {
-        this.transform.localPosition += new Vector3(0, 0, moveSpeed);
-        ropeHost.transform.localPosition += new Vector3(0, 0, moveSpeed);
-        if (supportDirectionChanger) craneBoxSupport.transform.localPosition += new Vector3(0, 0, moveSpeed);
+        if (!backRefusedFlag || limitIgnoreFlag)
+        {
+            this.transform.localPosition += new Vector3(0, 0, moveSpeed);
+            ropeHost.transform.localPosition += new Vector3(0, 0, moveSpeed);
+            if (supportDirectionChanger) craneBoxSupport.transform.localPosition += new Vector3(0, 0, moveSpeed);
+        }
     }
 
-    void ForwardMove()
+    public void Forward()
     {
-        this.transform.localPosition -= new Vector3(0, 0, moveSpeed);
-        ropeHost.transform.localPosition -= new Vector3(0, 0, moveSpeed);
-        if (supportDirectionChanger) craneBoxSupport.transform.localPosition -= new Vector3(0, 0, moveSpeed);
+        if (!forwardRefusedFlag || limitIgnoreFlag)
+        {
+            this.transform.localPosition -= new Vector3(0, 0, moveSpeed);
+            ropeHost.transform.localPosition -= new Vector3(0, 0, moveSpeed);
+            if (supportDirectionChanger) craneBoxSupport.transform.localPosition -= new Vector3(0, 0, moveSpeed);
+        }
     }
 }
