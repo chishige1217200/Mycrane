@@ -6,9 +6,11 @@ using UnityEngine;
 public class Type5Selecter : MonoBehaviour
 {
     [SerializeField] Type5Manager[] manager = new Type5Manager[2];
+    [SerializeField] Animator[] animator = new Animator[3];
     BGMPlayer _BGMPlayer;
     [SerializeField] int soundType = 0; //0:U9_1，1:U9_2，2:U8，3:U7
     [SerializeField] float audioPitch = 1.0f;
+    int lightColor = 0; //0:White, 1:Red, 2:Green, 3:Blue, 4:Yellow, 5:Sky, 6:Purple, 7:Pink(255,128,255), 8:Orange(255,128,0), 9:Forest(128,255,0)
     int nextPlay = 6;
 
     void Start()
