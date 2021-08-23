@@ -10,7 +10,7 @@ public class Type5Selecter : MonoBehaviour
     BGMPlayer _BGMPlayer;
     [SerializeField] int soundType = 0; //0:U9_1，1:U9_2，2:U8，3:U7
     [SerializeField] float audioPitch = 1.0f;
-    int lightColor = 0; //0:White, 1:Red, 2:Green, 3:Blue, 4:Yellow, 5:Sky, 6:Purple, 7:Pink(255,128,255), 8:Orange(255,128,0), 9:Forest(128,255,0)
+    [SerializeField] int lightColor = 1; //1:Red, 2:Green, 3:Blue, 4:Yellow, 5:Sky, 6:Purple, 7:Pink(255,128,255), 8:Orange(255,128,0), 9:Forest(128,255,0)
     int nextPlay = 6;
 
     void Start()
@@ -21,10 +21,15 @@ public class Type5Selecter : MonoBehaviour
         manager[1].soundType = soundType;
         manager[0]._SEPlayer.SetAudioPitch(audioPitch);
         manager[1]._SEPlayer.SetAudioPitch(audioPitch);
+
+        for (int i = 0; i < 3; i++)
+            animator[i].SetInteger("ColorNumber", lightColor);
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+            for (int i = 0; i < 3; i++) animator[i].SetTrigger("GetPrize");
         if (manager[0].craneStatus == 0 && manager[1].craneStatus == 0)
         {
             switch (soundType)
