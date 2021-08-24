@@ -23,13 +23,15 @@ public class Type5Selecter : MonoBehaviour
         manager[1]._SEPlayer.SetAudioPitch(audioPitch);
 
         for (int i = 0; i < 3; i++)
+        {
             animator[i].SetInteger("ColorNumber", lightColor);
+            manager[0].animator[i] = animator[i];
+            manager[1].animator[i] = animator[i];
+        }
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            for (int i = 0; i < 3; i++) animator[i].SetTrigger("GetPrize");
         if (manager[0].craneStatus == 0 && manager[1].craneStatus == 0)
         {
             switch (soundType)

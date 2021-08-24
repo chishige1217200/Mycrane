@@ -32,6 +32,7 @@ public class Type5Manager : MonoBehaviour
     GameObject canvas;
     [SerializeField] TextMesh credit3d;
     [SerializeField] TextMesh[] preset = new TextMesh[4];
+    public Animator[] animator = new Animator[3];
 
     async void Start()
     {
@@ -577,6 +578,8 @@ public class Type5Manager : MonoBehaviour
                 getSoundNum = 15;
                 break;
         }
+
+        for (int i = 0; i < 3; i++) animator[i].SetTrigger("GetPrize");
 
         switch (creditSystem.probabilityMode)
         {
