@@ -954,7 +954,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNumber: 1
   pushTime: 0
-  prizeFlag: 0
+  prizeCount: 0
   isShieldcollis: 0
 --- !u!1 &3240852617360308311
 GameObject:
@@ -6172,14 +6172,17 @@ MonoBehaviour:
   craneStatus: -2
   price: 100
   times: 1
-  catchArmpower: 100
-  upArmpower: 100
-  backArmpower: 100
-  catchArmpowersuccess: 100
-  upArmpowersuccess: 100
-  backArmpowersuccess: 100
+  armPowerConfig:
+  - 100
+  - 50
+  - 0
+  armPowerConfigSuccess:
+  - 100
+  - 100
+  - 100
   limitTimeSet: 25
   probability: 0
+  autoPower: 1
   limitTimedisplayed: {fileID: 7745598996855547526}
 --- !u!1 &7745598995664546665
 GameObject:
@@ -14222,7 +14225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a89b9e97f4e83744a31e7a11663698f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  releaseFlag: 1
+  autoPower: 1
 --- !u!1 &7976014657800355688
 GameObject:
   m_ObjectHideFlags: 0

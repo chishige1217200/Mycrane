@@ -7,12 +7,8 @@ public class Type3Manager : MonoBehaviour
     public int craneStatus = -2; //-2:初期化動作，0:待機状態
     [SerializeField] int[] priceSet = new int[2];
     [SerializeField] int[] timesSet = new int[2];
-    [SerializeField] float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
-    [SerializeField] float upArmpower = 100; //上昇時のアームパワー(%，未確率時)
-    [SerializeField] float backArmpower = 100; //獲得口移動時のアームパワー(%，未確率時)
-    [SerializeField] float catchArmpowersuccess = 100; //同確率時
-    [SerializeField] float upArmpowersuccess = 100; //同確率時
-    [SerializeField] float backArmpowersuccess = 100; //同確率時
+    [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
+    [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
     [SerializeField] int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     [SerializeField] float audioPitch = 1f; //サウンドのピッチ
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
@@ -286,8 +282,8 @@ public class Type3Manager : MonoBehaviour
                             _SEPlayer.StopSE(21);
                             break;
                     }
-                    if (probability) armPower = catchArmpowersuccess;
-                    else armPower = catchArmpower;
+                    if (probability) armPower = armPowerConfigSuccess[0];
+                    else armPower = armPowerConfig[0];
                     armController.MotorPower(armPower);
                     armController.ArmClose();
                     await Task.Delay(1000);
@@ -324,12 +320,12 @@ public class Type3Manager : MonoBehaviour
                 if (soundType == 2)
                     if (!_SEPlayer._AudioSource[15].isPlaying)
                         _SEPlayer.PlaySE(14, 2147483647);
-                if (probability && armPower > upArmpowersuccess)
+                if (probability && armPower > armPowerConfigSuccess[1])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
                 }
-                else if (!probability && armPower > upArmpower)
+                else if (!probability && armPower > armPowerConfig[1])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
@@ -343,8 +339,8 @@ public class Type3Manager : MonoBehaviour
             {
                 if (!armController.autoPower)
                 {
-                    if (probability) armPower = upArmpowersuccess;
-                    else armPower = upArmpower;
+                    if (probability) armPower = armPowerConfigSuccess[1];
+                    else armPower = armPowerConfig[1];
                     armController.MotorPower(armPower);
                 }
                 if (!isExecuted[craneStatus])
@@ -388,12 +384,12 @@ public class Type3Manager : MonoBehaviour
                 {
                     if (support.prizeCount > 0)
                     {
-                        if (probability && armPower > backArmpowersuccess)
+                        if (probability && armPower > armPowerConfigSuccess[2])
                         {
                             armPower -= 0.5f;
                             armController.MotorPower(armPower);
                         }
-                        else if (!probability && armPower > backArmpower)
+                        else if (!probability && armPower > armPowerConfig[2])
                         {
                             armPower -= 0.5f;
                             armController.MotorPower(armPower);
