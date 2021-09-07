@@ -19,6 +19,7 @@ public class Type3Manager : MonoBehaviour
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
     [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
+    [SerializeField] bool autoPower = true;
     public float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
@@ -69,6 +70,7 @@ public class Type3Manager : MonoBehaviour
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
         armController.GetManager(3);
+        armController.autoPower = autoPower;
 
         getPoint.GetManager(3);
 
@@ -317,7 +319,7 @@ public class Type3Manager : MonoBehaviour
                     }
                     ropeManager.ArmUnitUp();
                     await Task.Delay(1500);
-                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeFlag) armController.Release(); // 上昇中に離す振り分け
+                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
                 }
                 if (soundType == 2)
                     if (!_SEPlayer._AudioSource[15].isPlaying)
@@ -339,7 +341,7 @@ public class Type3Manager : MonoBehaviour
 
             if (craneStatus == 9)
             {
-                if (!armController.releaseFlag)
+                if (!armController.autoPower)
                 {
                     if (probability) armPower = upArmpowersuccess;
                     else armPower = upArmpower;
@@ -354,7 +356,7 @@ public class Type3Manager : MonoBehaviour
                             _SEPlayer.StopSE(22);
                             break;
                     }
-                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeFlag) armController.Release(); // 上昇後に離す振り分け
+                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
                     if (craneStatus == 9) craneStatus = 10;
                 }
                 //アーム上昇停止音再生;
@@ -382,9 +384,9 @@ public class Type3Manager : MonoBehaviour
                 if (soundType == 2)
                     if (!_SEPlayer._AudioSource[15].isPlaying)
                         _SEPlayer.PlaySE(14, 2147483647);
-                if (!armController.releaseFlag)
+                if (!armController.autoPower)
                 {
-                    if (support.prizeFlag)
+                    if (support.prizeCount > 0)
                     {
                         if (probability && armPower > backArmpowersuccess)
                         {

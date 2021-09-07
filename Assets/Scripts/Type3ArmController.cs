@@ -11,7 +11,7 @@ public class Type3ArmController : MonoBehaviour
     ArmControllerSupport support;
     Type3Manager _Type3Manager;
     //Type7Manager _Type7Manager;
-    public bool releaseFlag = true; //trueなら強制射出
+    public bool autoPower = true; //trueなら強制射出
     int craneType = 3;
     void Start()
     {
@@ -65,7 +65,7 @@ public class Type3ArmController : MonoBehaviour
     public async void Release()
     {
         if (craneType == 3) _Type3Manager.armPower = 0f;
-        if (releaseFlag)
+        if (autoPower)
         {
             for (int i = 0; i < 3; i++)
             {
@@ -73,7 +73,7 @@ public class Type3ArmController : MonoBehaviour
                 //motor[i].force = 1f;
                 joint[i].motor = motor[i];
             }
-            while (support.prizeFlag)
+            while (support.prizeCount > 0)
                 await Task.Delay(50);
             for (int i = 0; i < 3; i++)
             {

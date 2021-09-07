@@ -16,7 +16,7 @@ public class ArmControllerSupport : MonoBehaviour
     RopeManager ropeManager;
     int craneType = -1;
     public int pushTime = 0;
-    public bool prizeFlag = false;
+    public int prizeCount = 0; // プライズがアームにいくつ検知されているか
     public bool isShieldcollis = false; // アームがShieldに衝突しているかどうか
 
     async void OnTriggerEnter(Collider collider)
@@ -26,14 +26,14 @@ public class ArmControllerSupport : MonoBehaviour
             switch (craneType)
             {
                 case 3:
-                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeFlag)
+                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeCount > 0)
                     {
                         Debug.Log("Released.");
                         _Type3ArmController.Release();
                     }
                     break;
                 case 7:
-                    if (!_Type7Manager.probability && prizeFlag)
+                    if (!_Type7Manager.probability && prizeCount > 0)
                     {
                         Debug.Log("Released.");
                         _Type3ArmController.Release();
@@ -74,7 +74,7 @@ public class ArmControllerSupport : MonoBehaviour
         if (collider.tag == "prize")
         {
             Debug.Log("prize inTrigger");
-            prizeFlag = true;
+            prizeCount++;
             switch (craneType)
             {
                 case 3:
@@ -106,14 +106,14 @@ public class ArmControllerSupport : MonoBehaviour
 
     void OnTriggerStay(Collider collider)
     {
-        if (collider.tag == "prize")
-            prizeFlag = true;
+        /*if (collider.tag == "prize")
+            prizeFlag = true;*/
         if (collider.tag == "ReleaseCheck")
         {
             switch (craneType)
             {
                 case 3:
-                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeFlag)
+                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeCount > 0)
                     {
                         _Type3ArmController.Release();
                     }
@@ -127,7 +127,8 @@ public class ArmControllerSupport : MonoBehaviour
         if (collider.tag == "prize")
         {
             Debug.Log("prize outTrigger");
-            prizeFlag = false;
+            prizeCount--;
+            if (prizeCount < 0) prizeCount = 0;
         }
         if (collider.tag == "Shield")
         {

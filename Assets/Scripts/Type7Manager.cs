@@ -18,6 +18,7 @@ public class Type7Manager : MonoBehaviour
     [SerializeField] int limitTimeSet = 60; //操作制限時間
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     public bool probability; //確率判定用
+    [SerializeField] bool autoPower = true;
     float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
@@ -72,6 +73,7 @@ public class Type7Manager : MonoBehaviour
         support.GetRopeManager(ropeManager);
         creditSystem.SetCreditSound(0);
         armController.GetManager(7);
+        armController.autoPower = autoPower;
 
         getPoint.GetManager(7);
 
@@ -178,7 +180,7 @@ public class Type7Manager : MonoBehaviour
                     isExecuted[craneStatus] = true;
                     ropeManager.ArmUnitUp();
                     await Task.Delay(1500);
-                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeFlag) armController.Release(); // 上昇中に離す振り分け
+                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
                 }
                 if (probability && armPower > upArmpowersuccess)
                 {
