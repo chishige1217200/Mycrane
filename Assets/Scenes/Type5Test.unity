@@ -8417,6 +8417,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9037032912306396691, guid: f0995853bd162e94284c28a386aeb1ed,
         type: 3}
+      propertyPath: armLPowerConfig.Array.data[0]
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032912306396691, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armLPowerConfig.Array.data[1]
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032912306396691, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armLPowerConfig.Array.data[2]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032912306396691, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armRPowerConfig.Array.data[0]
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032912306396691, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armRPowerConfig.Array.data[1]
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032912306396691, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armRPowerConfig.Array.data[2]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032912306396691, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
       propertyPath: boxRestrictions.Array.data[1]
       value: 80
       objectReference: {fileID: 0}
@@ -8429,6 +8459,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Limits.min
       value: -32
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032912841439660, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: probabilityMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032912841439660, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: creditProbability
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9037032913109288805, guid: f0995853bd162e94284c28a386aeb1ed,
         type: 3}
@@ -17683,8 +17723,22 @@ MonoBehaviour:
   craneStatus: -3
   priceSet: 64000000f4010000
   timesSet: 0100000006000000
-  leftCatchArmpower: 5
-  rightCatchArmpower: 20
+  armLPowerConfig:
+  - 0
+  - 0
+  - 0
+  armLPowerConfigSuccess:
+  - 0
+  - 0
+  - 0
+  armRPowerConfig:
+  - 0
+  - 0
+  - 0
+  armRPowerConfigSuccess:
+  - 0
+  - 0
+  - 0
   armApertures: 100
   boxRestrictions:
   - 100
@@ -17692,6 +17746,9 @@ MonoBehaviour:
   downRestriction: 100
   soundType: 0
   buttonPushed: 0
+  probability: 0
+  armLPower: 0
+  armRPower: 0
   player2: 0
   button3: 1
   startPoint: {x: 0, y: 0}
@@ -27906,8 +27963,22 @@ MonoBehaviour:
   craneStatus: -3
   priceSet: 6400000000000000
   timesSet: 0100000000000000
-  leftCatchArmpower: 5
-  rightCatchArmpower: 5
+  armLPowerConfig:
+  - 0
+  - 0
+  - 0
+  armLPowerConfigSuccess:
+  - 0
+  - 0
+  - 0
+  armRPowerConfig:
+  - 0
+  - 0
+  - 0
+  armRPowerConfigSuccess:
+  - 0
+  - 0
+  - 0
   armApertures: 80
   boxRestrictions:
   - 100
@@ -27915,6 +27986,9 @@ MonoBehaviour:
   downRestriction: 100
   soundType: 0
   buttonPushed: 0
+  probability: 0
+  armLPower: 0
+  armRPower: 0
   player2: 1
   button3: 0
   startPoint: {x: 0, y: 0}
