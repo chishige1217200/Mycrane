@@ -18,6 +18,8 @@ public class Type6Manager : MonoBehaviour
     bool[] isExecuted = new bool[11]; //各craneStatusで1度しか実行しない処理の管理
     public bool leverTilted = false; //trueならレバーがアクティブ
     public bool probability; //確率判定用
+    [SerializeField] int releaseTiming = 3; //0:設定無し，1:上昇開始後，2:移動開始後
+    [SerializeField] int waitTime = 1; //n秒計測に使用（releaseTiming = 1,2で有効）
     public float armPower;
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool downStop = true; //下降停止の使用可否
@@ -80,7 +82,6 @@ public class Type6Manager : MonoBehaviour
         creditSystem.GetSEPlayer(_SEPlayer);
         timer.limitTime = limitTimeSet;
         timer.GetSEPlayer(_SEPlayer);
-        timer.SetAlertSound(-1);
         getPoint.GetManager(6);
         ropeManager.ArmUnitUp();
         await Task.Delay(500);
@@ -89,6 +90,7 @@ public class Type6Manager : MonoBehaviour
         support.GetManager(6);
         support.GetRopeManager(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
+
         for (int i = 0; i < 3; i++)
         {
             nail[i].GetManager(6);
@@ -104,6 +106,8 @@ public class Type6Manager : MonoBehaviour
         {
             await Task.Delay(100);
         }
+
+        armController.GetManager();
         armController.ArmLimit(armApertures);
         if (openEnd) armController.ArmOpen();
         else armController.ArmClose(100f);
@@ -140,7 +144,7 @@ public class Type6Manager : MonoBehaviour
         }
         else
         {
-            if (craneStatus == 1) // 操作待ち
+            if (craneStatus == 1) //操作待ち
             {
                 if (!player2)
                 {
@@ -174,7 +178,7 @@ public class Type6Manager : MonoBehaviour
                 }
             }
 
-            if (craneStatus == 2) // 1度でも移動したことがある
+            if (craneStatus == 2) //1度でも移動したことがある
             {
                 if (!isExecuted[craneStatus])
                 {
@@ -218,7 +222,7 @@ public class Type6Manager : MonoBehaviour
                 if (!leverTilted) InputKeyCheck(craneStatus); // 下降開始ボタン有効化
             }
 
-            if (craneStatus == 3) // アーム開く
+            if (craneStatus == 3) //アーム開く
             {
                 _SEPlayer.StopSE(1);
                 if (!isExecuted[craneStatus])
@@ -232,7 +236,7 @@ public class Type6Manager : MonoBehaviour
                         int credit = creditSystem.Pay(0);
                         if (credit < 100)
                         {
-                            limitTimedisplayed.text = credit.ToString();
+                            limitTimedisplayed.text = credit.ToString("D2");
                             credit3d.text = credit.ToString();
                         }
                         else
@@ -251,7 +255,7 @@ public class Type6Manager : MonoBehaviour
                 }
             }
 
-            if (craneStatus == 4) // アーム下降中
+            if (craneStatus == 4) //アーム下降中
             {
                 if (!isExecuted[craneStatus])
                 {
@@ -263,7 +267,7 @@ public class Type6Manager : MonoBehaviour
                 if (ropeManager.DownFinished() && craneStatus == 4) craneStatus = 5;
             }
 
-            if (craneStatus == 5) // アーム閉じる
+            if (craneStatus == 5) //アーム閉じる
             {
                 if (!isExecuted[craneStatus])
                 {
@@ -295,7 +299,7 @@ public class Type6Manager : MonoBehaviour
                 }
             }
 
-            if (craneStatus == 6) // アーム上昇中
+            if (craneStatus == 6) //アーム上昇中
             {
                 if (!isExecuted[craneStatus])
                 {
@@ -303,37 +307,49 @@ public class Type6Manager : MonoBehaviour
                     _SEPlayer.PlaySE(4, 2147483647);
 
                     ropeManager.ArmUnitUp();
+                    if (!probability && releaseTiming == 1)
+                    {
+                        await Task.Delay(waitTime);
+                        armController.Release();
+                    }
                 }
 
-                if (probability)
+                if (releaseTiming == 0)
                 {
-                    if (armPower > armPowerConfigSuccess[1]) armPower -= 0.1f;
+                    if (probability)
+                    {
+                        if (armPower > armPowerConfigSuccess[1]) armPower -= 0.1f;
+                    }
+                    else
+                    {
+                        if (armPower > armPowerConfig[1]) armPower -= 0.1f;
+                    }
+                    armController.MotorPower(armPower);
                 }
-                else
-                {
-                    if (armPower > armPowerConfig[1]) armPower -= 0.1f;
-                }
-                armController.MotorPower(armPower);
 
                 if (ropeManager.UpFinished() && craneStatus == 6) craneStatus = 7;
             }
 
 
-            if (craneStatus == 7) // アーム上昇停止
+            if (craneStatus == 7) //アーム上昇停止
             {
-                if (probability)
+                if (releaseTiming == 0)
                 {
-                    armPower = armPowerConfigSuccess[1];
+                    if (probability)
+                    {
+                        armPower = armPowerConfigSuccess[1];
+                    }
+                    else
+                    {
+                        armPower = armPowerConfig[1];
+                    }
+                    armController.MotorPower(armPower);
                 }
-                else
-                {
-                    armPower = armPowerConfig[1];
-                }
-                armController.MotorPower(armPower);
+
                 craneStatus = 8;
             }
 
-            if (craneStatus == 8) // 帰還中
+            if (craneStatus == 8) //帰還中
             {
                 if (!isExecuted[craneStatus])
                 {
@@ -341,22 +357,30 @@ public class Type6Manager : MonoBehaviour
 
                     _SEPlayer.StopSE(4);
                     _SEPlayer.PlaySE(6, 2147483647);
+                    if (!probability && releaseTiming == 2)
+                    {
+                        await Task.Delay(waitTime);
+                        armController.Release();
+                    }
                 }
 
-                if (probability)
+                if (releaseTiming == 0)
                 {
-                    if (armPower > armPowerConfigSuccess[2]) armPower -= 0.1f;
+                    if (probability)
+                    {
+                        if (armPower > armPowerConfigSuccess[2]) armPower -= 0.1f;
+                    }
+                    else
+                    {
+                        if (armPower > armPowerConfig[2]) armPower -= 0.1f;
+                    }
+                    armController.MotorPower(armPower);
                 }
-                else
-                {
-                    if (armPower > armPowerConfig[2]) armPower -= 0.1f;
-                }
-                armController.MotorPower(armPower);
 
                 if ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2)) craneStatus = 9;
             }
 
-            if (craneStatus == 9) // アーム開く
+            if (craneStatus == 9) //アーム開く
             {
                 if (!isExecuted[craneStatus])
                 {
@@ -371,7 +395,7 @@ public class Type6Manager : MonoBehaviour
                 }
             }
 
-            if (craneStatus == 10) // アーム閉じる
+            if (craneStatus == 10) //アーム閉じる
             {
                 if (!isExecuted[craneStatus])
                 {
@@ -394,7 +418,7 @@ public class Type6Manager : MonoBehaviour
                 }
             }
 
-            if (!creditSystem.segUpdateFlag) // Timer表示用
+            if (!creditSystem.segUpdateFlag) //Timer表示用
             {
                 if (timer.limitTimeNow >= 0)
                 {

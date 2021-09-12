@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Type6ArmController : MonoBehaviour
@@ -8,6 +9,9 @@ public class Type6ArmController : MonoBehaviour
     HingeJoint[] joint;
     JointMotor[] motor;
     JointLimits[] limit;
+    ArmControllerSupport support;
+    Type6Manager _Type6Manager;
+    [SerializeField] int playerNumber = 1;
     [SerializeField] float armAperturesBase = 35f;
 
     void Start()
@@ -39,16 +43,25 @@ public class Type6ArmController : MonoBehaviour
         }
     }
 
-    /*public void ArmFinalClose()
+    public async void Release()
     {
-        for (int i = 0; i < 2; i++)
+        _Type6Manager.armPower = 0f;
+
+        for (int i = 0; i < 3; i++)
+        {
+            motor[i].targetVelocity = -80f;
+            //motor[i].force = 1f;
+            joint[i].motor = motor[i];
+        }
+        while (support.prizeCount > 0)
+            await Task.Delay(50);
+        for (int i = 0; i < 3; i++)
         {
             motor[i].targetVelocity = 0f;
-            motor[i].force = 1f;
+            //motor[i].force = 1f;
             joint[i].motor = motor[i];
-            joint[i].useMotor = true;
         }
-    }*/
+    }
 
     public void ArmClose(float power)
     {
@@ -87,5 +100,13 @@ public class Type6ArmController : MonoBehaviour
         limit[2].max = armAperturesBase * armApertures / 100;
         for (int i = 0; i < 3; i++)
             joint[i].limits = limit[i];
+    }
+
+    public void GetManager() // 筐体のマネージャー情報取得
+    {
+        _Type6Manager = transform.root.gameObject.GetComponent<Type6Selecter>().GetManager(playerNumber);
+        support = this.transform.Find("Main").GetComponent<ArmControllerSupport>();
+        support.GetManager(6);
+        support.GetArmController(6);
     }
 }

@@ -1062,6 +1062,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91039a78c5848bc4f97a9d8164fe4089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerNumber: 2
   armAperturesBase: 35
 --- !u!1 &998877914018995240
 GameObject:
@@ -8262,6 +8263,8 @@ MonoBehaviour:
   soundType: 0
   leverTilted: 0
   probability: 0
+  releaseTiming: 2
+  waitTime: 500
   armPower: 0
   player2: 0
   downStop: 1
@@ -19489,6 +19492,8 @@ MonoBehaviour:
   soundType: 0
   leverTilted: 0
   probability: 0
+  releaseTiming: 2
+  waitTime: 500
   armPower: 0
   player2: 1
   downStop: 1
@@ -21380,6 +21385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91039a78c5848bc4f97a9d8164fe4089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerNumber: 1
   armAperturesBase: 35
 --- !u!1 &4601277283592131260
 GameObject:
@@ -21394,6 +21400,7 @@ GameObject:
   - component: {fileID: 1274393551307667333}
   - component: {fileID: 3549232042376190241}
   - component: {fileID: 6765522161161363490}
+  - component: {fileID: 2107240628889902495}
   m_Layer: 9
   m_Name: Main
   m_TagString: Untagged
@@ -21497,6 +21504,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.27, y: 0.20719701, z: 0.26}
   m_Center: {x: 0, y: 0.0146125, z: 0.0052265003}
+--- !u!135 &2107240628889902495
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4601277283592131260}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.15
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4601277283770432153
 GameObject:
   m_ObjectHideFlags: 0
@@ -25514,6 +25534,7 @@ GameObject:
   - component: {fileID: 1563903848226873631}
   - component: {fileID: 4937227490313390078}
   - component: {fileID: 5395320327405411026}
+  - component: {fileID: 1191413287471744543}
   m_Layer: 9
   m_Name: Main
   m_TagString: Untagged
@@ -25617,6 +25638,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.27, y: 0.20719701, z: 0.26}
   m_Center: {x: 0, y: 0.0146125, z: 0.0052265003}
+--- !u!135 &1191413287471744543
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7045886725507440107}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.15
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7048676820922223581
 GameObject:
   m_ObjectHideFlags: 0
