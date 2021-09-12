@@ -89,7 +89,7 @@ public class CraneBox : MonoBehaviour
             else if (this.transform.localPosition.z > goPoint.y) Forward();
         }
 
-        Debug.Log(Mathf.Abs(this.transform.localPosition.x - goPoint.x) + "," + Mathf.Abs(this.transform.localPosition.z - goPoint.y));
+        //Debug.Log(Mathf.Abs(this.transform.localPosition.x - goPoint.x) + "," + Mathf.Abs(this.transform.localPosition.z - goPoint.y));
 
         if (checker == 2)
         {

@@ -70,6 +70,14 @@ public class ArmControllerSupport : MonoBehaviour
                         _Type5Manager.craneStatus = 7;
                     }
                     break;
+                case 6:
+                    if (_Type6Manager.craneStatus == 4)
+                    {
+                        Debug.Log("下降制限に接触");
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type6Manager.craneStatus = 5;
+                    }
+                    break;
             }
         }
         if (collider.tag == "prize")
@@ -166,6 +174,13 @@ public class ArmControllerSupport : MonoBehaviour
                         _Type5Manager.craneStatus = 7;
                     }
                     break;
+                case 6:
+                    if (_Type6Manager.craneStatus == 4)
+                    {
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type6Manager.craneStatus = 5;
+                    }
+                    break;
             }
         }
     }
@@ -178,7 +193,7 @@ public class ArmControllerSupport : MonoBehaviour
         if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
         if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
         if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
-        if (craneType == 5) _Type6Manager = transform.root.gameObject.GetComponent<Type6Selecter>().GetManager(playerNumber);
+        if (craneType == 6) _Type6Manager = transform.root.gameObject.GetComponent<Type6Selecter>().GetManager(playerNumber);
         if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
     }
 

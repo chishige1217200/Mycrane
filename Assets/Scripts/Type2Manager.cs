@@ -12,13 +12,12 @@ public class Type2Manager : MonoBehaviour
     [SerializeField] int operationType = 1; //0:ボタン式，1:レバー式
     [SerializeField] int limitTimeSet = 15; //レバー式の場合，残り時間を設定
     [SerializeField] int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
-    bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
+    bool timerFlag = false; //タイマーの起動は1プレイにつき1度のみ実行
     float audioPitch = 1.0f; //サウンドのピッチ
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
     float armPower; //現在のアームパワー
-
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
@@ -67,7 +66,7 @@ public class Type2Manager : MonoBehaviour
 
         // ロープにマネージャー情報をセット
         creditSystem.GetSEPlayer(_SEPlayer);
-        timer.limitTimeNow = limitTimeSet;
+        timer.limitTime = limitTimeSet;
         timer.GetSEPlayer(_SEPlayer);
 
         if (soundType == 0)
@@ -380,7 +379,6 @@ public class Type2Manager : MonoBehaviour
                     limitTimedisplayed.text = "00";
                     credit3d.text = "00";
                 }
-
             }
         }
     }

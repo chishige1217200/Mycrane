@@ -12,7 +12,9 @@ public class Type6Manager : MonoBehaviour
     [SerializeField] float armApertures = 80f; //開口率
     [SerializeField] float[] boxRestrictions = new float[2];
     [SerializeField] float downRestriction = 100f;
+    [SerializeField] int limitTimeSet = 30; //残り時間を設定
     public int soundType = 0; //SEの切り替え 0,1: CATCHER 9 Selecterで指定すること
+    bool timerFlag = false; //タイマーの起動は1プレイにつき1度のみ実行
     bool[] isExecuted = new bool[11]; //各craneStatusで1度しか実行しない処理の管理
     public bool leverTilted = false; //trueならレバーがアクティブ
     public bool probability; //確率判定用
@@ -29,8 +31,10 @@ public class Type6Manager : MonoBehaviour
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[3];
     Lever lever;
+    Timer timer;
     MachineHost host;
     GameObject canvas;
+    public Text limitTimedisplayed;
     [SerializeField] TextMesh credit3d;
     [SerializeField] TextMesh[] preset = new TextMesh[4];
     public Animator[] animator = new Animator[3];
@@ -48,7 +52,7 @@ public class Type6Manager : MonoBehaviour
         //_SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever").GetComponent<Lever>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
-
+        timer = this.transform.Find("Timer").GetComponent<Timer>();
         temp = this.transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
@@ -74,6 +78,9 @@ public class Type6Manager : MonoBehaviour
 
         // ロープにマネージャー情報をセット
         creditSystem.GetSEPlayer(_SEPlayer);
+        timer.limitTime = limitTimeSet;
+        timer.GetSEPlayer(_SEPlayer);
+        timer.SetAlertSound(-1);
         getPoint.GetManager(6);
         ropeManager.ArmUnitUp();
         await Task.Delay(500);
@@ -169,6 +176,13 @@ public class Type6Manager : MonoBehaviour
 
             if (craneStatus == 2) // 1度でも移動したことがある
             {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    timerFlag = true;
+                    timer.StartTimer();
+                    creditSystem.segUpdateFlag = false;
+                }
                 // タイマーの起動処理を書く
                 if (!player2)
                 {
@@ -200,6 +214,7 @@ public class Type6Manager : MonoBehaviour
                         _SEPlayer.StopSE(1);
                     }
                 }
+                if (isExecuted[craneStatus] && timer.limitTimeNow <= 0) craneStatus = 3; // 時間切れになったら下降
                 if (!leverTilted) InputKeyCheck(craneStatus); // 下降開始ボタン有効化
             }
 
@@ -209,14 +224,30 @@ public class Type6Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    if (!openEnd)
-                    {
-                        armController.ArmOpen();
-                        _SEPlayer.PlaySE(3, 1);
-                        await Task.Delay(1200);
-                    }
                     await Task.Delay(500);
-                    if (craneStatus == 3) craneStatus = 4;
+                    if (craneStatus == 3)
+                    {
+                        creditSystem.segUpdateFlag = true;
+                        timer.CancelTimer();
+                        int credit = creditSystem.Pay(0);
+                        if (credit < 100)
+                        {
+                            limitTimedisplayed.text = credit.ToString();
+                            credit3d.text = credit.ToString();
+                        }
+                        else
+                        {
+                            limitTimedisplayed.text = "99";
+                            credit3d.text = "99.";
+                        }
+                        if (!openEnd)
+                        {
+                            armController.ArmOpen();
+                            _SEPlayer.PlaySE(3, 1);
+                            await Task.Delay(1200);
+                        }
+                        if (craneStatus == 3) craneStatus = 4;
+                    }
                 }
             }
 
@@ -351,6 +382,7 @@ public class Type6Manager : MonoBehaviour
                         armController.ArmClose(100f);
                         await Task.Delay(2500);
                     }
+                    timerFlag = false;
                     for (int i = 0; i < 10; i++)
                         isExecuted[i] = false;
                     armController.ArmLimit(armApertures); //アーム開口度リセット
@@ -359,6 +391,20 @@ public class Type6Manager : MonoBehaviour
                         craneStatus = 1;
                     else
                         craneStatus = 0;
+                }
+            }
+
+            if (!creditSystem.segUpdateFlag) // Timer表示用
+            {
+                if (timer.limitTimeNow >= 0)
+                {
+                    limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
+                    credit3d.text = timer.limitTimeNow.ToString("D2");
+                }
+                else
+                {
+                    limitTimedisplayed.text = "00";
+                    credit3d.text = "00";
                 }
             }
         }
