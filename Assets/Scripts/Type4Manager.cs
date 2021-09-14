@@ -237,7 +237,7 @@ public class Type4Manager : MonoBehaviour
                     if (!player2)
                     {
                         if (isExecuted[15] && ((Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)) // 初回用の処理
                         {
                             leverTilted = true;
                             isExecuted[15] = false;
@@ -247,15 +247,15 @@ public class Type4Manager : MonoBehaviour
                         }
 
                         if ((Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.G)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                         {
                             leverTilted = true;
                             videoPlay.PlayVideo(1);
                             _SEPlayer.StopSE(2);
                             _SEPlayer.PlaySE(1, 1);
                         }
-                        if ((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
-                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
+                        if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
+                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoPlay.PlayVideo(0);
@@ -266,7 +266,7 @@ public class Type4Manager : MonoBehaviour
                     else
                     {
                         if (isExecuted[15] && ((Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)) // 初回用の処理
                         {
                             leverTilted = true;
                             isExecuted[15] = false;
@@ -277,15 +277,15 @@ public class Type4Manager : MonoBehaviour
 
 
                         if ((Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.K)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                         {
                             leverTilted = true;
                             videoPlay.PlayVideo(1);
                             _SEPlayer.StopSE(2);
                             _SEPlayer.PlaySE(1, 1);
                         }
-                        if ((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
-                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
+                        if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
+                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoPlay.PlayVideo(0);
@@ -299,7 +299,7 @@ public class Type4Manager : MonoBehaviour
                     if (!player2)
                     {
                         if (isExecuted[15] && ((Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)) // 初回用の処理
                         {
                             leverTilted = true;
                             isExecuted[15] = false;
@@ -309,15 +309,15 @@ public class Type4Manager : MonoBehaviour
                         }
 
                         if ((Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.G)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                         {
                             leverTilted = true;
                             videoPlay.PlayVideo(1);
                             _SEPlayer.StopSE(2);
                             _SEPlayer.PlaySE(1, 1);
                         }
-                        if ((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
-                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
+                        if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
+                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoPlay.PlayVideo(0);
@@ -328,7 +328,7 @@ public class Type4Manager : MonoBehaviour
                     else
                     {
                         if (isExecuted[15] && ((Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)) // 初回用の処理
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)) // 初回用の処理
                         {
                             leverTilted = true;
                             isExecuted[15] = false;
@@ -339,15 +339,15 @@ public class Type4Manager : MonoBehaviour
 
 
                         if ((Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.K)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                         {
                             leverTilted = true;
                             videoPlay.PlayVideo(1);
                             _SEPlayer.StopSE(2);
                             _SEPlayer.PlaySE(1, 1);
                         }
-                        if ((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
-                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted)
+                        if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
+                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoPlay.PlayVideo(0);
