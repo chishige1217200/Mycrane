@@ -12,7 +12,6 @@ public class Type2Manager : MonoBehaviour
     [SerializeField] int operationType = 1; //0:ボタン式，1:レバー式
     [SerializeField] int limitTimeSet = 15; //レバー式の場合，残り時間を設定
     [SerializeField] int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
-    bool timerFlag = false; //タイマーの起動は1プレイにつき1度のみ実行
     float audioPitch = 1.0f; //サウンドのピッチ
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
@@ -183,10 +182,9 @@ public class Type2Manager : MonoBehaviour
                 }
                 if (craneStatus == 3)
                 {
-                    if (!isExecuted[craneStatus] && !timerFlag)
+                    if (!isExecuted[craneStatus])
                     {
                         isExecuted[craneStatus] = true;
-                        timerFlag = true;
                         timer.StartTimer();
                         creditSystem.segUpdateFlag = false;
                     }
@@ -356,7 +354,6 @@ public class Type2Manager : MonoBehaviour
                 //1秒待機;
                 if (!isExecuted[craneStatus])
                 {
-                    timerFlag = false;
                     for (int i = 0; i < 12; i++)
                         isExecuted[i] = false;
                 }

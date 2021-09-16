@@ -14,7 +14,6 @@ public class Type6Manager : MonoBehaviour
     [SerializeField] float downRestriction = 100f;
     [SerializeField] int limitTimeSet = 30; //残り時間を設定
     public int soundType = 0; //SEの切り替え 0,1: CATCHER 9 Selecterで指定すること
-    bool timerFlag = false; //タイマーの起動は1プレイにつき1度のみ実行
     bool[] isExecuted = new bool[11]; //各craneStatusで1度しか実行しない処理の管理
     public bool leverTilted = false; //trueならレバーがアクティブ
     public bool probability; //確率判定用
@@ -183,7 +182,6 @@ public class Type6Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    timerFlag = true;
                     timer.StartTimer();
                     creditSystem.segUpdateFlag = false;
                 }
@@ -406,7 +404,6 @@ public class Type6Manager : MonoBehaviour
                         armController.ArmClose(100f);
                         await Task.Delay(2500);
                     }
-                    timerFlag = false;
                     for (int i = 0; i < 10; i++)
                         isExecuted[i] = false;
                     armController.ArmLimit(armApertures); //アーム開口度リセット
