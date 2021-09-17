@@ -1,21 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
+using System.Threading.Tasks;
 
-public class Type8ManagerBeta : CraneManager
+public class Type8Manager : CraneManager
 {
     [SerializeField] int[] priceSet = new int[2];
     [SerializeField] int[] timesSet = new int[2];
-    [SerializeField] float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
-    [SerializeField] float upArmpower = 100; //上昇時のアームパワー(%，未確率時)
-    [SerializeField] float backArmpower = 100; //獲得口移動時のアームパワー(%，未確率時)
-    [SerializeField] float catchArmpowersuccess = 100; //同確率時
-    [SerializeField] float upArmpowersuccess = 100; //同確率時
-    [SerializeField] float backArmpowersuccess = 100; //同確率時
-    [SerializeField] int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
+    [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
+    [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
+    [SerializeField] int soundType = 1; //0:GEORGE, 1:FW1, 2:FW2, 3:JOHNNY1, 4:JOHNNY2
     [SerializeField] float audioPitch = 1f; //サウンドのピッチ
-    bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
+    [SerializeField] bool downStop = true; //下降停止の利用可否
+    bool[] isExecuted = new bool[14]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
     public float armPower; //現在のアームパワー
@@ -29,7 +26,6 @@ public class Type8ManagerBeta : CraneManager
         Transform temp;
 
         craneStatus = -2;
-
 
         // 様々なコンポーネントの取得
         host = this.transform.Find("CP").GetComponent<MachineHost>();
@@ -55,34 +51,26 @@ public class Type8ManagerBeta : CraneManager
 
         // ロープにマネージャー情報をセット
         creditSystem.GetSEPlayer(_SEPlayer);
-        if (soundType == 0) creditSystem.SetCreditSound(0);
-        if (soundType == 1) creditSystem.SetCreditSound(6);
-        if (soundType == 2) creditSystem.SetCreditSound(13);
-        if (soundType == 3) creditSystem.SetCreditSound(-1);
+
         switch (soundType)
         {
             case 0:
-                getSoundNum = 5;
-                _SEPlayer.StopSE(1);
-                break;
             case 1:
-                getSoundNum = 12;
-                _SEPlayer.StopSE(11);
-                break;
             case 2:
-                getSoundNum = 16;
-                _SEPlayer.StopSE(14);
-                _SEPlayer.StopSE(17);
+                creditSystem.SetCreditSound(0);
+                getSoundNum = 6;
                 break;
             case 3:
-                getSoundNum = 26;
-                _SEPlayer.StopSE(25);
+            case 4:
+                creditSystem.SetCreditSound(7);
+                getSoundNum = 11;
                 break;
         }
+
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
 
-        getPoint.GetManager(3);
+        getPoint.GetManager(-1); // テスト中
 
         await Task.Delay(300);
         ropeManager.ArmUnitUp();
@@ -90,10 +78,9 @@ public class Type8ManagerBeta : CraneManager
         {
             await Task.Delay(100);
         }
-        if (soundType == 2) armController.ArmOpen();
-        else armController.ArmClose();
+        armController.ArmOpen();
 
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < 13; i++)
             isExecuted[i] = false;
 
         craneStatus = -1;
@@ -296,8 +283,8 @@ public class Type8ManagerBeta : CraneManager
                             _SEPlayer.StopSE(21);
                             break;
                     }
-                    if (probability) armPower = catchArmpowersuccess;
-                    else armPower = catchArmpower;
+                    if (probability) armPower = armPowerConfigSuccess[0];
+                    else armPower = armPowerConfig[0];
                     armController.MotorPower(armPower);
                     armController.ArmClose();
                     await Task.Delay(1000);
@@ -333,12 +320,12 @@ public class Type8ManagerBeta : CraneManager
                 if (soundType == 2)
                     if (!_SEPlayer._AudioSource[15].isPlaying)
                         _SEPlayer.PlaySE(14, 2147483647);
-                if (probability && armPower > upArmpowersuccess)
+                if (probability && armPower > armPowerConfigSuccess[1])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
                 }
-                else if (!probability && armPower > upArmpower)
+                else if (!probability && armPower > armPowerConfig[1])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
@@ -350,8 +337,8 @@ public class Type8ManagerBeta : CraneManager
 
             if (craneStatus == 9)
             {
-                if (probability) armPower = upArmpowersuccess;
-                else armPower = upArmpower;
+                if (probability) armPower = armPowerConfigSuccess[1];
+                else armPower = armPowerConfig[1];
                 armController.MotorPower(armPower);
                 if (!isExecuted[craneStatus])
                 {
@@ -390,12 +377,12 @@ public class Type8ManagerBeta : CraneManager
                     if (!_SEPlayer._AudioSource[15].isPlaying)
                         _SEPlayer.PlaySE(14, 2147483647);
 
-                if (probability && armPower > backArmpowersuccess)
+                if (probability && armPower > armPowerConfigSuccess[2])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
                 }
-                else if (!probability && armPower > backArmpower)
+                else if (!probability && armPower > armPowerConfig[2])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
@@ -427,7 +414,7 @@ public class Type8ManagerBeta : CraneManager
                 //1秒待機;
             }
 
-            if (craneStatus == 12)
+            if (craneStatus == 13)
             {
 
                 if (!isExecuted[craneStatus])
@@ -445,7 +432,7 @@ public class Type8ManagerBeta : CraneManager
                             _SEPlayer.PlaySE(25, 1);
                             break;
                     }
-                    for (int i = 0; i < 12; i++)
+                    for (int i = 0; i < 13; i++)
                         isExecuted[i] = false;
                     await Task.Delay(1000);
                     if (soundType == 3) await Task.Delay(1000);
@@ -498,9 +485,9 @@ public class Type8ManagerBeta : CraneManager
                         {
                             creditSystem.ResetPayment();
                             int credit = creditSystem.PlayStart();
-                            if (credit < 10) credit3d.text = credit.ToString();
-                            else credit3d.text = "9.";
-                            isExecuted[12] = false;
+                            if (credit < 100) credit3d.text = credit.ToString();
+                            else credit3d.text = "99.";
+                            isExecuted[13] = false;
                             probability = creditSystem.ProbabilityCheck();
                             Debug.Log("Probability:" + probability);
                         }
@@ -529,6 +516,13 @@ public class Type8ManagerBeta : CraneManager
                         buttonPushed = false;
                     }
                     break;
+                case 6:
+                    if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && downStop)
+                    {
+                        ropeManager.ArmUnitDownForceStop();
+                        craneStatus = 7;
+                    }
+                    break;
             }
         }
     }
@@ -548,7 +542,7 @@ public class Type8ManagerBeta : CraneManager
                         int credit = creditSystem.PlayStart();
                         if (credit < 10) credit3d.text = credit.ToString();
                         else credit3d.text = "9.";
-                        isExecuted[12] = false;
+                        isExecuted[13] = false;
                         probability = creditSystem.ProbabilityCheck();
                         Debug.Log("Probability:" + probability);
                     }
@@ -558,6 +552,13 @@ public class Type8ManagerBeta : CraneManager
                     {
                         buttonPushed = true;
                         craneStatus = 4;
+                    }
+                    break;
+                case 3:
+                    if (craneStatus == 6)
+                    {
+                        ropeManager.ArmUnitDownForceStop();
+                        craneStatus = 7;
                     }
                     break;
             }
@@ -593,8 +594,8 @@ public class Type8ManagerBeta : CraneManager
         if (host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
-            if (credit < 10) credit3d.text = credit.ToString();
-            else credit3d.text = "9.";
+            if (credit < 100) credit3d.text = credit.ToString();
+            else credit3d.text = "99.";
             if (credit > 0 && craneStatus == 0) craneStatus = 1;
         }
     }

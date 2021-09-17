@@ -12,6 +12,7 @@ public class GetPoint : MonoBehaviour
     Type5Manager _Type5Manager;
     Type6Manager _Type6Manager;
     Type7Manager _Type7Manager;
+    CraneManager craneManager;
     [SerializeField] int playerNumber = 1;
     int craneType = -1;
     [SerializeField] bool autoDestroy = false; // 自動的に景品を消去する
@@ -27,6 +28,7 @@ public class GetPoint : MonoBehaviour
     public void GetManager(int num) // 筐体のマネージャー情報取得
     {
         craneType = num;
+        if (craneType == -1) craneManager = transform.root.gameObject.GetComponent<CraneManager>(); ;
         if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
         if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
         if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
@@ -41,6 +43,7 @@ public class GetPoint : MonoBehaviour
         if (collider.tag == "prize")
         {
             //Debug.Log("prize");
+            if (craneType == -1) craneManager.GetPrize();
             if (craneType == 1) _Type1Manager.GetPrize();
             if (craneType == 2) _Type2Manager.GetPrize();
             if (craneType == 3) _Type3Manager.GetPrize();
