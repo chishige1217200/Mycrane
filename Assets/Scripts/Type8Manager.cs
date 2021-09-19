@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Threading.Tasks;
 
 public class Type8Manager : CraneManager
@@ -9,6 +10,7 @@ public class Type8Manager : CraneManager
     [SerializeField] int[] timesSet = new int[2];
     [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
     [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
+    [SerializeField] int limitTimeSet = 60; //残り時間を設定
     [SerializeField] int soundType = 1; //0:GEORGE, 1:FW1, 2:FW2, 3:JOHNNY1, 4:JOHNNY2
     [SerializeField] float audioPitch = 1f; //サウンドのピッチ
     public bool leverTilted = false; //trueならレバーがアクティブ
@@ -22,6 +24,7 @@ public class Type8Manager : CraneManager
     RopeManager ropeManager;
     Lever lever;
     Timer timer;
+    public Text limitTimedisplayed;
     [SerializeField] TextMesh credit3d;
 
     async void Start()
@@ -38,6 +41,7 @@ public class Type8Manager : CraneManager
         _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
         lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever").GetComponent<Lever>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        timer = this.transform.Find("Timer").GetComponent<Timer>();
         temp = this.transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
@@ -55,6 +59,7 @@ public class Type8Manager : CraneManager
 
         // ロープにマネージャー情報をセット
         creditSystem.GetSEPlayer(_SEPlayer);
+        timer.limitTime = limitTimeSet;
 
         switch (soundType)
         {
@@ -175,6 +180,12 @@ public class Type8Manager : CraneManager
 
             if (craneStatus == 3) //操作中
             {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    timer.StartTimer();
+                    creditSystem.segUpdateFlag = false;
+                }
                 if ((Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
                     || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                 {
@@ -185,7 +196,8 @@ public class Type8Manager : CraneManager
                 {
                     leverTilted = false;
                 }
-                if (!leverTilted) DetectKey(craneStatus);
+                DetectKey(craneStatus);
+                if (isExecuted[craneStatus] && timer.limitTimeNow <= 0) IncrimentStatus();
             }
 
             if (craneStatus == 4) //下降中
@@ -210,6 +222,19 @@ public class Type8Manager : CraneManager
                             break;
                     }
                     await Task.Delay(300);
+                    timer.CancelTimer();
+                    creditSystem.segUpdateFlag = true;
+                    int credit = creditSystem.Pay(0);
+                    if (credit < 100)
+                    {
+                        limitTimedisplayed.text = credit.ToString("D2");
+                        credit3d.text = credit.ToString("D2");
+                    }
+                    else
+                    {
+                        limitTimedisplayed.text = "99";
+                        credit3d.text = "99.";
+                    }
                     ropeManager.ArmUnitDown();
                     if (downTime > 0 && downTime <= 5000)
                     {
@@ -217,13 +242,12 @@ public class Type8Manager : CraneManager
                         if (craneStatus == 4)
                         {
                             ropeManager.ArmUnitDownForceStop();
-                            craneStatus = 5;
+                            IncrimentStatus();
                         }
                     }
                 }
-                DetectKey(craneStatus);
+                if (isExecuted[craneStatus]) DetectKey(craneStatus);
                 if (soundType == 3 && !_SEPlayer._AudioSource[9].isPlaying) _BGMPlayer.PlayBGM(soundType * 2 + 1);
-                if (ropeManager.DownFinished()) Debug.Log("DownFinish!");
                 if (ropeManager.DownFinished() && craneStatus == 4) IncrimentStatus();
             }
 
@@ -485,6 +509,20 @@ public class Type8Manager : CraneManager
                     else craneStatus = 0;
                 }
             }
+
+            if (!creditSystem.segUpdateFlag) // Timer表示用
+            {
+                if (timer.limitTimeNow >= 0)
+                {
+                    limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
+                    credit3d.text = timer.limitTimeNow.ToString("D2");
+                }
+                else
+                {
+                    limitTimedisplayed.text = "00";
+                    credit3d.text = "00";
+                }
+            }
         }
     }
 
@@ -513,14 +551,14 @@ public class Type8Manager : CraneManager
                     if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)))
                         IncrimentStatus();
                     break;
-                case 4:
-                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && downStop)
-                    {
-                        Debug.Log("DownStop!");
-                        ropeManager.ArmUnitDownForceStop();
-                        IncrimentStatus();
-                    }
-                    break;
+                    /*case 4:
+                        if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && downStop)
+                        {
+                            Debug.Log("DownStop!");
+                            ropeManager.ArmUnitDownForceStop();
+                            IncrimentStatus();
+                        }
+                        break;*/
             }
         }
     }
