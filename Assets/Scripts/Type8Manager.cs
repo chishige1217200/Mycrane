@@ -551,14 +551,14 @@ public class Type8Manager : CraneManager
                     if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)))
                         IncrimentStatus();
                     break;
-                    /*case 4:
-                        if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && downStop)
-                        {
-                            Debug.Log("DownStop!");
-                            ropeManager.ArmUnitDownForceStop();
-                            IncrimentStatus();
-                        }
-                        break;*/
+                case 4:
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && downStop)
+                    {
+                        Debug.Log("DownStop!");
+                        ropeManager.ArmUnitDownForceStop();
+                        IncrimentStatus();
+                    }
+                    break;
             }
         }
     }

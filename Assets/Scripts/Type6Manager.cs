@@ -259,7 +259,7 @@ public class Type6Manager : MonoBehaviour
                 {
                     isExecuted[craneStatus] = true;
                     _SEPlayer.PlaySE(4, 2147483647);
-                    if (craneStatus == 4) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
+                    ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
                 }
                 if (downStop) InputKeyCheck(craneStatus); // 下降停止ボタン有効化
                 if (ropeManager.DownFinished() && craneStatus == 4) craneStatus = 5;
