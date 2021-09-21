@@ -68,11 +68,13 @@ public class Type8Manager : CraneManager
             case 2:
                 creditSystem.SetCreditSound(0);
                 getSoundNum = 6;
+                craneBox.dummyEnableTime = 300;
                 break;
             case 3:
             case 4:
                 creditSystem.SetCreditSound(7);
                 getSoundNum = 11;
+                craneBox.dummyEnableTime = 400;
                 break;
         }
 

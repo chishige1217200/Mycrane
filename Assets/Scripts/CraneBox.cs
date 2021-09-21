@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class CraneBox : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class CraneBox : MonoBehaviour
     public Vector2 goPoint; // GoPosition関数の目的地
     public bool goPositionFlag = false; // GoPosition関数の実行フラグ
     public bool limitIgnoreFlag = false; // trueのとき，refusedFlagの影響を受けない
+    bool leftDummyFlag = false; // 特定の左移動制限を無視
+    bool useLeftDummy = false; // 特定の左移動制限無視機能の使用
+    public int dummyEnableTime = 100; // ミリ秒
 
     void Start()
     {
@@ -27,20 +31,30 @@ public class CraneBox : MonoBehaviour
         if (goPositionFlag) GoPosition();
     }
 
-    void OnTriggerEnter(Collider collider)
+    void OnTriggerEnter(Collider collider) // 限界に達すると，RefusedFlagをTrueに
     {
-        if (collider.tag == "LeftLimit") leftRefusedFlag = true;
-        if (collider.tag == "RightLimit") rightRefusedFlag = true;
-        if (collider.tag == "BackgroundLimit") backRefusedFlag = true;
-        if (collider.tag == "ForegroundLimit") forwardRefusedFlag = true;
+        if (collider.CompareTag("LeftLimit")) leftRefusedFlag = true;
+        if (collider.CompareTag("RightLimit")) rightRefusedFlag = true;
+        if (collider.CompareTag("BackgroundLimit")) backRefusedFlag = true;
+        if (collider.CompareTag("ForegroundLimit")) forwardRefusedFlag = true;
+        if (collider.CompareTag("LeftLimitDummy"))
+        {
+            leftRefusedFlag = true;
+            useLeftDummy = true;
+        }
     }
 
-    void OnTriggerExit(Collider collider) // 限界に達すると，RefusedFlagをTrueに
+    void OnTriggerExit(Collider collider)
     {
-        if (collider.tag == "LeftLimit") leftRefusedFlag = false;
-        if (collider.tag == "RightLimit") rightRefusedFlag = false;
-        if (collider.tag == "BackgroundLimit") backRefusedFlag = false;
-        if (collider.tag == "ForegroundLimit") forwardRefusedFlag = false;
+        if (collider.CompareTag("LeftLimit")) leftRefusedFlag = false;
+        if (collider.CompareTag("RightLimit")) rightRefusedFlag = false;
+        if (collider.CompareTag("BackgroundLimit")) backRefusedFlag = false;
+        if (collider.CompareTag("ForegroundLimit")) forwardRefusedFlag = false;
+        if (collider.CompareTag("LeftLimitDummy"))
+        {
+            leftRefusedFlag = false;
+            useLeftDummy = false;
+        }
     }
 
     public bool CheckPos(int mode) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：GoPosition用
@@ -66,27 +80,27 @@ public class CraneBox : MonoBehaviour
     {
         int checker = 0;
         if (!limitIgnoreFlag) limitIgnoreFlag = true;
-        if (Mathf.Abs(this.transform.localPosition.x - goPoint.x) <= moveSpeed)
+        if (Mathf.Abs(transform.localPosition.x - goPoint.x) <= moveSpeed)
         {
             checker++;
-            if (this.transform.localPosition.x - goPoint.x != 0)
-                this.transform.localPosition = new Vector3(goPoint.x, this.transform.localPosition.y, this.transform.localPosition.z);
+            if (transform.localPosition.x - goPoint.x != 0)
+                transform.localPosition = new Vector3(goPoint.x, transform.localPosition.y, transform.localPosition.z);
         }
         else
         {
-            if (this.transform.localPosition.x < goPoint.x) Right();
-            else if (this.transform.localPosition.x > goPoint.x) Left();
+            if (transform.localPosition.x < goPoint.x) Right();
+            else if (transform.localPosition.x > goPoint.x) Left();
         }
-        if (Mathf.Abs(this.transform.localPosition.z - goPoint.y) <= moveSpeed)
+        if (Mathf.Abs(transform.localPosition.z - goPoint.y) <= moveSpeed)
         {
             checker++;
-            if (this.transform.localPosition.z - goPoint.y != 0)
-                this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y, goPoint.y);
+            if (transform.localPosition.z - goPoint.y != 0)
+                transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, goPoint.y);
         }
         else
         {
-            if (this.transform.localPosition.z < goPoint.y) Back();
-            else if (this.transform.localPosition.z > goPoint.y) Forward();
+            if (transform.localPosition.z < goPoint.y) Back();
+            else if (transform.localPosition.z > goPoint.y) Forward();
         }
 
         //Debug.Log(Mathf.Abs(this.transform.localPosition.x - goPoint.x) + "," + Mathf.Abs(this.transform.localPosition.z - goPoint.y));
@@ -100,9 +114,10 @@ public class CraneBox : MonoBehaviour
 
     public void Right()
     {
+        if (useLeftDummy && !leftDummyFlag) EnableLeftDummy();
         if (!rightRefusedFlag || limitIgnoreFlag)
         {
-            this.transform.localPosition += new Vector3(moveSpeed, 0, 0);
+            transform.localPosition += new Vector3(moveSpeed, 0, 0);
             ropeHost.transform.localPosition += new Vector3(moveSpeed, 0, 0);
             if (!supportDirectionChanger) craneBoxSupport.transform.localPosition += new Vector3(moveSpeed, 0, 0);
         }
@@ -110,9 +125,9 @@ public class CraneBox : MonoBehaviour
 
     public void Left()
     {
-        if (!leftRefusedFlag || limitIgnoreFlag)
+        if (!leftRefusedFlag || limitIgnoreFlag || leftDummyFlag)
         {
-            this.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
+            transform.localPosition -= new Vector3(moveSpeed, 0, 0);
             ropeHost.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
             if (!supportDirectionChanger) craneBoxSupport.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
         }
@@ -122,7 +137,7 @@ public class CraneBox : MonoBehaviour
     {
         if (!backRefusedFlag || limitIgnoreFlag)
         {
-            this.transform.localPosition += new Vector3(0, 0, moveSpeed);
+            transform.localPosition += new Vector3(0, 0, moveSpeed);
             ropeHost.transform.localPosition += new Vector3(0, 0, moveSpeed);
             if (supportDirectionChanger) craneBoxSupport.transform.localPosition += new Vector3(0, 0, moveSpeed);
         }
@@ -132,9 +147,16 @@ public class CraneBox : MonoBehaviour
     {
         if (!forwardRefusedFlag || limitIgnoreFlag)
         {
-            this.transform.localPosition -= new Vector3(0, 0, moveSpeed);
+            transform.localPosition -= new Vector3(0, 0, moveSpeed);
             ropeHost.transform.localPosition -= new Vector3(0, 0, moveSpeed);
             if (supportDirectionChanger) craneBoxSupport.transform.localPosition -= new Vector3(0, 0, moveSpeed);
         }
+    }
+
+    async void EnableLeftDummy()
+    {
+        leftDummyFlag = true;
+        await Task.Delay(dummyEnableTime);
+        leftDummyFlag = false;
     }
 }
