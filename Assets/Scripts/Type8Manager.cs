@@ -34,15 +34,15 @@ public class Type8Manager : CraneManager
         craneStatus = -2;
 
         // 様々なコンポーネントの取得
-        host = this.transform.Find("CP").GetComponent<MachineHost>();
-        canvas = this.transform.Find("Canvas").gameObject;
-        creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
-        lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever").GetComponent<Lever>();
-        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
-        timer = this.transform.Find("Timer").GetComponent<Timer>();
-        temp = this.transform.Find("CraneUnit").transform;
+        host = transform.Find("CP").GetComponent<MachineHost>();
+        canvas = transform.Find("Canvas").gameObject;
+        creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        _BGMPlayer = transform.Find("BGM").GetComponent<BGMPlayer>();
+        _SEPlayer = transform.Find("SE").GetComponent<SEPlayer>();
+        lever = transform.Find("Canvas").Find("ControlGroup").Find("Lever").GetComponent<Lever>();
+        getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        timer = transform.Find("Timer").GetComponent<Timer>();
+        temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
         creditSystem.rateSet[0, 0] = priceSet[0];
@@ -51,7 +51,7 @@ public class Type8Manager : CraneManager
         creditSystem.rateSet[1, 1] = timesSet[1];
 
         // ロープとアームコントローラに関する処理
-        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
         armController = temp.Find("ArmUnit").GetComponent<Type8ArmController>();
 
         // CraneBoxに関する処理
@@ -357,19 +357,6 @@ public class Type8Manager : CraneManager
 
             if (craneStatus == 8) //離すポジションに移動
             {
-                if (!isExecuted[craneStatus])
-                {
-                    isExecuted[craneStatus] = true;
-                    switch (soundType)
-                    {
-                        case 3:
-
-                            break;
-                        case 4:
-
-                            break;
-                    }
-                }
                 if (!_SEPlayer._AudioSource[10].isPlaying)
                 {
                     if (soundType == 3) _BGMPlayer.PlayBGM(soundType * 2 + 1);
@@ -582,7 +569,7 @@ public class Type8Manager : CraneManager
             || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
                 if (craneStatus == 2)
                 {
-                    craneStatus = 3;
+                    IncrimentStatus();
                     creditSystem.ResetPayment();
                     credit = creditSystem.PlayStart();
                     if (credit < 100) credit3d.text = credit.ToString();
@@ -603,12 +590,12 @@ public class Type8Manager : CraneManager
                 case 2:
                     if (craneStatus == 3 && !leverTilted)
                     {
-                        craneStatus = 4;
+                        IncrimentStatus();
                     }
                     else if (craneStatus == 4 && downStop)
                     {
                         ropeManager.ArmUnitDownForceStop();
-                        craneStatus = 5;
+                        IncrimentStatus();
                     }
                     break;
             }
