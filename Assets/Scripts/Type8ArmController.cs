@@ -63,7 +63,7 @@ public class Type8ArmController : MonoBehaviour
         isOpen = false;
         for (int i = 0; i < 3; i++)
         {
-            motor[i].targetVelocity = -100f;
+            motor[i].targetVelocity = -200f;
             joint[i].motor = motor[i];
             joint[i].useMotor = true;
         }
