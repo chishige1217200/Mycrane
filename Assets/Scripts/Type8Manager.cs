@@ -78,6 +78,8 @@ public class Type8Manager : CraneManager
                 break;
         }
 
+        probabilityReset = false;
+
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
 
@@ -104,7 +106,7 @@ public class Type8Manager : CraneManager
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
 
         if (craneStatus == -1)
-            if (craneBox.CheckPos(1)) craneStatus = 0;
+            if (craneBox.CheckPos(1)) IncrimentStatus();
 
         if (craneStatus == 0)
         {

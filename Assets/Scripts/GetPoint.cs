@@ -28,7 +28,7 @@ public class GetPoint : MonoBehaviour
     public void GetManager(int num) // 筐体のマネージャー情報取得
     {
         craneType = num;
-        if (craneType == -1) craneManager = transform.root.gameObject.GetComponent<CraneManager>(); ;
+        if (craneType == -1) craneManager = transform.root.gameObject.GetComponent<CraneManager>();
         if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
         if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
         if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();

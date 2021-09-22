@@ -7,6 +7,7 @@ public abstract class CraneManager : MonoBehaviour
     protected int craneType;
     protected int craneStatus; //クレーン状態
     protected bool probability; //確率判定用
+    protected bool probabilityReset = true; //景品獲得時に確率をリセットするか
     protected int getSoundNum = -1;
     protected CreditSystem creditSystem;
     protected SEPlayer _SEPlayer;
@@ -17,16 +18,19 @@ public abstract class CraneManager : MonoBehaviour
 
     public void GetPrize()
     {
-        switch (creditSystem.probabilityMode)
+        if (probabilityReset)
         {
-            case 2:
-            case 3:
-                creditSystem.ResetCreditProbability();
-                break;
-            case 4:
-            case 5:
-                creditSystem.ResetCostProbability();
-                break;
+            switch (creditSystem.probabilityMode)
+            {
+                case 2:
+                case 3:
+                    creditSystem.ResetCreditProbability();
+                    break;
+                case 4:
+                case 5:
+                    creditSystem.ResetCostProbability();
+                    break;
+            }
         }
         if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
         {
