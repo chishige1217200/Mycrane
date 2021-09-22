@@ -34,7 +34,7 @@ public class Type8Manager : CraneManager
         craneStatus = -2;
 
         // 様々なコンポーネントの取得
-        host = transform.Find("CP").GetComponent<MachineHost>();
+        host = transform.Find("CP2").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = transform.Find("BGM").GetComponent<BGMPlayer>();
@@ -574,7 +574,7 @@ public class Type8Manager : CraneManager
                     IncrimentStatus();
                     creditSystem.ResetPayment();
                     credit = creditSystem.PlayStart();
-                    if (credit < 100) credit3d.text = credit.ToString();
+                    if (credit < 100) credit3d.text = credit.ToString("D2");
                     else credit3d.text = "99.";
                     isExecuted[13] = false;
                     probability = creditSystem.ProbabilityCheck();
@@ -609,7 +609,7 @@ public class Type8Manager : CraneManager
         if (host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
-            if (credit < 100) credit3d.text = credit.ToString();
+            if (credit < 100) credit3d.text = credit.ToString("D2");
             else credit3d.text = "99.";
             if (credit > 0 && craneStatus == 0) craneStatus = 1;
         }
