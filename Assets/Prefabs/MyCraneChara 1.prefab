@@ -571,10 +571,9 @@ GameObject:
   - component: {fileID: 3835935681689222258}
   - component: {fileID: 3835935681689222257}
   - component: {fileID: 3835935681689222256}
-  - component: {fileID: 7544663866216985689}
   m_Layer: 0
   m_Name: Sphere (2)
-  m_TagString: prize
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -653,20 +652,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7544663866216985689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3835935681689222254}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 801f0e7fdc28a8945b592e52e322d374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prizeName: "\u30DE\u30A4\u304F\u3093"
-  destroyObject: {fileID: 8684888322647086045}
 --- !u!1 &3835935682340772988
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,9 +1116,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8344390859170580839}
   - component: {fileID: 1668223104406976333}
+  - component: {fileID: 7687683711351704762}
+  - component: {fileID: 7822618962692924433}
   m_Layer: 0
   m_Name: MyCraneChara 1
-  m_TagString: Untagged
+  m_TagString: prize
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1180,3 +1167,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7687683711351704762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8684888322647086045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 801f0e7fdc28a8945b592e52e322d374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prizeName: "\u30DE\u30A4\u304F\u3093"
+  destroyObject: {fileID: 0}
+--- !u!135 &7822618962692924433
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8684888322647086045}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.17
+  m_Center: {x: 0, y: 0, z: 0}

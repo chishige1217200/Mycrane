@@ -7,18 +7,15 @@ public class Type3Manager : MonoBehaviour
     public int craneStatus = -2; //-2:初期化動作，0:待機状態
     [SerializeField] int[] priceSet = new int[2];
     [SerializeField] int[] timesSet = new int[2];
-    [SerializeField] float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
-    [SerializeField] float upArmpower = 100; //上昇時のアームパワー(%，未確率時)
-    [SerializeField] float backArmpower = 100; //獲得口移動時のアームパワー(%，未確率時)
-    [SerializeField] float catchArmpowersuccess = 100; //同確率時
-    [SerializeField] float upArmpowersuccess = 100; //同確率時
-    [SerializeField] float backArmpowersuccess = 100; //同確率時
+    [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
+    [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
     [SerializeField] int soundType = 1; //0:CARINO 1:CARINO4 2:BAMBINO 3:neomini
     [SerializeField] float audioPitch = 1f; //サウンドのピッチ
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
     [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
+    [SerializeField] bool autoPower = true;
     public float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
@@ -69,6 +66,7 @@ public class Type3Manager : MonoBehaviour
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
         armController.GetManager(3);
+        armController.autoPower = autoPower;
 
         getPoint.GetManager(3);
 
@@ -284,8 +282,8 @@ public class Type3Manager : MonoBehaviour
                             _SEPlayer.StopSE(21);
                             break;
                     }
-                    if (probability) armPower = catchArmpowersuccess;
-                    else armPower = catchArmpower;
+                    if (probability) armPower = armPowerConfigSuccess[0];
+                    else armPower = armPowerConfig[0];
                     armController.MotorPower(armPower);
                     armController.ArmClose();
                     await Task.Delay(1000);
@@ -317,17 +315,17 @@ public class Type3Manager : MonoBehaviour
                     }
                     ropeManager.ArmUnitUp();
                     await Task.Delay(1500);
-                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeFlag) armController.Release(); // 上昇中に離す振り分け
+                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
                 }
                 if (soundType == 2)
                     if (!_SEPlayer._AudioSource[15].isPlaying)
                         _SEPlayer.PlaySE(14, 2147483647);
-                if (probability && armPower > upArmpowersuccess)
+                if (probability && armPower > armPowerConfigSuccess[1])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
                 }
-                else if (!probability && armPower > upArmpower)
+                else if (!probability && armPower > armPowerConfig[1])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
@@ -339,10 +337,10 @@ public class Type3Manager : MonoBehaviour
 
             if (craneStatus == 9)
             {
-                if (!armController.releaseFlag)
+                if (!armController.autoPower)
                 {
-                    if (probability) armPower = upArmpowersuccess;
-                    else armPower = upArmpower;
+                    if (probability) armPower = armPowerConfigSuccess[1];
+                    else armPower = armPowerConfig[1];
                     armController.MotorPower(armPower);
                 }
                 if (!isExecuted[craneStatus])
@@ -354,7 +352,7 @@ public class Type3Manager : MonoBehaviour
                             _SEPlayer.StopSE(22);
                             break;
                     }
-                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeFlag) armController.Release(); // 上昇後に離す振り分け
+                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
                     if (craneStatus == 9) craneStatus = 10;
                 }
                 //アーム上昇停止音再生;
@@ -382,16 +380,16 @@ public class Type3Manager : MonoBehaviour
                 if (soundType == 2)
                     if (!_SEPlayer._AudioSource[15].isPlaying)
                         _SEPlayer.PlaySE(14, 2147483647);
-                if (!armController.releaseFlag)
+                if (!armController.autoPower)
                 {
-                    if (support.prizeFlag)
+                    if (support.prizeCount > 0)
                     {
-                        if (probability && armPower > backArmpowersuccess)
+                        if (probability && armPower > armPowerConfigSuccess[2])
                         {
                             armPower -= 0.5f;
                             armController.MotorPower(armPower);
                         }
-                        else if (!probability && armPower > backArmpower)
+                        else if (!probability && armPower > armPowerConfig[2])
                         {
                             armPower -= 0.5f;
                             armController.MotorPower(armPower);

@@ -7,14 +7,19 @@ public class Type5Manager : MonoBehaviour
     public int craneStatus = -3; //-3:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
-    [SerializeField] float leftCatchArmpower = 10f; //左アームパワー
-    [SerializeField] float rightCatchArmpower = 10f; //右アームパワー
+    [SerializeField] float[] armLPowerConfig = new float[3]; //アームパワーL(%，未確率時)
+    [SerializeField] float[] armLPowerConfigSuccess = new float[3]; //アームパワーL(%，確率時)
+    [SerializeField] float[] armRPowerConfig = new float[3]; //アームパワーR(%，未確率時)
+    [SerializeField] float[] armRPowerConfigSuccess = new float[3]; //アームパワーR(%，確率時)
     [SerializeField] float armApertures = 80f; //開口率
     [SerializeField] float[] boxRestrictions = new float[2];
     [SerializeField] float downRestriction = 100f;
     public int soundType = 0; //SEの切り替え 0,1: CATCHER 8,9 2: CATCHER 7 Selecterで指定すること
     bool[] isExecuted = new bool[15]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
+    public bool probability; //確率判定用
+    public float armLPower;
+    public float armRPower;
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool button3 = true; //button3の使用可否
     public Vector2 startPoint; // 開始位置座標定義
@@ -32,6 +37,7 @@ public class Type5Manager : MonoBehaviour
     GameObject canvas;
     [SerializeField] TextMesh credit3d;
     [SerializeField] TextMesh[] preset = new TextMesh[4];
+    public Animator[] animator = new Animator[3];
 
     async void Start()
     {
@@ -127,7 +133,7 @@ public class Type5Manager : MonoBehaviour
         if (!player2 && (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
         else if (player2 && (Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus))) InsertCoin();
 
-        if (((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2)) && craneStatus == -2)
+        if (craneStatus == -2 && ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2)))
         {
             craneStatus = -1;
             craneBox.goPositionFlag = true;
@@ -301,16 +307,29 @@ public class Type5Manager : MonoBehaviour
                             _SEPlayer.PlaySE(13, 1);
                             break;
                     }
-                    if (craneStatus == 7)
-                        if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
-                        {
-                            if (leftCatchArmpower >= rightCatchArmpower) armController.ArmClose(leftCatchArmpower);
-                            else armController.ArmClose(rightCatchArmpower);
-                        }
-                        else armController.ArmClose(30f);
+                    armController.ArmClose(30f);
 
                     await Task.Delay(3000);
-                    if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
+                    if (craneStatus == 7)
+                    {
+                        if (probability)
+                        {
+                            if (armLPowerConfigSuccess[0] >= 30) armLPower = armLPowerConfigSuccess[0];
+                            else armLPower = 30f;
+                            if (armRPowerConfigSuccess[0] >= 30) armRPower = armRPowerConfigSuccess[0];
+                            else armRPower = 30f;
+                        }
+                        else
+                        {
+                            if (armLPowerConfig[0] >= 30) armLPower = armLPowerConfig[0];
+                            else armLPower = 30f;
+                            if (armRPowerConfig[0] >= 30) armRPower = armRPowerConfig[0];
+                            else armRPower = 30f;
+                        }
+                        armController.MotorPower(armLPower, 0);
+                        armController.MotorPower(armRPower, 1);
+                        craneStatus = 8; //awaitによる時差実行を防止
+                    }
                 }
                 //アーム掴む;
             }
@@ -333,13 +352,27 @@ public class Type5Manager : MonoBehaviour
                             break;
                     }
                     ropeManager.ArmUnitUp();
-                    await Task.Delay(1000);
+                    /*await Task.Delay(1000);
                     if (craneStatus < 11)
                     {
                         armController.MotorPower(leftCatchArmpower, 0);
                         armController.MotorPower(rightCatchArmpower, 1);
-                    }
+                    }*/
                 }
+
+                if (probability)
+                {
+                    if (armLPower > armLPowerConfigSuccess[1]) armLPower -= 0.1f;
+                    if (armRPower > armRPowerConfigSuccess[1]) armRPower -= 0.1f;
+                }
+                else
+                {
+                    if (armLPower > armLPowerConfig[1]) armLPower -= 0.1f;
+                    if (armRPower > armRPowerConfig[1]) armRPower -= 0.1f;
+                }
+                armController.MotorPower(armLPower, 0);
+                armController.MotorPower(armRPower, 1);
+
                 if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
                 //アーム上昇;
             }
@@ -348,6 +381,18 @@ public class Type5Manager : MonoBehaviour
             {
                 //アーム上昇停止音再生;
                 //アーム上昇停止;
+                if (probability)
+                {
+                    armLPower = armLPowerConfigSuccess[1];
+                    armRPower = armRPowerConfigSuccess[1];
+                }
+                else
+                {
+                    armLPower = armLPowerConfig[1];
+                    armRPower = armRPowerConfig[1];
+                }
+                armController.MotorPower(armLPower, 0);
+                armController.MotorPower(armRPower, 1);
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -379,7 +424,21 @@ public class Type5Manager : MonoBehaviour
                             break;
                     }
                 }
-                if (craneBox.CheckPos(prizezoneType)) craneStatus = 11; //ここがバグってる
+
+                if (probability)
+                {
+                    if (armLPower > armLPowerConfigSuccess[2]) armLPower -= 0.1f;
+                    if (armRPower > armRPowerConfigSuccess[2]) armRPower -= 0.1f;
+                }
+                else
+                {
+                    if (armLPower > armLPowerConfig[2]) armLPower -= 0.1f;
+                    if (armRPower > armRPowerConfig[2]) armRPower -= 0.1f;
+                }
+                armController.MotorPower(armLPower, 0);
+                armController.MotorPower(armRPower, 1);
+
+                if (craneBox.CheckPos(prizezoneType)) craneStatus = 11;
                 //アーム獲得口ポジション移動音再生;
                 //アーム獲得口ポジションへ;
             }
@@ -578,6 +637,8 @@ public class Type5Manager : MonoBehaviour
                 break;
         }
 
+        for (int i = 0; i < 3; i++) animator[i].SetTrigger("GetPrize");
+
         switch (creditSystem.probabilityMode)
         {
             case 2:
@@ -615,6 +676,8 @@ public class Type5Manager : MonoBehaviour
                             if (credit < 100) credit3d.text = credit.ToString();
                             else credit3d.text = "99.";
                             isExecuted[14] = false;
+                            probability = creditSystem.ProbabilityCheck();
+                            Debug.Log("Probability:" + probability);
                         }
                         craneStatus = 2;
                     }
@@ -628,6 +691,8 @@ public class Type5Manager : MonoBehaviour
                             if (credit < 100) credit3d.text = credit.ToString();
                             else credit3d.text = "99.";
                             isExecuted[14] = false;
+                            probability = creditSystem.ProbabilityCheck();
+                            Debug.Log("Probability:" + probability);
                         }
                         craneStatus = 2;
                     }
@@ -702,6 +767,8 @@ public class Type5Manager : MonoBehaviour
                         if (credit < 100) credit3d.text = credit.ToString();
                         else credit3d.text = "99.";
                         isExecuted[14] = false;
+                        probability = creditSystem.ProbabilityCheck();
+                        Debug.Log("Probability:" + probability);
                     }
                     break;
                 case 2:
@@ -728,6 +795,8 @@ public class Type5Manager : MonoBehaviour
                         if (credit < 100) credit3d.text = credit.ToString();
                         else credit3d.text = "99.";
                         isExecuted[14] = false;
+                        probability = creditSystem.ProbabilityCheck();
+                        Debug.Log("Probability:" + probability);
                     }
                     break;
             }

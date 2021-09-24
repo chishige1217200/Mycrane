@@ -7,22 +7,16 @@ public class Type2Manager : MonoBehaviour
     public int craneStatus = -2; //-1:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
-    [SerializeField] float catchArmpower = 80f; //掴むときのアームパワー(%，未確率時)
-    [SerializeField] float upArmpower = 0f; //上昇時のアームパワー(%，未確率時)
-    [SerializeField] float backArmpower = 0f; //獲得口移動時のアームパワー(%，未確率時)
-    [SerializeField] float catchArmpowersuccess = 100f; //同確率時
-    [SerializeField] float upArmpowersuccess = 100f; //同確率時
-    [SerializeField] float backArmpowersuccess = 100f; //同確率時
+    [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
+    [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
     [SerializeField] int operationType = 1; //0:ボタン式，1:レバー式
     [SerializeField] int limitTimeSet = 15; //レバー式の場合，残り時間を設定
     [SerializeField] int soundType = 0; //DECACRE:0, DECACRE Alpha:1, TRIPLE CATCHER MEGA DASH:2
-    bool timerFlag = false; //タイマーの起動はaプレイにつき1度のみ実行
     float audioPitch = 1.0f; //サウンドのピッチ
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
     float armPower; //現在のアームパワー
-
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
@@ -71,7 +65,7 @@ public class Type2Manager : MonoBehaviour
 
         // ロープにマネージャー情報をセット
         creditSystem.GetSEPlayer(_SEPlayer);
-        timer.limitTimeNow = limitTimeSet;
+        timer.limitTime = limitTimeSet;
         timer.GetSEPlayer(_SEPlayer);
 
         if (soundType == 0)
@@ -188,10 +182,9 @@ public class Type2Manager : MonoBehaviour
                 }
                 if (craneStatus == 3)
                 {
-                    if (!isExecuted[craneStatus] && !timerFlag)
+                    if (!isExecuted[craneStatus])
                     {
                         isExecuted[craneStatus] = true;
-                        timerFlag = true;
                         timer.StartTimer();
                         creditSystem.segUpdateFlag = false;
                     }
@@ -256,8 +249,8 @@ public class Type2Manager : MonoBehaviour
                             _SEPlayer.StopSE(12);
                             break;
                     }
-                    if (probability) armPower = catchArmpowersuccess;
-                    else armPower = catchArmpower;
+                    if (probability) armPower = armPowerConfigSuccess[0];
+                    else armPower = armPowerConfig[0];
                     armController.MotorPower(armPower);
                     armController.ArmClose();
                     await Task.Delay(1000);
@@ -283,12 +276,12 @@ public class Type2Manager : MonoBehaviour
                     isExecuted[craneStatus] = true;
                     ropeManager.ArmUnitUp();
                 }
-                if (probability && armPower > upArmpowersuccess)
+                if (probability && armPower > armPowerConfigSuccess[1])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
                 }
-                else if (!probability && armPower > upArmpower)
+                else if (!probability && armPower > armPowerConfig[1])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
@@ -300,8 +293,8 @@ public class Type2Manager : MonoBehaviour
 
             if (craneStatus == 9)
             {
-                if (probability) armPower = upArmpowersuccess;
-                else armPower = upArmpower;
+                if (probability) armPower = armPowerConfigSuccess[1];
+                else armPower = armPowerConfig[1];
                 armController.MotorPower(armPower);
                 if (!isExecuted[craneStatus])
                 {
@@ -326,12 +319,12 @@ public class Type2Manager : MonoBehaviour
 
             if (craneStatus == 10)
             {
-                if (probability && armPower > backArmpowersuccess)
+                if (probability && armPower > armPowerConfigSuccess[2])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
                 }
-                else if (!probability && armPower > backArmpower)
+                else if (!probability && armPower > armPowerConfig[2])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
@@ -361,7 +354,6 @@ public class Type2Manager : MonoBehaviour
                 //1秒待機;
                 if (!isExecuted[craneStatus])
                 {
-                    timerFlag = false;
                     for (int i = 0; i < 12; i++)
                         isExecuted[i] = false;
                 }
@@ -384,7 +376,6 @@ public class Type2Manager : MonoBehaviour
                     limitTimedisplayed.text = "00";
                     credit3d.text = "00";
                 }
-
             }
         }
     }

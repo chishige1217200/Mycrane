@@ -9,15 +9,12 @@ public class Type7Manager : MonoBehaviour
     public int craneStatus = -2; //-2:初期化動作，0:待機状態
     public int price = 100;
     public int times = 1;
-    [SerializeField] float catchArmpower = 100; //掴むときのアームパワー(%，未確率時)
-    [SerializeField] float upArmpower = 100; //上昇時のアームパワー(%，未確率時)
-    [SerializeField] float backArmpower = 100; //獲得口移動時のアームパワー(%，未確率時)
-    [SerializeField] float catchArmpowersuccess = 100; //同確率時
-    [SerializeField] float upArmpowersuccess = 100; //同確率時
-    [SerializeField] float backArmpowersuccess = 100; //同確率時
+    [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
+    [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
     [SerializeField] int limitTimeSet = 60; //操作制限時間
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     public bool probability; //確率判定用
+    [SerializeField] bool autoPower = true;
     float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
@@ -72,6 +69,7 @@ public class Type7Manager : MonoBehaviour
         support.GetRopeManager(ropeManager);
         creditSystem.SetCreditSound(0);
         armController.GetManager(7);
+        armController.autoPower = autoPower;
 
         getPoint.GetManager(7);
 
@@ -155,8 +153,8 @@ public class Type7Manager : MonoBehaviour
                     ropeManager.ArmUnitUpForceStop();
                     leverState = 0;
 
-                    if (probability) armPower = catchArmpowersuccess;
-                    else armPower = catchArmpower;
+                    if (probability) armPower = armPowerConfigSuccess[0];
+                    else armPower = armPowerConfig[0];
                     armController.MotorPower(armPower);
                     if (armState == 1)
                     {
@@ -178,14 +176,14 @@ public class Type7Manager : MonoBehaviour
                     isExecuted[craneStatus] = true;
                     ropeManager.ArmUnitUp();
                     await Task.Delay(1500);
-                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeFlag) armController.Release(); // 上昇中に離す振り分け
+                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
                 }
-                if (probability && armPower > upArmpowersuccess)
+                if (probability && armPower > armPowerConfigSuccess[1])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
                 }
-                else if (!probability && armPower > upArmpower)
+                else if (!probability && armPower > armPowerConfig[1])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
@@ -197,8 +195,8 @@ public class Type7Manager : MonoBehaviour
 
             if (craneStatus == 9)
             {
-                if (probability) armPower = upArmpowersuccess;
-                else armPower = upArmpower;
+                if (probability) armPower = armPowerConfigSuccess[1];
+                else armPower = armPowerConfig[1];
                 armController.MotorPower(armPower);
                 if (!isExecuted[craneStatus])
                 {
@@ -212,12 +210,12 @@ public class Type7Manager : MonoBehaviour
             if (craneStatus == 10)
             {
                 //アーム獲得口ポジション移動音再生;
-                if (probability && armPower > backArmpowersuccess)
+                if (probability && armPower > armPowerConfigSuccess[2])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);
                 }
-                else if (!probability && armPower > backArmpower)
+                else if (!probability && armPower > armPowerConfig[2])
                 {
                     armPower -= 0.5f;
                     armController.MotorPower(armPower);

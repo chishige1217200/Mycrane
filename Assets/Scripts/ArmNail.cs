@@ -9,6 +9,7 @@ public class ArmNail : MonoBehaviour
     Type3Manager _Type3Manager;
     Type4Manager _Type4Manager;
     Type5Manager _Type5Manager;
+    Type6Manager _Type6Manager;
     [SerializeField] int playerNumber = 1;
     RopeManager ropeManager;
     int craneType = -1;
@@ -43,6 +44,14 @@ public class ArmNail : MonoBehaviour
                         _Type5Manager.craneStatus = 7;
                     }
                     break;
+                case 6:
+                    if (_Type6Manager.craneStatus == 4)
+                    {
+                        Debug.Log("床");
+                        ropeManager.ArmUnitDownForceStop();
+                        _Type6Manager.craneStatus = 5;
+                    }
+                    break;
             }
         }
     }
@@ -55,6 +64,7 @@ public class ArmNail : MonoBehaviour
         if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
         if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
         if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
+        if (craneType == 6) _Type6Manager = transform.root.gameObject.GetComponent<Type6Selecter>().GetManager(playerNumber);
     }
 
     public void GetRopeManager(RopeManager r)

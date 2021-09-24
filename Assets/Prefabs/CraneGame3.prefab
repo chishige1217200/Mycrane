@@ -489,7 +489,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!59 &3753310965732560877
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -647,7 +647,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNumber: 1
   pushTime: 0
-  prizeFlag: 0
+  prizeCount: 0
   isShieldcollis: 0
 --- !u!1 &2129659296016885644
 GameObject:
@@ -1905,7 +1905,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!59 &2460362714876505711
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -2460,7 +2460,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!59 &8046578530432822078
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -2549,7 +2549,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a89b9e97f4e83744a31e7a11663698f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  releaseFlag: 1
+  autoPower: 1
 --- !u!1 &7343695825118361756
 GameObject:
   m_ObjectHideFlags: 0
@@ -12974,16 +12974,19 @@ MonoBehaviour:
   craneStatus: -2
   priceSet: 6400000064000000
   timesSet: 0100000001000000
-  catchArmpower: 100
-  upArmpower: 100
-  backArmpower: 100
-  catchArmpowersuccess: 100
-  upArmpowersuccess: 100
-  backArmpowersuccess: 100
+  armPowerConfig:
+  - 100
+  - 50
+  - 0
+  armPowerConfigSuccess:
+  - 100
+  - 100
+  - 100
   soundType: 1
   audioPitch: 1
   probability: 0
   downTime: 0
+  autoPower: 1
   armPower: 0
   credit3d: {fileID: 2460163067817029194}
 --- !u!1 &8292428784456400021

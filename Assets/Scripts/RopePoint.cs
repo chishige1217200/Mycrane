@@ -28,8 +28,8 @@ public class RopePoint : MonoBehaviour
             {
                 moveUpFlag = false;
                 upRefusedFlag = true;
-                this.transform.localPosition = new Vector3(0, this.transform.localPosition.y, 0);
-                this.transform.localRotation = new Quaternion(0, 0, 0, 0);
+                transform.localPosition = new Vector3(0, transform.localPosition.y, 0);
+                transform.localRotation = new Quaternion(0, 0, 0, 0);
             }
         }
 
@@ -78,35 +78,36 @@ public class RopePoint : MonoBehaviour
     void RopeUp()
     {
         if (upRefusedFlag) moveUpFlag = false;
+        if (transform.localPosition.y >= 0.02f) transform.localPosition = new Vector3(0, 0, 0);
         if (!rb.isKinematic)
         {
-            if (this.transform.localPosition.x < -0.01f)
+            if (transform.localPosition.x < -0.01f)
                 rb.AddForce(new Vector3(upSpeed / 2, 0, 0), ForceMode.Impulse);
-            if (this.transform.localPosition.x > 0.01f)
+            if (transform.localPosition.x > 0.01f)
                 rb.AddForce(new Vector3(-upSpeed / 2, 0, 0), ForceMode.Impulse);
-            if (this.transform.localPosition.z < -0.01f)
+            if (transform.localPosition.z < -0.01f)
                 rb.AddForce(new Vector3(0, 0, upSpeed / 2), ForceMode.Impulse);
-            if (this.transform.localPosition.z > 0.01f)
+            if (transform.localPosition.z > 0.01f)
                 rb.AddForce(new Vector3(0, 0, -upSpeed / 2), ForceMode.Impulse);
         }
         else
         {
-            this.transform.localPosition += new Vector3(0, upSpeed, 0);
-            if (this.transform.localPosition.x < -0.5f)
-                this.transform.localPosition += new Vector3(0.5f, 0, 0);
-            else if (this.transform.localPosition.x > 0.5f)
-                this.transform.localPosition -= new Vector3(0.5f, 0, 0);
-            if (this.transform.localPosition.z < -0.5f)
-                this.transform.localPosition += new Vector3(0, 0, 0.5f);
-            else if (this.transform.localPosition.z > 0.5f)
-                this.transform.localPosition -= new Vector3(0, 0, 0.5f);
+            transform.localPosition += new Vector3(0, upSpeed, 0);
+            if (transform.localPosition.x < -0.5f)
+                transform.localPosition += new Vector3(0.5f, 0, 0);
+            else if (transform.localPosition.x > 0.5f)
+                transform.localPosition -= new Vector3(0.5f, 0, 0);
+            if (transform.localPosition.z < -0.5f)
+                transform.localPosition += new Vector3(0, 0, 0.5f);
+            else if (transform.localPosition.z > 0.5f)
+                transform.localPosition -= new Vector3(0, 0, 0.5f);
         }
     }
 
     void RopeDown()
     {
         if (downRefusedFlag) moveDownFlag = false;
-        if (rb.isKinematic) this.transform.localPosition -= new Vector3(0, downSpeed, 0);
+        if (rb.isKinematic) transform.localPosition -= new Vector3(0, downSpeed, 0);
     }
 
     public void SetKinematic()
