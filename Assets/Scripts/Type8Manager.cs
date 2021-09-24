@@ -16,7 +16,6 @@ public class Type8Manager : CraneManager
     public bool leverTilted = false; //trueならレバーがアクティブ
     [SerializeField] bool downStop = true; //下降停止の利用可否
     bool[] isExecuted = new bool[14]; //各craneStatusで1度しか実行しない処理の管理
-    bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
     public float armPower; //現在のアームパワー
     BGMPlayer _BGMPlayer;
@@ -532,7 +531,7 @@ public class Type8Manager : CraneManager
         }
     }
 
-    public override void DetectKey(int num)
+    protected override void DetectKey(int num)
     {
         if (host.playable)
         {

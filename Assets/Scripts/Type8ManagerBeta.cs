@@ -484,7 +484,7 @@ public class Type8ManagerBeta : CraneManager
         }
     }
 
-    public override void DetectKey(int num)
+    protected override void DetectKey(int num)
     {
         if (host.playable)
         {
