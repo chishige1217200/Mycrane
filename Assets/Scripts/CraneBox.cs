@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 public class CraneBox : MonoBehaviour
 {
-    public bool rightRefusedFlag = false; // trueなら、その方向に移動禁止
-    public bool leftRefusedFlag = false;
-    public bool backRefusedFlag = false;
-    public bool forwardRefusedFlag = false;
+    bool rightRefusedFlag = false; // trueなら、その方向に移動禁止
+    bool leftRefusedFlag = false;
+    bool backRefusedFlag = false;
+    bool forwardRefusedFlag = false;
     public float moveSpeed = 0.001f;
     [SerializeField] bool supportDirectionChanger = false; // true:x-move false:z-move
     GameObject craneBoxSupport;
