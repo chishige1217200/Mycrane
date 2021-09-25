@@ -14,7 +14,7 @@ public class Type9Manager : CraneManager
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     Type9ArmController armController;
     RopeManager ropeManager; //暫定
-    ArmUnitLifter lifter;
+    //ArmUnitLifter lifter;
     CraneUnitRoter roter;
     [SerializeField] TextMesh credit3d;
 
