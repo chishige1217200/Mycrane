@@ -119,9 +119,9 @@ public class Type9Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     _SEPlayer.StopSE(1);
-                    _SEPlayer.PlaySE(2, 1);
+                    _SEPlayer.ForcePlaySE(2);
                     armController.Open();
-                    await Task.Delay(1000);
+                    await Task.Delay(1500);
                     if (craneStatus == 5)
                     {
                         ropeManager.ArmUnitDown();
@@ -143,17 +143,15 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    await Task.Delay(1000);
-                    if (craneStatus == 7)
+                    await Task.Delay(300);
+                    if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
                     {
-                        if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
-                        {
-                            if (leftCatchArmpower >= rightCatchArmpower) armController.Close(leftCatchArmpower);
-                            else armController.Close(rightCatchArmpower);
-                        }
-                        else armController.Close(30f);
-                        IncrimentStatus();
+                        if (leftCatchArmpower >= rightCatchArmpower) armController.Close(leftCatchArmpower);
+                        else armController.Close(rightCatchArmpower);
                     }
+                    else armController.Close(30f);
+                    await Task.Delay(700);
+                    IncrimentStatus();
                 }
             }
             if (craneStatus == 8) //上昇中
