@@ -160,7 +160,6 @@ public class Type9Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     ropeManager.ArmUnitUp();
-                    await Task.Delay(1000);
                     if (craneStatus < 11)
                     {
                         armController.Power(leftCatchArmpower, 0);
