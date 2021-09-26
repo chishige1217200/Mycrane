@@ -35,7 +35,9 @@ public class Type6Manager : MonoBehaviour
     Timer timer;
     MachineHost host;
     GameObject canvas;
-    public Text limitTimedisplayed;
+    [SerializeField] GameObject watch;
+    [SerializeField] Text limitTimedisplayed;
+    [SerializeField] TextMesh limitTime3d;
     [SerializeField] TextMesh credit3d;
     [SerializeField] TextMesh[] preset = new TextMesh[4];
     public Animator[] animator = new Animator[3];
@@ -145,6 +147,12 @@ public class Type6Manager : MonoBehaviour
         {
             if (craneStatus == 1) //操作待ち
             {
+                if (isExecuted[craneStatus] == false)
+                {
+                    isExecuted[craneStatus] = true;
+                    limitTime3d.text = limitTimeSet.ToString("D2");
+                    watch.SetActive(true);
+                }
                 if (!player2)
                 {
                     if ((Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
@@ -229,19 +237,12 @@ public class Type6Manager : MonoBehaviour
                     await Task.Delay(500);
                     if (craneStatus == 3)
                     {
-                        creditSystem.segUpdateFlag = true;
                         timer.CancelTimer();
+                        watch.SetActive(false);
+                        creditSystem.segUpdateFlag = true;
                         int credit = creditSystem.Pay(0);
-                        if (credit < 100)
-                        {
-                            limitTimedisplayed.text = credit.ToString("D2");
-                            credit3d.text = credit.ToString();
-                        }
-                        else
-                        {
-                            limitTimedisplayed.text = "99";
-                            credit3d.text = "99.";
-                        }
+                        if (credit < 100) limitTimedisplayed.text = credit.ToString("D2");
+                        else limitTimedisplayed.text = "99";
                         if (!openEnd)
                         {
                             armController.ArmOpen();
@@ -415,17 +416,17 @@ public class Type6Manager : MonoBehaviour
                 }
             }
 
-            if (!creditSystem.segUpdateFlag) //Timer表示用
+            if (!creditSystem.segUpdateFlag)
             {
                 if (timer.limitTimeNow >= 0)
                 {
                     limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
-                    credit3d.text = timer.limitTimeNow.ToString("D2");
+                    limitTime3d.text = timer.limitTimeNow.ToString("D2");
                 }
                 else
                 {
                     limitTimedisplayed.text = "00";
-                    credit3d.text = "00";
+                    limitTime3d.text = "00";
                 }
             }
         }
