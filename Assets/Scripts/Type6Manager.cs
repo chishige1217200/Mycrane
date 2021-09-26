@@ -41,6 +41,7 @@ public class Type6Manager : MonoBehaviour
     [SerializeField] TextMesh credit3d;
     [SerializeField] TextMesh[] preset = new TextMesh[4];
     public Animator[] animator = new Animator[3];
+    [SerializeField] Animator needle;
 
     async void Start()
     {
@@ -191,6 +192,7 @@ public class Type6Manager : MonoBehaviour
                 {
                     isExecuted[craneStatus] = true;
                     timer.StartTimer();
+                    needle.SetBool("isExecuted", true);
                     creditSystem.segUpdateFlag = false;
                 }
                 // タイマーの起動処理を書く
@@ -239,6 +241,7 @@ public class Type6Manager : MonoBehaviour
                     {
                         timer.CancelTimer();
                         watch.SetActive(false);
+                        needle.SetBool("isExecuted", false);
                         creditSystem.segUpdateFlag = true;
                         int credit = creditSystem.Pay(0);
                         if (credit < 100) limitTimedisplayed.text = credit.ToString("D2");
