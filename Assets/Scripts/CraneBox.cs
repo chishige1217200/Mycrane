@@ -114,7 +114,7 @@ public class CraneBox : MonoBehaviour
 
     public void Right()
     {
-        if (useLeftDummy && !leftDummyFlag) EnableLeftDummy();
+        if (useLeftDummy && !leftDummyFlag && !Input.GetKey(KeyCode.F)) EnableLeftDummy();
         if (!rightRefusedFlag || limitIgnoreFlag)
         {
             transform.localPosition += new Vector3(moveSpeed, 0, 0);
