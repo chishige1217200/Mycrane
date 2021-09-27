@@ -16,7 +16,9 @@ public class Type2Manager : MonoBehaviour
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
-    float armPower; //現在のアームパワー
+    [SerializeField] int releaseTiming = 2; //0:設定無し，1:上昇開始後，2:移動開始後
+    [SerializeField] int waitTime = 1; //n秒計測に使用（releaseTiming = 1,2で有効）
+    public float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
@@ -67,6 +69,7 @@ public class Type2Manager : MonoBehaviour
         creditSystem.GetSEPlayer(_SEPlayer);
         timer.limitTime = limitTimeSet;
         timer.GetSEPlayer(_SEPlayer);
+        armController.GetManager();
 
         if (soundType == 0)
             creditSystem.SetCreditSound(0);
@@ -275,17 +278,27 @@ public class Type2Manager : MonoBehaviour
                 {
                     isExecuted[craneStatus] = true;
                     ropeManager.ArmUnitUp();
+                    if (!probability && releaseTiming == 1)
+                    {
+                        await Task.Delay(waitTime);
+                        if (craneStatus <= 10 && craneStatus >= 8) armController.Release();
+                    }
                 }
-                if (probability && armPower > armPowerConfigSuccess[1])
+
+                if (releaseTiming == 0)
                 {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
+                    if (probability && armPower > armPowerConfigSuccess[1])
+                    {
+                        armPower -= 0.5f;
+                        armController.MotorPower(armPower);
+                    }
+                    else if (!probability && armPower > armPowerConfig[1])
+                    {
+                        armPower -= 0.5f;
+                        armController.MotorPower(armPower);
+                    }
                 }
-                else if (!probability && armPower > armPowerConfig[1])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
+
                 if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
                 //アーム上昇音再生;
                 //アーム上昇;
@@ -293,9 +306,13 @@ public class Type2Manager : MonoBehaviour
 
             if (craneStatus == 9)
             {
-                if (probability) armPower = armPowerConfigSuccess[1];
-                else armPower = armPowerConfig[1];
-                armController.MotorPower(armPower);
+                if (releaseTiming == 0)
+                {
+                    if (probability) armPower = armPowerConfigSuccess[1];
+                    else armPower = armPowerConfig[1];
+                    armController.MotorPower(armPower);
+                }
+
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -319,16 +336,23 @@ public class Type2Manager : MonoBehaviour
 
             if (craneStatus == 10)
             {
-                if (probability && armPower > armPowerConfigSuccess[2])
+                if (!isExecuted[craneStatus])
                 {
-                    armPower -= 0.5f;
+                    isExecuted[craneStatus] = true;
+                    if (!probability && releaseTiming == 2)
+                    {
+                        await Task.Delay(waitTime);
+                        if (craneStatus == 10) armController.Release();
+                    }
+                }
+
+                if (releaseTiming == 0)
+                {
+                    if (probability && armPower > armPowerConfigSuccess[2]) armPower -= 0.5f;
+                    else if (!probability && armPower > armPowerConfig[2]) armPower -= 0.5f;
                     armController.MotorPower(armPower);
                 }
-                else if (!probability && armPower > armPowerConfig[2])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
+
                 if (craneBox.CheckPos(1)) craneStatus = 11;
                 //アーム獲得口ポジション移動音再生;
                 //アーム獲得口ポジションへ;

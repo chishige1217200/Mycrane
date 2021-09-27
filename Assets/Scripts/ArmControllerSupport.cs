@@ -127,6 +127,12 @@ public class ArmControllerSupport : MonoBehaviour
                         _Type3ArmController.Release();
                     }
                     break;
+                case 7:
+                    if (!_Type7Manager.probability && _Type7Manager.craneStatus >= 8 && prizeCount > 0)
+                    {
+                        _Type3ArmController.Release();
+                    }
+                    break;
             }
         }
     }

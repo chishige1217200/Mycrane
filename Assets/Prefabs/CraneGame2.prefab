@@ -3834,15 +3834,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd010bcc5ab6eb4ca61ea9d07e2d66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightRefusedFlag: 0
-  leftRefusedFlag: 0
-  backRefusedFlag: 0
-  forwardRefusedFlag: 0
   moveSpeed: 0.003
   supportDirectionChanger: 1
   goPoint: {x: 0, y: 0}
   goPositionFlag: 0
   limitIgnoreFlag: 0
+  dummyEnableTime: 100
 --- !u!1 &5059423015170704674
 GameObject:
   m_ObjectHideFlags: 0
@@ -12699,6 +12696,9 @@ MonoBehaviour:
   limitTimeSet: 15
   soundType: 0
   probability: 0
+  releaseTiming: 2
+  waitTime: 1
+  armPower: 0
   limitTimedisplayed: {fileID: 5059423016434584343}
   credit3d: {fileID: 6736326454888409889}
   preset:
@@ -14717,8 +14717,10 @@ GameObject:
   - component: {fileID: 5210331502906301862}
   - component: {fileID: 8949418940327748845}
   - component: {fileID: 8949418940327748844}
+  - component: {fileID: 5153379906257436021}
+  - component: {fileID: 6542097583761408807}
   m_Layer: 9
-  m_Name: Body
+  m_Name: Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14836,3 +14838,33 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!136 &5153379906257436021
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8949418940327748846}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.4
+  m_Height: 0.9
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.27, z: 0}
+--- !u!114 &6542097583761408807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8949418940327748846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d85221ad8c7e7842bd63741608384d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNumber: 1
+  pushTime: 0
+  prizeCount: 0
+  isShieldcollis: 0
