@@ -2250,7 +2250,7 @@ GameObject:
   - component: {fileID: 64476909}
   - component: {fileID: 64476908}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2379,7 +2379,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 393abc4ee1ca17246a5993c8778f28ea, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -4184,7 +4184,7 @@ GameObject:
   - component: {fileID: 135234110}
   - component: {fileID: 135234109}
   m_Layer: 5
-  m_Name: Button (4)
+  m_Name: 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4313,7 +4313,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: eecf901b96032104499ff11c1c565138, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -4667,7 +4667,7 @@ GameObject:
   - component: {fileID: 144850396}
   - component: {fileID: 144850395}
   m_Layer: 5
-  m_Name: Button (3)
+  m_Name: 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4796,7 +4796,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d560572e37a57c44ab9c0276c94ddcbf, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -15998,6 +15998,9 @@ MonoBehaviour:
   limitTimeSet: 15
   soundType: 0
   probability: 0
+  releaseTiming: 2
+  waitTime: 1
+  armPower: 0
   limitTimedisplayed: {fileID: 398649515}
   credit3d: {fileID: 0}
   preset:
@@ -27597,15 +27600,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd010bcc5ab6eb4ca61ea9d07e2d66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightRefusedFlag: 0
-  leftRefusedFlag: 0
-  backRefusedFlag: 0
-  forwardRefusedFlag: 0
   moveSpeed: 0.003
   supportDirectionChanger: 1
   goPoint: {x: 0, y: 0}
   goPositionFlag: 0
   limitIgnoreFlag: 0
+  dummyEnableTime: 100
 --- !u!65 &525457354
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -32228,7 +32228,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 1a343d95eea9a084d995d609cc5e01fa, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -35065,15 +35065,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd010bcc5ab6eb4ca61ea9d07e2d66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightRefusedFlag: 0
-  leftRefusedFlag: 0
-  backRefusedFlag: 0
-  forwardRefusedFlag: 0
   moveSpeed: 0.002
   supportDirectionChanger: 0
   goPoint: {x: 0, y: 0}
   goPositionFlag: 0
   limitIgnoreFlag: 0
+  dummyEnableTime: 100
 --- !u!65 &720933056
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -42487,7 +42484,7 @@ GameObject:
   - component: {fileID: 848260494}
   - component: {fileID: 848260493}
   m_Layer: 5
-  m_Name: Button (5)
+  m_Name: 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42616,7 +42613,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a0846d425397ae24197f3e2ea09edcda, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -48013,7 +48010,7 @@ GameObject:
   - component: {fileID: 957194411}
   - component: {fileID: 957194410}
   m_Layer: 5
-  m_Name: Button
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48142,7 +48139,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 9c3562a3e4397bb44a9cc99b0d92eec3, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -55236,7 +55233,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: v0.3.7
+  m_Text: v0.3.8
 --- !u!222 &1120831526
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -56897,7 +56894,7 @@ GameObject:
   - component: {fileID: 1149893653}
   - component: {fileID: 1149893652}
   m_Layer: 5
-  m_Name: Button (7)
+  m_Name: 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56935,7 +56932,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: eecf901b96032104499ff11c1c565138, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -57971,7 +57968,7 @@ GameObject:
   - component: {fileID: 1177643452}
   - component: {fileID: 1177643451}
   m_Layer: 5
-  m_Name: Button (8)
+  m_Name: 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57990,7 +57987,7 @@ RectTransform:
   m_Children:
   - {fileID: 153905857}
   m_Father: {fileID: 1981331655}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -58009,7 +58006,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8cff64be6a34fa142b0d8b93443bb151, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -67356,15 +67353,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd010bcc5ab6eb4ca61ea9d07e2d66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightRefusedFlag: 0
-  leftRefusedFlag: 0
-  backRefusedFlag: 0
-  forwardRefusedFlag: 0
   moveSpeed: 0.002
   supportDirectionChanger: 0
   goPoint: {x: 0, y: 0}
   goPositionFlag: 0
   limitIgnoreFlag: 0
+  dummyEnableTime: 100
 --- !u!65 &1358982144
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -76717,15 +76711,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd010bcc5ab6eb4ca61ea9d07e2d66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightRefusedFlag: 0
-  leftRefusedFlag: 0
-  backRefusedFlag: 0
-  forwardRefusedFlag: 0
   moveSpeed: 0.002
   supportDirectionChanger: 0
   goPoint: {x: 0, y: 0}
   goPositionFlag: 0
   limitIgnoreFlag: 0
+  dummyEnableTime: 100
 --- !u!65 &1542690760
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -78037,7 +78028,7 @@ GameObject:
   - component: {fileID: 1573346831}
   - component: {fileID: 1573346830}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78166,7 +78157,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: da3113470b5ee4b4aa523153782f1ce5, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -90117,15 +90108,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd010bcc5ab6eb4ca61ea9d07e2d66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightRefusedFlag: 0
-  leftRefusedFlag: 0
-  backRefusedFlag: 0
-  forwardRefusedFlag: 0
   moveSpeed: 0.002
   supportDirectionChanger: 0
   goPoint: {x: 0, y: 0}
   goPositionFlag: 0
   limitIgnoreFlag: 0
+  dummyEnableTime: 100
 --- !u!65 &1852143631
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -95916,8 +95904,8 @@ RectTransform:
   - {fileID: 135234105}
   - {fileID: 1149893651}
   - {fileID: 848260489}
-  - {fileID: 2034412345}
   - {fileID: 1177643450}
+  - {fileID: 2034412345}
   - {fileID: 806839678}
   - {fileID: 1120831524}
   - {fileID: 1012686650}
@@ -97118,15 +97106,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd010bcc5ab6eb4ca61ea9d07e2d66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightRefusedFlag: 0
-  leftRefusedFlag: 0
-  backRefusedFlag: 0
-  forwardRefusedFlag: 0
   moveSpeed: 0.001
   supportDirectionChanger: 0
   goPoint: {x: 0, y: 0}
   goPositionFlag: 0
   limitIgnoreFlag: 0
+  dummyEnableTime: 100
 --- !u!65 &2018188197
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -97514,7 +97499,7 @@ GameObject:
   - component: {fileID: 2034412350}
   - component: {fileID: 2034412349}
   m_Layer: 5
-  m_Name: Button (6)
+  m_Name: GC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97533,7 +97518,7 @@ RectTransform:
   m_Children:
   - {fileID: 1895666864}
   m_Father: {fileID: 1981331655}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

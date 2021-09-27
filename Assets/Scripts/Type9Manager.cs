@@ -155,7 +155,7 @@ public class Type9Manager : CraneManager
                         else armController.Close(rightCatchArmpower);
                     }
                     else armController.Close(30f);
-                    await Task.Delay(700);
+                    await Task.Delay(800);
                     IncrimentStatus();
                 }
             }
