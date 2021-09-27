@@ -30,7 +30,7 @@ public class Type9Manager : CraneManager
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _SEPlayer = transform.Find("SE").GetComponent<SEPlayer>();
-        //getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
@@ -57,7 +57,7 @@ public class Type9Manager : CraneManager
         creditSystem.SetCreditSound(0);
         getSoundNum = 4;
 
-        //getPoint.GetManager(-1); // テスト中
+        getPoint.GetManager(-1); // テスト中
 
         await Task.Delay(300);
         ropeManager.ArmUnitUp();
@@ -155,7 +155,7 @@ public class Type9Manager : CraneManager
                         else armController.Close(rightCatchArmpower);
                     }
                     else armController.Close(30f);
-                    await Task.Delay(800);
+                    await Task.Delay(700);
                     IncrimentStatus();
                 }
             }
