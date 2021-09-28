@@ -411,11 +411,11 @@ public class Type8Manager : CraneManager
                     {
                         case 3:
                             _BGMPlayer.Stop(soundType * 2 + 1);
-                            _SEPlayer.Play(8, 2147483647);
+                            _SEPlayer.Play(8);
                             break;
                         case 4:
                             _BGMPlayer.Stop(6);
-                            _SEPlayer.Play(8, 2147483647);
+                            _SEPlayer.Play(8);
                             break;
                     }
                     ropeManager.ArmUnitDown();
@@ -459,7 +459,7 @@ public class Type8Manager : CraneManager
                     {
                         case 3:
                         case 4:
-                            _SEPlayer.Play(8, 2147483647);
+                            _SEPlayer.Play(8);
                             break;
                     }
                     ropeManager.ArmUnitUp();

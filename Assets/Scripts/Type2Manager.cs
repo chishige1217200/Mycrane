@@ -204,13 +204,13 @@ public class Type2Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Play(1, 2147483647);
+                            _SEPlayer.Play(1);
                             break;
                         case 1:
-                            _SEPlayer.Play(8, 2147483647);
+                            _SEPlayer.Play(8);
                             break;
                         case 2:
-                            _SEPlayer.Play(12, 2147483647);
+                            _SEPlayer.Play(12);
                             break;
                     }
                     await Task.Delay(300);
@@ -267,10 +267,10 @@ public class Type2Manager : MonoBehaviour
                 switch (soundType)
                 {
                     case 1:
-                        _SEPlayer.Play(9, 2147483647);
+                        _SEPlayer.Play(9);
                         break;
                     case 2:
-                        _SEPlayer.Play(13, 2147483647);
+                        _SEPlayer.Play(13);
                         break;
                 }
 

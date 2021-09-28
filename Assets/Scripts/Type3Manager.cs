@@ -130,7 +130,7 @@ public class Type3Manager : MonoBehaviour
                 {
                     case 1:
                         if (!_SEPlayer._AudioSource[6].isPlaying)
-                            _SEPlayer.Play(7, 2147483647);
+                            _SEPlayer.Play(7);
                         break;
                     case 3:
                         _BGMPlayer.Play(4);
@@ -147,17 +147,17 @@ public class Type3Manager : MonoBehaviour
                 switch (soundType)
                 {
                     case 0:
-                        _SEPlayer.Play(1, 2147483647);
+                        _SEPlayer.Play(1);
                         break;
                     case 1:
                         _SEPlayer.Stop(7);
-                        _SEPlayer.Play(8, 2147483647);
+                        _SEPlayer.Play(8);
                         break;
                     case 2:
-                        _SEPlayer.Play(14, 2147483647);
+                        _SEPlayer.Play(14);
                         break;
                     case 3:
-                        _SEPlayer.Play(18, 2147483647);
+                        _SEPlayer.Play(18);
                         break;
                 }
                 if (craneBox.CheckPos(7))
@@ -183,18 +183,18 @@ public class Type3Manager : MonoBehaviour
                 {
                     case 0:
                         _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2, 2147483647);
+                        _SEPlayer.Play(2);
                         break;
                     case 1:
                         _SEPlayer.Stop(8);
-                        _SEPlayer.Play(9, 2147483647);
+                        _SEPlayer.Play(9);
                         break;
                     case 2:
-                        _SEPlayer.Play(14, 2147483647);
+                        _SEPlayer.Play(14);
                         break;
                     case 3:
                         _SEPlayer.Stop(18);
-                        _SEPlayer.Play(19, 2147483647);
+                        _SEPlayer.Play(19);
                         break;
                 }
                 if (craneBox.CheckPos(8))
@@ -215,11 +215,11 @@ public class Type3Manager : MonoBehaviour
                     {
                         case 0:
                             _SEPlayer.Stop(2);
-                            _SEPlayer.Play(3, 2147483647);
+                            _SEPlayer.Play(3);
                             break;
                         case 1:
                             _SEPlayer.Stop(9);
-                            _SEPlayer.Play(10, 2147483647);
+                            _SEPlayer.Play(10);
                             break;
                         case 2:
                             _SEPlayer.Stop(14);
@@ -253,7 +253,7 @@ public class Type3Manager : MonoBehaviour
                             _SEPlayer.Play(15, 2);
                             break;
                         case 3:
-                            _SEPlayer.Play(21, 2147483647);
+                            _SEPlayer.Play(21);
                             break;
                     }
                     if (downTime > 0 && downTime <= 4600)
@@ -303,14 +303,14 @@ public class Type3Manager : MonoBehaviour
                     {
                         case 0:
                             _SEPlayer.Stop(3);
-                            _SEPlayer.Play(4, 2147483647);
+                            _SEPlayer.Play(4);
                             break;
                         case 1:
                             _SEPlayer.Stop(10);
-                            _SEPlayer.Play(11, 2147483647);
+                            _SEPlayer.Play(11);
                             break;
                         case 3:
-                            _SEPlayer.Play(22, 2147483647);
+                            _SEPlayer.Play(22);
                             break;
                     }
                     ropeManager.ArmUnitUp();
@@ -319,7 +319,7 @@ public class Type3Manager : MonoBehaviour
                 }
                 if (soundType == 2)
                     if (!_SEPlayer._AudioSource[15].isPlaying)
-                        _SEPlayer.Play(14, 2147483647);
+                        _SEPlayer.Play(14);
                 if (probability && armPower > armPowerConfigSuccess[1])
                 {
                     armPower -= 0.5f;
@@ -369,17 +369,17 @@ public class Type3Manager : MonoBehaviour
                     {
                         case 0:
                             _SEPlayer.Stop(4);
-                            _SEPlayer.Play(1, 2147483647);
+                            _SEPlayer.Play(1);
                             break;
                         case 3:
-                            _SEPlayer.Play(23, 2147483647);
+                            _SEPlayer.Play(23);
                             break;
                     }
 
                 }
                 if (soundType == 2)
                     if (!_SEPlayer._AudioSource[15].isPlaying)
-                        _SEPlayer.Play(14, 2147483647);
+                        _SEPlayer.Play(14);
                 if (!armController.autoPower)
                 {
                     if (support.prizeCount > 0)

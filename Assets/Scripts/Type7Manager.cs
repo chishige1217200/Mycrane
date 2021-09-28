@@ -134,7 +134,7 @@ public class Type7Manager : MonoBehaviour
                         _BGMPlayer.Stop(1);
                         _SEPlayer.Play(2, 1);
                     }
-                    if (!_SEPlayer._AudioSource[2].isPlaying && timer.limitTimeNow <= 9) _SEPlayer.Play(3, 2147483647);
+                    if (!_SEPlayer._AudioSource[2].isPlaying && timer.limitTimeNow <= 9) _SEPlayer.Play(3);
                 }
                 if (timer.limitTimeNow == 0) craneStatus = 7;
                 InputKeyCheck();

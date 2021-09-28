@@ -166,10 +166,10 @@ public class Type5Manager : MonoBehaviour
                     case 0:
                     case 1:
                     case 2:
-                        _SEPlayer.Play(1, 2147483647);
+                        _SEPlayer.Play(1);
                         break;
                     case 3:
-                        _SEPlayer.Play(9, 2147483647);
+                        _SEPlayer.Play(9);
                         break;
                 }
                 if (!player2 & craneBox.CheckPos(7))
@@ -212,10 +212,10 @@ public class Type5Manager : MonoBehaviour
                     case 0:
                     case 1:
                     case 2:
-                        _SEPlayer.Play(2, 2147483647);
+                        _SEPlayer.Play(2);
                         break;
                     case 3:
-                        _SEPlayer.Play(10, 2147483647);
+                        _SEPlayer.Play(10);
                         break;
                 }
                 if (craneBox.CheckPos(8))
@@ -263,10 +263,10 @@ public class Type5Manager : MonoBehaviour
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Play(4, 2147483647);
+                            _SEPlayer.Play(4);
                             break;
                         case 3:
-                            _SEPlayer.Play(12, 2147483647);
+                            _SEPlayer.Play(12);
                             break;
                     }
                     if (craneStatus == 6) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
@@ -345,10 +345,10 @@ public class Type5Manager : MonoBehaviour
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Play(4, 2147483647);
+                            _SEPlayer.Play(4);
                             break;
                         case 3:
-                            _SEPlayer.Play(14, 2147483647);
+                            _SEPlayer.Play(14);
                             break;
                     }
                     ropeManager.ArmUnitUp();
@@ -416,11 +416,11 @@ public class Type5Manager : MonoBehaviour
                         case 1:
                         case 2:
                             _SEPlayer.Stop(4);
-                            _SEPlayer.Play(6, 2147483647);
+                            _SEPlayer.Play(6);
                             break;
                         case 3:
                             _SEPlayer.Stop(14);
-                            _SEPlayer.Play(9, 2147483647);
+                            _SEPlayer.Play(9);
                             break;
                     }
                 }
@@ -506,7 +506,7 @@ public class Type5Manager : MonoBehaviour
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Play(6, 2147483647);
+                            _SEPlayer.Play(6);
                             break;
                     }
                 }
@@ -535,7 +535,7 @@ public class Type5Manager : MonoBehaviour
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Play(6, 2147483647);
+                            _SEPlayer.Play(6);
                             break;
                     }
                     for (int i = 0; i < 14; i++)
