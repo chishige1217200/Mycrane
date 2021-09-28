@@ -18,7 +18,7 @@ public class Type1Selecter : MonoBehaviour
     void Update()
     {
         if (manager[0].craneStatus >= 0 && manager[1].craneStatus >= 0 && !_BGMPlayer._AudioSource[soundType].isPlaying)
-            _BGMPlayer.PlayBGM(soundType);
+            _BGMPlayer.Play(soundType);
     }
 
     public Type1Manager GetManager(int num)

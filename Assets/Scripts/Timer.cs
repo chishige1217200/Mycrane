@@ -38,7 +38,7 @@ public class Timer : MonoBehaviour
             }
             if (limitTimeNow <= thresholdTimeCount)
             {
-                if (soundNum != -1) _SEPlayer.ForcePlaySE(soundNum);
+                if (soundNum != -1) _SEPlayer.ForcePlay(soundNum);
             }
             await Task.Delay(1000);
             limitTimeNow--;

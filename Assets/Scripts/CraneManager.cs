@@ -35,7 +35,7 @@ public abstract class CraneManager : MonoBehaviour
         if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
         {
             if (getSoundNum != -1)
-                _SEPlayer.PlaySE(getSoundNum, 1);
+                _SEPlayer.Play(getSoundNum, 1);
         }
     }
 

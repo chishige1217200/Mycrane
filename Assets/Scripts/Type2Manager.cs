@@ -126,8 +126,8 @@ public class Type2Manager : MonoBehaviour
 
         if (craneStatus == 0)
         {
-            _BGMPlayer.StopBGM(1 + 2 * soundType);
-            _BGMPlayer.PlayBGM(2 * soundType);
+            _BGMPlayer.Stop(1 + 2 * soundType);
+            _BGMPlayer.Play(2 * soundType);
             //コイン投入有効化;
         }
         else
@@ -137,8 +137,8 @@ public class Type2Manager : MonoBehaviour
                 if (craneStatus == 1)
                 {
                     //コイン投入有効化;
-                    _BGMPlayer.StopBGM(2 * soundType);
-                    _BGMPlayer.PlayBGM(1 + 2 * soundType);
+                    _BGMPlayer.Stop(2 * soundType);
+                    _BGMPlayer.Play(1 + 2 * soundType);
                     InputKeyCheck(craneStatus);     //右移動ボタン有効化;
                 }
 
@@ -178,8 +178,8 @@ public class Type2Manager : MonoBehaviour
             {
                 if (craneStatus == 1)
                 {
-                    _BGMPlayer.StopBGM(2 * soundType);
-                    _BGMPlayer.PlayBGM(1 + 2 * soundType);
+                    _BGMPlayer.Stop(2 * soundType);
+                    _BGMPlayer.Play(1 + 2 * soundType);
                     //レバー操作有効化;
                     //降下ボタン有効化;
                 }
@@ -204,13 +204,13 @@ public class Type2Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.PlaySE(1, 2147483647);
+                            _SEPlayer.Play(1, 2147483647);
                             break;
                         case 1:
-                            _SEPlayer.PlaySE(8, 2147483647);
+                            _SEPlayer.Play(8, 2147483647);
                             break;
                         case 2:
-                            _SEPlayer.PlaySE(12, 2147483647);
+                            _SEPlayer.Play(12, 2147483647);
                             break;
                     }
                     await Task.Delay(300);
@@ -242,14 +242,14 @@ public class Type2Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.StopSE(1); //アーム下降音再生停止;
-                            _SEPlayer.PlaySE(2, 1); //アーム掴む音再生;
+                            _SEPlayer.Stop(1); //アーム下降音再生停止;
+                            _SEPlayer.Play(2, 1); //アーム掴む音再生;
                             break;
                         case 1:
-                            _SEPlayer.StopSE(8);
+                            _SEPlayer.Stop(8);
                             break;
                         case 2:
-                            _SEPlayer.StopSE(12);
+                            _SEPlayer.Stop(12);
                             break;
                     }
                     if (probability) armPower = armPowerConfigSuccess[0];
@@ -267,10 +267,10 @@ public class Type2Manager : MonoBehaviour
                 switch (soundType)
                 {
                     case 1:
-                        _SEPlayer.PlaySE(9, 2147483647);
+                        _SEPlayer.Play(9, 2147483647);
                         break;
                     case 2:
-                        _SEPlayer.PlaySE(13, 2147483647);
+                        _SEPlayer.Play(13, 2147483647);
                         break;
                 }
 
@@ -319,14 +319,14 @@ public class Type2Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.StopSE(2);
-                            _SEPlayer.PlaySE(3, 1); //アーム上昇停止音再生;
+                            _SEPlayer.Stop(2);
+                            _SEPlayer.Play(3, 1); //アーム上昇停止音再生;
                             break;
                         case 1:
-                            _SEPlayer.StopSE(9);
+                            _SEPlayer.Stop(9);
                             break;
                         case 2:
-                            _SEPlayer.StopSE(13);
+                            _SEPlayer.Stop(13);
                             break;
                     }
                     if (craneStatus == 9) craneStatus = 10;
@@ -364,7 +364,7 @@ public class Type2Manager : MonoBehaviour
                 {
                     isExecuted[craneStatus] = true;
                     armController.ArmOpen();
-                    if (soundType == 0) _SEPlayer.PlaySE(4, 1);
+                    if (soundType == 0) _SEPlayer.Play(4, 1);
                     await Task.Delay(1000);
                     craneStatus = 12;
                 }
@@ -453,7 +453,7 @@ public class Type2Manager : MonoBehaviour
         if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
         {
             if (getSoundNum != -1)
-                _SEPlayer.PlaySE(getSoundNum, 1);
+                _SEPlayer.Play(getSoundNum, 1);
         }
     }
 

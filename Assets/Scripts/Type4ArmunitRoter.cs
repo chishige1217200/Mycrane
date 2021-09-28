@@ -40,13 +40,13 @@ public class Type4ArmunitRoter : MonoBehaviour
             else isExecuted = false;
             if (rotationDirection)
             {
-                _SEPlayer.StopSE(4);
-                _SEPlayer.PlaySE(3, 2147483647);
+                _SEPlayer.Stop(4);
+                _SEPlayer.Play(3, 2147483647);
             }
             else
             {
-                _SEPlayer.StopSE(3);
-                _SEPlayer.PlaySE(4, 2147483647);
+                _SEPlayer.Stop(3);
+                _SEPlayer.Play(4, 2147483647);
             }
         }
         if (rotateInitialFlag) //位置初期化確認

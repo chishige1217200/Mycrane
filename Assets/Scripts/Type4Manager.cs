@@ -191,15 +191,15 @@ public class Type4Manager : MonoBehaviour
                     InputKeyCheck(craneStatus);
                     if (!player2 & craneBox.CheckPos(7))
                     {
-                        _SEPlayer.StopSE(1);
-                        _SEPlayer.PlaySE(2, 1);
+                        _SEPlayer.Stop(1);
+                        _SEPlayer.Play(2, 1);
                         buttonPushed = false;
                         craneStatus = 3;
                     }
                     if (player2 & craneBox.CheckPos(5))
                     {
-                        _SEPlayer.StopSE(1);
-                        _SEPlayer.PlaySE(2, 1);
+                        _SEPlayer.Stop(1);
+                        _SEPlayer.Play(2, 1);
                         buttonPushed = false;
                         craneStatus = 3;
                     }
@@ -216,8 +216,8 @@ public class Type4Manager : MonoBehaviour
                     InputKeyCheck(craneStatus);
                     if (craneBox.CheckPos(8))
                     {
-                        _SEPlayer.StopSE(1);
-                        _SEPlayer.PlaySE(2, 1);
+                        _SEPlayer.Stop(1);
+                        _SEPlayer.Play(2, 1);
                         buttonPushed = false;
                         craneStatus = 5;
                     }
@@ -242,8 +242,8 @@ public class Type4Manager : MonoBehaviour
                             leverTilted = true;
                             isExecuted[15] = false;
                             videoPlay.PlayVideo(1);
-                            _SEPlayer.StopSE(2);
-                            _SEPlayer.PlaySE(1, 1);
+                            _SEPlayer.Stop(2);
+                            _SEPlayer.Play(1, 1);
                         }
 
                         if ((Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.G)
@@ -251,16 +251,16 @@ public class Type4Manager : MonoBehaviour
                         {
                             leverTilted = true;
                             videoPlay.PlayVideo(1);
-                            _SEPlayer.StopSE(2);
-                            _SEPlayer.PlaySE(1, 1);
+                            _SEPlayer.Stop(2);
+                            _SEPlayer.Play(1, 1);
                         }
                         if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoPlay.PlayVideo(0);
-                            _SEPlayer.StopSE(1);
-                            _SEPlayer.PlaySE(2, 1);
+                            _SEPlayer.Stop(1);
+                            _SEPlayer.Play(2, 1);
                         }
                     }
                     else
@@ -271,8 +271,8 @@ public class Type4Manager : MonoBehaviour
                             leverTilted = true;
                             isExecuted[15] = false;
                             videoPlay.PlayVideo(1);
-                            _SEPlayer.StopSE(2);
-                            _SEPlayer.PlaySE(1, 1);
+                            _SEPlayer.Stop(2);
+                            _SEPlayer.Play(1, 1);
                         }
 
 
@@ -281,16 +281,16 @@ public class Type4Manager : MonoBehaviour
                         {
                             leverTilted = true;
                             videoPlay.PlayVideo(1);
-                            _SEPlayer.StopSE(2);
-                            _SEPlayer.PlaySE(1, 1);
+                            _SEPlayer.Stop(2);
+                            _SEPlayer.Play(1, 1);
                         }
                         if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoPlay.PlayVideo(0);
-                            _SEPlayer.StopSE(1);
-                            _SEPlayer.PlaySE(2, 1);
+                            _SEPlayer.Stop(1);
+                            _SEPlayer.Play(2, 1);
                         }
                     }
                 }
@@ -304,8 +304,8 @@ public class Type4Manager : MonoBehaviour
                             leverTilted = true;
                             isExecuted[15] = false;
                             videoPlay.PlayVideo(1);
-                            _SEPlayer.StopSE(2);
-                            _SEPlayer.PlaySE(1, 1);
+                            _SEPlayer.Stop(2);
+                            _SEPlayer.Play(1, 1);
                         }
 
                         if ((Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.G)
@@ -313,16 +313,16 @@ public class Type4Manager : MonoBehaviour
                         {
                             leverTilted = true;
                             videoPlay.PlayVideo(1);
-                            _SEPlayer.StopSE(2);
-                            _SEPlayer.PlaySE(1, 1);
+                            _SEPlayer.Stop(2);
+                            _SEPlayer.Play(1, 1);
                         }
                         if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoPlay.PlayVideo(0);
-                            _SEPlayer.StopSE(1);
-                            _SEPlayer.PlaySE(2, 1);
+                            _SEPlayer.Stop(1);
+                            _SEPlayer.Play(2, 1);
                         }
                     }
                     else
@@ -333,8 +333,8 @@ public class Type4Manager : MonoBehaviour
                             leverTilted = true;
                             isExecuted[15] = false;
                             videoPlay.PlayVideo(1);
-                            _SEPlayer.StopSE(2);
-                            _SEPlayer.PlaySE(1, 1);
+                            _SEPlayer.Stop(2);
+                            _SEPlayer.Play(1, 1);
                         }
 
 
@@ -343,16 +343,16 @@ public class Type4Manager : MonoBehaviour
                         {
                             leverTilted = true;
                             videoPlay.PlayVideo(1);
-                            _SEPlayer.StopSE(2);
-                            _SEPlayer.PlaySE(1, 1);
+                            _SEPlayer.Stop(2);
+                            _SEPlayer.Play(1, 1);
                         }
                         if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoPlay.PlayVideo(0);
-                            _SEPlayer.StopSE(1);
-                            _SEPlayer.PlaySE(2, 1);
+                            _SEPlayer.Stop(1);
+                            _SEPlayer.Play(2, 1);
                         }
 
                     }
@@ -383,9 +383,9 @@ public class Type4Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.StopSE(3);
-                    _SEPlayer.StopSE(4);
-                    _SEPlayer.PlaySE(5, 1);
+                    _SEPlayer.Stop(3);
+                    _SEPlayer.Stop(4);
+                    _SEPlayer.Play(5, 1);
                     if (craneStatus == 8) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
                 }
                 InputKeyCheck(craneStatus);
@@ -472,7 +472,7 @@ public class Type4Manager : MonoBehaviour
                     for (int i = 0; i < 14; i++)
                         isExecuted[i] = false;
                     armController.ArmLimit(armApertures); //アーム開口度リセット
-                    if (!_SEPlayer._AudioSource[6].isPlaying) _SEPlayer.PlaySE(7, 1);
+                    if (!_SEPlayer._AudioSource[6].isPlaying) _SEPlayer.Play(7, 1);
 
                     creditSystem.ResetPayment();
                     int credit = creditSystem.PlayStart();
@@ -519,9 +519,9 @@ public class Type4Manager : MonoBehaviour
 
     public void GetPrize()
     {
-        _SEPlayer.StopSE(7);
+        _SEPlayer.Stop(7);
         if (!_SEPlayer._AudioSource[6].isPlaying)
-            _SEPlayer.PlaySE(6, 1);
+            _SEPlayer.Play(6, 1);
     }
 
     public void InputKeyCheck(int num)
@@ -542,7 +542,7 @@ public class Type4Manager : MonoBehaviour
                             isExecuted[15] = false;
                         }
                         craneStatus = 2;
-                        _SEPlayer.PlaySE(1, 1);
+                        _SEPlayer.Play(1, 1);
                     }
                     if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonPushed && player2)
                     {
@@ -555,7 +555,7 @@ public class Type4Manager : MonoBehaviour
                             isExecuted[15] = false;
                         }
                         craneStatus = 2;
-                        _SEPlayer.PlaySE(1, 1);
+                        _SEPlayer.Play(1, 1);
                     }
                     break;
                 //投入を無効化
@@ -563,15 +563,15 @@ public class Type4Manager : MonoBehaviour
                     if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed && !player2)
                     {
                         craneStatus = 3;
-                        _SEPlayer.StopSE(1);
-                        _SEPlayer.PlaySE(2, 1);
+                        _SEPlayer.Stop(1);
+                        _SEPlayer.Play(2, 1);
                         buttonPushed = false;
                     }
                     if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonPushed && player2)
                     {
                         craneStatus = 3;
-                        _SEPlayer.StopSE(1);
-                        _SEPlayer.PlaySE(2, 1);
+                        _SEPlayer.Stop(1);
+                        _SEPlayer.Play(2, 1);
                         buttonPushed = false;
                     }
                     break;
@@ -580,28 +580,28 @@ public class Type4Manager : MonoBehaviour
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        _SEPlayer.ForcePlaySE(1);
+                        _SEPlayer.ForcePlay(1);
                     }
                     if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonPushed && player2)
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        _SEPlayer.ForcePlaySE(1);
+                        _SEPlayer.ForcePlay(1);
                     }
                     break;
                 case 4:
                     if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed && !player2)
                     {
                         craneStatus = 5;
-                        _SEPlayer.StopSE(1);
-                        _SEPlayer.ForcePlaySE(2);
+                        _SEPlayer.Stop(1);
+                        _SEPlayer.ForcePlay(2);
                         buttonPushed = false;
                     }
                     if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonPushed && player2)
                     {
                         craneStatus = 5;
-                        _SEPlayer.StopSE(1);
-                        _SEPlayer.ForcePlaySE(2);
+                        _SEPlayer.Stop(1);
+                        _SEPlayer.ForcePlay(2);
                         buttonPushed = false;
                     }
                     break;
@@ -703,11 +703,11 @@ public class Type4Manager : MonoBehaviour
                         craneStatus = 2;
                         creditSystem.ResetPayment();
                         videoPlay.PlayVideo(1);
-                        _SEPlayer.PlaySE(1, 1);
+                        _SEPlayer.Play(1, 1);
                         isExecuted[15] = false;
                     }
                     if (craneStatus == 2 && buttonPushed)
-                        _SEPlayer.PlaySE(1, 1);
+                        _SEPlayer.Play(1, 1);
 
                     break;
                 case 2:
@@ -715,7 +715,7 @@ public class Type4Manager : MonoBehaviour
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        _SEPlayer.PlaySE(1, 1);
+                        _SEPlayer.Play(1, 1);
                     }
                     break;
                 case 3:
@@ -755,11 +755,11 @@ public class Type4Manager : MonoBehaviour
                         craneStatus = 2;
                         creditSystem.ResetPayment();
                         videoPlay.PlayVideo(1);
-                        _SEPlayer.PlaySE(1, 1);
+                        _SEPlayer.Play(1, 1);
                         isExecuted[15] = false;
                     }
                     if (craneStatus == 2 && buttonPushed)
-                        _SEPlayer.PlaySE(1, 1);
+                        _SEPlayer.Play(1, 1);
                     break;
             }
         }
@@ -775,8 +775,8 @@ public class Type4Manager : MonoBehaviour
                     if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
-                        _SEPlayer.StopSE(1);
-                        _SEPlayer.PlaySE(2, 1);
+                        _SEPlayer.Stop(1);
+                        _SEPlayer.Play(2, 1);
                         buttonPushed = false;
                     }
                     break;
@@ -784,8 +784,8 @@ public class Type4Manager : MonoBehaviour
                     if (craneStatus == 4 && buttonPushed)
                     {
                         craneStatus = 5;
-                        _SEPlayer.StopSE(1);
-                        _SEPlayer.PlaySE(2, 1);
+                        _SEPlayer.Stop(1);
+                        _SEPlayer.Play(2, 1);
                         buttonPushed = false;
                     }
                     break;
@@ -793,8 +793,8 @@ public class Type4Manager : MonoBehaviour
                     if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
-                        _SEPlayer.StopSE(1);
-                        _SEPlayer.PlaySE(2, 1);
+                        _SEPlayer.Stop(1);
+                        _SEPlayer.Play(2, 1);
                         buttonPushed = false;
                     }
                     break;

@@ -103,10 +103,10 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.PlaySE(2, 1);
+                    _SEPlayer.Play(2, 1);
                 }
                 DetectKey(craneStatus);
-                _SEPlayer.StopSE(1);
+                _SEPlayer.Stop(1);
             }
             if (craneStatus == 4)
             {
@@ -123,8 +123,8 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.StopSE(1);
-                    _SEPlayer.ForcePlaySE(2);
+                    _SEPlayer.Stop(1);
+                    _SEPlayer.ForcePlay(2);
                     armController.Open();
                     await Task.Delay(1500);
                     if (craneStatus == 5)
@@ -139,7 +139,7 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.PlaySE(3, 1);
+                    _SEPlayer.Play(3, 1);
                 }
                 if (ropeManager.DownFinished() && craneStatus == 6) IncrimentStatus();
             }
@@ -187,8 +187,8 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.StopSE(1);
-                    _SEPlayer.PlaySE(2, 1);
+                    _SEPlayer.Stop(1);
+                    _SEPlayer.Play(2, 1);
                     armController.Limit(100f); // アーム開口度を100に
                     armController.Open();
                     await Task.Delay(2000);

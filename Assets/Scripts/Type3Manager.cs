@@ -100,18 +100,18 @@ public class Type3Manager : MonoBehaviour
             switch (soundType)
             {
                 case 0:
-                    if (!_SEPlayer._AudioSource[5].isPlaying) _BGMPlayer.PlayBGM(0);
+                    if (!_SEPlayer._AudioSource[5].isPlaying) _BGMPlayer.Play(0);
                     break;
                 case 1:
-                    if (!_SEPlayer._AudioSource[12].isPlaying) _BGMPlayer.PlayBGM(1);
+                    if (!_SEPlayer._AudioSource[12].isPlaying) _BGMPlayer.Play(1);
                     break;
                 case 2:
                     if (!_SEPlayer._AudioSource[16].isPlaying && !_SEPlayer._AudioSource[17].isPlaying)
-                        _BGMPlayer.PlayBGM(2);
+                        _BGMPlayer.Play(2);
                     break;
                 case 3:
-                    _BGMPlayer.StopBGM(4);
-                    _BGMPlayer.PlayBGM(3);
+                    _BGMPlayer.Stop(4);
+                    _BGMPlayer.Play(3);
                     break;
             }
         }
@@ -123,17 +123,17 @@ public class Type3Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _BGMPlayer.StopBGM(soundType);
+                    _BGMPlayer.Stop(soundType);
                 }
                 InputKeyCheck(craneStatus);     //右移動ボタン有効化;
                 switch (soundType)
                 {
                     case 1:
                         if (!_SEPlayer._AudioSource[6].isPlaying)
-                            _SEPlayer.PlaySE(7, 2147483647);
+                            _SEPlayer.Play(7, 2147483647);
                         break;
                     case 3:
-                        _BGMPlayer.PlayBGM(4);
+                        _BGMPlayer.Play(4);
                         break;
                 }
 
@@ -141,23 +141,23 @@ public class Type3Manager : MonoBehaviour
 
             if (craneStatus == 2)
             { //右移動中
-                _BGMPlayer.StopBGM(soundType);
+                _BGMPlayer.Stop(soundType);
                 InputKeyCheck(craneStatus);
                 //コイン投入無効化;
                 switch (soundType)
                 {
                     case 0:
-                        _SEPlayer.PlaySE(1, 2147483647);
+                        _SEPlayer.Play(1, 2147483647);
                         break;
                     case 1:
-                        _SEPlayer.StopSE(7);
-                        _SEPlayer.PlaySE(8, 2147483647);
+                        _SEPlayer.Stop(7);
+                        _SEPlayer.Play(8, 2147483647);
                         break;
                     case 2:
-                        _SEPlayer.PlaySE(14, 2147483647);
+                        _SEPlayer.Play(14, 2147483647);
                         break;
                     case 3:
-                        _SEPlayer.PlaySE(18, 2147483647);
+                        _SEPlayer.Play(18, 2147483647);
                         break;
                 }
                 if (craneBox.CheckPos(7))
@@ -182,19 +182,19 @@ public class Type3Manager : MonoBehaviour
                 switch (soundType)
                 {
                     case 0:
-                        _SEPlayer.StopSE(1);
-                        _SEPlayer.PlaySE(2, 2147483647);
+                        _SEPlayer.Stop(1);
+                        _SEPlayer.Play(2, 2147483647);
                         break;
                     case 1:
-                        _SEPlayer.StopSE(8);
-                        _SEPlayer.PlaySE(9, 2147483647);
+                        _SEPlayer.Stop(8);
+                        _SEPlayer.Play(9, 2147483647);
                         break;
                     case 2:
-                        _SEPlayer.PlaySE(14, 2147483647);
+                        _SEPlayer.Play(14, 2147483647);
                         break;
                     case 3:
-                        _SEPlayer.StopSE(18);
-                        _SEPlayer.PlaySE(19, 2147483647);
+                        _SEPlayer.Stop(18);
+                        _SEPlayer.Play(19, 2147483647);
                         break;
                 }
                 if (craneBox.CheckPos(8))
@@ -214,19 +214,19 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.StopSE(2);
-                            _SEPlayer.PlaySE(3, 2147483647);
+                            _SEPlayer.Stop(2);
+                            _SEPlayer.Play(3, 2147483647);
                             break;
                         case 1:
-                            _SEPlayer.StopSE(9);
-                            _SEPlayer.PlaySE(10, 2147483647);
+                            _SEPlayer.Stop(9);
+                            _SEPlayer.Play(10, 2147483647);
                             break;
                         case 2:
-                            _SEPlayer.StopSE(14);
+                            _SEPlayer.Stop(14);
                             break;
                         case 3:
-                            _SEPlayer.StopSE(19);
-                            _SEPlayer.PlaySE(20, 1);
+                            _SEPlayer.Stop(19);
+                            _SEPlayer.Play(20, 1);
                             break;
                     }
                     if (soundType != 2)
@@ -250,10 +250,10 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 2:
-                            _SEPlayer.PlaySE(15, 2);
+                            _SEPlayer.Play(15, 2);
                             break;
                         case 3:
-                            _SEPlayer.PlaySE(21, 2147483647);
+                            _SEPlayer.Play(21, 2147483647);
                             break;
                     }
                     if (downTime > 0 && downTime <= 4600)
@@ -279,7 +279,7 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.StopSE(21);
+                            _SEPlayer.Stop(21);
                             break;
                     }
                     if (probability) armPower = armPowerConfigSuccess[0];
@@ -302,15 +302,15 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.StopSE(3);
-                            _SEPlayer.PlaySE(4, 2147483647);
+                            _SEPlayer.Stop(3);
+                            _SEPlayer.Play(4, 2147483647);
                             break;
                         case 1:
-                            _SEPlayer.StopSE(10);
-                            _SEPlayer.PlaySE(11, 2147483647);
+                            _SEPlayer.Stop(10);
+                            _SEPlayer.Play(11, 2147483647);
                             break;
                         case 3:
-                            _SEPlayer.PlaySE(22, 2147483647);
+                            _SEPlayer.Play(22, 2147483647);
                             break;
                     }
                     ropeManager.ArmUnitUp();
@@ -319,7 +319,7 @@ public class Type3Manager : MonoBehaviour
                 }
                 if (soundType == 2)
                     if (!_SEPlayer._AudioSource[15].isPlaying)
-                        _SEPlayer.PlaySE(14, 2147483647);
+                        _SEPlayer.Play(14, 2147483647);
                 if (probability && armPower > armPowerConfigSuccess[1])
                 {
                     armPower -= 0.5f;
@@ -349,7 +349,7 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.StopSE(22);
+                            _SEPlayer.Stop(22);
                             break;
                     }
                     if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
@@ -368,18 +368,18 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.StopSE(4);
-                            _SEPlayer.PlaySE(1, 2147483647);
+                            _SEPlayer.Stop(4);
+                            _SEPlayer.Play(1, 2147483647);
                             break;
                         case 3:
-                            _SEPlayer.PlaySE(23, 2147483647);
+                            _SEPlayer.Play(23, 2147483647);
                             break;
                     }
 
                 }
                 if (soundType == 2)
                     if (!_SEPlayer._AudioSource[15].isPlaying)
-                        _SEPlayer.PlaySE(14, 2147483647);
+                        _SEPlayer.Play(14, 2147483647);
                 if (!armController.autoPower)
                 {
                     if (support.prizeCount > 0)
@@ -411,8 +411,8 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.StopSE(23);
-                            _SEPlayer.PlaySE(24, 1);
+                            _SEPlayer.Stop(23);
+                            _SEPlayer.Play(24, 1);
                             break;
                     }
                     await Task.Delay(2000);
@@ -433,12 +433,12 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 2:
-                            _SEPlayer.StopSE(14);
+                            _SEPlayer.Stop(14);
                             if (!_SEPlayer._AudioSource[16].isPlaying)
-                                _SEPlayer.PlaySE(17, 1);
+                                _SEPlayer.Play(17, 1);
                             break;
                         case 3:
-                            _SEPlayer.PlaySE(25, 1);
+                            _SEPlayer.Play(25, 1);
                             break;
                     }
                     for (int i = 0; i < 12; i++)
@@ -448,10 +448,10 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.StopSE(1);
+                            _SEPlayer.Stop(1);
                             break;
                         case 1:
-                            _SEPlayer.StopSE(11);
+                            _SEPlayer.Stop(11);
                             break;
                     }
                     if (creditSystem.creditDisplayed > 0)
@@ -488,20 +488,20 @@ public class Type3Manager : MonoBehaviour
         {
             case 0:
                 getSoundNum = 5;
-                _SEPlayer.StopSE(1);
+                _SEPlayer.Stop(1);
                 break;
             case 1:
                 getSoundNum = 12;
-                _SEPlayer.StopSE(11);
+                _SEPlayer.Stop(11);
                 break;
             case 2:
                 getSoundNum = 16;
-                _SEPlayer.StopSE(14);
-                _SEPlayer.StopSE(17);
+                _SEPlayer.Stop(14);
+                _SEPlayer.Stop(17);
                 break;
             case 3:
                 getSoundNum = 26;
-                _SEPlayer.StopSE(25);
+                _SEPlayer.Stop(25);
                 break;
         }
 
@@ -520,7 +520,7 @@ public class Type3Manager : MonoBehaviour
         if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
         {
             if (getSoundNum != -1)
-                _SEPlayer.PlaySE(getSoundNum, 1);
+                _SEPlayer.Play(getSoundNum, 1);
         }
     }
 

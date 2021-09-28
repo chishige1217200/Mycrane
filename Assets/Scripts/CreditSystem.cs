@@ -104,7 +104,7 @@ public class CreditSystem : MonoBehaviour
             Debug.Log("あなたは損または保留をしています"); //いずれでも割り切れない場合
 
         creditDisplayed = creditOld + creditNew; //内部クレジットを更新
-        if (creditSoundNum != -1) _SEPlayer.ForcePlaySE(creditSoundNum); //サウンド再生
+        if (creditSoundNum != -1) _SEPlayer.ForcePlay(creditSoundNum); //サウンド再生
 
         if (creditDisplayed >= 100) Credit.text = "99."; //表示更新
         else Credit.text = creditDisplayed.ToString("D2");
@@ -179,7 +179,7 @@ public class CreditSystem : MonoBehaviour
         //{
         creditOld++;
         creditDisplayed = creditOld + creditNew; //クレジット表示を更新
-        if (creditSoundNum != -1) _SEPlayer.ForcePlaySE(creditSoundNum);
+        if (creditSoundNum != -1) _SEPlayer.ForcePlay(creditSoundNum);
         //}
     }
 

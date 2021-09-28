@@ -19,13 +19,13 @@ public class Type9Selecter : MonoBehaviour
         {
             if (!IsPlaying())
             {
-                _BGMPlayer.StopBGM(3);
-                _BGMPlayer.PlayBGM(soundType);
+                _BGMPlayer.Stop(3);
+                _BGMPlayer.Play(soundType);
             }
             else
             {
-                _BGMPlayer.StopBGM(soundType);
-                _BGMPlayer.PlayBGM(3);
+                _BGMPlayer.Stop(soundType);
+                _BGMPlayer.Play(3);
             }
         }
     }

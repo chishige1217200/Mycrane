@@ -160,13 +160,13 @@ public class Type6Manager : MonoBehaviour
                     || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                     {
                         leverTilted = true;
-                        _SEPlayer.PlaySE(1, 2147483647);
+                        _SEPlayer.Play(1, 2147483647);
                     }
                     if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
                     && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
                     {
                         leverTilted = false;
-                        _SEPlayer.StopSE(1);
+                        _SEPlayer.Stop(1);
                     }
                 }
                 else
@@ -175,13 +175,13 @@ public class Type6Manager : MonoBehaviour
                     || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                     {
                         leverTilted = true;
-                        _SEPlayer.PlaySE(1, 2147483647);
+                        _SEPlayer.Play(1, 2147483647);
                     }
                     if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
                     && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
                     {
                         leverTilted = false;
-                        _SEPlayer.StopSE(1);
+                        _SEPlayer.Stop(1);
                     }
                 }
             }
@@ -202,13 +202,13 @@ public class Type6Manager : MonoBehaviour
                     || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                     {
                         leverTilted = true;
-                        _SEPlayer.PlaySE(1, 2147483647);
+                        _SEPlayer.Play(1, 2147483647);
                     }
                     if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
                     && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
                     {
                         leverTilted = false;
-                        _SEPlayer.StopSE(1);
+                        _SEPlayer.Stop(1);
                     }
                 }
                 else
@@ -217,13 +217,13 @@ public class Type6Manager : MonoBehaviour
                     || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                     {
                         leverTilted = true;
-                        _SEPlayer.PlaySE(1, 2147483647);
+                        _SEPlayer.Play(1, 2147483647);
                     }
                     if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
                     && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
                     {
                         leverTilted = false;
-                        _SEPlayer.StopSE(1);
+                        _SEPlayer.Stop(1);
                     }
                 }
                 if (isExecuted[craneStatus] && timer.limitTimeNow <= 0) craneStatus = 3; // 時間切れになったら下降
@@ -232,7 +232,7 @@ public class Type6Manager : MonoBehaviour
 
             if (craneStatus == 3) //アーム開く
             {
-                _SEPlayer.StopSE(1);
+                _SEPlayer.Stop(1);
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -249,7 +249,7 @@ public class Type6Manager : MonoBehaviour
                         if (!openEnd)
                         {
                             armController.ArmOpen();
-                            _SEPlayer.PlaySE(3, 1);
+                            _SEPlayer.Play(3, 1);
                             await Task.Delay(1200);
                         }
                         if (craneStatus == 3) craneStatus = 4;
@@ -262,7 +262,7 @@ public class Type6Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.PlaySE(4, 2147483647);
+                    _SEPlayer.Play(4, 2147483647);
                     ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
                 }
                 if (downStop) InputKeyCheck(craneStatus); // 下降停止ボタン有効化
@@ -274,11 +274,11 @@ public class Type6Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.StopSE(4);
+                    _SEPlayer.Stop(4);
                     //アーム下降音再生停止;
                     await Task.Delay(1000);
                     //アーム掴む音再生;
-                    _SEPlayer.PlaySE(5, 1);
+                    _SEPlayer.Play(5, 1);
 
                     armController.ArmClose(30f);
 
@@ -306,7 +306,7 @@ public class Type6Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.PlaySE(4, 2147483647);
+                    _SEPlayer.Play(4, 2147483647);
 
                     ropeManager.ArmUnitUp();
                     if (!probability && releaseTiming == 1)
@@ -357,8 +357,8 @@ public class Type6Manager : MonoBehaviour
                 {
                     isExecuted[craneStatus] = true;
 
-                    _SEPlayer.StopSE(4);
-                    _SEPlayer.PlaySE(6, 2147483647);
+                    _SEPlayer.Stop(4);
+                    _SEPlayer.Play(6, 2147483647);
                     if (!probability && releaseTiming == 2)
                     {
                         await Task.Delay(waitTime);
@@ -388,8 +388,8 @@ public class Type6Manager : MonoBehaviour
                 {
                     isExecuted[craneStatus] = true;
 
-                    _SEPlayer.StopSE(6);
-                    _SEPlayer.PlaySE(3, 1);
+                    _SEPlayer.Stop(6);
+                    _SEPlayer.Play(3, 1);
                     armController.ArmLimit(100f); // アーム開口度を100に
                     armController.ArmOpen();
                     await Task.Delay(2500);
@@ -404,7 +404,7 @@ public class Type6Manager : MonoBehaviour
                     isExecuted[craneStatus] = true;
                     if (!openEnd)
                     {
-                        _SEPlayer.PlaySE(5, 1);
+                        _SEPlayer.Play(5, 1);
                         armController.ArmClose(100f);
                         await Task.Delay(2500);
                     }
@@ -472,7 +472,7 @@ public class Type6Manager : MonoBehaviour
         if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
         {
             if (getSoundNum != -1)
-                _SEPlayer.PlaySE(getSoundNum, 1);
+                _SEPlayer.Play(getSoundNum, 1);
         }
     }
 

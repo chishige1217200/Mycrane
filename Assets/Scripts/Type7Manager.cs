@@ -97,7 +97,7 @@ public class Type7Manager : MonoBehaviour
 
         if (craneStatus == 0)
         {
-            _BGMPlayer.PlayBGM(0);
+            _BGMPlayer.Play(0);
             //コイン投入有効化;
             if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) InsertCoin();
         }
@@ -106,7 +106,7 @@ public class Type7Manager : MonoBehaviour
             if (craneStatus == 1)
             {
                 //コイン投入有効化;
-                _BGMPlayer.StopBGM(0);
+                _BGMPlayer.Stop(0);
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -114,10 +114,10 @@ public class Type7Manager : MonoBehaviour
                     isExecuted[12] = false;
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
-                    _SEPlayer.PlaySE(1, 1);
+                    _SEPlayer.Play(1, 1);
                     await Task.Delay(3000);
                     timer.StartTimer();
-                    _BGMPlayer.PlayBGM(1);
+                    _BGMPlayer.Play(1);
                     if (craneStatus == 1) craneStatus = 2;
                 }
 
@@ -131,10 +131,10 @@ public class Type7Manager : MonoBehaviour
                     if (!isExecuted[craneStatus])
                     {
                         isExecuted[craneStatus] = true;
-                        _BGMPlayer.StopBGM(1);
-                        _SEPlayer.PlaySE(2, 1);
+                        _BGMPlayer.Stop(1);
+                        _SEPlayer.Play(2, 1);
                     }
-                    if (!_SEPlayer._AudioSource[2].isPlaying && timer.limitTimeNow <= 9) _SEPlayer.PlaySE(3, 2147483647);
+                    if (!_SEPlayer._AudioSource[2].isPlaying && timer.limitTimeNow <= 9) _SEPlayer.Play(3, 2147483647);
                 }
                 if (timer.limitTimeNow == 0) craneStatus = 7;
                 InputKeyCheck();
@@ -145,8 +145,8 @@ public class Type7Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.StopSE(3);
-                    _SEPlayer.PlaySE(5, 1);
+                    _SEPlayer.Stop(3);
+                    _SEPlayer.Play(5, 1);
                     creditSystem.ResetPayment();
                     creditSystem.PlayStart();
                     ropeManager.ArmUnitDownForceStop();
@@ -289,7 +289,7 @@ public class Type7Manager : MonoBehaviour
                 break;
         }
         if (!_SEPlayer._AudioSource[4].isPlaying)
-            _SEPlayer.PlaySE(4, 1);
+            _SEPlayer.Play(4, 1);
         probability = creditSystem.ProbabilityCheck();
         Debug.Log("Probability:" + probability);
     }
