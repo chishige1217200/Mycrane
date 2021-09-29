@@ -35,11 +35,11 @@ public abstract class CraneManager : MonoBehaviour
         if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
         {
             if (getSoundNum != -1)
-                _SEPlayer.PlaySE(getSoundNum, 1);
+                _SEPlayer.Play(getSoundNum, 1);
         }
     }
 
-    public abstract void DetectKey(int num);
+    protected abstract void DetectKey(int num);
     public abstract void ButtonDown(int num);
     public abstract void InsertCoin();
     public int GetStatus()

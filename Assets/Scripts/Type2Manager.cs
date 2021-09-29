@@ -16,7 +16,9 @@ public class Type2Manager : MonoBehaviour
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool probability; //確率判定用
-    float armPower; //現在のアームパワー
+    [SerializeField] int releaseTiming = 2; //0:設定無し，1:上昇開始後，2:移動開始後
+    [SerializeField] int waitTime = 1; //n秒計測に使用（releaseTiming = 1,2で有効）
+    public float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
@@ -67,6 +69,7 @@ public class Type2Manager : MonoBehaviour
         creditSystem.GetSEPlayer(_SEPlayer);
         timer.limitTime = limitTimeSet;
         timer.GetSEPlayer(_SEPlayer);
+        armController.GetManager();
 
         if (soundType == 0)
             creditSystem.SetCreditSound(0);
@@ -123,8 +126,8 @@ public class Type2Manager : MonoBehaviour
 
         if (craneStatus == 0)
         {
-            _BGMPlayer.StopBGM(1 + 2 * soundType);
-            _BGMPlayer.PlayBGM(2 * soundType);
+            _BGMPlayer.Stop(1 + 2 * soundType);
+            _BGMPlayer.Play(2 * soundType);
             //コイン投入有効化;
         }
         else
@@ -134,8 +137,8 @@ public class Type2Manager : MonoBehaviour
                 if (craneStatus == 1)
                 {
                     //コイン投入有効化;
-                    _BGMPlayer.StopBGM(2 * soundType);
-                    _BGMPlayer.PlayBGM(1 + 2 * soundType);
+                    _BGMPlayer.Stop(2 * soundType);
+                    _BGMPlayer.Play(1 + 2 * soundType);
                     InputKeyCheck(craneStatus);     //右移動ボタン有効化;
                 }
 
@@ -175,8 +178,8 @@ public class Type2Manager : MonoBehaviour
             {
                 if (craneStatus == 1)
                 {
-                    _BGMPlayer.StopBGM(2 * soundType);
-                    _BGMPlayer.PlayBGM(1 + 2 * soundType);
+                    _BGMPlayer.Stop(2 * soundType);
+                    _BGMPlayer.Play(1 + 2 * soundType);
                     //レバー操作有効化;
                     //降下ボタン有効化;
                 }
@@ -201,13 +204,13 @@ public class Type2Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.PlaySE(1, 2147483647);
+                            _SEPlayer.Play(1);
                             break;
                         case 1:
-                            _SEPlayer.PlaySE(8, 2147483647);
+                            _SEPlayer.Play(8);
                             break;
                         case 2:
-                            _SEPlayer.PlaySE(12, 2147483647);
+                            _SEPlayer.Play(12);
                             break;
                     }
                     await Task.Delay(300);
@@ -239,14 +242,14 @@ public class Type2Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.StopSE(1); //アーム下降音再生停止;
-                            _SEPlayer.PlaySE(2, 1); //アーム掴む音再生;
+                            _SEPlayer.Stop(1); //アーム下降音再生停止;
+                            _SEPlayer.Play(2, 1); //アーム掴む音再生;
                             break;
                         case 1:
-                            _SEPlayer.StopSE(8);
+                            _SEPlayer.Stop(8);
                             break;
                         case 2:
-                            _SEPlayer.StopSE(12);
+                            _SEPlayer.Stop(12);
                             break;
                     }
                     if (probability) armPower = armPowerConfigSuccess[0];
@@ -264,10 +267,10 @@ public class Type2Manager : MonoBehaviour
                 switch (soundType)
                 {
                     case 1:
-                        _SEPlayer.PlaySE(9, 2147483647);
+                        _SEPlayer.Play(9);
                         break;
                     case 2:
-                        _SEPlayer.PlaySE(13, 2147483647);
+                        _SEPlayer.Play(13);
                         break;
                 }
 
@@ -275,17 +278,27 @@ public class Type2Manager : MonoBehaviour
                 {
                     isExecuted[craneStatus] = true;
                     ropeManager.ArmUnitUp();
+                    if (!probability && releaseTiming == 1)
+                    {
+                        await Task.Delay(waitTime);
+                        if (craneStatus <= 10 && craneStatus >= 8) armController.Release();
+                    }
                 }
-                if (probability && armPower > armPowerConfigSuccess[1])
+
+                if (releaseTiming == 0)
                 {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
+                    if (probability && armPower > armPowerConfigSuccess[1])
+                    {
+                        armPower -= 0.5f;
+                        armController.MotorPower(armPower);
+                    }
+                    else if (!probability && armPower > armPowerConfig[1])
+                    {
+                        armPower -= 0.5f;
+                        armController.MotorPower(armPower);
+                    }
                 }
-                else if (!probability && armPower > armPowerConfig[1])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
+
                 if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
                 //アーム上昇音再生;
                 //アーム上昇;
@@ -293,23 +306,27 @@ public class Type2Manager : MonoBehaviour
 
             if (craneStatus == 9)
             {
-                if (probability) armPower = armPowerConfigSuccess[1];
-                else armPower = armPowerConfig[1];
-                armController.MotorPower(armPower);
+                if (releaseTiming == 0)
+                {
+                    if (probability) armPower = armPowerConfigSuccess[1];
+                    else armPower = armPowerConfig[1];
+                    armController.MotorPower(armPower);
+                }
+
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.StopSE(2);
-                            _SEPlayer.PlaySE(3, 1); //アーム上昇停止音再生;
+                            _SEPlayer.Stop(2);
+                            _SEPlayer.Play(3, 1); //アーム上昇停止音再生;
                             break;
                         case 1:
-                            _SEPlayer.StopSE(9);
+                            _SEPlayer.Stop(9);
                             break;
                         case 2:
-                            _SEPlayer.StopSE(13);
+                            _SEPlayer.Stop(13);
                             break;
                     }
                     if (craneStatus == 9) craneStatus = 10;
@@ -319,16 +336,23 @@ public class Type2Manager : MonoBehaviour
 
             if (craneStatus == 10)
             {
-                if (probability && armPower > armPowerConfigSuccess[2])
+                if (!isExecuted[craneStatus])
                 {
-                    armPower -= 0.5f;
+                    isExecuted[craneStatus] = true;
+                    if (!probability && releaseTiming == 2)
+                    {
+                        await Task.Delay(waitTime);
+                        if (craneStatus == 10) armController.Release();
+                    }
+                }
+
+                if (releaseTiming == 0)
+                {
+                    if (probability && armPower > armPowerConfigSuccess[2]) armPower -= 0.5f;
+                    else if (!probability && armPower > armPowerConfig[2]) armPower -= 0.5f;
                     armController.MotorPower(armPower);
                 }
-                else if (!probability && armPower > armPowerConfig[2])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
+
                 if (craneBox.CheckPos(1)) craneStatus = 11;
                 //アーム獲得口ポジション移動音再生;
                 //アーム獲得口ポジションへ;
@@ -340,7 +364,7 @@ public class Type2Manager : MonoBehaviour
                 {
                     isExecuted[craneStatus] = true;
                     armController.ArmOpen();
-                    if (soundType == 0) _SEPlayer.PlaySE(4, 1);
+                    if (soundType == 0) _SEPlayer.Play(4, 1);
                     await Task.Delay(1000);
                     craneStatus = 12;
                 }
@@ -429,7 +453,7 @@ public class Type2Manager : MonoBehaviour
         if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
         {
             if (getSoundNum != -1)
-                _SEPlayer.PlaySE(getSoundNum, 1);
+                _SEPlayer.Play(getSoundNum, 1);
         }
     }
 

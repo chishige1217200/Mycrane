@@ -160,10 +160,10 @@ public class Type1Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.PlaySE(1, 2);
+                        _SEPlayer.Play(1, 2);
                         break;
                     case 2:
-                        _SEPlayer.PlaySE(7, 2);
+                        _SEPlayer.Play(7, 2);
                         break;
                 }
 
@@ -187,10 +187,10 @@ public class Type1Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.StopSE(1);
+                        _SEPlayer.Stop(1);
                         break;
                     case 2:
-                        _SEPlayer.StopSE(7);
+                        _SEPlayer.Stop(7);
                         break;
                 } //右移動効果音ループ再生停止;
                   //奥移動ボタン有効化;
@@ -204,10 +204,10 @@ public class Type1Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.PlaySE(1, 2);
+                        _SEPlayer.Play(1, 2);
                         break;
                     case 2:
-                        _SEPlayer.PlaySE(7, 2);
+                        _SEPlayer.Play(7, 2);
                         break;
                 }
                 if (craneBox.CheckPos(8))
@@ -224,10 +224,10 @@ public class Type1Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.StopSE(1);
+                        _SEPlayer.Stop(1);
                         break;
                     case 2:
-                        _SEPlayer.StopSE(7);
+                        _SEPlayer.Stop(7);
                         break;
                 } //奥移動効果音ループ再生停止;
                 if (!isExecuted[craneStatus])
@@ -253,10 +253,10 @@ public class Type1Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.PlaySE(2, 2);
+                        _SEPlayer.Play(2, 2);
                         break;
                     case 2:
-                        _SEPlayer.PlaySE(8, 2);
+                        _SEPlayer.Play(8, 2);
                         break;
                 }
                 if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
@@ -270,10 +270,10 @@ public class Type1Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.StopSE(2);
+                        _SEPlayer.Stop(2);
                         break;
                     case 2:
-                        _SEPlayer.StopSE(8);
+                        _SEPlayer.Stop(8);
                         break;
                 } //アーム下降音再生停止;
                 await Task.Delay(1000);
@@ -283,10 +283,10 @@ public class Type1Manager : MonoBehaviour
                     {
                         case 0:
                         case 1:
-                            _SEPlayer.PlaySE(3, 2);
+                            _SEPlayer.Play(3, 2);
                             break;
                         case 2:
-                            _SEPlayer.PlaySE(9, 2);
+                            _SEPlayer.Play(9, 2);
                             break;
                     }
                 } //アーム掴む音再生;
@@ -312,12 +312,12 @@ public class Type1Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.StopSE(3);
-                        _SEPlayer.PlaySE(4, 2);
+                        _SEPlayer.Stop(3);
+                        _SEPlayer.Play(4, 2);
                         break;
                     case 2:
-                        _SEPlayer.StopSE(9);
-                        _SEPlayer.PlaySE(10, 2);
+                        _SEPlayer.Stop(9);
+                        _SEPlayer.Play(10, 2);
                         break;
                 } //アーム上昇音再生;
                 if (!isExecuted[craneStatus])
@@ -341,10 +341,10 @@ public class Type1Manager : MonoBehaviour
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.StopSE(4);
+                        _SEPlayer.Stop(4);
                         break;
                     case 2:
-                        _SEPlayer.StopSE(10);
+                        _SEPlayer.Stop(10);
                         break;
                 }
                 //アーム上昇停止音再生;
@@ -495,7 +495,7 @@ public class Type1Manager : MonoBehaviour
         if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
         {
             if (getSoundNum != -1)
-                _SEPlayer.PlaySE(getSoundNum, 1);
+                _SEPlayer.Play(getSoundNum, 1);
         }
     }
 

@@ -35,18 +35,23 @@ public class SEPlayer : MonoBehaviour
             _AudioSource[i].pitch = pitch;
     }
 
-    public void PlaySE(int num, int repeatcount)
+    public void Play(int num, int repeatcount)
     {
         _RepeatCount[num] = repeatcount;
     }
 
-    public void StopSE(int num)
+    public void Play(int num)
+    {
+        _RepeatCount[num] = 2147483647;
+    }
+
+    public void Stop(int num)
     {
         _AudioSource[num].Stop();
         _RepeatCount[num] = 0;
     }
 
-    public void ForcePlaySE(int num)
+    public void ForcePlay(int num)
     {
         _AudioSource[num].Stop();
         _RepeatCount[num] = 0;

@@ -35,12 +35,12 @@ public class BGMPlayer : MonoBehaviour
             _AudioSource[i].pitch = pitch;
     }
 
-    public void PlayBGM(int num)
+    public void Play(int num)
     {
         BGMflag[num] = true;
     }
 
-    public void StopBGM(int num)
+    public void Stop(int num)
     {
         BGMflag[num] = false;
         _AudioSource[num].Stop();

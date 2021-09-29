@@ -37,19 +37,19 @@ public class Type5Selecter : MonoBehaviour
             switch (soundType)
             {
                 case 0:
-                    _BGMPlayer.StopBGM(1);
-                    _BGMPlayer.PlayBGM(0);
+                    _BGMPlayer.Stop(1);
+                    _BGMPlayer.Play(0);
                     break;
                 case 1:
-                    _BGMPlayer.StopBGM(3);
-                    _BGMPlayer.PlayBGM(2);
+                    _BGMPlayer.Stop(3);
+                    _BGMPlayer.Play(2);
                     break;
                 case 2:
-                    _BGMPlayer.StopBGM(5);
-                    _BGMPlayer.PlayBGM(4);
+                    _BGMPlayer.Stop(5);
+                    _BGMPlayer.Play(4);
                     break;
                 case 3:
-                    _BGMPlayer.StopBGM(8);
+                    _BGMPlayer.Stop(8);
                     if (!_BGMPlayer._AudioSource[6].isPlaying && !_BGMPlayer._AudioSource[7].isPlaying)
                     {
                         if (nextPlay == 6)
@@ -71,28 +71,28 @@ public class Type5Selecter : MonoBehaviour
             switch (soundType)
             {
                 case 0:
-                    _BGMPlayer.StopBGM(0);
-                    _BGMPlayer.PlayBGM(1);
+                    _BGMPlayer.Stop(0);
+                    _BGMPlayer.Play(1);
                     break;
                 case 1:
-                    _BGMPlayer.StopBGM(2);
-                    _BGMPlayer.PlayBGM(3);
+                    _BGMPlayer.Stop(2);
+                    _BGMPlayer.Play(3);
                     break;
                 case 2:
-                    _BGMPlayer.StopBGM(4);
-                    _BGMPlayer.PlayBGM(5);
+                    _BGMPlayer.Stop(4);
+                    _BGMPlayer.Play(5);
                     break;
                 case 3:
-                    _BGMPlayer.StopBGM(6);
-                    _BGMPlayer.StopBGM(7);
-                    _BGMPlayer.PlayBGM(8);
+                    _BGMPlayer.Stop(6);
+                    _BGMPlayer.Stop(7);
+                    _BGMPlayer.Play(8);
                     break;
             }
             /*if (_BGMPlayer._AudioSource[0].isPlaying) await Task.Delay(500);
             if (!_BGMPlayer._AudioSource[1].isPlaying && (!_SEPlayer[0]._AudioSource[6].isPlaying || !_SEPlayer[1]._AudioSource[6].isPlaying))
             {
-                _BGMPlayer.StopBGM(0);
-                _BGMPlayer.PlayBGM(1);
+                _BGMPlayer.Stop(0);
+                _BGMPlayer.Play(1);
             }*/
         }
     }
