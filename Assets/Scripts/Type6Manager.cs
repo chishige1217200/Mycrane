@@ -148,40 +148,43 @@ public class Type6Manager : MonoBehaviour
         {
             if (craneStatus == 1) //操作待ち
             {
-                if (isExecuted[craneStatus] == false)
+                if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
                     limitTime3d.text = limitTimeSet.ToString("D2");
                     watch.SetActive(true);
                 }
-                if (!player2)
+                if (isExecuted[craneStatus])
                 {
-                    if ((Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
-                    || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
+                    if (!player2)
                     {
-                        leverTilted = true;
-                        _SEPlayer.Play(1);
+                        if ((Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
+                        {
+                            leverTilted = true;
+                            _SEPlayer.Play(1);
+                        }
+                        if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
+                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
+                        {
+                            leverTilted = false;
+                            _SEPlayer.Stop(1);
+                        }
                     }
-                    if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
-                    && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
+                    else
                     {
-                        leverTilted = false;
-                        _SEPlayer.Stop(1);
-                    }
-                }
-                else
-                {
-                    if ((Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
-                    || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
-                    {
-                        leverTilted = true;
-                        _SEPlayer.Play(1);
-                    }
-                    if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
-                    && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
-                    {
-                        leverTilted = false;
-                        _SEPlayer.Stop(1);
+                        if ((Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
+                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
+                        {
+                            leverTilted = true;
+                            _SEPlayer.Play(1);
+                        }
+                        if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
+                        && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
+                        {
+                            leverTilted = false;
+                            _SEPlayer.Stop(1);
+                        }
                     }
                 }
             }
