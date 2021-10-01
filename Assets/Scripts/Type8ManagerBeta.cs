@@ -54,7 +54,7 @@ public class Type8ManagerBeta : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.GetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(_SEPlayer);
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);
@@ -82,16 +82,16 @@ public class Type8ManagerBeta : CraneManager
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
 
-        getPoint.GetManager(3);
+        getPoint.SetManager(3);
 
         await Task.Delay(300);
-        ropeManager.ArmUnitUp();
+        ropeManager.Up();
         while (!ropeManager.UpFinished())
         {
             await Task.Delay(100);
         }
-        if (soundType == 2) armController.ArmOpen();
-        else armController.ArmClose();
+        if (soundType == 2) armController.Open();
+        else armController.Close();
 
         for (int i = 0; i < 12; i++)
             isExecuted[i] = false;
@@ -224,7 +224,7 @@ public class Type8ManagerBeta : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    if (soundType != 2) armController.ArmOpen();
+                    if (soundType != 2) armController.Open();
                     switch (soundType)
                     {
                         case 0:
@@ -248,7 +248,7 @@ public class Type8ManagerBeta : CraneManager
                         if (soundType == 3) await Task.Delay(2000);
                         else await Task.Delay(1000);
                     }
-                    ropeManager.ArmUnitDown();
+                    ropeManager.Down();
                     if (craneStatus == 5) craneStatus = 6;
                 }
                 //奥移動効果音ループ再生停止;
@@ -275,7 +275,7 @@ public class Type8ManagerBeta : CraneManager
                         await Task.Delay(downTime);
                         if (craneStatus == 6)
                         {
-                            ropeManager.ArmUnitDownForceStop();
+                            ropeManager.DownForceStop();
                             craneStatus = 7;
                         }
                     }
@@ -298,8 +298,8 @@ public class Type8ManagerBeta : CraneManager
                     }
                     if (probability) armPower = catchArmpowersuccess;
                     else armPower = catchArmpower;
-                    armController.MotorPower(armPower);
-                    armController.ArmClose();
+                    armController.SetMotorPower(armPower);
+                    armController.Close();
                     await Task.Delay(1000);
                     if (craneStatus == 7) craneStatus = 8;
                 }
@@ -327,7 +327,7 @@ public class Type8ManagerBeta : CraneManager
                             _SEPlayer.Play(22, 2147483647);
                             break;
                     }
-                    ropeManager.ArmUnitUp();
+                    ropeManager.Up();
                     await Task.Delay(1500);
                 }
                 if (soundType == 2)
@@ -336,12 +336,12 @@ public class Type8ManagerBeta : CraneManager
                 if (probability && armPower > upArmpowersuccess)
                 {
                     armPower -= 0.5f;
-                    armController.MotorPower(armPower);
+                    armController.SetMotorPower(armPower);
                 }
                 else if (!probability && armPower > upArmpower)
                 {
                     armPower -= 0.5f;
-                    armController.MotorPower(armPower);
+                    armController.SetMotorPower(armPower);
                 }
                 if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
                 //アーム上昇音再生;
@@ -352,7 +352,7 @@ public class Type8ManagerBeta : CraneManager
             {
                 if (probability) armPower = upArmpowersuccess;
                 else armPower = upArmpower;
-                armController.MotorPower(armPower);
+                armController.SetMotorPower(armPower);
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -393,14 +393,14 @@ public class Type8ManagerBeta : CraneManager
                 if (probability && armPower > backArmpowersuccess)
                 {
                     armPower -= 0.5f;
-                    armController.MotorPower(armPower);
+                    armController.SetMotorPower(armPower);
                 }
                 else if (!probability && armPower > backArmpower)
                 {
                     armPower -= 0.5f;
-                    armController.MotorPower(armPower);
+                    armController.SetMotorPower(armPower);
                 }
-                else armController.MotorPower(100f);
+                else armController.SetMotorPower(100f);
 
                 if (craneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
                 //アーム獲得口ポジションへ;
@@ -411,7 +411,7 @@ public class Type8ManagerBeta : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    armController.ArmOpen();
+                    armController.Open();
                     switch (soundType)
                     {
                         case 3:
@@ -433,7 +433,7 @@ public class Type8ManagerBeta : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    if (soundType != 2) armController.ArmClose();
+                    if (soundType != 2) armController.Close();
                     switch (soundType)
                     {
                         case 2:

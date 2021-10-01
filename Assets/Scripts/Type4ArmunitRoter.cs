@@ -61,7 +61,7 @@ public class Type4ArmunitRoter : MonoBehaviour
         }
     }
 
-    public void GetSEPlayer(SEPlayer s)
+    public void SetSEPlayer(SEPlayer s)
     {
         _SEPlayer = s;
     }

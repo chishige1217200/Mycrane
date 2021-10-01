@@ -25,7 +25,7 @@ public class GetPoint : MonoBehaviour
         if (gb.TryGetComponent(out panel)) panel = gb.GetComponent<PrizePanel>();
     }
 
-    public void GetManager(int num) // 筐体のマネージャー情報取得
+    public void SetManager(int num) // 筐体のマネージャー情報取得
     {
         craneType = num;
         if (craneType == -1) craneManager = transform.parent.parent.gameObject.GetComponent<CraneManager>();

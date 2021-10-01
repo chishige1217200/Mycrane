@@ -71,18 +71,18 @@ public class Type1Manager : MonoBehaviour
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.GetSEPlayer(_SEPlayer);
-        getPoint.GetManager(1);
-        ropeManager.ArmUnitUp();
+        creditSystem.SetSEPlayer(_SEPlayer);
+        getPoint.SetManager(1);
+        ropeManager.Up();
         creditSystem.SetCreditSound(0);
-        creditSystem.GetSEPlayer(_SEPlayer);
-        support.GetManager(1);
-        support.GetRopeManager(ropeManager);
+        creditSystem.SetSEPlayer(_SEPlayer);
+        support.SetManager(1);
+        support.SetRopeManager(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
         for (int i = 0; i < 2; i++)
         {
-            nail[i].GetManager(1);
-            nail[i].GetRopeManager(ropeManager);
+            nail[i].SetManager(1);
+            nail[i].SetRopeManager(ropeManager);
         }
 
         for (int i = 0; i < 15; i++)
@@ -100,7 +100,7 @@ public class Type1Manager : MonoBehaviour
         {
             await Task.Delay(100);
         }
-        armController.ArmLimit(armApertures);
+        armController.SetLimit(armApertures);
 
         if (!player2)
         {
@@ -233,7 +233,7 @@ public class Type1Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    armController.ArmOpen();
+                    armController.Open();
                     await Task.Delay(1000);
                     if (craneStatus == 5) craneStatus = 6;
                 }
@@ -246,7 +246,7 @@ public class Type1Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    if (craneStatus == 6) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
+                    if (craneStatus == 6) ropeManager.Down(); //awaitによる時差実行を防止
                 }
                 InputKeyCheck(craneStatus);
                 switch (soundType)
@@ -296,10 +296,10 @@ public class Type1Manager : MonoBehaviour
                     if (craneStatus == 7)
                         if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
                         {
-                            if (leftCatchArmpower >= rightCatchArmpower) armController.ArmClose(leftCatchArmpower);
-                            else armController.ArmClose(rightCatchArmpower);
+                            if (leftCatchArmpower >= rightCatchArmpower) armController.Close(leftCatchArmpower);
+                            else armController.Close(rightCatchArmpower);
                         }
-                        else armController.ArmClose(30f);
+                        else armController.Close(30f);
                     await Task.Delay(catchTime);
                     if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
                 }
@@ -323,12 +323,12 @@ public class Type1Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    ropeManager.ArmUnitUp();
+                    ropeManager.Up();
                     await Task.Delay(1000);
                     if (craneStatus < 11)
                     {
-                        armController.MotorPower(leftCatchArmpower, 0);
-                        armController.MotorPower(rightCatchArmpower, 1);
+                        armController.SetMotorPower(leftCatchArmpower, 0);
+                        armController.SetMotorPower(rightCatchArmpower, 1);
                     }
                 }
                 if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
@@ -373,8 +373,8 @@ public class Type1Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    armController.ArmLimit(100f); // アーム開口度を100に
-                    armController.ArmOpen();
+                    armController.SetLimit(100f); // アーム開口度を100に
+                    armController.Open();
                     await Task.Delay(2000);
                     if (craneStatus == 11) craneStatus = 12;
                 }
@@ -388,7 +388,7 @@ public class Type1Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    armController.ArmFinalClose();
+                    armController.FinalClose();
                     await Task.Delay(1000);
                     if (craneStatus == 12) craneStatus = 13;
                 }
@@ -413,7 +413,7 @@ public class Type1Manager : MonoBehaviour
                     isExecuted[craneStatus] = true;
                     for (int i = 0; i < 14; i++)
                         isExecuted[i] = false;
-                    armController.ArmLimit(armApertures); //アーム開口度リセット
+                    armController.SetLimit(armApertures); //アーム開口度リセット
 
                     craneBox.goPoint = startPoint;
                     craneBox.goPositionFlag = true;
@@ -574,12 +574,12 @@ public class Type1Manager : MonoBehaviour
                 case 6:
                     if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2 && button3)
                     {
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         craneStatus = 7;
                     }
                     if ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2 && button3)
                     {
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         craneStatus = 7;
                     }
                     break;
@@ -616,7 +616,7 @@ public class Type1Manager : MonoBehaviour
                 case 3:
                     if (craneStatus == 6)
                     {
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         craneStatus = 7;
                     }
                     break;

@@ -24,7 +24,7 @@ public class ArmNail : MonoBehaviour
                     if (_Type1Manager.craneStatus == 6)
                     {
                         Debug.Log("床");
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         _Type1Manager.craneStatus = 7;
                     }
                     break;
@@ -32,7 +32,7 @@ public class ArmNail : MonoBehaviour
                     if (_Type4Manager.craneStatus == 8)
                     {
                         Debug.Log("床");
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         _Type4Manager.craneStatus = 9;
                     }
                     break;
@@ -40,7 +40,7 @@ public class ArmNail : MonoBehaviour
                     if (_Type5Manager.craneStatus == 6)
                     {
                         Debug.Log("床");
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         _Type5Manager.craneStatus = 7;
                     }
                     break;
@@ -48,7 +48,7 @@ public class ArmNail : MonoBehaviour
                     if (_Type6Manager.craneStatus == 4)
                     {
                         Debug.Log("床");
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         _Type6Manager.craneStatus = 5;
                     }
                     break;
@@ -56,7 +56,7 @@ public class ArmNail : MonoBehaviour
         }
     }
 
-    public void GetManager(int num) // 筐体のマネージャー情報取得
+    public void SetManager(int num) // 筐体のマネージャー情報取得
     {
         craneType = num;
         if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
@@ -67,7 +67,7 @@ public class ArmNail : MonoBehaviour
         if (craneType == 6) _Type6Manager = transform.root.gameObject.GetComponent<Type6Selecter>().GetManager(playerNumber);
     }
 
-    public void GetRopeManager(RopeManager r)
+    public void SetRopeManager(RopeManager r)
     {
         ropeManager = r;
     }

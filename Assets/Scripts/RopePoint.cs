@@ -16,8 +16,8 @@ public class RopePoint : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (moveDownFlag) RopeDown();
-        if (moveUpFlag) RopeUp();
+        if (moveDownFlag) Down();
+        if (moveUpFlag) Up();
     }
 
     void OnTriggerEnter(Collider collider)
@@ -75,7 +75,7 @@ public class RopePoint : MonoBehaviour
         }
     }
 
-    void RopeUp()
+    void Up()
     {
         if (upRefusedFlag) moveUpFlag = false;
         if (transform.localPosition.y >= 0.02f) transform.localPosition = new Vector3(0, 0, 0);
@@ -104,7 +104,7 @@ public class RopePoint : MonoBehaviour
         }
     }
 
-    void RopeDown()
+    void Down()
     {
         if (downRefusedFlag) moveDownFlag = false;
         if (rb.isKinematic) transform.localPosition -= new Vector3(0, downSpeed, 0);

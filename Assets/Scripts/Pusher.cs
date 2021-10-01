@@ -22,5 +22,4 @@ public class Pusher : MonoBehaviour
     {
         if (collider.CompareTag("PusherStop")) forward = !forward;
     }
-
 }

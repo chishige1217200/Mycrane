@@ -57,7 +57,7 @@ public class Type8Manager : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.GetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(_SEPlayer);
         timer.limitTime = limitTimeSet;
 
         switch (soundType)
@@ -82,15 +82,15 @@ public class Type8Manager : CraneManager
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
 
-        getPoint.GetManager(-1); // テスト中
+        getPoint.SetManager(-1); // テスト中
 
         await Task.Delay(300);
-        ropeManager.ArmUnitUp();
+        ropeManager.Up();
         while (!ropeManager.UpFinished())
         {
             await Task.Delay(100);
         }
-        armController.ArmOpen();
+        armController.Open();
 
         for (int i = 0; i < 13; i++)
             isExecuted[i] = false;
@@ -238,13 +238,13 @@ public class Type8Manager : CraneManager
                         limitTimedisplayed.text = "99";
                         credit3d.text = "99.";
                     }
-                    ropeManager.ArmUnitDown();
+                    ropeManager.Down();
                     if (downTime > 0 && downTime <= 5000)
                     {
                         await Task.Delay(downTime);
                         if (craneStatus == 4)
                         {
-                            ropeManager.ArmUnitDownForceStop();
+                            ropeManager.DownForceStop();
                             IncrimentStatus();
                         }
                     }
@@ -276,7 +276,7 @@ public class Type8Manager : CraneManager
                             _SEPlayer.Play(10, 1);
                             break;
                     }
-                    armController.ArmClose();
+                    armController.Close();
                     await Task.Delay(1000);
                     if (craneStatus == 5)
                     {
@@ -290,7 +290,7 @@ public class Type8Manager : CraneManager
                             if (armPowerConfig[0] >= 30) armPower = armPowerConfig[0];
                             else armPower = 30f;
                         }
-                        armController.MotorPower(armPower);
+                        armController.SetMotorPower(armPower);
                         IncrimentStatus();
                     }
                 }
@@ -310,7 +310,7 @@ public class Type8Manager : CraneManager
                             _SEPlayer.Play(3, 1);
                             break;
                     }
-                    ropeManager.ArmUnitUp();
+                    ropeManager.Up();
                 }
 
                 if (!_SEPlayer._AudioSource[10].isPlaying)
@@ -327,7 +327,7 @@ public class Type8Manager : CraneManager
                 {
                     if (armPower > armPowerConfig[1]) armPower -= 0.1f;
                 }
-                armController.MotorPower(armPower);
+                armController.SetMotorPower(armPower);
 
                 if (ropeManager.UpFinished() && craneStatus == 6) IncrimentStatus();
             }
@@ -348,7 +348,7 @@ public class Type8Manager : CraneManager
                     }
                     if (probability) armPower = armPowerConfigSuccess[1];
                     else armPower = armPowerConfig[1];
-                    armController.MotorPower(armPower);
+                    armController.SetMotorPower(armPower);
                     IncrimentStatus();
                 }
                 if (!_SEPlayer._AudioSource[10].isPlaying)
@@ -373,7 +373,7 @@ public class Type8Manager : CraneManager
                 {
                     if (armPower > armPowerConfig[2]) armPower -= 0.1f;
                 }
-                armController.MotorPower(armPower);
+                armController.SetMotorPower(armPower);
                 if (craneBox.CheckPos(8)) IncrimentStatus();
             }
 
@@ -398,7 +398,7 @@ public class Type8Manager : CraneManager
                 {
                     if (armPower > armPowerConfig[2]) armPower -= 0.1f;
                 }
-                armController.MotorPower(armPower);
+                armController.SetMotorPower(armPower);
                 if (craneBox.CheckPos(9)) IncrimentStatus();
             }
 
@@ -418,10 +418,10 @@ public class Type8Manager : CraneManager
                             _SEPlayer.Play(8);
                             break;
                     }
-                    ropeManager.ArmUnitDown();
+                    ropeManager.Down();
 
                     await Task.Delay(1000);
-                    ropeManager.ArmUnitDownForceStop();
+                    ropeManager.DownForceStop();
                     IncrimentStatus();
                 }
             }
@@ -431,7 +431,7 @@ public class Type8Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    armController.ArmOpen();
+                    armController.Open();
                     switch (soundType)
                     {
                         case 0:
@@ -462,7 +462,7 @@ public class Type8Manager : CraneManager
                             _SEPlayer.Play(8);
                             break;
                     }
-                    ropeManager.ArmUnitUp();
+                    ropeManager.Up();
                 }
                 if (ropeManager.UpFinished()) IncrimentStatus();
             }
@@ -545,7 +545,7 @@ public class Type8Manager : CraneManager
                     if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && downStop)
                     {
                         Debug.Log("DownStop!");
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         IncrimentStatus();
                     }
                     break;
@@ -597,7 +597,7 @@ public class Type8Manager : CraneManager
                     }
                     else if (craneStatus == 4 && downStop)
                     {
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         IncrimentStatus();
                     }
                     break;

@@ -102,10 +102,10 @@ public class Type6ArmController : MonoBehaviour
             joint[i].limits = limit[i];
     }
 
-    public void GetManager() // 筐体のマネージャー情報取得
+    public void SetManager() // 筐体のマネージャー情報取得
     {
         _Type6Manager = transform.root.gameObject.GetComponent<Type6Selecter>().GetManager(playerNumber);
         support = this.transform.Find("Main").GetComponent<ArmControllerSupport>();
-        support.GetManager(6);
+        support.SetManager(6);
     }
 }

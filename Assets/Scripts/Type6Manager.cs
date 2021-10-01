@@ -81,22 +81,22 @@ public class Type6Manager : MonoBehaviour
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.GetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(_SEPlayer);
         timer.limitTime = limitTimeSet;
-        timer.GetSEPlayer(_SEPlayer);
-        getPoint.GetManager(6);
-        ropeManager.ArmUnitUp();
+        timer.SetSEPlayer(_SEPlayer);
+        getPoint.SetManager(6);
+        ropeManager.Up();
         await Task.Delay(500);
         creditSystem.SetCreditSound(0);
-        creditSystem.GetSEPlayer(_SEPlayer);
-        support.GetManager(6);
-        support.GetRopeManager(ropeManager);
+        creditSystem.SetSEPlayer(_SEPlayer);
+        support.SetManager(6);
+        support.SetRopeManager(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
 
         for (int i = 0; i < 3; i++)
         {
-            nail[i].GetManager(6);
-            nail[i].GetRopeManager(ropeManager);
+            nail[i].SetManager(6);
+            nail[i].SetRopeManager(ropeManager);
         }
 
         for (int i = 0; i < 11; i++)
@@ -109,7 +109,7 @@ public class Type6Manager : MonoBehaviour
             await Task.Delay(100);
         }
 
-        armController.GetManager();
+        armController.SetManager();
         armController.ArmLimit(armApertures);
         if (openEnd) armController.ArmOpen();
         else armController.ArmClose(100f);
@@ -266,7 +266,7 @@ public class Type6Manager : MonoBehaviour
                 {
                     isExecuted[craneStatus] = true;
                     _SEPlayer.Play(4);
-                    ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
+                    ropeManager.Down(); //awaitによる時差実行を防止
                 }
                 if (downStop) InputKeyCheck(craneStatus); // 下降停止ボタン有効化
                 if (ropeManager.DownFinished() && craneStatus == 4) craneStatus = 5;
@@ -311,7 +311,7 @@ public class Type6Manager : MonoBehaviour
                     isExecuted[craneStatus] = true;
                     _SEPlayer.Play(4);
 
-                    ropeManager.ArmUnitUp();
+                    ropeManager.Up();
                     if (!probability && releaseTiming == 1)
                     {
                         await Task.Delay(waitTime);
@@ -494,12 +494,12 @@ public class Type6Manager : MonoBehaviour
                 case 4:
                     if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !player2 && downStop)
                     {
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         craneStatus = 5;
                     }
                     if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && player2 && downStop)
                     {
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         craneStatus = 5;
                     }
                     break;
@@ -578,7 +578,7 @@ public class Type6Manager : MonoBehaviour
                 case 4:
                     if (downStop && craneStatus == 4)
                     {
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         craneStatus = 5;
                     }
                     break;

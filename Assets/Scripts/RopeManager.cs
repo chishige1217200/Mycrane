@@ -22,30 +22,30 @@ public class RopeManager : MonoBehaviour
             else if (ropePointNum == 0 && !ropePoint[0].moveDownFlag)
             {
                 //Debug.Log("Stop!");
-                ArmUnitDownForceStop();
+                DownForceStop();
             }
         }
     }
 
-    public void ArmUnitDown()
+    public void Down()
     {
-        ArmUnitUpForceStop();
+        UpForceStop();
         ropePointNum = ropePoint.Length - 1;
         downCheckFlag = true;
         ropePoint[ropePointNum].moveDownFlag = true;
     }
 
-    public void ArmUnitDownForceStop()
+    public void DownForceStop()
     {
         downCheckFlag = false;
         for (int i = 0; i < ropePoint.Length; i++)
             ropePoint[i].moveDownFlag = false;
     }
 
-    public void ArmUnitUp()
+    public void Up()
     {
         int checker = 0;
-        ArmUnitDownForceStop();
+        DownForceStop();
         for (int i = 0; i < ropePoint.Length; i++)
         {
             if (checker == 0 && !ropePoint[i].rb.isKinematic)
@@ -57,7 +57,7 @@ public class RopeManager : MonoBehaviour
         }
     }
 
-    public void ArmUnitUpForceStop()
+    public void UpForceStop()
     {
         for (int i = 0; i < ropePoint.Length; i++)
             ropePoint[i].moveUpFlag = false;
