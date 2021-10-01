@@ -15,7 +15,7 @@ public class Type7Manager : MonoBehaviour
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     public bool probability; //確率判定用
     [SerializeField] bool autoPower = true;
-    float armPower; //現在のアームパワー
+    public float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
@@ -195,12 +195,16 @@ public class Type7Manager : MonoBehaviour
 
             if (craneStatus == 9)
             {
-                if (probability) armPower = armPowerConfigSuccess[1];
-                else armPower = armPowerConfig[1];
-                armController.MotorPower(armPower);
+                if (!armController.autoPower)
+                {
+                    if (probability) armPower = armPowerConfigSuccess[1];
+                    else armPower = armPowerConfig[1];
+                    armController.MotorPower(armPower);
+                }
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
                     if (craneStatus == 9) craneStatus = 10;
                 }
                 //アーム上昇停止音再生;
@@ -210,15 +214,22 @@ public class Type7Manager : MonoBehaviour
             if (craneStatus == 10)
             {
                 //アーム獲得口ポジション移動音再生;
-                if (probability && armPower > armPowerConfigSuccess[2])
+                if (!armController.autoPower)
                 {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
-                else if (!probability && armPower > armPowerConfig[2])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
+                    if (support.prizeCount > 0)
+                    {
+                        if (probability && armPower > armPowerConfigSuccess[2])
+                        {
+                            armPower -= 0.5f;
+                            armController.MotorPower(armPower);
+                        }
+                        else if (!probability && armPower > armPowerConfig[2])
+                        {
+                            armPower -= 0.5f;
+                            armController.MotorPower(armPower);
+                        }
+                    }
+                    else armController.MotorPower(100f);
                 }
                 if (craneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
                 //アーム獲得口ポジションへ;
