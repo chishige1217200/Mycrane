@@ -49,7 +49,7 @@ public class Type9ArmController : MonoBehaviour
         }
     }
 
-    public void Power(float power, int num)
+    public void SetMotorPower(float power, int num)
     {
         if (power > 50)
         {
@@ -65,7 +65,7 @@ public class Type9ArmController : MonoBehaviour
         }
     }
 
-    public void Limit(float armApertures)
+    public void SetLimit(float armApertures)
     {
         limit[0].min = -armAperturesBase * armApertures / 100;
         limit[1].min = -armAperturesBase * armApertures / 100;

@@ -66,10 +66,10 @@ public class Type2Manager : MonoBehaviour
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.GetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(_SEPlayer);
         timer.limitTime = limitTimeSet;
-        timer.GetSEPlayer(_SEPlayer);
-        armController.GetManager();
+        timer.SetSEPlayer(_SEPlayer);
+        armController.SetManager();
 
         if (soundType == 0)
             creditSystem.SetCreditSound(0);
@@ -86,8 +86,8 @@ public class Type2Manager : MonoBehaviour
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
 
-        getPoint.GetManager(2);
-        ropeManager.ArmUnitUp();
+        getPoint.SetManager(2);
+        ropeManager.Up();
 
         for (int i = 0; i < 12; i++)
             isExecuted[i] = false;
@@ -112,7 +112,7 @@ public class Type2Manager : MonoBehaviour
             await Task.Delay(100);
         }
         craneStatus = -1;
-        armController.ArmOpen();
+        armController.Open();
     }
 
     async void Update()
@@ -227,7 +227,7 @@ public class Type2Manager : MonoBehaviour
                         limitTimedisplayed.text = "99";
                         credit3d.text = "99.";
                     }
-                    if (craneStatus == 6) ropeManager.ArmUnitDown(); //awaitによる時差実行を防止
+                    if (craneStatus == 6) ropeManager.Down(); //awaitによる時差実行を防止
                 }
                 if (craneStatus == 6 && isExecuted[6]) InputKeyCheck(craneStatus); //awaitによる時差実行を防止
                 if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
@@ -255,7 +255,7 @@ public class Type2Manager : MonoBehaviour
                     if (probability) armPower = armPowerConfigSuccess[0];
                     else armPower = armPowerConfig[0];
                     armController.MotorPower(armPower);
-                    armController.ArmClose();
+                    armController.Close();
                     await Task.Delay(1000);
                     if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
                 }
@@ -277,7 +277,7 @@ public class Type2Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    ropeManager.ArmUnitUp();
+                    ropeManager.Up();
                     if (!probability && releaseTiming == 1)
                     {
                         await Task.Delay(waitTime);
@@ -363,7 +363,7 @@ public class Type2Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    armController.ArmOpen();
+                    armController.Open();
                     if (soundType == 0) _SEPlayer.Play(4, 1);
                     await Task.Delay(1000);
                     craneStatus = 12;
@@ -509,7 +509,7 @@ public class Type2Manager : MonoBehaviour
                 case 6:
                     if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)))
                     {
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         craneStatus = 7;
                     }
                     break;
@@ -576,7 +576,7 @@ public class Type2Manager : MonoBehaviour
                 case 3:
                     if (craneStatus == 6)
                     {
-                        ropeManager.ArmUnitDownForceStop();
+                        ropeManager.DownForceStop();
                         craneStatus = 7;
                     }
                     else if (craneStatus == 3)

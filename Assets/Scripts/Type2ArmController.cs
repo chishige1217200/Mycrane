@@ -50,7 +50,7 @@ public class Type2ArmController : MonoBehaviour
         }
     }
 
-    public void ArmOpen()
+    public void Open()
     {
         for (int i = 0; i < 3; i++)
         {
@@ -84,7 +84,7 @@ public class Type2ArmController : MonoBehaviour
         }
     }
 
-    public void ArmClose()
+    public void Close()
     {
         isOpen = false;
         for (int i = 0; i < 3; i++)
@@ -114,7 +114,7 @@ public class Type2ArmController : MonoBehaviour
         }
     }
 
-    public void GetManager() // 筐体のマネージャー情報取得
+    public void SetManager() // 筐体のマネージャー情報取得
     {
         _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
         support = transform.Find("Body").GetComponent<ArmControllerSupport>();

@@ -47,7 +47,7 @@ public class Type8ArmController : MonoBehaviour
         }
     }
 
-    public void ArmOpen()
+    public void Open()
     {
         isOpen = true;
         for (int i = 0; i < 3; i++)
@@ -58,7 +58,7 @@ public class Type8ArmController : MonoBehaviour
         }
     }
 
-    public void ArmClose()
+    public void Close()
     {
         isOpen = false;
         for (int i = 0; i < 3; i++)
@@ -69,7 +69,7 @@ public class Type8ArmController : MonoBehaviour
         }
     }
 
-    public void MotorPower(float power)
+    public void SetMotorPower(float power)
     {
         for (int i = 0; i < 3; i++)
         {

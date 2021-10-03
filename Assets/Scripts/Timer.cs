@@ -13,7 +13,7 @@ public class Timer : MonoBehaviour
     //public bool isCounting = false; //タイマー起動中
     //CreditSystem creditSystem;
     SEPlayer _SEPlayer;
-    public void GetSEPlayer(SEPlayer s)
+    public void SetSEPlayer(SEPlayer s)
     {
         _SEPlayer = s;
     }

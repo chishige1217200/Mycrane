@@ -52,20 +52,20 @@ public class Type9Manager : CraneManager
         roter = temp.GetComponent<CraneUnitRoter>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.GetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(_SEPlayer);
 
         creditSystem.SetCreditSound(0);
         getSoundNum = 4;
 
-        getPoint.GetManager(-1); // テスト中
+        getPoint.SetManager(-1); // テスト中
 
         await Task.Delay(300);
-        ropeManager.ArmUnitUp();
+        ropeManager.Up();
         while (!ropeManager.UpFinished())
         {
             await Task.Delay(100);
         }
-        armController.Limit(armApertures);
+        armController.SetLimit(armApertures);
 
         for (int i = 0; i < 13; i++)
             isExecuted[i] = false;
@@ -129,7 +129,7 @@ public class Type9Manager : CraneManager
                     await Task.Delay(1500);
                     if (craneStatus == 5)
                     {
-                        ropeManager.ArmUnitDown();
+                        ropeManager.Down();
                         IncrimentStatus();
                     }
                 }
@@ -155,7 +155,7 @@ public class Type9Manager : CraneManager
                         else armController.Close(rightCatchArmpower);
                     }
                     else armController.Close(30f);
-                    await Task.Delay(700);
+                    await Task.Delay(800);
                     IncrimentStatus();
                 }
             }
@@ -164,11 +164,11 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    ropeManager.ArmUnitUp();
+                    ropeManager.Up();
                     if (craneStatus < 11)
                     {
-                        armController.Power(leftCatchArmpower, 0);
-                        armController.Power(rightCatchArmpower, 1);
+                        armController.SetMotorPower(leftCatchArmpower, 0);
+                        armController.SetMotorPower(rightCatchArmpower, 1);
                     }
                 }
                 if (ropeManager.UpFinished() && craneStatus == 8) IncrimentStatus();
@@ -189,7 +189,7 @@ public class Type9Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     _SEPlayer.Stop(1);
                     _SEPlayer.Play(2, 1);
-                    armController.Limit(100f); // アーム開口度を100に
+                    armController.SetLimit(100f); // アーム開口度を100に
                     armController.Open();
                     await Task.Delay(2000);
                     if (craneStatus == 11) IncrimentStatus();

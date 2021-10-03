@@ -15,7 +15,7 @@ public class Type7Manager : MonoBehaviour
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     public bool probability; //確率判定用
     [SerializeField] bool autoPower = true;
-    float armPower; //現在のアームパワー
+    public float armPower; //現在のアームパワー
     CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
     SEPlayer _SEPlayer;
@@ -62,19 +62,19 @@ public class Type7Manager : MonoBehaviour
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.GetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(_SEPlayer);
         timer.limitTimeNow = limitTimeSet;
         timer.limitTime = limitTimeSet;
-        support.GetManager(7);
-        support.GetRopeManager(ropeManager);
+        support.SetManager(7);
+        support.SetRopeManager(ropeManager);
         creditSystem.SetCreditSound(0);
-        armController.GetManager(7);
+        armController.SetManager(7);
         armController.autoPower = autoPower;
 
-        getPoint.GetManager(7);
+        getPoint.SetManager(7);
 
         await Task.Delay(300);
-        ropeManager.ArmUnitUp();
+        ropeManager.Up();
         while (!ropeManager.UpFinished())
         {
             await Task.Delay(100);
@@ -149,8 +149,8 @@ public class Type7Manager : MonoBehaviour
                     _SEPlayer.Play(5, 1);
                     creditSystem.ResetPayment();
                     creditSystem.PlayStart();
-                    ropeManager.ArmUnitDownForceStop();
-                    ropeManager.ArmUnitUpForceStop();
+                    ropeManager.DownForceStop();
+                    ropeManager.UpForceStop();
                     leverState = 0;
 
                     if (probability) armPower = armPowerConfigSuccess[0];
@@ -159,7 +159,7 @@ public class Type7Manager : MonoBehaviour
                     if (armState == 1)
                     {
                         armState = 0;
-                        armController.ArmClose();
+                        armController.Close();
                     }
                     await Task.Delay(1000);
                     if (craneStatus == 7) craneStatus = 8;
@@ -174,7 +174,7 @@ public class Type7Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    ropeManager.ArmUnitUp();
+                    ropeManager.Up();
                     await Task.Delay(1500);
                     if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
                 }
@@ -195,12 +195,16 @@ public class Type7Manager : MonoBehaviour
 
             if (craneStatus == 9)
             {
-                if (probability) armPower = armPowerConfigSuccess[1];
-                else armPower = armPowerConfig[1];
-                armController.MotorPower(armPower);
+                if (!armController.autoPower)
+                {
+                    if (probability) armPower = armPowerConfigSuccess[1];
+                    else armPower = armPowerConfig[1];
+                    armController.MotorPower(armPower);
+                }
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
                     if (craneStatus == 9) craneStatus = 10;
                 }
                 //アーム上昇停止音再生;
@@ -210,15 +214,22 @@ public class Type7Manager : MonoBehaviour
             if (craneStatus == 10)
             {
                 //アーム獲得口ポジション移動音再生;
-                if (probability && armPower > armPowerConfigSuccess[2])
+                if (!armController.autoPower)
                 {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
-                else if (!probability && armPower > armPowerConfig[2])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
+                    if (support.prizeCount > 0)
+                    {
+                        if (probability && armPower > armPowerConfigSuccess[2])
+                        {
+                            armPower -= 0.5f;
+                            armController.MotorPower(armPower);
+                        }
+                        else if (!probability && armPower > armPowerConfig[2])
+                        {
+                            armPower -= 0.5f;
+                            armController.MotorPower(armPower);
+                        }
+                    }
+                    else armController.MotorPower(100f);
                 }
                 if (craneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
                 //アーム獲得口ポジションへ;
@@ -229,7 +240,7 @@ public class Type7Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    armController.ArmOpen();
+                    armController.Open();
                     await Task.Delay(2000);
                     if (craneStatus == 11) craneStatus = 12;
                 }
@@ -244,7 +255,7 @@ public class Type7Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    armController.ArmClose();
+                    armController.Close();
 
                     for (int i = 0; i < 12; i++)
                         isExecuted[i] = false;
@@ -311,21 +322,21 @@ public class Type7Manager : MonoBehaviour
             {
                 Debug.Log("Up");
                 leverState = 2;
-                ropeManager.ArmUnitUp();
+                ropeManager.Up();
             }
             if ((Input.GetKey(KeyCode.K) || lever[1].forwardFlag) && leverState != 1 && !support.isShieldcollis)
             {
                 Debug.Log("Down");
                 leverState = 1;
-                ropeManager.ArmUnitDown();
+                ropeManager.Down();
             }
             if (!Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K) && !lever[1].backFlag && !lever[1].forwardFlag)
             {
                 leverState = 0;
-                ropeManager.ArmUnitUpForceStop();
-                ropeManager.ArmUnitDownForceStop();
+                ropeManager.UpForceStop();
+                ropeManager.DownForceStop();
             }
-            if (support.isShieldcollis) ropeManager.ArmUnitDownForceStop();
+            if (support.isShieldcollis) ropeManager.DownForceStop();
         }
     }
 
@@ -336,12 +347,12 @@ public class Type7Manager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.O) && armState == 0)
             {
                 armState = 1;
-                armController.ArmOpen();
+                armController.Open();
             }
             if (Input.GetKeyDown(KeyCode.L) && armState == 1)
             {
                 armState = 0;
-                armController.ArmClose();
+                armController.Close();
             }
         }
     }
@@ -355,12 +366,12 @@ public class Type7Manager : MonoBehaviour
                 if (num == 0 && armState == 0)
                 {
                     armState = 1;
-                    armController.ArmOpen();
+                    armController.Open();
                 }
                 if (num == 1 && armState == 1)
                 {
                     armState = 0;
-                    armController.ArmClose();
+                    armController.Close();
                 }
             }
         }

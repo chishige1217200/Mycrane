@@ -188,7 +188,7 @@ public class CreditSystem : MonoBehaviour
         creditSoundNum = num; //クレジット投入効果音番号登録
     }
 
-    public void GetSEPlayer(SEPlayer s)
+    public void SetSEPlayer(SEPlayer s)
     {
         _SEPlayer = s;
     }

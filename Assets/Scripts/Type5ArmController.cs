@@ -27,7 +27,7 @@ public class Type5ArmController : MonoBehaviour
         }
     }
 
-    public void ArmOpen()
+    public void Open()
     {
         for (int i = 0; i < 2; i++)
         {
@@ -49,7 +49,7 @@ public class Type5ArmController : MonoBehaviour
         }
     }*/
 
-    public void ArmClose(float power)
+    public void Close(float power)
     {
         for (int i = 0; i < 2; i++)
         {
@@ -60,7 +60,7 @@ public class Type5ArmController : MonoBehaviour
         }
     }
 
-    public void MotorPower(float power, int num)
+    public void SetMotorPower(float power, int num)
     {
         if (power > 50)
         {
@@ -76,7 +76,7 @@ public class Type5ArmController : MonoBehaviour
         }
     }
 
-    public void ArmLimit(float armApertures)
+    public void SetLimit(float armApertures)
     {
         limit[0].min = -armAperturesBase * armApertures / 100;
         limit[1].min = -armAperturesBase * armApertures / 100;
