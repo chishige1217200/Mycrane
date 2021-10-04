@@ -3,58 +3,57 @@ using UnityEngine;
 
 public class SEPlayer : MonoBehaviour
 {
-    public AudioSource[] _AudioSource; //オーディオ情報の格納
-    //public int _AudioIndex; //オーディオ数
-    private int[] _RepeatCount; //リピート再生回数
+    public AudioSource[] audioSource; //オーディオ情報の格納
+    private int[] repeatCount; //リピート再生回数
 
     void Start()
     {
-        _AudioSource = this.transform.GetComponents<AudioSource>();
-        _RepeatCount = new int[_AudioSource.Length];
-        for (int i = 0; i < _AudioSource.Length; i++)
+        audioSource = this.transform.GetComponents<AudioSource>();
+        repeatCount = new int[audioSource.Length];
+        for (int i = 0; i < audioSource.Length; i++)
         {
-            _RepeatCount[i] = 0; //すべてのリピート再生回数を0にする
+            repeatCount[i] = 0; //すべてのリピート再生回数を0にする
         }
     }
 
     void Update()
     {
-        for (int i = 0; i < _AudioSource.Length; i++)
+        for (int i = 0; i < audioSource.Length; i++)
         {
-            if (_RepeatCount[i] > 0 && _AudioSource[i].isPlaying == false)
+            if (repeatCount[i] > 0 && !audioSource[i].isPlaying)
             {
-                _AudioSource[i].PlayOneShot(_AudioSource[i].clip);
-                _RepeatCount[i]--;
+                audioSource[i].PlayOneShot(audioSource[i].clip);
+                repeatCount[i]--;
             }
         }
     }
 
     public void SetAudioPitch(float pitch)
     {
-        for (int i = 0; i < _AudioSource.Length; i++)
-            _AudioSource[i].pitch = pitch;
+        for (int i = 0; i < audioSource.Length; i++)
+            audioSource[i].pitch = pitch;
     }
 
     public void Play(int num, int repeatcount)
     {
-        _RepeatCount[num] = repeatcount;
+        repeatCount[num] = repeatcount;
     }
 
     public void Play(int num)
     {
-        _RepeatCount[num] = 2147483647;
+        repeatCount[num] = 2147483647;
     }
 
     public void Stop(int num)
     {
-        _AudioSource[num].Stop();
-        _RepeatCount[num] = 0;
+        audioSource[num].Stop();
+        repeatCount[num] = 0;
     }
 
     public void ForcePlay(int num)
     {
-        _AudioSource[num].Stop();
-        _RepeatCount[num] = 0;
-        _AudioSource[num].Play();
+        audioSource[num].Stop();
+        repeatCount[num] = 0;
+        audioSource[num].Play();
     }
 }

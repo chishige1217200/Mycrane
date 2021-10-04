@@ -24,12 +24,12 @@ public class Type9Manager : CraneManager
         Transform temp;
 
         craneStatus = -2;
-
+        craneType = 9;
         // 様々なコンポーネントの取得
         host = transform.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        _SEPlayer = transform.Find("SE").GetComponent<SEPlayer>();
+        //sp = transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = transform.Find("CraneUnit").transform;
 
@@ -52,12 +52,12 @@ public class Type9Manager : CraneManager
         roter = temp.GetComponent<CraneUnitRoter>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
 
         creditSystem.SetCreditSound(0);
         getSoundNum = 4;
 
-        getPoint.SetManager(-1); // テスト中
+        getPoint.SetManager(this); // テスト中
 
         await Task.Delay(300);
         ropeManager.Up();
@@ -70,7 +70,7 @@ public class Type9Manager : CraneManager
         for (int i = 0; i < 13; i++)
             isExecuted[i] = false;
 
-        craneStatus = -1;
+        IncrimentStatus();
     }
 
     async void Update()
@@ -81,8 +81,7 @@ public class Type9Manager : CraneManager
 
         if (craneStatus == -1)
             if (roter.CheckPos(2)) IncrimentStatus();
-        if (craneStatus == 0) ;
-        else
+        if (craneStatus > 0)
         {
             if (craneStatus == 1)
             {
@@ -91,7 +90,7 @@ public class Type9Manager : CraneManager
             if (craneStatus == 2)
             {
                 DetectKey(craneStatus);
-                _SEPlayer.Play(1);
+                sp.Play(1);
                 if (roter.CheckPos(1))
                 {
                     buttonPushed = false;
@@ -103,15 +102,15 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Play(2, 1);
+                    sp.Play(2, 1);
                 }
                 DetectKey(craneStatus);
-                _SEPlayer.Stop(1);
+                sp.Stop(1);
             }
             if (craneStatus == 4)
             {
                 DetectKey(craneStatus);
-                _SEPlayer.Play(1);
+                sp.Play(1);
                 if (craneBox.CheckPos(8))
                 {
                     buttonPushed = false;
@@ -123,8 +122,8 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Stop(1);
-                    _SEPlayer.ForcePlay(2);
+                    sp.Stop(1);
+                    sp.ForcePlay(2);
                     armController.Open();
                     await Task.Delay(1500);
                     if (craneStatus == 5)
@@ -139,7 +138,7 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Play(3, 1);
+                    sp.Play(3, 1);
                 }
                 if (ropeManager.DownFinished() && craneStatus == 6) IncrimentStatus();
             }
@@ -179,7 +178,7 @@ public class Type9Manager : CraneManager
             }
             if (craneStatus == 10) //帰還中
             {
-                _SEPlayer.Play(1);
+                sp.Play(1);
                 if (roter.CheckPos(2) && craneBox.CheckPos(6)) IncrimentStatus();
             }
             if (craneStatus == 11) //アーム開く
@@ -187,8 +186,8 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Stop(1);
-                    _SEPlayer.Play(2, 1);
+                    sp.Stop(1);
+                    sp.Play(2, 1);
                     armController.SetLimit(100f); // アーム開口度を100に
                     armController.Open();
                     await Task.Delay(2000);
@@ -215,8 +214,7 @@ public class Type9Manager : CraneManager
 
     void FixedUpdate()
     {
-        if (craneStatus == 0) ;
-        else
+        if (craneStatus != 0)
         {
             if (craneStatus == -1 || craneStatus == 10)
             {
@@ -246,14 +244,14 @@ public class Type9Manager : CraneManager
                             else credit3d.text = "99.";
                             isExecuted[12] = false;
                         }
-                        craneStatus = 2;
+                        IncrimentStatus();
                     }
                     break;
                 //投入を無効化
                 case 2:
                     if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed)
                     {
-                        craneStatus = 3;
+                        IncrimentStatus();
                         buttonPushed = false;
                     }
                     break;
@@ -261,13 +259,13 @@ public class Type9Manager : CraneManager
                     if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed)
                     {
                         buttonPushed = true;
-                        craneStatus = 4;
+                        IncrimentStatus();
                     }
                     break;
                 case 4:
                     if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed)
                     {
-                        craneStatus = 5;
+                        IncrimentStatus();
                         buttonPushed = false;
                     }
                     break;
@@ -285,7 +283,7 @@ public class Type9Manager : CraneManager
                     if (craneStatus == 1 && !buttonPushed)
                     {
                         buttonPushed = true;
-                        craneStatus = 2;
+                        IncrimentStatus();
                         creditSystem.ResetPayment();
                         int credit = creditSystem.PlayStart();
                         if (credit < 100) credit3d.text = credit.ToString();
@@ -297,7 +295,7 @@ public class Type9Manager : CraneManager
                     if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
                     {
                         buttonPushed = true;
-                        craneStatus = 4;
+                        IncrimentStatus();
                     }
                     break;
             }
@@ -313,14 +311,14 @@ public class Type9Manager : CraneManager
                 case 1:
                     if (craneStatus == 2 && buttonPushed)
                     {
-                        craneStatus = 3;
+                        IncrimentStatus();
                         buttonPushed = false;
                     }
                     break;
                 case 2:
                     if (craneStatus == 4 && buttonPushed)
                     {
-                        craneStatus = 5;
+                        IncrimentStatus();
                         buttonPushed = false;
                     }
                     break;
@@ -335,7 +333,7 @@ public class Type9Manager : CraneManager
             int credit = creditSystem.Pay(100);
             if (credit < 100) credit3d.text = credit.ToString();
             else credit3d.text = "99.";
-            if (credit > 0 && craneStatus == 0) craneStatus = 1;
+            if (credit > 0 && craneStatus == 0) IncrimentStatus();
         }
     }
 }

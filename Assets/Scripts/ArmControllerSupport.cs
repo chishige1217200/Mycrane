@@ -5,17 +5,9 @@ using UnityEngine;
 
 public class ArmControllerSupport : MonoBehaviour
 {
-    Type1Manager _Type1Manager;
-    Type2Manager _Type2Manager;
-    Type3Manager _Type3Manager;
-    Type4Manager _Type4Manager;
-    Type5Manager _Type5Manager;
-    Type6Manager _Type6Manager;
-    Type7Manager _Type7Manager;
     Type3ArmController _Type3ArmController;
-    [SerializeField] int playerNumber = 1;
+    CraneManager craneManager;
     RopeManager ropeManager;
-    int craneType = -1;
     public int pushTime = 0;
     public int prizeCount = 0; // プライズがアームにいくつ検知されているか
     public bool isShieldcollis = false; // アームがShieldに衝突しているかどうか
@@ -24,17 +16,17 @@ public class ArmControllerSupport : MonoBehaviour
     {
         if (collider.tag == "ReleaseCheck")
         {
-            switch (craneType)
+            switch (craneManager.GetCType())
             {
                 case 3:
-                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeCount > 0)
+                    if (!craneManager.GetProbability() && craneManager.GetStatus() >= 8 && prizeCount > 0)
                     {
                         Debug.Log("Released.");
                         _Type3ArmController.Release();
                     }
                     break;
                 case 7:
-                    if (!_Type7Manager.probability && prizeCount > 0)
+                    if (!craneManager.GetProbability() && prizeCount > 0)
                     {
                         Debug.Log("Released.");
                         _Type3ArmController.Release();
@@ -44,38 +36,31 @@ public class ArmControllerSupport : MonoBehaviour
         }
         if (collider.tag == "DownLimit")
         {
-            switch (craneType)
+            switch (craneManager.GetCType())
             {
                 case 1:
-                    if (_Type1Manager.craneStatus == 6)
+                case 5:
+                    if (craneManager.GetStatus() == 6)
                     {
                         Debug.Log("下降制限に接触");
                         ropeManager.DownForceStop();
-                        _Type1Manager.craneStatus = 7;
+                        craneManager.IncrimentStatus();
                     }
                     break;
                 case 4:
-                    if (_Type4Manager.craneStatus == 8)
+                    if (craneManager.GetStatus() == 8)
                     {
                         Debug.Log("下降制限に接触");
                         ropeManager.DownForceStop();
-                        _Type4Manager.craneStatus = 9;
-                    }
-                    break;
-                case 5:
-                    if (_Type5Manager.craneStatus == 6)
-                    {
-                        Debug.Log("下降制限に接触");
-                        ropeManager.DownForceStop();
-                        _Type5Manager.craneStatus = 7;
+                        craneManager.IncrimentStatus();
                     }
                     break;
                 case 6:
-                    if (_Type6Manager.craneStatus == 4)
+                    if (craneManager.GetStatus() == 4)
                     {
                         Debug.Log("下降制限に接触");
                         ropeManager.DownForceStop();
-                        _Type6Manager.craneStatus = 5;
+                        craneManager.IncrimentStatus();
                     }
                     break;
             }
@@ -84,28 +69,35 @@ public class ArmControllerSupport : MonoBehaviour
         {
             Debug.Log("prize inTrigger");
             prizeCount++;
-            switch (craneType)
+            switch (craneManager.GetCType())
             {
                 case 3:
-                    if (_Type3Manager.craneStatus == 6)
+                    if (craneManager.GetStatus() == 6)
                     {
                         await Task.Delay(700);
-                        ropeManager.DownForceStop();
-                        _Type3Manager.craneStatus = 7;
+                        if (craneManager.GetStatus() == 6)
+                        {
+                            ropeManager.DownForceStop();
+                            craneManager.IncrimentStatus();
+                        }
+
                     }
                     break;
             }
         }
         if (collider.tag == "Shield")
         {
-            switch (craneType)
+            switch (craneManager.GetCType())
             {
                 case 3:
-                    if (_Type3Manager.craneStatus == 6)
+                    if (craneManager.GetStatus() == 6)
                     {
                         await Task.Delay(1000);
-                        ropeManager.DownForceStop();
-                        _Type3Manager.craneStatus = 7;
+                        if (craneManager.GetStatus() == 6)
+                        {
+                            ropeManager.DownForceStop();
+                            craneManager.IncrimentStatus();
+                        }
                     }
                     break;
             }
@@ -115,20 +107,13 @@ public class ArmControllerSupport : MonoBehaviour
 
     void OnTriggerStay(Collider collider)
     {
-        /*if (collider.tag == "prize")
-            prizeFlag = true;*/
         if (collider.tag == "ReleaseCheck")
         {
-            switch (craneType)
+            switch (craneManager.GetCType())
             {
                 case 3:
-                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeCount > 0)
-                    {
-                        _Type3ArmController.Release();
-                    }
-                    break;
                 case 7:
-                    if (!_Type7Manager.probability && _Type7Manager.craneStatus >= 8 && prizeCount > 0)
+                    if (!craneManager.GetProbability() && craneManager.GetStatus() >= 8 && prizeCount > 0)
                     {
                         _Type3ArmController.Release();
                     }
@@ -156,59 +141,42 @@ public class ArmControllerSupport : MonoBehaviour
         {
             Debug.Log("景品に接触");
             await Task.Delay(pushTime); //押し込みパワーの調整
-            switch (craneType)
+            switch (craneManager.GetCType())
             {
 
                 case 1:
-                    if (_Type1Manager.craneStatus == 6)
+                case 5:
+                    if (craneManager.GetStatus() == 6)
                     {
                         ropeManager.DownForceStop();
-                        _Type1Manager.craneStatus = 7;
+                        craneManager.IncrimentStatus();
                     }
                     break;
                 case 4:
-                    if (_Type4Manager.craneStatus == 8)
+                    if (craneManager.GetStatus() == 8)
                     {
                         ropeManager.DownForceStop();
-                        _Type4Manager.craneStatus = 9;
-                    }
-                    break;
-                case 5:
-                    if (_Type5Manager.craneStatus == 6)
-                    {
-                        ropeManager.DownForceStop();
-                        _Type5Manager.craneStatus = 7;
+                        craneManager.IncrimentStatus();
                     }
                     break;
                 case 6:
-                    if (_Type6Manager.craneStatus == 4)
+                    if (craneManager.GetStatus() == 4)
                     {
                         ropeManager.DownForceStop();
-                        _Type6Manager.craneStatus = 5;
+                        craneManager.IncrimentStatus();
                     }
                     break;
             }
         }
     }
 
-    public void SetManager(int num) // 筐体のマネージャー情報取得
+    public void SetManager(CraneManager c)
     {
-        craneType = num;
-        if (craneType == 1) _Type1Manager = transform.root.gameObject.GetComponent<Type1Selecter>().GetManager(playerNumber);
-        if (craneType == 2) _Type2Manager = transform.root.gameObject.GetComponent<Type2Manager>();
-        if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
-        if (craneType == 4) _Type4Manager = transform.root.gameObject.GetComponent<Type4Selecter>().GetManager(playerNumber);
-        if (craneType == 5) _Type5Manager = transform.root.gameObject.GetComponent<Type5Selecter>().GetManager(playerNumber);
-        if (craneType == 6) _Type6Manager = transform.root.gameObject.GetComponent<Type6Selecter>().GetManager(playerNumber);
-        if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
+        craneManager = c;
     }
 
     public void SetArmController(int num)
     {
-        /*if (num == 1)
-            _Type1Manager = transform.parent.gameObject.GetComponent<Type1Manager>();
-        if (num == 2)
-            _Type2Manager = transform.parent.gameObject.GetComponent<Type2Manager>();*/
         if (num == 3 || num == 7)
             _Type3ArmController = transform.parent.parent.gameObject.GetComponent<Type3ArmController>();
     }

@@ -2,9 +2,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Type3Manager : MonoBehaviour
+public class Type3Manager : CraneManager
 {
-    public int craneStatus = -2; //-2:初期化動作，0:待機状態
     [SerializeField] int[] priceSet = new int[2];
     [SerializeField] int[] timesSet = new int[2];
     [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
@@ -13,33 +12,30 @@ public class Type3Manager : MonoBehaviour
     [SerializeField] float audioPitch = 1f; //サウンドのピッチ
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
-    public bool probability; //確率判定用
     [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
     [SerializeField] bool autoPower = true;
     public float armPower; //現在のアームパワー
-    CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
-    BGMPlayer _BGMPlayer;
-    SEPlayer _SEPlayer;
+    BGMPlayer bp;
     Type3ArmController armController;
-    CraneBox craneBox;
-    GetPoint getPoint;
     RopeManager ropeManager;
     ArmControllerSupport support;
-    MachineHost host;
-    GameObject canvas;
     [SerializeField] TextMesh credit3d;
 
     async void Start()
     {
         Transform temp;
+
+        craneStatus = -2;
+        craneType = 3;
+
         // 様々なコンポーネントの取得
-        host = this.transform.Find("CP").GetComponent<MachineHost>();
-        canvas = this.transform.Find("Canvas").gameObject;
-        creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
-        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
-        temp = this.transform.Find("CraneUnit").transform;
+        host = transform.Find("CP").GetComponent<MachineHost>();
+        canvas = transform.Find("Canvas").gameObject;
+        creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        bp = transform.Find("BGM").GetComponent<BGMPlayer>();
+        //sp = transform.Find("SE").GetComponent<SEPlayer>();
+        getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
         creditSystem.rateSet[0, 0] = priceSet[0];
@@ -48,7 +44,7 @@ public class Type3Manager : MonoBehaviour
         creditSystem.rateSet[1, 1] = timesSet[1];
 
         // ロープとアームコントローラに関する処理
-        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
         armController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
         support = temp.Find("ArmUnit").Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
 
@@ -56,19 +52,19 @@ public class Type3Manager : MonoBehaviour
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.SetSEPlayer(_SEPlayer);
-        support.SetManager(3);
+        creditSystem.SetSEPlayer(sp);
+        support.SetManager(this);
         support.SetRopeManager(ropeManager);
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);
         if (soundType == 3) creditSystem.SetCreditSound(-1);
-        _BGMPlayer.SetAudioPitch(audioPitch);
-        _SEPlayer.SetAudioPitch(audioPitch);
+        bp.SetAudioPitch(audioPitch);
+        sp.SetAudioPitch(audioPitch);
         armController.SetManager(3);
         armController.autoPower = autoPower;
 
-        getPoint.SetManager(3);
+        getPoint.SetManager(this);
 
         await Task.Delay(300);
         ropeManager.Up();
@@ -100,18 +96,18 @@ public class Type3Manager : MonoBehaviour
             switch (soundType)
             {
                 case 0:
-                    if (!_SEPlayer._AudioSource[5].isPlaying) _BGMPlayer.Play(0);
+                    if (!sp.audioSource[5].isPlaying) bp.Play(0);
                     break;
                 case 1:
-                    if (!_SEPlayer._AudioSource[12].isPlaying) _BGMPlayer.Play(1);
+                    if (!sp.audioSource[12].isPlaying) bp.Play(1);
                     break;
                 case 2:
-                    if (!_SEPlayer._AudioSource[16].isPlaying && !_SEPlayer._AudioSource[17].isPlaying)
-                        _BGMPlayer.Play(2);
+                    if (!sp.audioSource[16].isPlaying && !sp.audioSource[17].isPlaying)
+                        bp.Play(2);
                     break;
                 case 3:
-                    _BGMPlayer.Stop(4);
-                    _BGMPlayer.Play(3);
+                    bp.Stop(4);
+                    bp.Play(3);
                     break;
             }
         }
@@ -123,17 +119,17 @@ public class Type3Manager : MonoBehaviour
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _BGMPlayer.Stop(soundType);
+                    bp.Stop(soundType);
                 }
-                InputKeyCheck(craneStatus);     //右移動ボタン有効化;
+                DetectKey(craneStatus);     //右移動ボタン有効化;
                 switch (soundType)
                 {
                     case 1:
-                        if (!_SEPlayer._AudioSource[6].isPlaying)
-                            _SEPlayer.Play(7);
+                        if (!sp.audioSource[6].isPlaying)
+                            sp.Play(7);
                         break;
                     case 3:
-                        _BGMPlayer.Play(4);
+                        bp.Play(4);
                         break;
                 }
 
@@ -141,23 +137,23 @@ public class Type3Manager : MonoBehaviour
 
             if (craneStatus == 2)
             { //右移動中
-                _BGMPlayer.Stop(soundType);
-                InputKeyCheck(craneStatus);
+                bp.Stop(soundType);
+                DetectKey(craneStatus);
                 //コイン投入無効化;
                 switch (soundType)
                 {
                     case 0:
-                        _SEPlayer.Play(1);
+                        sp.Play(1);
                         break;
                     case 1:
-                        _SEPlayer.Stop(7);
-                        _SEPlayer.Play(8);
+                        sp.Stop(7);
+                        sp.Play(8);
                         break;
                     case 2:
-                        _SEPlayer.Play(14);
+                        sp.Play(14);
                         break;
                     case 3:
-                        _SEPlayer.Play(18);
+                        sp.Play(18);
                         break;
                 }
                 if (craneBox.CheckPos(7))
@@ -171,30 +167,30 @@ public class Type3Manager : MonoBehaviour
 
             if (craneStatus == 3)
             {
-                InputKeyCheck(craneStatus);         //奥移動ボタン有効化;
+                DetectKey(craneStatus);         //奥移動ボタン有効化;
                 //右移動効果音ループ再生停止;
             }
 
             if (craneStatus == 4)
             { //奥移動中
-                InputKeyCheck(craneStatus);
+                DetectKey(craneStatus);
                 //クレーン奥移動;
                 switch (soundType)
                 {
                     case 0:
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2);
+                        sp.Stop(1);
+                        sp.Play(2);
                         break;
                     case 1:
-                        _SEPlayer.Stop(8);
-                        _SEPlayer.Play(9);
+                        sp.Stop(8);
+                        sp.Play(9);
                         break;
                     case 2:
-                        _SEPlayer.Play(14);
+                        sp.Play(14);
                         break;
                     case 3:
-                        _SEPlayer.Stop(18);
-                        _SEPlayer.Play(19);
+                        sp.Stop(18);
+                        sp.Play(19);
                         break;
                 }
                 if (craneBox.CheckPos(8))
@@ -214,19 +210,19 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(3);
+                            sp.Stop(2);
+                            sp.Play(3);
                             break;
                         case 1:
-                            _SEPlayer.Stop(9);
-                            _SEPlayer.Play(10);
+                            sp.Stop(9);
+                            sp.Play(10);
                             break;
                         case 2:
-                            _SEPlayer.Stop(14);
+                            sp.Stop(14);
                             break;
                         case 3:
-                            _SEPlayer.Stop(19);
-                            _SEPlayer.Play(20, 1);
+                            sp.Stop(19);
+                            sp.Play(20, 1);
                             break;
                     }
                     if (soundType != 2)
@@ -250,10 +246,10 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 2:
-                            _SEPlayer.Play(15, 2);
+                            sp.Play(15, 2);
                             break;
                         case 3:
-                            _SEPlayer.Play(21);
+                            sp.Play(21);
                             break;
                     }
                     if (downTime > 0 && downTime <= 4600)
@@ -279,7 +275,7 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.Stop(21);
+                            sp.Stop(21);
                             break;
                     }
                     if (probability) armPower = armPowerConfigSuccess[0];
@@ -302,15 +298,15 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(3);
-                            _SEPlayer.Play(4);
+                            sp.Stop(3);
+                            sp.Play(4);
                             break;
                         case 1:
-                            _SEPlayer.Stop(10);
-                            _SEPlayer.Play(11);
+                            sp.Stop(10);
+                            sp.Play(11);
                             break;
                         case 3:
-                            _SEPlayer.Play(22);
+                            sp.Play(22);
                             break;
                     }
                     ropeManager.Up();
@@ -318,8 +314,8 @@ public class Type3Manager : MonoBehaviour
                     if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
                 }
                 if (soundType == 2)
-                    if (!_SEPlayer._AudioSource[15].isPlaying)
-                        _SEPlayer.Play(14);
+                    if (!sp.audioSource[15].isPlaying)
+                        sp.Play(14);
                 if (probability && armPower > armPowerConfigSuccess[1])
                 {
                     armPower -= 0.5f;
@@ -349,7 +345,7 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.Stop(22);
+                            sp.Stop(22);
                             break;
                     }
                     if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
@@ -368,18 +364,18 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(4);
-                            _SEPlayer.Play(1);
+                            sp.Stop(4);
+                            sp.Play(1);
                             break;
                         case 3:
-                            _SEPlayer.Play(23);
+                            sp.Play(23);
                             break;
                     }
 
                 }
                 if (soundType == 2)
-                    if (!_SEPlayer._AudioSource[15].isPlaying)
-                        _SEPlayer.Play(14);
+                    if (!sp.audioSource[15].isPlaying)
+                        sp.Play(14);
                 if (!armController.autoPower)
                 {
                     if (support.prizeCount > 0)
@@ -411,8 +407,8 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.Stop(23);
-                            _SEPlayer.Play(24, 1);
+                            sp.Stop(23);
+                            sp.Play(24, 1);
                             break;
                     }
                     await Task.Delay(2000);
@@ -433,12 +429,12 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 2:
-                            _SEPlayer.Stop(14);
-                            if (!_SEPlayer._AudioSource[16].isPlaying)
-                                _SEPlayer.Play(17, 1);
+                            sp.Stop(14);
+                            if (!sp.audioSource[16].isPlaying)
+                                sp.Play(17, 1);
                             break;
                         case 3:
-                            _SEPlayer.Play(25, 1);
+                            sp.Play(25, 1);
                             break;
                     }
                     for (int i = 0; i < 12; i++)
@@ -448,10 +444,10 @@ public class Type3Manager : MonoBehaviour
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(1);
+                            sp.Stop(1);
                             break;
                         case 1:
-                            _SEPlayer.Stop(11);
+                            sp.Stop(11);
                             break;
                     }
                     if (creditSystem.creditDisplayed > 0)
@@ -467,8 +463,7 @@ public class Type3Manager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (craneStatus == 0) ;
-        else
+        if (craneStatus != 0)
         {
             if (craneStatus == -1 || craneStatus == 10)
             {
@@ -480,51 +475,33 @@ public class Type3Manager : MonoBehaviour
         }
     }
 
-    public void GetPrize()
+    public override void GetPrize()
     {
-        int getSoundNum = -1;
-
         switch (soundType)
         {
             case 0:
                 getSoundNum = 5;
-                _SEPlayer.Stop(1);
+                sp.Stop(1);
                 break;
             case 1:
                 getSoundNum = 12;
-                _SEPlayer.Stop(11);
+                sp.Stop(11);
                 break;
             case 2:
                 getSoundNum = 16;
-                _SEPlayer.Stop(14);
-                _SEPlayer.Stop(17);
+                sp.Stop(14);
+                sp.Stop(17);
                 break;
             case 3:
                 getSoundNum = 26;
-                _SEPlayer.Stop(25);
+                sp.Stop(25);
                 break;
         }
 
-        switch (creditSystem.probabilityMode)
-        {
-            case 2:
-            case 3:
-                creditSystem.ResetCreditProbability();
-                break;
-            case 4:
-            case 5:
-                creditSystem.ResetCostProbability();
-                break;
-        }
-
-        if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
-        {
-            if (getSoundNum != -1)
-                _SEPlayer.Play(getSoundNum, 1);
-        }
+        base.GetPrize();
     }
 
-    public void InputKeyCheck(int num)
+    protected override void DetectKey(int num)
     {
         if (host.playable)
         {
@@ -573,7 +550,7 @@ public class Type3Manager : MonoBehaviour
         }
     }
 
-    public void ButtonDown(int num)
+    public override void ButtonDown(int num)
     {
         if (host.playable)
         {
@@ -628,7 +605,7 @@ public class Type3Manager : MonoBehaviour
         }
     }
 
-    public void InsertCoin()
+    public override void InsertCoin()
     {
         if (host.playable && craneStatus >= 0)
         {

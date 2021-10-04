@@ -100,8 +100,7 @@ public class Type3ArmController : MonoBehaviour
         craneType = num;
         if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
         if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
-        support = this.transform.Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
-        support.SetManager(craneType);
+        support = transform.Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
         support.SetArmController(craneType);
     }
 }

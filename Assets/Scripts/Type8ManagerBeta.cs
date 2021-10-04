@@ -19,7 +19,7 @@ public class Type8ManagerBeta : CraneManager
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
     public float armPower; //現在のアームパワー
-    BGMPlayer _BGMPlayer;
+    BGMPlayer bp;
     Type8ArmController armController;
     RopeManager ropeManager;
     [SerializeField] TextMesh credit3d;
@@ -35,8 +35,8 @@ public class Type8ManagerBeta : CraneManager
         host = this.transform.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        bp = this.transform.Find("BGM").GetComponent<BGMPlayer>();
+        sp = this.transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
 
@@ -54,7 +54,7 @@ public class Type8ManagerBeta : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);
@@ -63,26 +63,26 @@ public class Type8ManagerBeta : CraneManager
         {
             case 0:
                 getSoundNum = 5;
-                _SEPlayer.Stop(1);
+                sp.Stop(1);
                 break;
             case 1:
                 getSoundNum = 12;
-                _SEPlayer.Stop(11);
+                sp.Stop(11);
                 break;
             case 2:
                 getSoundNum = 16;
-                _SEPlayer.Stop(14);
-                _SEPlayer.Stop(17);
+                sp.Stop(14);
+                sp.Stop(17);
                 break;
             case 3:
                 getSoundNum = 26;
-                _SEPlayer.Stop(25);
+                sp.Stop(25);
                 break;
         }
-        _BGMPlayer.SetAudioPitch(audioPitch);
-        _SEPlayer.SetAudioPitch(audioPitch);
+        bp.SetAudioPitch(audioPitch);
+        sp.SetAudioPitch(audioPitch);
 
-        getPoint.SetManager(3);
+        getPoint.SetManager(this);
 
         await Task.Delay(300);
         ropeManager.Up();
@@ -114,18 +114,18 @@ public class Type8ManagerBeta : CraneManager
             switch (soundType)
             {
                 case 0:
-                    if (!_SEPlayer._AudioSource[5].isPlaying) _BGMPlayer.Play(0);
+                    if (!sp.audioSource[5].isPlaying) bp.Play(0);
                     break;
                 case 1:
-                    if (!_SEPlayer._AudioSource[12].isPlaying) _BGMPlayer.Play(1);
+                    if (!sp.audioSource[12].isPlaying) bp.Play(1);
                     break;
                 case 2:
-                    if (!_SEPlayer._AudioSource[16].isPlaying && !_SEPlayer._AudioSource[17].isPlaying)
-                        _BGMPlayer.Play(2);
+                    if (!sp.audioSource[16].isPlaying && !sp.audioSource[17].isPlaying)
+                        bp.Play(2);
                     break;
                 case 3:
-                    _BGMPlayer.Stop(4);
-                    _BGMPlayer.Play(3);
+                    bp.Stop(4);
+                    bp.Play(3);
                     break;
             }
         }
@@ -137,17 +137,17 @@ public class Type8ManagerBeta : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _BGMPlayer.Stop(soundType);
+                    bp.Stop(soundType);
                 }
                 DetectKey(craneStatus);     //右移動ボタン有効化;
                 switch (soundType)
                 {
                     case 1:
-                        if (!_SEPlayer._AudioSource[6].isPlaying)
-                            _SEPlayer.Play(7, 2147483647);
+                        if (!sp.audioSource[6].isPlaying)
+                            sp.Play(7, 2147483647);
                         break;
                     case 3:
-                        _BGMPlayer.Play(4);
+                        bp.Play(4);
                         break;
                 }
 
@@ -155,23 +155,23 @@ public class Type8ManagerBeta : CraneManager
 
             if (craneStatus == 2)
             { //右移動中
-                _BGMPlayer.Stop(soundType);
+                bp.Stop(soundType);
                 DetectKey(craneStatus);
                 //コイン投入無効化;
                 switch (soundType)
                 {
                     case 0:
-                        _SEPlayer.Play(1, 2147483647);
+                        sp.Play(1, 2147483647);
                         break;
                     case 1:
-                        _SEPlayer.Stop(7);
-                        _SEPlayer.Play(8, 2147483647);
+                        sp.Stop(7);
+                        sp.Play(8, 2147483647);
                         break;
                     case 2:
-                        _SEPlayer.Play(14, 2147483647);
+                        sp.Play(14, 2147483647);
                         break;
                     case 3:
-                        _SEPlayer.Play(18, 2147483647);
+                        sp.Play(18, 2147483647);
                         break;
                 }
                 if (craneBox.CheckPos(7))
@@ -196,19 +196,19 @@ public class Type8ManagerBeta : CraneManager
                 switch (soundType)
                 {
                     case 0:
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2, 2147483647);
+                        sp.Stop(1);
+                        sp.Play(2, 2147483647);
                         break;
                     case 1:
-                        _SEPlayer.Stop(8);
-                        _SEPlayer.Play(9, 2147483647);
+                        sp.Stop(8);
+                        sp.Play(9, 2147483647);
                         break;
                     case 2:
-                        _SEPlayer.Play(14, 2147483647);
+                        sp.Play(14, 2147483647);
                         break;
                     case 3:
-                        _SEPlayer.Stop(18);
-                        _SEPlayer.Play(19, 2147483647);
+                        sp.Stop(18);
+                        sp.Play(19, 2147483647);
                         break;
                 }
                 if (craneBox.CheckPos(8))
@@ -228,19 +228,19 @@ public class Type8ManagerBeta : CraneManager
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(3, 2147483647);
+                            sp.Stop(2);
+                            sp.Play(3, 2147483647);
                             break;
                         case 1:
-                            _SEPlayer.Stop(9);
-                            _SEPlayer.Play(10, 2147483647);
+                            sp.Stop(9);
+                            sp.Play(10, 2147483647);
                             break;
                         case 2:
-                            _SEPlayer.Stop(14);
+                            sp.Stop(14);
                             break;
                         case 3:
-                            _SEPlayer.Stop(19);
-                            _SEPlayer.Play(20, 1);
+                            sp.Stop(19);
+                            sp.Play(20, 1);
                             break;
                     }
                     if (soundType != 2)
@@ -264,10 +264,10 @@ public class Type8ManagerBeta : CraneManager
                     switch (soundType)
                     {
                         case 2:
-                            _SEPlayer.Play(15, 2);
+                            sp.Play(15, 2);
                             break;
                         case 3:
-                            _SEPlayer.Play(21, 2147483647);
+                            sp.Play(21, 2147483647);
                             break;
                     }
                     if (downTime > 0 && downTime <= 4600)
@@ -293,7 +293,7 @@ public class Type8ManagerBeta : CraneManager
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.Stop(21);
+                            sp.Stop(21);
                             break;
                     }
                     if (probability) armPower = catchArmpowersuccess;
@@ -316,23 +316,23 @@ public class Type8ManagerBeta : CraneManager
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(3);
-                            _SEPlayer.Play(4, 2147483647);
+                            sp.Stop(3);
+                            sp.Play(4, 2147483647);
                             break;
                         case 1:
-                            _SEPlayer.Stop(10);
-                            _SEPlayer.Play(11, 2147483647);
+                            sp.Stop(10);
+                            sp.Play(11, 2147483647);
                             break;
                         case 3:
-                            _SEPlayer.Play(22, 2147483647);
+                            sp.Play(22, 2147483647);
                             break;
                     }
                     ropeManager.Up();
                     await Task.Delay(1500);
                 }
                 if (soundType == 2)
-                    if (!_SEPlayer._AudioSource[15].isPlaying)
-                        _SEPlayer.Play(14, 2147483647);
+                    if (!sp.audioSource[15].isPlaying)
+                        sp.Play(14, 2147483647);
                 if (probability && armPower > upArmpowersuccess)
                 {
                     armPower -= 0.5f;
@@ -359,7 +359,7 @@ public class Type8ManagerBeta : CraneManager
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.Stop(22);
+                            sp.Stop(22);
                             break;
                     }
                     if (craneStatus == 9) craneStatus = 10;
@@ -377,18 +377,18 @@ public class Type8ManagerBeta : CraneManager
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(4);
-                            _SEPlayer.Play(1, 2147483647);
+                            sp.Stop(4);
+                            sp.Play(1, 2147483647);
                             break;
                         case 3:
-                            _SEPlayer.Play(23, 2147483647);
+                            sp.Play(23, 2147483647);
                             break;
                     }
 
                 }
                 if (soundType == 2)
-                    if (!_SEPlayer._AudioSource[15].isPlaying)
-                        _SEPlayer.Play(14, 2147483647);
+                    if (!sp.audioSource[15].isPlaying)
+                        sp.Play(14, 2147483647);
 
                 if (probability && armPower > backArmpowersuccess)
                 {
@@ -415,8 +415,8 @@ public class Type8ManagerBeta : CraneManager
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.Stop(23);
-                            _SEPlayer.Play(24, 1);
+                            sp.Stop(23);
+                            sp.Play(24, 1);
                             break;
                     }
                     await Task.Delay(2000);
@@ -437,12 +437,12 @@ public class Type8ManagerBeta : CraneManager
                     switch (soundType)
                     {
                         case 2:
-                            _SEPlayer.Stop(14);
-                            if (!_SEPlayer._AudioSource[16].isPlaying)
-                                _SEPlayer.Play(17, 1);
+                            sp.Stop(14);
+                            if (!sp.audioSource[16].isPlaying)
+                                sp.Play(17, 1);
                             break;
                         case 3:
-                            _SEPlayer.Play(25, 1);
+                            sp.Play(25, 1);
                             break;
                     }
                     for (int i = 0; i < 12; i++)
@@ -452,10 +452,10 @@ public class Type8ManagerBeta : CraneManager
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(1);
+                            sp.Stop(1);
                             break;
                         case 1:
-                            _SEPlayer.Stop(11);
+                            sp.Stop(11);
                             break;
                     }
                     if (creditSystem.creditDisplayed > 0)
@@ -471,8 +471,7 @@ public class Type8ManagerBeta : CraneManager
 
     void FixedUpdate()
     {
-        if (craneStatus == 0) ;
-        else
+        if (craneStatus != 0)
         {
             if (craneStatus == -1 || craneStatus == 10)
             {

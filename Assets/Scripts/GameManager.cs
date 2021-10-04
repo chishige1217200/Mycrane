@@ -11,9 +11,14 @@ public class GameManager : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #elif UNITY_WEBPLAYER
-                Application.OpenURL("http://www.google.com");
+                Application.OpenURL("https://sites.google.com/view/mycrane");
 #else
         Application.Quit();
 #endif
+    }
+
+    public void OpenHome()
+    {
+        Application.OpenURL("https://sites.google.com/view/mycrane");
     }
 }
