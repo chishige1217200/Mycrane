@@ -4,30 +4,22 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Type7Manager : MonoBehaviour
+public class Type7Manager : CraneManager
 {
-    public int craneStatus = -2; //-2:初期化動作，0:待機状態
     public int price = 100;
     public int times = 1;
     [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
     [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
     [SerializeField] int limitTimeSet = 60; //操作制限時間
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
-    public bool probability; //確率判定用
     [SerializeField] bool autoPower = true;
     public float armPower; //現在のアームパワー
-    CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
     BGMPlayer _BGMPlayer;
-    SEPlayer _SEPlayer;
     Type3ArmController armController;
-    CraneBox craneBox;
-    GetPoint getPoint;
     RopeManager ropeManager;
     ArmControllerSupport support;
     Lever[] lever = new Lever[2];
     Timer timer;
-    MachineHost host;
-    GameObject canvas;
     int leverState = 0; // 0:ニュートラル，1:下降中，2:上昇中
     int armState = 0; // 0:閉じている，1:開いている
     public TextMesh limitTimedisplayed;
@@ -35,6 +27,9 @@ public class Type7Manager : MonoBehaviour
     async void Start()
     {
         Transform temp;
+
+        craneStatus = -2;
+        craneType = 7;
         // 様々なコンポーネントの取得
         host = this.transform.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
@@ -71,7 +66,8 @@ public class Type7Manager : MonoBehaviour
         armController.SetManager(7);
         armController.autoPower = autoPower;
 
-        getPoint.SetManager(7);
+        getPoint.SetManager(-1);
+        getSoundNum = 4;
 
         await Task.Delay(300);
         ropeManager.Up();
@@ -134,10 +130,10 @@ public class Type7Manager : MonoBehaviour
                         _BGMPlayer.Stop(1);
                         _SEPlayer.Play(2, 1);
                     }
-                    if (!_SEPlayer._AudioSource[2].isPlaying && timer.limitTimeNow <= 9) _SEPlayer.Play(3);
+                    if (!_SEPlayer.audioSource[2].isPlaying && timer.limitTimeNow <= 9) _SEPlayer.Play(3);
                 }
                 if (timer.limitTimeNow == 0) craneStatus = 7;
-                InputKeyCheck();
+                DetectKey(0);
             }
 
             if (craneStatus == 7)
@@ -274,38 +270,25 @@ public class Type7Manager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (craneStatus == 0) ;
-        else
+        if (craneStatus != 0)
         {
             if (craneStatus == -1 || craneStatus == 10)
             {
                 craneBox.Left();
                 craneBox.Forward();
             }
-            if (craneStatus == 2) InputLeverCheck();
+            if (craneStatus == 2) DetectLever();
         }
     }
 
-    public void GetPrize()
+    public override void GetPrize()
     {
-        switch (creditSystem.probabilityMode)
-        {
-            case 2:
-            case 3:
-                creditSystem.ResetCreditProbability();
-                break;
-            case 4:
-            case 5:
-                creditSystem.ResetCostProbability();
-                break;
-        }
-        if (!_SEPlayer._AudioSource[4].isPlaying)
-            _SEPlayer.Play(4, 1);
+        base.GetPrize();
         probability = creditSystem.ProbabilityCheck();
         Debug.Log("Probability:" + probability);
     }
 
-    public void InputLeverCheck() // キーボード，UI共通のレバー処理
+    public void DetectLever() // キーボード，UI共通のレバー処理
     {
         if (host.playable)
         {
@@ -340,7 +323,7 @@ public class Type7Manager : MonoBehaviour
         }
     }
 
-    public void InputKeyCheck()
+    protected override void DetectKey(int num)
     {
         if (host.playable)
         {
@@ -357,7 +340,7 @@ public class Type7Manager : MonoBehaviour
         }
     }
 
-    public void ButtonDown(int num)
+    public override void ButtonDown(int num)
     {
         if (host.playable)
         {
@@ -376,7 +359,7 @@ public class Type7Manager : MonoBehaviour
             }
         }
     }
-    public void InsertCoin()
+    public override void InsertCoin()
     {
         if (host.playable && craneStatus >= 0 && creditSystem.creditDisplayed == 0)
             if (creditSystem.Pay(100) >= 1) craneStatus = 1;

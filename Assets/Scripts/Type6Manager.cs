@@ -2,9 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Type6Manager : MonoBehaviour
+public class Type6Manager : CraneManager
 {
-    public int craneStatus = -2; //-2:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
     [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
@@ -16,25 +15,18 @@ public class Type6Manager : MonoBehaviour
     public int soundType = 0; //SEの切り替え 0,1: CATCHER 9 Selecterで指定すること
     bool[] isExecuted = new bool[11]; //各craneStatusで1度しか実行しない処理の管理
     public bool leverTilted = false; //trueならレバーがアクティブ
-    public bool probability; //確率判定用
     [SerializeField] int releaseTiming = 3; //0:設定無し，1:上昇開始後，2:移動開始後
     [SerializeField] int waitTime = 1; //n秒計測に使用（releaseTiming = 1,2で有効）
     public float armPower;
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool downStop = true; //下降停止の使用可否
     [SerializeField] bool openEnd = true; //終了時にアームは開きっぱなしになるか
-    CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
-    public SEPlayer _SEPlayer;
     Type6ArmController armController;
-    CraneBox craneBox;
-    GetPoint getPoint;
     RopeManager ropeManager;
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[3];
     Lever lever;
     Timer timer;
-    MachineHost host;
-    GameObject canvas;
     [SerializeField] GameObject watch;
     [SerializeField] Text limitTimedisplayed;
     [SerializeField] TextMesh limitTime3d;
@@ -49,6 +41,9 @@ public class Type6Manager : MonoBehaviour
         Transform xLimit = this.transform.Find("Floor").Find("XLimit");
         Transform zLimit = this.transform.Find("Floor").Find("ZLimit");
         Transform downLimit = this.transform.Find("Floor").Find("DownLimit");
+
+        craneStatus = -2;
+        craneType = 6;
         // 様々なコンポーネントの取得
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
@@ -84,7 +79,8 @@ public class Type6Manager : MonoBehaviour
         creditSystem.SetSEPlayer(_SEPlayer);
         timer.limitTime = limitTimeSet;
         timer.SetSEPlayer(_SEPlayer);
-        getPoint.SetManager(6);
+        getPoint.SetManager(-1);
+        getSoundNum = 7;
         ropeManager.Up();
         await Task.Delay(500);
         creditSystem.SetCreditSound(0);
@@ -101,7 +97,6 @@ public class Type6Manager : MonoBehaviour
 
         for (int i = 0; i < 11; i++)
             isExecuted[i] = false;
-
 
         // イニシャル移動とinsertFlagを後に実行
         while (!ropeManager.UpFinished())
@@ -230,7 +225,7 @@ public class Type6Manager : MonoBehaviour
                     }
                 }
                 if (isExecuted[craneStatus] && timer.limitTimeNow <= 0) craneStatus = 3; // 時間切れになったら下降
-                if (!leverTilted) InputKeyCheck(craneStatus); // 下降開始ボタン有効化
+                if (!leverTilted) DetectKey(craneStatus); // 下降開始ボタン有効化
             }
 
             if (craneStatus == 3) //アーム開く
@@ -268,7 +263,7 @@ public class Type6Manager : MonoBehaviour
                     _SEPlayer.Play(4);
                     ropeManager.Down(); //awaitによる時差実行を防止
                 }
-                if (downStop) InputKeyCheck(craneStatus); // 下降停止ボタン有効化
+                if (downStop) DetectKey(craneStatus); // 下降停止ボタン有効化
                 if (ropeManager.DownFinished() && craneStatus == 4) craneStatus = 5;
             }
 
@@ -440,8 +435,7 @@ public class Type6Manager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (craneStatus == 0) ;
-        else
+        if (craneStatus != 0)
         {
             if (craneStatus == -1 || craneStatus == 8)
             {
@@ -450,36 +444,17 @@ public class Type6Manager : MonoBehaviour
                 craneBox.Forward();
             }
             else if (craneStatus == 1 || craneStatus == 2)
-                InputLeverCheck();
+                DetectLever();
         }
     }
 
-    public void GetPrize()
+    public override void GetPrize()
     {
-        int getSoundNum = 7;
-
         for (int i = 0; i < 3; i++) animator[i].SetTrigger("GetPrize");
-
-        switch (creditSystem.probabilityMode)
-        {
-            case 2:
-            case 3:
-                creditSystem.ResetCreditProbability();
-                break;
-            case 4:
-            case 5:
-                creditSystem.ResetCostProbability();
-                break;
-        }
-
-        if (!_SEPlayer._AudioSource[getSoundNum].isPlaying)
-        {
-            if (getSoundNum != -1)
-                _SEPlayer.Play(getSoundNum, 1);
-        }
+        base.GetPrize();
     }
 
-    public void InputKeyCheck(int num)
+    protected override void DetectKey(int num)
     {
         if (host.playable)
         {
@@ -507,7 +482,7 @@ public class Type6Manager : MonoBehaviour
         }
     }
 
-    public void InputLeverCheck() // キーボード，UI共通のレバー処理
+    public void DetectLever() // キーボード，UI共通のレバー処理
     {
         if (host.playable)
         {
@@ -565,7 +540,7 @@ public class Type6Manager : MonoBehaviour
         }
     }
 
-    public void ButtonDown(int num)
+    public override void ButtonDown(int num)
     {
         if (host.playable)
         {
@@ -586,7 +561,7 @@ public class Type6Manager : MonoBehaviour
         }
     }
 
-    public void InsertCoin()
+    public override void InsertCoin()
     {
         if (host.playable && craneStatus >= 0)
         {

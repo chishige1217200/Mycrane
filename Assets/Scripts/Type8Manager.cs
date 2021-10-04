@@ -31,7 +31,7 @@ public class Type8Manager : CraneManager
         Transform temp;
 
         craneStatus = -2;
-
+        craneType = 8;
         // 様々なコンポーネントの取得
         host = transform.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
@@ -77,8 +77,6 @@ public class Type8Manager : CraneManager
                 break;
         }
 
-        probabilityReset = false;
-
         _BGMPlayer.SetAudioPitch(audioPitch);
         _SEPlayer.SetAudioPitch(audioPitch);
 
@@ -95,7 +93,7 @@ public class Type8Manager : CraneManager
         for (int i = 0; i < 13; i++)
             isExecuted[i] = false;
 
-        craneStatus = -1;
+        IncrimentStatus();
     }
 
     async void Update()
@@ -250,7 +248,7 @@ public class Type8Manager : CraneManager
                     }
                 }
                 if (isExecuted[craneStatus]) DetectKey(craneStatus);
-                if (soundType == 3 && !_SEPlayer._AudioSource[9].isPlaying) _BGMPlayer.Play(soundType * 2 + 1);
+                if (soundType == 3 && !_SEPlayer.audioSource[9].isPlaying) _BGMPlayer.Play(soundType * 2 + 1);
                 if (ropeManager.DownFinished() && craneStatus == 4) IncrimentStatus();
             }
 
@@ -294,7 +292,7 @@ public class Type8Manager : CraneManager
                         IncrimentStatus();
                     }
                 }
-                if (soundType == 3 && !_SEPlayer._AudioSource[10].isPlaying) _BGMPlayer.Play(soundType * 2 + 1);
+                if (soundType == 3 && !_SEPlayer.audioSource[10].isPlaying) _BGMPlayer.Play(soundType * 2 + 1);
             }
 
             if (craneStatus == 6) //上昇中
@@ -313,7 +311,7 @@ public class Type8Manager : CraneManager
                     ropeManager.Up();
                 }
 
-                if (!_SEPlayer._AudioSource[10].isPlaying)
+                if (!_SEPlayer.audioSource[10].isPlaying)
                 {
                     if (soundType == 3) _BGMPlayer.Play(soundType * 2 + 1);
                     if (soundType == 4) _BGMPlayer.Play(6);
@@ -351,7 +349,7 @@ public class Type8Manager : CraneManager
                     armController.SetMotorPower(armPower);
                     IncrimentStatus();
                 }
-                if (!_SEPlayer._AudioSource[10].isPlaying)
+                if (!_SEPlayer.audioSource[10].isPlaying)
                 {
                     if (soundType == 3) _BGMPlayer.Play(soundType * 2 + 1);
                     if (soundType == 4) _BGMPlayer.Play(6);
@@ -360,7 +358,7 @@ public class Type8Manager : CraneManager
 
             if (craneStatus == 8) //離すポジションに移動
             {
-                if (!_SEPlayer._AudioSource[10].isPlaying)
+                if (!_SEPlayer.audioSource[10].isPlaying)
                 {
                     if (soundType == 3) _BGMPlayer.Play(soundType * 2 + 1);
                     if (soundType == 4) _BGMPlayer.Play(6);
@@ -385,7 +383,7 @@ public class Type8Manager : CraneManager
                     craneBox.goPoint = new Vector2(-0.2f, craneBox.transform.localPosition.z);
                     craneBox.goPositionFlag = true;
                 }
-                if (!_SEPlayer._AudioSource[10].isPlaying)
+                if (!_SEPlayer.audioSource[10].isPlaying)
                 {
                     if (soundType == 3) _BGMPlayer.Play(soundType * 2 + 1);
                     if (soundType == 4) _BGMPlayer.Play(6);
@@ -518,8 +516,7 @@ public class Type8Manager : CraneManager
 
     void FixedUpdate()
     {
-        if (craneStatus == 0) ;
-        else
+        if (craneStatus != 0)
         {
             if (craneStatus == -1 || craneStatus == 14)
             {
@@ -528,6 +525,27 @@ public class Type8Manager : CraneManager
             }
             else if (craneStatus == 2 || craneStatus == 3) DetectLever();
             else if (craneStatus == 8) craneBox.Back();
+        }
+    }
+
+    public override void GetPrize()
+    {
+        Debug.Log("Type8 GetPrize");
+        // case 3はリセットしません
+        switch (creditSystem.probabilityMode)
+        {
+            case 2:
+                creditSystem.ResetCreditProbability();
+                break;
+            case 4:
+            case 5:
+                creditSystem.ResetCostProbability();
+                break;
+        }
+        if (!_SEPlayer.audioSource[getSoundNum].isPlaying)
+        {
+            if (getSoundNum != -1)
+                _SEPlayer.Play(getSoundNum, 1);
         }
     }
 
@@ -612,7 +630,7 @@ public class Type8Manager : CraneManager
             int credit = creditSystem.Pay(100);
             if (credit < 100) credit3d.text = credit.ToString("D2");
             else credit3d.text = "99.";
-            if (credit > 0 && craneStatus == 0) craneStatus = 1;
+            if (credit > 0 && craneStatus == 0) IncrimentStatus();
         }
     }
 }

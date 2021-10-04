@@ -114,13 +114,13 @@ public class Type8ManagerBeta : CraneManager
             switch (soundType)
             {
                 case 0:
-                    if (!_SEPlayer._AudioSource[5].isPlaying) _BGMPlayer.Play(0);
+                    if (!_SEPlayer.audioSource[5].isPlaying) _BGMPlayer.Play(0);
                     break;
                 case 1:
-                    if (!_SEPlayer._AudioSource[12].isPlaying) _BGMPlayer.Play(1);
+                    if (!_SEPlayer.audioSource[12].isPlaying) _BGMPlayer.Play(1);
                     break;
                 case 2:
-                    if (!_SEPlayer._AudioSource[16].isPlaying && !_SEPlayer._AudioSource[17].isPlaying)
+                    if (!_SEPlayer.audioSource[16].isPlaying && !_SEPlayer.audioSource[17].isPlaying)
                         _BGMPlayer.Play(2);
                     break;
                 case 3:
@@ -143,7 +143,7 @@ public class Type8ManagerBeta : CraneManager
                 switch (soundType)
                 {
                     case 1:
-                        if (!_SEPlayer._AudioSource[6].isPlaying)
+                        if (!_SEPlayer.audioSource[6].isPlaying)
                             _SEPlayer.Play(7, 2147483647);
                         break;
                     case 3:
@@ -331,7 +331,7 @@ public class Type8ManagerBeta : CraneManager
                     await Task.Delay(1500);
                 }
                 if (soundType == 2)
-                    if (!_SEPlayer._AudioSource[15].isPlaying)
+                    if (!_SEPlayer.audioSource[15].isPlaying)
                         _SEPlayer.Play(14, 2147483647);
                 if (probability && armPower > upArmpowersuccess)
                 {
@@ -387,7 +387,7 @@ public class Type8ManagerBeta : CraneManager
 
                 }
                 if (soundType == 2)
-                    if (!_SEPlayer._AudioSource[15].isPlaying)
+                    if (!_SEPlayer.audioSource[15].isPlaying)
                         _SEPlayer.Play(14, 2147483647);
 
                 if (probability && armPower > backArmpowersuccess)
@@ -438,7 +438,7 @@ public class Type8ManagerBeta : CraneManager
                     {
                         case 2:
                             _SEPlayer.Stop(14);
-                            if (!_SEPlayer._AudioSource[16].isPlaying)
+                            if (!_SEPlayer.audioSource[16].isPlaying)
                                 _SEPlayer.Play(17, 1);
                             break;
                         case 3:
@@ -471,8 +471,7 @@ public class Type8ManagerBeta : CraneManager
 
     void FixedUpdate()
     {
-        if (craneStatus == 0) ;
-        else
+        if (craneStatus != 0)
         {
             if (craneStatus == -1 || craneStatus == 10)
             {

@@ -2,9 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Type4Manager : MonoBehaviour
+public class Type4Manager : CraneManager
 {
-    public int craneStatus = -2; //-2:初期化動作，0:待機状態
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
     [SerializeField] float leftCatchArmpower = 20f; //左アームパワー
@@ -22,11 +21,7 @@ public class Type4Manager : MonoBehaviour
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool rotation = true; //回転機能の使用可否
     [SerializeField] bool downStop = true; //下降停止機能の使用可否
-    CreditSystem creditSystem; //クレジットシステムのインスタンスを格納（以下同）
-    SEPlayer _SEPlayer;
     Type1ArmController armController;
-    CraneBox craneBox;
-    GetPoint getPoint;
     RopeManager ropeManager;
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[2];
@@ -35,8 +30,6 @@ public class Type4Manager : MonoBehaviour
     Type4ArmunitRoter roter;
     KeyCode downButtonAlpha;
     KeyCode downButtonNumpad;
-    MachineHost host;
-    GameObject canvas;
     [SerializeField] TextMesh credit3d;
     [SerializeField] TextMesh[] preset = new TextMesh[4];
 
@@ -46,6 +39,9 @@ public class Type4Manager : MonoBehaviour
         Transform xLimit = this.transform.Find("Floor").Find("XLimit");
         Transform zLimit = this.transform.Find("Floor").Find("ZLimit");
         Transform downLimit = this.transform.Find("Floor").Find("DownLimit");
+
+        craneStatus = -2;
+        craneType = 4;
         // 様々なコンポーネントの取得
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
@@ -79,7 +75,8 @@ public class Type4Manager : MonoBehaviour
 
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(_SEPlayer);
-        getPoint.SetManager(4);
+        getPoint.SetManager(-1);
+        getSoundNum = 6;
         ropeManager.Up();
         creditSystem.SetCreditSound(0);
         creditSystem.SetSEPlayer(_SEPlayer);
@@ -183,12 +180,12 @@ public class Type4Manager : MonoBehaviour
                         if (Random.Range(0, 2) == 0 && !player2) videoManager.Play(4);
                         else videoManager.Play(0);
                     }
-                    InputKeyCheck(craneStatus);         //右移動ボタン有効化;
+                    DetectKey(craneStatus);         //右移動ボタン有効化;
                 }
 
                 if (craneStatus == 2)
                 { //右移動中
-                    InputKeyCheck(craneStatus);
+                    DetectKey(craneStatus);
                     if (!player2 & craneBox.CheckPos(7))
                     {
                         _SEPlayer.Stop(1);
@@ -208,12 +205,12 @@ public class Type4Manager : MonoBehaviour
 
                 if (craneStatus == 3)
                 {
-                    InputKeyCheck(craneStatus);         //奥移動ボタン有効化;
+                    DetectKey(craneStatus);         //奥移動ボタン有効化;
                 }
 
                 if (craneStatus == 4)
                 { //奥移動中
-                    InputKeyCheck(craneStatus);
+                    DetectKey(craneStatus);
                     if (craneBox.CheckPos(8))
                     {
                         _SEPlayer.Stop(1);
@@ -356,15 +353,15 @@ public class Type4Manager : MonoBehaviour
                         }
 
                     }
-                    if (!leverTilted) InputKeyCheck(5);
+                    if (!leverTilted) DetectKey(5);
                 }
             }
 
-            if (craneStatus == 5) InputKeyCheck(craneStatus);
+            if (craneStatus == 5) DetectKey(craneStatus);
             if (craneStatus == 6)
             {
                 await Task.Delay(10);
-                if (craneStatus == 6) InputKeyCheck(craneStatus);
+                if (craneStatus == 6) DetectKey(craneStatus);
             }
             if (craneStatus == 7)
             {
@@ -388,7 +385,7 @@ public class Type4Manager : MonoBehaviour
                     _SEPlayer.Play(5, 1);
                     if (craneStatus == 8) ropeManager.Down(); //awaitによる時差実行を防止
                 }
-                InputKeyCheck(craneStatus);
+                DetectKey(craneStatus);
                 if (ropeManager.DownFinished() && craneStatus == 8) craneStatus = 9;
             }
             if (craneStatus == 9)
@@ -472,7 +469,7 @@ public class Type4Manager : MonoBehaviour
                     for (int i = 0; i < 14; i++)
                         isExecuted[i] = false;
                     armController.SetLimit(armApertures); //アーム開口度リセット
-                    if (!_SEPlayer._AudioSource[6].isPlaying) _SEPlayer.Play(7, 1);
+                    if (!_SEPlayer.audioSource[6].isPlaying) _SEPlayer.Play(7, 1);
 
                     creditSystem.ResetPayment();
                     int credit = creditSystem.PlayStart();
@@ -493,8 +490,7 @@ public class Type4Manager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (craneStatus == 0) ;
-        else
+        if (craneStatus != 0)
         {
             if (craneStatus == -1 || craneStatus == 12)
             {
@@ -513,18 +509,17 @@ public class Type4Manager : MonoBehaviour
             }
             else
                 if (craneStatus == 1 || craneStatus == 3)
-                InputLeverCheck();
+                DetectLever();
         }
     }
 
-    public void GetPrize()
+    public override void GetPrize()
     {
         _SEPlayer.Stop(7);
-        if (!_SEPlayer._AudioSource[6].isPlaying)
-            _SEPlayer.Play(6, 1);
+        base.GetPrize();
     }
 
-    public void InputKeyCheck(int num)
+    protected override void DetectKey(int num)
     {
         if (host.playable)
         {
@@ -643,7 +638,7 @@ public class Type4Manager : MonoBehaviour
             }
         }
     }
-    public void InputLeverCheck() // キーボード，UI共通のレバー処理
+    public void DetectLever() // キーボード，UI共通のレバー処理
     {
         if (host.playable)
         {
@@ -690,7 +685,7 @@ public class Type4Manager : MonoBehaviour
         }
     }
 
-    public void ButtonDown(int num)
+    public override void ButtonDown(int num)
     {
         if (host.playable)
         {
@@ -801,7 +796,7 @@ public class Type4Manager : MonoBehaviour
             }
         }
     }
-    public void InsertCoin()
+    public override void InsertCoin()
     {
         if (host.playable && craneStatus >= 0)
         {

@@ -27,14 +27,14 @@ public class ArmControllerSupport : MonoBehaviour
             switch (craneType)
             {
                 case 3:
-                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeCount > 0)
+                    if (!_Type3Manager.GetProbability() && _Type3Manager.GetStatus() >= 8 && prizeCount > 0)
                     {
                         Debug.Log("Released.");
                         _Type3ArmController.Release();
                     }
                     break;
                 case 7:
-                    if (!_Type7Manager.probability && prizeCount > 0)
+                    if (!_Type7Manager.GetProbability() && prizeCount > 0)
                     {
                         Debug.Log("Released.");
                         _Type3ArmController.Release();
@@ -47,35 +47,35 @@ public class ArmControllerSupport : MonoBehaviour
             switch (craneType)
             {
                 case 1:
-                    if (_Type1Manager.craneStatus == 6)
+                    if (_Type1Manager.GetStatus() == 6)
                     {
                         Debug.Log("下降制限に接触");
                         ropeManager.DownForceStop();
-                        _Type1Manager.craneStatus = 7;
+                        _Type1Manager.IncrimentStatus();
                     }
                     break;
                 case 4:
-                    if (_Type4Manager.craneStatus == 8)
+                    if (_Type4Manager.GetStatus() == 8)
                     {
                         Debug.Log("下降制限に接触");
                         ropeManager.DownForceStop();
-                        _Type4Manager.craneStatus = 9;
+                        _Type4Manager.IncrimentStatus();
                     }
                     break;
                 case 5:
-                    if (_Type5Manager.craneStatus == 6)
+                    if (_Type5Manager.GetStatus() == 6)
                     {
                         Debug.Log("下降制限に接触");
                         ropeManager.DownForceStop();
-                        _Type5Manager.craneStatus = 7;
+                        _Type5Manager.IncrimentStatus();
                     }
                     break;
                 case 6:
-                    if (_Type6Manager.craneStatus == 4)
+                    if (_Type6Manager.GetStatus() == 4)
                     {
                         Debug.Log("下降制限に接触");
                         ropeManager.DownForceStop();
-                        _Type6Manager.craneStatus = 5;
+                        _Type6Manager.IncrimentStatus();
                     }
                     break;
             }
@@ -87,11 +87,15 @@ public class ArmControllerSupport : MonoBehaviour
             switch (craneType)
             {
                 case 3:
-                    if (_Type3Manager.craneStatus == 6)
+                    if (_Type3Manager.GetStatus() == 6)
                     {
                         await Task.Delay(700);
-                        ropeManager.DownForceStop();
-                        _Type3Manager.craneStatus = 7;
+                        if (_Type3Manager.GetStatus() == 6)
+                        {
+                            ropeManager.DownForceStop();
+                            _Type3Manager.IncrimentStatus();
+                        }
+
                     }
                     break;
             }
@@ -101,11 +105,15 @@ public class ArmControllerSupport : MonoBehaviour
             switch (craneType)
             {
                 case 3:
-                    if (_Type3Manager.craneStatus == 6)
+                    if (_Type3Manager.GetStatus() == 6)
                     {
                         await Task.Delay(1000);
-                        ropeManager.DownForceStop();
-                        _Type3Manager.craneStatus = 7;
+                        if (_Type3Manager.GetStatus() == 6)
+                        {
+                            ropeManager.DownForceStop();
+                            _Type3Manager.IncrimentStatus();
+                        }
+
                     }
                     break;
             }
@@ -122,13 +130,13 @@ public class ArmControllerSupport : MonoBehaviour
             switch (craneType)
             {
                 case 3:
-                    if (!_Type3Manager.probability && _Type3Manager.craneStatus >= 8 && prizeCount > 0)
+                    if (!_Type3Manager.GetProbability() && _Type3Manager.GetStatus() >= 8 && prizeCount > 0)
                     {
                         _Type3ArmController.Release();
                     }
                     break;
                 case 7:
-                    if (!_Type7Manager.probability && _Type7Manager.craneStatus >= 8 && prizeCount > 0)
+                    if (!_Type7Manager.GetProbability() && _Type7Manager.GetStatus() >= 8 && prizeCount > 0)
                     {
                         _Type3ArmController.Release();
                     }
@@ -160,31 +168,31 @@ public class ArmControllerSupport : MonoBehaviour
             {
 
                 case 1:
-                    if (_Type1Manager.craneStatus == 6)
+                    if (_Type1Manager.GetStatus() == 6)
                     {
                         ropeManager.DownForceStop();
-                        _Type1Manager.craneStatus = 7;
+                        _Type1Manager.IncrimentStatus();
                     }
                     break;
                 case 4:
-                    if (_Type4Manager.craneStatus == 8)
+                    if (_Type4Manager.GetStatus() == 8)
                     {
                         ropeManager.DownForceStop();
-                        _Type4Manager.craneStatus = 9;
+                        _Type4Manager.IncrimentStatus();
                     }
                     break;
                 case 5:
-                    if (_Type5Manager.craneStatus == 6)
+                    if (_Type5Manager.GetStatus() == 6)
                     {
                         ropeManager.DownForceStop();
-                        _Type5Manager.craneStatus = 7;
+                        _Type5Manager.IncrimentStatus();
                     }
                     break;
                 case 6:
-                    if (_Type6Manager.craneStatus == 4)
+                    if (_Type6Manager.GetStatus() == 4)
                     {
                         ropeManager.DownForceStop();
-                        _Type6Manager.craneStatus = 5;
+                        _Type6Manager.IncrimentStatus();
                     }
                     break;
             }

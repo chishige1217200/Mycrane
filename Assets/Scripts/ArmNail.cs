@@ -21,35 +21,35 @@ public class ArmNail : MonoBehaviour
             switch (craneType)
             {
                 case 1:
-                    if (_Type1Manager.craneStatus == 6)
+                    if (_Type1Manager.GetStatus() == 6)
                     {
                         Debug.Log("床");
                         ropeManager.DownForceStop();
-                        _Type1Manager.craneStatus = 7;
+                        _Type1Manager.IncrimentStatus();
                     }
                     break;
                 case 4:
-                    if (_Type4Manager.craneStatus == 8)
+                    if (_Type4Manager.GetStatus() == 8)
                     {
                         Debug.Log("床");
                         ropeManager.DownForceStop();
-                        _Type4Manager.craneStatus = 9;
+                        _Type4Manager.IncrimentStatus();
                     }
                     break;
                 case 5:
-                    if (_Type5Manager.craneStatus == 6)
+                    if (_Type5Manager.GetStatus() == 6)
                     {
                         Debug.Log("床");
                         ropeManager.DownForceStop();
-                        _Type5Manager.craneStatus = 7;
+                        _Type5Manager.IncrimentStatus();
                     }
                     break;
                 case 6:
-                    if (_Type6Manager.craneStatus == 4)
+                    if (_Type6Manager.GetStatus() == 4)
                     {
                         Debug.Log("床");
                         ropeManager.DownForceStop();
-                        _Type6Manager.craneStatus = 5;
+                        _Type6Manager.IncrimentStatus();
                     }
                     break;
             }
