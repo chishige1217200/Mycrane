@@ -45,19 +45,6 @@ public class RopePoint : MonoBehaviour
         }
     }
 
-    /*void OnTriggerStay(Collider collider)
-    {
-        if (collider.tag == "UpLimit")
-            if (moveUpFlag)
-            {
-                upRefusedFlag = true;
-                moveUpFlag = false;
-            }
-        if (collider.tag == "UpPoint")
-            if (moveUpFlag && !upRefusedFlag && !rb.isKinematic)
-                rb.isKinematic = true;
-    }*/
-
     void OnTriggerExit(Collider collider)
     {
         if (collider.tag == "UpLimit")
