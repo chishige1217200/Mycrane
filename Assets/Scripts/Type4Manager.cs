@@ -86,7 +86,7 @@ public class Type4Manager : CraneManager
         support.pushTime = 300; // 押し込みパワーの調整
         for (int i = 0; i < 2; i++)
         {
-            nail[i].SetManager(4);
+            nail[i].SetManager(this);
             nail[i].SetRopeManager(ropeManager);
         }
 

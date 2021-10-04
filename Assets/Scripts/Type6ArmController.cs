@@ -106,6 +106,6 @@ public class Type6ArmController : MonoBehaviour
     {
         _Type6Manager = transform.root.gameObject.GetComponent<Type6Selecter>().GetManager(playerNumber);
         support = this.transform.Find("Main").GetComponent<ArmControllerSupport>();
-        support.SetManager(6);
+        support.SetManager(_Type6Manager);
     }
 }

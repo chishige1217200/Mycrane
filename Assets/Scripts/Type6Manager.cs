@@ -82,16 +82,16 @@ public class Type6Manager : CraneManager
         getPoint.SetManager(this);
         getSoundNum = 7;
         ropeManager.Up();
-        await Task.Delay(500);
         creditSystem.SetCreditSound(0);
         creditSystem.SetSEPlayer(sp);
-        support.SetManager(6);
+        support.SetManager(this);
         support.SetRopeManager(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
+        await Task.Delay(500);
 
         for (int i = 0; i < 3; i++)
         {
-            nail[i].SetManager(6);
+            nail[i].SetManager(this);
             nail[i].SetRopeManager(ropeManager);
         }
 
@@ -186,6 +186,12 @@ public class Type6Manager : CraneManager
 
             if (craneStatus == 2) //1度でも移動したことがある
             {
+                if (!isExecuted[1])
+                {
+                    isExecuted[1] = true;
+                    limitTime3d.text = limitTimeSet.ToString("D2");
+                    watch.SetActive(true);
+                }
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;

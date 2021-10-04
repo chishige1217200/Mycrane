@@ -60,7 +60,7 @@ public class Type7Manager : CraneManager
         creditSystem.SetSEPlayer(sp);
         timer.limitTimeNow = limitTimeSet;
         timer.limitTime = limitTimeSet;
-        support.SetManager(7);
+        support.SetManager(this);
         support.SetRopeManager(ropeManager);
         creditSystem.SetCreditSound(0);
         armController.SetManager(7);

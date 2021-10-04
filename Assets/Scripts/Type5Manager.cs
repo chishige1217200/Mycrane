@@ -84,16 +84,17 @@ public class Type5Manager : CraneManager
                 break;
         }
         ropeManager.Up();
-        await Task.Delay(500);
+
         if (soundType == 0 || soundType == 1 || soundType == 2) creditSystem.SetCreditSound(0);
         else creditSystem.SetCreditSound(8);
         creditSystem.SetSEPlayer(sp);
-        support.SetManager(5);
+        support.SetManager(this);
         support.SetRopeManager(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
+        await Task.Delay(500);
         for (int i = 0; i < 2; i++)
         {
-            nail[i].SetManager(5);
+            nail[i].SetManager(this);
             nail[i].SetRopeManager(ropeManager);
         }
 

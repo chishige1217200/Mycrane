@@ -71,13 +71,13 @@ public class Type1Manager : CraneManager
         ropeManager.Up();
         creditSystem.SetCreditSound(0);
         creditSystem.SetSEPlayer(sp);
-        support.SetManager(1);
+        support.SetManager(this);
         support.SetRopeManager(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
         getSoundNum = 5;
         for (int i = 0; i < 2; i++)
         {
-            nail[i].SetManager(1);
+            nail[i].SetManager(this);
             nail[i].SetRopeManager(ropeManager);
         }
 
