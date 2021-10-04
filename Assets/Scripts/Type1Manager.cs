@@ -20,7 +20,6 @@ public class Type1Manager : CraneManager
     public Vector2 startPoint; // 開始位置座標定義
     public Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
     public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標
-    //BGMPlayer _BGMPlayer;
     Type1ArmController armController;
     RopeManager ropeManager;
     ArmControllerSupport support;
@@ -43,7 +42,7 @@ public class Type1Manager : CraneManager
         canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         //_BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        sp = this.transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
 
@@ -68,11 +67,11 @@ public class Type1Manager : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         getPoint.SetManager(-1);
         ropeManager.Up();
         creditSystem.SetCreditSound(0);
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         support.SetManager(1);
         support.SetRopeManager(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
@@ -154,10 +153,10 @@ public class Type1Manager : CraneManager
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.Play(1, 2);
+                        sp.Play(1, 2);
                         break;
                     case 2:
-                        _SEPlayer.Play(7, 2);
+                        sp.Play(7, 2);
                         break;
                 }
 
@@ -181,10 +180,10 @@ public class Type1Manager : CraneManager
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.Stop(1);
+                        sp.Stop(1);
                         break;
                     case 2:
-                        _SEPlayer.Stop(7);
+                        sp.Stop(7);
                         break;
                 } //右移動効果音ループ再生停止;
                   //奥移動ボタン有効化;
@@ -198,10 +197,10 @@ public class Type1Manager : CraneManager
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.Play(1, 2);
+                        sp.Play(1, 2);
                         break;
                     case 2:
-                        _SEPlayer.Play(7, 2);
+                        sp.Play(7, 2);
                         break;
                 }
                 if (craneBox.CheckPos(8))
@@ -218,10 +217,10 @@ public class Type1Manager : CraneManager
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.Stop(1);
+                        sp.Stop(1);
                         break;
                     case 2:
-                        _SEPlayer.Stop(7);
+                        sp.Stop(7);
                         break;
                 } //奥移動効果音ループ再生停止;
                 if (!isExecuted[craneStatus])
@@ -247,10 +246,10 @@ public class Type1Manager : CraneManager
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.Play(2, 2);
+                        sp.Play(2, 2);
                         break;
                     case 2:
-                        _SEPlayer.Play(8, 2);
+                        sp.Play(8, 2);
                         break;
                 }
                 if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
@@ -264,10 +263,10 @@ public class Type1Manager : CraneManager
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.Stop(2);
+                        sp.Stop(2);
                         break;
                     case 2:
-                        _SEPlayer.Stop(8);
+                        sp.Stop(8);
                         break;
                 } //アーム下降音再生停止;
                 await Task.Delay(1000);
@@ -277,10 +276,10 @@ public class Type1Manager : CraneManager
                     {
                         case 0:
                         case 1:
-                            _SEPlayer.Play(3, 2);
+                            sp.Play(3, 2);
                             break;
                         case 2:
-                            _SEPlayer.Play(9, 2);
+                            sp.Play(9, 2);
                             break;
                     }
                 } //アーム掴む音再生;
@@ -306,12 +305,12 @@ public class Type1Manager : CraneManager
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.Stop(3);
-                        _SEPlayer.Play(4, 2);
+                        sp.Stop(3);
+                        sp.Play(4, 2);
                         break;
                     case 2:
-                        _SEPlayer.Stop(9);
-                        _SEPlayer.Play(10, 2);
+                        sp.Stop(9);
+                        sp.Play(10, 2);
                         break;
                 } //アーム上昇音再生;
                 if (!isExecuted[craneStatus])
@@ -335,10 +334,10 @@ public class Type1Manager : CraneManager
                 {
                     case 0:
                     case 1:
-                        _SEPlayer.Stop(4);
+                        sp.Stop(4);
                         break;
                     case 2:
-                        _SEPlayer.Stop(10);
+                        sp.Stop(10);
                         break;
                 }
                 //アーム上昇停止音再生;

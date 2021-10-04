@@ -38,7 +38,7 @@ public class Type2Manager : CraneManager
         canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        sp = this.transform.Find("SE").GetComponent<SEPlayer>();
         lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         timer = this.transform.Find("Timer").GetComponent<Timer>();
@@ -62,9 +62,9 @@ public class Type2Manager : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         timer.limitTime = limitTimeSet;
-        timer.SetSEPlayer(_SEPlayer);
+        timer.SetSEPlayer(sp);
         armController.SetManager();
 
         if (soundType == 0)
@@ -81,7 +81,7 @@ public class Type2Manager : CraneManager
         }
         getSoundNum = 5;
         _BGMPlayer.SetAudioPitch(audioPitch);
-        _SEPlayer.SetAudioPitch(audioPitch);
+        sp.SetAudioPitch(audioPitch);
 
         getPoint.SetManager(2);
         ropeManager.Up();
@@ -201,13 +201,13 @@ public class Type2Manager : CraneManager
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Play(1);
+                            sp.Play(1);
                             break;
                         case 1:
-                            _SEPlayer.Play(8);
+                            sp.Play(8);
                             break;
                         case 2:
-                            _SEPlayer.Play(12);
+                            sp.Play(12);
                             break;
                     }
                     await Task.Delay(300);
@@ -239,14 +239,14 @@ public class Type2Manager : CraneManager
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(1); //アーム下降音再生停止;
-                            _SEPlayer.Play(2, 1); //アーム掴む音再生;
+                            sp.Stop(1); //アーム下降音再生停止;
+                            sp.Play(2, 1); //アーム掴む音再生;
                             break;
                         case 1:
-                            _SEPlayer.Stop(8);
+                            sp.Stop(8);
                             break;
                         case 2:
-                            _SEPlayer.Stop(12);
+                            sp.Stop(12);
                             break;
                     }
                     if (probability) armPower = armPowerConfigSuccess[0];
@@ -264,10 +264,10 @@ public class Type2Manager : CraneManager
                 switch (soundType)
                 {
                     case 1:
-                        _SEPlayer.Play(9);
+                        sp.Play(9);
                         break;
                     case 2:
-                        _SEPlayer.Play(13);
+                        sp.Play(13);
                         break;
                 }
 
@@ -316,14 +316,14 @@ public class Type2Manager : CraneManager
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(3, 1); //アーム上昇停止音再生;
+                            sp.Stop(2);
+                            sp.Play(3, 1); //アーム上昇停止音再生;
                             break;
                         case 1:
-                            _SEPlayer.Stop(9);
+                            sp.Stop(9);
                             break;
                         case 2:
-                            _SEPlayer.Stop(13);
+                            sp.Stop(13);
                             break;
                     }
                     if (craneStatus == 9) craneStatus = 10;
@@ -361,7 +361,7 @@ public class Type2Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     armController.Open();
-                    if (soundType == 0) _SEPlayer.Play(4, 1);
+                    if (soundType == 0) sp.Play(4, 1);
                     await Task.Delay(1000);
                     craneStatus = 12;
                 }

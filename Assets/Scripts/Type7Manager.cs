@@ -14,7 +14,7 @@ public class Type7Manager : CraneManager
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     [SerializeField] bool autoPower = true;
     public float armPower; //現在のアームパワー
-    BGMPlayer _BGMPlayer;
+    BGMPlayer bp;
     Type3ArmController armController;
     RopeManager ropeManager;
     ArmControllerSupport support;
@@ -34,8 +34,8 @@ public class Type7Manager : CraneManager
         host = this.transform.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        bp = this.transform.Find("BGM").GetComponent<BGMPlayer>();
+        sp = this.transform.Find("SE").GetComponent<SEPlayer>();
         lever[0] = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
         lever[1] = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").GetComponent<Lever>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
@@ -57,7 +57,7 @@ public class Type7Manager : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         timer.limitTimeNow = limitTimeSet;
         timer.limitTime = limitTimeSet;
         support.SetManager(7);
@@ -93,7 +93,7 @@ public class Type7Manager : CraneManager
 
         if (craneStatus == 0)
         {
-            _BGMPlayer.Play(0);
+            bp.Play(0);
             //コイン投入有効化;
             if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0)) InsertCoin();
         }
@@ -102,7 +102,7 @@ public class Type7Manager : CraneManager
             if (craneStatus == 1)
             {
                 //コイン投入有効化;
-                _BGMPlayer.Stop(0);
+                bp.Stop(0);
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -110,10 +110,10 @@ public class Type7Manager : CraneManager
                     isExecuted[12] = false;
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
-                    _SEPlayer.Play(1, 1);
+                    sp.Play(1, 1);
                     await Task.Delay(3000);
                     timer.StartTimer();
-                    _BGMPlayer.Play(1);
+                    bp.Play(1);
                     if (craneStatus == 1) craneStatus = 2;
                 }
 
@@ -127,10 +127,10 @@ public class Type7Manager : CraneManager
                     if (!isExecuted[craneStatus])
                     {
                         isExecuted[craneStatus] = true;
-                        _BGMPlayer.Stop(1);
-                        _SEPlayer.Play(2, 1);
+                        bp.Stop(1);
+                        sp.Play(2, 1);
                     }
-                    if (!_SEPlayer.audioSource[2].isPlaying && timer.limitTimeNow <= 9) _SEPlayer.Play(3);
+                    if (!sp.audioSource[2].isPlaying && timer.limitTimeNow <= 9) sp.Play(3);
                 }
                 if (timer.limitTimeNow == 0) craneStatus = 7;
                 DetectKey(0);
@@ -141,8 +141,8 @@ public class Type7Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Stop(3);
-                    _SEPlayer.Play(5, 1);
+                    sp.Stop(3);
+                    sp.Play(5, 1);
                     creditSystem.ResetPayment();
                     creditSystem.PlayStart();
                     ropeManager.DownForceStop();

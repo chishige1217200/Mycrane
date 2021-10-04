@@ -33,7 +33,7 @@ public class Type3Manager : CraneManager
         canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
         _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        sp = this.transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
 
@@ -52,7 +52,7 @@ public class Type3Manager : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         support.SetManager(3);
         support.SetRopeManager(ropeManager);
         if (soundType == 0) creditSystem.SetCreditSound(0);
@@ -60,7 +60,7 @@ public class Type3Manager : CraneManager
         if (soundType == 2) creditSystem.SetCreditSound(13);
         if (soundType == 3) creditSystem.SetCreditSound(-1);
         _BGMPlayer.SetAudioPitch(audioPitch);
-        _SEPlayer.SetAudioPitch(audioPitch);
+        sp.SetAudioPitch(audioPitch);
         armController.SetManager(3);
         armController.autoPower = autoPower;
 
@@ -96,13 +96,13 @@ public class Type3Manager : CraneManager
             switch (soundType)
             {
                 case 0:
-                    if (!_SEPlayer.audioSource[5].isPlaying) _BGMPlayer.Play(0);
+                    if (!sp.audioSource[5].isPlaying) _BGMPlayer.Play(0);
                     break;
                 case 1:
-                    if (!_SEPlayer.audioSource[12].isPlaying) _BGMPlayer.Play(1);
+                    if (!sp.audioSource[12].isPlaying) _BGMPlayer.Play(1);
                     break;
                 case 2:
-                    if (!_SEPlayer.audioSource[16].isPlaying && !_SEPlayer.audioSource[17].isPlaying)
+                    if (!sp.audioSource[16].isPlaying && !sp.audioSource[17].isPlaying)
                         _BGMPlayer.Play(2);
                     break;
                 case 3:
@@ -125,8 +125,8 @@ public class Type3Manager : CraneManager
                 switch (soundType)
                 {
                     case 1:
-                        if (!_SEPlayer.audioSource[6].isPlaying)
-                            _SEPlayer.Play(7);
+                        if (!sp.audioSource[6].isPlaying)
+                            sp.Play(7);
                         break;
                     case 3:
                         _BGMPlayer.Play(4);
@@ -143,17 +143,17 @@ public class Type3Manager : CraneManager
                 switch (soundType)
                 {
                     case 0:
-                        _SEPlayer.Play(1);
+                        sp.Play(1);
                         break;
                     case 1:
-                        _SEPlayer.Stop(7);
-                        _SEPlayer.Play(8);
+                        sp.Stop(7);
+                        sp.Play(8);
                         break;
                     case 2:
-                        _SEPlayer.Play(14);
+                        sp.Play(14);
                         break;
                     case 3:
-                        _SEPlayer.Play(18);
+                        sp.Play(18);
                         break;
                 }
                 if (craneBox.CheckPos(7))
@@ -178,19 +178,19 @@ public class Type3Manager : CraneManager
                 switch (soundType)
                 {
                     case 0:
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2);
+                        sp.Stop(1);
+                        sp.Play(2);
                         break;
                     case 1:
-                        _SEPlayer.Stop(8);
-                        _SEPlayer.Play(9);
+                        sp.Stop(8);
+                        sp.Play(9);
                         break;
                     case 2:
-                        _SEPlayer.Play(14);
+                        sp.Play(14);
                         break;
                     case 3:
-                        _SEPlayer.Stop(18);
-                        _SEPlayer.Play(19);
+                        sp.Stop(18);
+                        sp.Play(19);
                         break;
                 }
                 if (craneBox.CheckPos(8))
@@ -210,19 +210,19 @@ public class Type3Manager : CraneManager
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(3);
+                            sp.Stop(2);
+                            sp.Play(3);
                             break;
                         case 1:
-                            _SEPlayer.Stop(9);
-                            _SEPlayer.Play(10);
+                            sp.Stop(9);
+                            sp.Play(10);
                             break;
                         case 2:
-                            _SEPlayer.Stop(14);
+                            sp.Stop(14);
                             break;
                         case 3:
-                            _SEPlayer.Stop(19);
-                            _SEPlayer.Play(20, 1);
+                            sp.Stop(19);
+                            sp.Play(20, 1);
                             break;
                     }
                     if (soundType != 2)
@@ -246,10 +246,10 @@ public class Type3Manager : CraneManager
                     switch (soundType)
                     {
                         case 2:
-                            _SEPlayer.Play(15, 2);
+                            sp.Play(15, 2);
                             break;
                         case 3:
-                            _SEPlayer.Play(21);
+                            sp.Play(21);
                             break;
                     }
                     if (downTime > 0 && downTime <= 4600)
@@ -275,7 +275,7 @@ public class Type3Manager : CraneManager
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.Stop(21);
+                            sp.Stop(21);
                             break;
                     }
                     if (probability) armPower = armPowerConfigSuccess[0];
@@ -298,15 +298,15 @@ public class Type3Manager : CraneManager
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(3);
-                            _SEPlayer.Play(4);
+                            sp.Stop(3);
+                            sp.Play(4);
                             break;
                         case 1:
-                            _SEPlayer.Stop(10);
-                            _SEPlayer.Play(11);
+                            sp.Stop(10);
+                            sp.Play(11);
                             break;
                         case 3:
-                            _SEPlayer.Play(22);
+                            sp.Play(22);
                             break;
                     }
                     ropeManager.Up();
@@ -314,8 +314,8 @@ public class Type3Manager : CraneManager
                     if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
                 }
                 if (soundType == 2)
-                    if (!_SEPlayer.audioSource[15].isPlaying)
-                        _SEPlayer.Play(14);
+                    if (!sp.audioSource[15].isPlaying)
+                        sp.Play(14);
                 if (probability && armPower > armPowerConfigSuccess[1])
                 {
                     armPower -= 0.5f;
@@ -345,7 +345,7 @@ public class Type3Manager : CraneManager
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.Stop(22);
+                            sp.Stop(22);
                             break;
                     }
                     if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
@@ -364,18 +364,18 @@ public class Type3Manager : CraneManager
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(4);
-                            _SEPlayer.Play(1);
+                            sp.Stop(4);
+                            sp.Play(1);
                             break;
                         case 3:
-                            _SEPlayer.Play(23);
+                            sp.Play(23);
                             break;
                     }
 
                 }
                 if (soundType == 2)
-                    if (!_SEPlayer.audioSource[15].isPlaying)
-                        _SEPlayer.Play(14);
+                    if (!sp.audioSource[15].isPlaying)
+                        sp.Play(14);
                 if (!armController.autoPower)
                 {
                     if (support.prizeCount > 0)
@@ -407,8 +407,8 @@ public class Type3Manager : CraneManager
                     switch (soundType)
                     {
                         case 3:
-                            _SEPlayer.Stop(23);
-                            _SEPlayer.Play(24, 1);
+                            sp.Stop(23);
+                            sp.Play(24, 1);
                             break;
                     }
                     await Task.Delay(2000);
@@ -429,12 +429,12 @@ public class Type3Manager : CraneManager
                     switch (soundType)
                     {
                         case 2:
-                            _SEPlayer.Stop(14);
-                            if (!_SEPlayer.audioSource[16].isPlaying)
-                                _SEPlayer.Play(17, 1);
+                            sp.Stop(14);
+                            if (!sp.audioSource[16].isPlaying)
+                                sp.Play(17, 1);
                             break;
                         case 3:
-                            _SEPlayer.Play(25, 1);
+                            sp.Play(25, 1);
                             break;
                     }
                     for (int i = 0; i < 12; i++)
@@ -444,10 +444,10 @@ public class Type3Manager : CraneManager
                     switch (soundType)
                     {
                         case 0:
-                            _SEPlayer.Stop(1);
+                            sp.Stop(1);
                             break;
                         case 1:
-                            _SEPlayer.Stop(11);
+                            sp.Stop(11);
                             break;
                     }
                     if (creditSystem.creditDisplayed > 0)
@@ -481,20 +481,20 @@ public class Type3Manager : CraneManager
         {
             case 0:
                 getSoundNum = 5;
-                _SEPlayer.Stop(1);
+                sp.Stop(1);
                 break;
             case 1:
                 getSoundNum = 12;
-                _SEPlayer.Stop(11);
+                sp.Stop(11);
                 break;
             case 2:
                 getSoundNum = 16;
-                _SEPlayer.Stop(14);
-                _SEPlayer.Stop(17);
+                sp.Stop(14);
+                sp.Stop(17);
                 break;
             case 3:
                 getSoundNum = 26;
-                _SEPlayer.Stop(25);
+                sp.Stop(25);
                 break;
         }
 

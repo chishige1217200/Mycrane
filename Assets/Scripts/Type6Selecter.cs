@@ -18,8 +18,8 @@ public class Type6Selecter : MonoBehaviour
         bp.SetAudioPitch(audioPitch);
         manager[0].soundType = soundType;
         manager[1].soundType = soundType;
-        manager[0]._SEPlayer.SetAudioPitch(audioPitch);
-        manager[1]._SEPlayer.SetAudioPitch(audioPitch);
+        manager[0].sp.SetAudioPitch(audioPitch);
+        manager[1].sp.SetAudioPitch(audioPitch);
 
         for (int i = 0; i < 3; i++)
         {

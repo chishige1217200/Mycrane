@@ -46,7 +46,7 @@ public class Type4Manager : CraneManager
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        _SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        sp = this.transform.Find("SE").GetComponent<SEPlayer>();
         lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = this.transform.Find("CraneUnit").transform;
@@ -74,15 +74,15 @@ public class Type4Manager : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         getPoint.SetManager(-1);
         getSoundNum = 6;
         ropeManager.Up();
         creditSystem.SetCreditSound(0);
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         //support.SetManager(4);
         support.SetRopeManager(ropeManager);
-        roter.SetSEPlayer(_SEPlayer);
+        roter.SetSEPlayer(sp);
         support.pushTime = 300; // 押し込みパワーの調整
         for (int i = 0; i < 2; i++)
         {
@@ -188,15 +188,15 @@ public class Type4Manager : CraneManager
                     DetectKey(craneStatus);
                     if (!player2 & craneBox.CheckPos(7))
                     {
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2, 1);
+                        sp.Stop(1);
+                        sp.Play(2, 1);
                         buttonPushed = false;
                         craneStatus = 3;
                     }
                     if (player2 & craneBox.CheckPos(5))
                     {
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2, 1);
+                        sp.Stop(1);
+                        sp.Play(2, 1);
                         buttonPushed = false;
                         craneStatus = 3;
                     }
@@ -213,8 +213,8 @@ public class Type4Manager : CraneManager
                     DetectKey(craneStatus);
                     if (craneBox.CheckPos(8))
                     {
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2, 1);
+                        sp.Stop(1);
+                        sp.Play(2, 1);
                         buttonPushed = false;
                         craneStatus = 5;
                     }
@@ -239,8 +239,8 @@ public class Type4Manager : CraneManager
                             leverTilted = true;
                             isExecuted[15] = false;
                             videoManager.Play(1);
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(1, 1);
+                            sp.Stop(2);
+                            sp.Play(1, 1);
                         }
 
                         if ((Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.G)
@@ -248,16 +248,16 @@ public class Type4Manager : CraneManager
                         {
                             leverTilted = true;
                             videoManager.Play(1);
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(1, 1);
+                            sp.Stop(2);
+                            sp.Play(1, 1);
                         }
                         if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoManager.Play(0);
-                            _SEPlayer.Stop(1);
-                            _SEPlayer.Play(2, 1);
+                            sp.Stop(1);
+                            sp.Play(2, 1);
                         }
                     }
                     else
@@ -268,8 +268,8 @@ public class Type4Manager : CraneManager
                             leverTilted = true;
                             isExecuted[15] = false;
                             videoManager.Play(1);
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(1, 1);
+                            sp.Stop(2);
+                            sp.Play(1, 1);
                         }
 
 
@@ -278,16 +278,16 @@ public class Type4Manager : CraneManager
                         {
                             leverTilted = true;
                             videoManager.Play(1);
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(1, 1);
+                            sp.Stop(2);
+                            sp.Play(1, 1);
                         }
                         if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoManager.Play(0);
-                            _SEPlayer.Stop(1);
-                            _SEPlayer.Play(2, 1);
+                            sp.Stop(1);
+                            sp.Play(2, 1);
                         }
                     }
                 }
@@ -301,8 +301,8 @@ public class Type4Manager : CraneManager
                             leverTilted = true;
                             isExecuted[15] = false;
                             videoManager.Play(1);
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(1, 1);
+                            sp.Stop(2);
+                            sp.Play(1, 1);
                         }
 
                         if ((Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.G)
@@ -310,16 +310,16 @@ public class Type4Manager : CraneManager
                         {
                             leverTilted = true;
                             videoManager.Play(1);
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(1, 1);
+                            sp.Stop(2);
+                            sp.Play(1, 1);
                         }
                         if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoManager.Play(0);
-                            _SEPlayer.Stop(1);
-                            _SEPlayer.Play(2, 1);
+                            sp.Stop(1);
+                            sp.Play(2, 1);
                         }
                     }
                     else
@@ -330,8 +330,8 @@ public class Type4Manager : CraneManager
                             leverTilted = true;
                             isExecuted[15] = false;
                             videoManager.Play(1);
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(1, 1);
+                            sp.Stop(2);
+                            sp.Play(1, 1);
                         }
 
 
@@ -340,16 +340,16 @@ public class Type4Manager : CraneManager
                         {
                             leverTilted = true;
                             videoManager.Play(1);
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(1, 1);
+                            sp.Stop(2);
+                            sp.Play(1, 1);
                         }
                         if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
                         {
                             leverTilted = false;
                             videoManager.Play(0);
-                            _SEPlayer.Stop(1);
-                            _SEPlayer.Play(2, 1);
+                            sp.Stop(1);
+                            sp.Play(2, 1);
                         }
 
                     }
@@ -380,9 +380,9 @@ public class Type4Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Stop(3);
-                    _SEPlayer.Stop(4);
-                    _SEPlayer.Play(5, 1);
+                    sp.Stop(3);
+                    sp.Stop(4);
+                    sp.Play(5, 1);
                     if (craneStatus == 8) ropeManager.Down(); //awaitによる時差実行を防止
                 }
                 DetectKey(craneStatus);
@@ -469,7 +469,7 @@ public class Type4Manager : CraneManager
                     for (int i = 0; i < 14; i++)
                         isExecuted[i] = false;
                     armController.SetLimit(armApertures); //アーム開口度リセット
-                    if (!_SEPlayer.audioSource[6].isPlaying) _SEPlayer.Play(7, 1);
+                    if (!sp.audioSource[6].isPlaying) sp.Play(7, 1);
 
                     creditSystem.ResetPayment();
                     int credit = creditSystem.PlayStart();
@@ -515,7 +515,7 @@ public class Type4Manager : CraneManager
 
     public override void GetPrize()
     {
-        _SEPlayer.Stop(7);
+        sp.Stop(7);
         base.GetPrize();
     }
 
@@ -537,7 +537,7 @@ public class Type4Manager : CraneManager
                             isExecuted[15] = false;
                         }
                         craneStatus = 2;
-                        _SEPlayer.Play(1, 1);
+                        sp.Play(1, 1);
                     }
                     if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonPushed && player2)
                     {
@@ -550,7 +550,7 @@ public class Type4Manager : CraneManager
                             isExecuted[15] = false;
                         }
                         craneStatus = 2;
-                        _SEPlayer.Play(1, 1);
+                        sp.Play(1, 1);
                     }
                     break;
                 //投入を無効化
@@ -558,15 +558,15 @@ public class Type4Manager : CraneManager
                     if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed && !player2)
                     {
                         craneStatus = 3;
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2, 1);
+                        sp.Stop(1);
+                        sp.Play(2, 1);
                         buttonPushed = false;
                     }
                     if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonPushed && player2)
                     {
                         craneStatus = 3;
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2, 1);
+                        sp.Stop(1);
+                        sp.Play(2, 1);
                         buttonPushed = false;
                     }
                     break;
@@ -575,28 +575,28 @@ public class Type4Manager : CraneManager
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        _SEPlayer.ForcePlay(1);
+                        sp.ForcePlay(1);
                     }
                     if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonPushed && player2)
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        _SEPlayer.ForcePlay(1);
+                        sp.ForcePlay(1);
                     }
                     break;
                 case 4:
                     if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed && !player2)
                     {
                         craneStatus = 5;
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.ForcePlay(2);
+                        sp.Stop(1);
+                        sp.ForcePlay(2);
                         buttonPushed = false;
                     }
                     if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonPushed && player2)
                     {
                         craneStatus = 5;
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.ForcePlay(2);
+                        sp.Stop(1);
+                        sp.ForcePlay(2);
                         buttonPushed = false;
                     }
                     break;
@@ -698,11 +698,11 @@ public class Type4Manager : CraneManager
                         craneStatus = 2;
                         creditSystem.ResetPayment();
                         videoManager.Play(1);
-                        _SEPlayer.Play(1, 1);
+                        sp.Play(1, 1);
                         isExecuted[15] = false;
                     }
                     if (craneStatus == 2 && buttonPushed)
-                        _SEPlayer.Play(1, 1);
+                        sp.Play(1, 1);
 
                     break;
                 case 2:
@@ -710,7 +710,7 @@ public class Type4Manager : CraneManager
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        _SEPlayer.Play(1, 1);
+                        sp.Play(1, 1);
                     }
                     break;
                 case 3:
@@ -750,11 +750,11 @@ public class Type4Manager : CraneManager
                         craneStatus = 2;
                         creditSystem.ResetPayment();
                         videoManager.Play(1);
-                        _SEPlayer.Play(1, 1);
+                        sp.Play(1, 1);
                         isExecuted[15] = false;
                     }
                     if (craneStatus == 2 && buttonPushed)
-                        _SEPlayer.Play(1, 1);
+                        sp.Play(1, 1);
                     break;
             }
         }
@@ -770,8 +770,8 @@ public class Type4Manager : CraneManager
                     if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2, 1);
+                        sp.Stop(1);
+                        sp.Play(2, 1);
                         buttonPushed = false;
                     }
                     break;
@@ -779,8 +779,8 @@ public class Type4Manager : CraneManager
                     if (craneStatus == 4 && buttonPushed)
                     {
                         craneStatus = 5;
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2, 1);
+                        sp.Stop(1);
+                        sp.Play(2, 1);
                         buttonPushed = false;
                     }
                     break;
@@ -788,8 +788,8 @@ public class Type4Manager : CraneManager
                     if (craneStatus == 2 && buttonPushed)
                     {
                         craneStatus = 3;
-                        _SEPlayer.Stop(1);
-                        _SEPlayer.Play(2, 1);
+                        sp.Stop(1);
+                        sp.Play(2, 1);
                         buttonPushed = false;
                     }
                     break;

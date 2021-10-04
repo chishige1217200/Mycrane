@@ -19,8 +19,8 @@ public class Type5Selecter : MonoBehaviour
         bp.SetAudioPitch(audioPitch);
         manager[0].soundType = soundType;
         manager[1].soundType = soundType;
-        manager[0]._SEPlayer.SetAudioPitch(audioPitch);
-        manager[1]._SEPlayer.SetAudioPitch(audioPitch);
+        manager[0].sp.SetAudioPitch(audioPitch);
+        manager[1].sp.SetAudioPitch(audioPitch);
 
         for (int i = 0; i < 3; i++)
         {
@@ -82,7 +82,7 @@ public class Type5Selecter : MonoBehaviour
                     break;
             }
             /*if (bp.audioSource[0].isPlaying) await Task.Delay(500);
-            if (!bp.audioSource[1].isPlaying && (!_SEPlayer[0].audioSource[6].isPlaying || !_SEPlayer[1].audioSource[6].isPlaying))
+            if (!bp.audioSource[1].isPlaying && (!sp[0].audioSource[6].isPlaying || !sp[1].audioSource[6].isPlaying))
             {
                 bp.Stop(0);
                 bp.Play(1);

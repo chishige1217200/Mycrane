@@ -48,7 +48,7 @@ public class Type6Manager : CraneManager
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        //_SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        //sp = this.transform.Find("SE").GetComponent<SEPlayer>();
         lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever").GetComponent<Lever>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         timer = this.transform.Find("Timer").GetComponent<Timer>();
@@ -76,15 +76,15 @@ public class Type6Manager : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         timer.limitTime = limitTimeSet;
-        timer.SetSEPlayer(_SEPlayer);
+        timer.SetSEPlayer(sp);
         getPoint.SetManager(-1);
         getSoundNum = 7;
         ropeManager.Up();
         await Task.Delay(500);
         creditSystem.SetCreditSound(0);
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         support.SetManager(6);
         support.SetRopeManager(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
@@ -157,13 +157,13 @@ public class Type6Manager : CraneManager
                         || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                         {
                             leverTilted = true;
-                            _SEPlayer.Play(1);
+                            sp.Play(1);
                         }
                         if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
                         {
                             leverTilted = false;
-                            _SEPlayer.Stop(1);
+                            sp.Stop(1);
                         }
                     }
                     else
@@ -172,13 +172,13 @@ public class Type6Manager : CraneManager
                         || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                         {
                             leverTilted = true;
-                            _SEPlayer.Play(1);
+                            sp.Play(1);
                         }
                         if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
                         {
                             leverTilted = false;
-                            _SEPlayer.Stop(1);
+                            sp.Stop(1);
                         }
                     }
                 }
@@ -200,13 +200,13 @@ public class Type6Manager : CraneManager
                     || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                     {
                         leverTilted = true;
-                        _SEPlayer.Play(1);
+                        sp.Play(1);
                     }
                     if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
                     && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
                     {
                         leverTilted = false;
-                        _SEPlayer.Stop(1);
+                        sp.Stop(1);
                     }
                 }
                 else
@@ -215,13 +215,13 @@ public class Type6Manager : CraneManager
                     || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                     {
                         leverTilted = true;
-                        _SEPlayer.Play(1);
+                        sp.Play(1);
                     }
                     if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
                     && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted) || !host.playable)
                     {
                         leverTilted = false;
-                        _SEPlayer.Stop(1);
+                        sp.Stop(1);
                     }
                 }
                 if (isExecuted[craneStatus] && timer.limitTimeNow <= 0) craneStatus = 3; // 時間切れになったら下降
@@ -230,7 +230,7 @@ public class Type6Manager : CraneManager
 
             if (craneStatus == 3) //アーム開く
             {
-                _SEPlayer.Stop(1);
+                sp.Stop(1);
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -247,7 +247,7 @@ public class Type6Manager : CraneManager
                         if (!openEnd)
                         {
                             armController.ArmOpen();
-                            _SEPlayer.Play(3, 1);
+                            sp.Play(3, 1);
                             await Task.Delay(1200);
                         }
                         if (craneStatus == 3) craneStatus = 4;
@@ -260,7 +260,7 @@ public class Type6Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Play(4);
+                    sp.Play(4);
                     ropeManager.Down(); //awaitによる時差実行を防止
                 }
                 if (downStop) DetectKey(craneStatus); // 下降停止ボタン有効化
@@ -272,11 +272,11 @@ public class Type6Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Stop(4);
+                    sp.Stop(4);
                     //アーム下降音再生停止;
                     await Task.Delay(1000);
                     //アーム掴む音再生;
-                    _SEPlayer.Play(5, 1);
+                    sp.Play(5, 1);
 
                     armController.ArmClose(30f);
 
@@ -304,7 +304,7 @@ public class Type6Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Play(4);
+                    sp.Play(4);
 
                     ropeManager.Up();
                     if (!probability && releaseTiming == 1)
@@ -355,8 +355,8 @@ public class Type6Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
 
-                    _SEPlayer.Stop(4);
-                    _SEPlayer.Play(6);
+                    sp.Stop(4);
+                    sp.Play(6);
                     if (!probability && releaseTiming == 2)
                     {
                         await Task.Delay(waitTime);
@@ -386,8 +386,8 @@ public class Type6Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
 
-                    _SEPlayer.Stop(6);
-                    _SEPlayer.Play(3, 1);
+                    sp.Stop(6);
+                    sp.Play(3, 1);
                     armController.ArmLimit(100f); // アーム開口度を100に
                     armController.ArmOpen();
                     await Task.Delay(2500);
@@ -402,7 +402,7 @@ public class Type6Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     if (!openEnd)
                     {
-                        _SEPlayer.Play(5, 1);
+                        sp.Play(5, 1);
                         armController.ArmClose(100f);
                         await Task.Delay(2500);
                     }

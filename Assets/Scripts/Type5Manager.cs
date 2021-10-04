@@ -44,7 +44,7 @@ public class Type5Manager : CraneManager
         host = this.transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = this.transform.Find("Canvas").gameObject;
         creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        //_SEPlayer = this.transform.Find("SE").GetComponent<SEPlayer>();
+        //sp = this.transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
 
         temp = this.transform.Find("CraneUnit").transform;
@@ -70,7 +70,7 @@ public class Type5Manager : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         getPoint.SetManager(-1);
         switch (soundType)
         {
@@ -87,7 +87,7 @@ public class Type5Manager : CraneManager
         await Task.Delay(500);
         if (soundType == 0 || soundType == 1 || soundType == 2) creditSystem.SetCreditSound(0);
         else creditSystem.SetCreditSound(8);
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
         support.SetManager(5);
         support.SetRopeManager(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
@@ -172,10 +172,10 @@ public class Type5Manager : CraneManager
                     case 0:
                     case 1:
                     case 2:
-                        _SEPlayer.Play(1);
+                        sp.Play(1);
                         break;
                     case 3:
-                        _SEPlayer.Play(9);
+                        sp.Play(9);
                         break;
                 }
                 if (!player2 & craneBox.CheckPos(7))
@@ -199,10 +199,10 @@ public class Type5Manager : CraneManager
                     case 0:
                     case 1:
                     case 2:
-                        _SEPlayer.Stop(1);
+                        sp.Stop(1);
                         break;
                     case 3:
-                        _SEPlayer.Stop(9);
+                        sp.Stop(9);
                         break;
                 }
                 //右移動効果音ループ再生停止;
@@ -218,10 +218,10 @@ public class Type5Manager : CraneManager
                     case 0:
                     case 1:
                     case 2:
-                        _SEPlayer.Play(2);
+                        sp.Play(2);
                         break;
                     case 3:
-                        _SEPlayer.Play(10);
+                        sp.Play(10);
                         break;
                 }
                 if (craneBox.CheckPos(8))
@@ -234,7 +234,7 @@ public class Type5Manager : CraneManager
 
             if (craneStatus == 5)
             {
-                _SEPlayer.Stop(1); //奥移動効果音ループ再生停止;
+                sp.Stop(1); //奥移動効果音ループ再生停止;
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -244,12 +244,12 @@ public class Type5Manager : CraneManager
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Stop(2);
-                            _SEPlayer.Play(3, 1);
+                            sp.Stop(2);
+                            sp.Play(3, 1);
                             break;
                         case 3:
-                            _SEPlayer.Stop(10);
-                            _SEPlayer.Play(11, 1);
+                            sp.Stop(10);
+                            sp.Play(11, 1);
                             break;
                     }
                     await Task.Delay(1700);
@@ -269,10 +269,10 @@ public class Type5Manager : CraneManager
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Play(4);
+                            sp.Play(4);
                             break;
                         case 3:
-                            _SEPlayer.Play(12);
+                            sp.Play(12);
                             break;
                     }
                     if (craneStatus == 6) ropeManager.Down(); //awaitによる時差実行を防止
@@ -290,10 +290,10 @@ public class Type5Manager : CraneManager
                     case 0:
                     case 1:
                     case 2:
-                        _SEPlayer.Stop(4);
+                        sp.Stop(4);
                         break;
                     case 3:
-                        _SEPlayer.Stop(12);
+                        sp.Stop(12);
                         break;
                 }
                 //アーム下降音再生停止;
@@ -307,10 +307,10 @@ public class Type5Manager : CraneManager
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Play(5, 1);
+                            sp.Play(5, 1);
                             break;
                         case 3:
-                            _SEPlayer.Play(13, 1);
+                            sp.Play(13, 1);
                             break;
                     }
                     armController.Close(30f);
@@ -351,10 +351,10 @@ public class Type5Manager : CraneManager
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Play(4);
+                            sp.Play(4);
                             break;
                         case 3:
-                            _SEPlayer.Play(14);
+                            sp.Play(14);
                             break;
                     }
                     ropeManager.Up();
@@ -421,12 +421,12 @@ public class Type5Manager : CraneManager
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Stop(4);
-                            _SEPlayer.Play(6);
+                            sp.Stop(4);
+                            sp.Play(6);
                             break;
                         case 3:
-                            _SEPlayer.Stop(14);
-                            _SEPlayer.Play(9);
+                            sp.Stop(14);
+                            sp.Play(9);
                             break;
                     }
                 }
@@ -459,12 +459,12 @@ public class Type5Manager : CraneManager
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Stop(6);
-                            _SEPlayer.Play(3, 1);
+                            sp.Stop(6);
+                            sp.Play(3, 1);
                             break;
                         case 3:
-                            _SEPlayer.Stop(9);
-                            _SEPlayer.Play(11, 1);
+                            sp.Stop(9);
+                            sp.Play(11, 1);
                             break;
                     }
                     armController.SetLimit(100f); // アーム開口度を100に
@@ -487,10 +487,10 @@ public class Type5Manager : CraneManager
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Play(5, 1);
+                            sp.Play(5, 1);
                             break;
                         case 3:
-                            _SEPlayer.Play(13, 1);
+                            sp.Play(13, 1);
                             break;
                     }
                     armController.Close(100f);
@@ -512,7 +512,7 @@ public class Type5Manager : CraneManager
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Play(6);
+                            sp.Play(6);
                             break;
                     }
                 }
@@ -523,7 +523,7 @@ public class Type5Manager : CraneManager
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Stop(6);
+                            sp.Stop(6);
                             break;
                     }
                     await Task.Delay(1000);
@@ -541,7 +541,7 @@ public class Type5Manager : CraneManager
                         case 0:
                         case 1:
                         case 2:
-                            _SEPlayer.Play(6);
+                            sp.Play(6);
                             break;
                     }
                     for (int i = 0; i < 14; i++)
@@ -560,7 +560,7 @@ public class Type5Manager : CraneManager
                             case 0:
                             case 1:
                             case 2:
-                                _SEPlayer.Stop(6);
+                                sp.Stop(6);
                                 break;
                         }
                         if (creditSystem.creditDisplayed > 0)

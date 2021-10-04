@@ -9,7 +9,7 @@ public abstract class CraneManager : MonoBehaviour
     protected bool probability; //確率判定用
     protected int getSoundNum = -1;
     protected CreditSystem creditSystem;
-    public SEPlayer _SEPlayer;
+    public SEPlayer sp;
     protected CraneBox craneBox;
     protected GetPoint getPoint;
     protected MachineHost host;
@@ -29,10 +29,10 @@ public abstract class CraneManager : MonoBehaviour
                 creditSystem.ResetCostProbability();
                 break;
         }
-        if (!_SEPlayer.audioSource[getSoundNum].isPlaying)
+        if (!sp.audioSource[getSoundNum].isPlaying)
         {
             if (getSoundNum != -1)
-                _SEPlayer.Play(getSoundNum, 1);
+                sp.Play(getSoundNum, 1);
         }
     }
 

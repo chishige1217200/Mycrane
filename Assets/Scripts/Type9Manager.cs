@@ -29,7 +29,7 @@ public class Type9Manager : CraneManager
         host = transform.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        _SEPlayer = transform.Find("SE").GetComponent<SEPlayer>();
+        sp = transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = transform.Find("CraneUnit").transform;
 
@@ -52,7 +52,7 @@ public class Type9Manager : CraneManager
         roter = temp.GetComponent<CraneUnitRoter>();
 
         // ロープにマネージャー情報をセット
-        creditSystem.SetSEPlayer(_SEPlayer);
+        creditSystem.SetSEPlayer(sp);
 
         creditSystem.SetCreditSound(0);
         getSoundNum = 4;
@@ -90,7 +90,7 @@ public class Type9Manager : CraneManager
             if (craneStatus == 2)
             {
                 DetectKey(craneStatus);
-                _SEPlayer.Play(1);
+                sp.Play(1);
                 if (roter.CheckPos(1))
                 {
                     buttonPushed = false;
@@ -102,15 +102,15 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Play(2, 1);
+                    sp.Play(2, 1);
                 }
                 DetectKey(craneStatus);
-                _SEPlayer.Stop(1);
+                sp.Stop(1);
             }
             if (craneStatus == 4)
             {
                 DetectKey(craneStatus);
-                _SEPlayer.Play(1);
+                sp.Play(1);
                 if (craneBox.CheckPos(8))
                 {
                     buttonPushed = false;
@@ -122,8 +122,8 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Stop(1);
-                    _SEPlayer.ForcePlay(2);
+                    sp.Stop(1);
+                    sp.ForcePlay(2);
                     armController.Open();
                     await Task.Delay(1500);
                     if (craneStatus == 5)
@@ -138,7 +138,7 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Play(3, 1);
+                    sp.Play(3, 1);
                 }
                 if (ropeManager.DownFinished() && craneStatus == 6) IncrimentStatus();
             }
@@ -178,7 +178,7 @@ public class Type9Manager : CraneManager
             }
             if (craneStatus == 10) //帰還中
             {
-                _SEPlayer.Play(1);
+                sp.Play(1);
                 if (roter.CheckPos(2) && craneBox.CheckPos(6)) IncrimentStatus();
             }
             if (craneStatus == 11) //アーム開く
@@ -186,8 +186,8 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _SEPlayer.Stop(1);
-                    _SEPlayer.Play(2, 1);
+                    sp.Stop(1);
+                    sp.Play(2, 1);
                     armController.SetLimit(100f); // アーム開口度を100に
                     armController.Open();
                     await Task.Delay(2000);
