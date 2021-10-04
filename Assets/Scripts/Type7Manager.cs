@@ -31,16 +31,16 @@ public class Type7Manager : CraneManager
         craneStatus = -2;
         craneType = 7;
         // 様々なコンポーネントの取得
-        host = this.transform.Find("CP").GetComponent<MachineHost>();
-        canvas = this.transform.Find("Canvas").gameObject;
-        creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        bp = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        sp = this.transform.Find("SE").GetComponent<SEPlayer>();
-        lever[0] = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
-        lever[1] = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").GetComponent<Lever>();
-        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
-        temp = this.transform.Find("CraneUnit").transform;
-        timer = this.transform.Find("Timer").GetComponent<Timer>();
+        host = transform.Find("CP").GetComponent<MachineHost>();
+        canvas = transform.Find("Canvas").gameObject;
+        creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        bp = transform.Find("BGM").GetComponent<BGMPlayer>();
+        //sp = transform.Find("SE").GetComponent<SEPlayer>();
+        lever[0] = transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
+        lever[1] = transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").GetComponent<Lever>();
+        getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        temp = transform.Find("CraneUnit").transform;
+        timer = transform.Find("Timer").GetComponent<Timer>();
 
         // クレジット情報登録
         creditSystem.rateSet[0, 0] = price;
@@ -49,7 +49,7 @@ public class Type7Manager : CraneManager
         creditSystem.rateSet[1, 1] = 0;
 
         // ロープとアームコントローラに関する処理
-        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
         armController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
         support = temp.Find("ArmUnit").Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
 
@@ -66,7 +66,7 @@ public class Type7Manager : CraneManager
         armController.SetManager(7);
         armController.autoPower = autoPower;
 
-        getPoint.SetManager(-1);
+        getPoint.SetManager(this);
         getSoundNum = 4;
 
         await Task.Delay(300);

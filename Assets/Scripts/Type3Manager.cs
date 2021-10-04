@@ -15,7 +15,7 @@ public class Type3Manager : CraneManager
     [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
     [SerializeField] bool autoPower = true;
     public float armPower; //現在のアームパワー
-    BGMPlayer _BGMPlayer;
+    BGMPlayer bp;
     Type3ArmController armController;
     RopeManager ropeManager;
     ArmControllerSupport support;
@@ -29,13 +29,13 @@ public class Type3Manager : CraneManager
         craneType = 3;
 
         // 様々なコンポーネントの取得
-        host = this.transform.Find("CP").GetComponent<MachineHost>();
-        canvas = this.transform.Find("Canvas").gameObject;
-        creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        sp = this.transform.Find("SE").GetComponent<SEPlayer>();
-        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
-        temp = this.transform.Find("CraneUnit").transform;
+        host = transform.Find("CP").GetComponent<MachineHost>();
+        canvas = transform.Find("Canvas").gameObject;
+        creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        bp = transform.Find("BGM").GetComponent<BGMPlayer>();
+        //sp = transform.Find("SE").GetComponent<SEPlayer>();
+        getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
         creditSystem.rateSet[0, 0] = priceSet[0];
@@ -44,7 +44,7 @@ public class Type3Manager : CraneManager
         creditSystem.rateSet[1, 1] = timesSet[1];
 
         // ロープとアームコントローラに関する処理
-        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
         armController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
         support = temp.Find("ArmUnit").Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
 
@@ -59,12 +59,12 @@ public class Type3Manager : CraneManager
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);
         if (soundType == 3) creditSystem.SetCreditSound(-1);
-        _BGMPlayer.SetAudioPitch(audioPitch);
+        bp.SetAudioPitch(audioPitch);
         sp.SetAudioPitch(audioPitch);
         armController.SetManager(3);
         armController.autoPower = autoPower;
 
-        getPoint.SetManager(-1);
+        getPoint.SetManager(this);
 
         await Task.Delay(300);
         ropeManager.Up();
@@ -96,18 +96,18 @@ public class Type3Manager : CraneManager
             switch (soundType)
             {
                 case 0:
-                    if (!sp.audioSource[5].isPlaying) _BGMPlayer.Play(0);
+                    if (!sp.audioSource[5].isPlaying) bp.Play(0);
                     break;
                 case 1:
-                    if (!sp.audioSource[12].isPlaying) _BGMPlayer.Play(1);
+                    if (!sp.audioSource[12].isPlaying) bp.Play(1);
                     break;
                 case 2:
                     if (!sp.audioSource[16].isPlaying && !sp.audioSource[17].isPlaying)
-                        _BGMPlayer.Play(2);
+                        bp.Play(2);
                     break;
                 case 3:
-                    _BGMPlayer.Stop(4);
-                    _BGMPlayer.Play(3);
+                    bp.Stop(4);
+                    bp.Play(3);
                     break;
             }
         }
@@ -119,7 +119,7 @@ public class Type3Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    _BGMPlayer.Stop(soundType);
+                    bp.Stop(soundType);
                 }
                 DetectKey(craneStatus);     //右移動ボタン有効化;
                 switch (soundType)
@@ -129,7 +129,7 @@ public class Type3Manager : CraneManager
                             sp.Play(7);
                         break;
                     case 3:
-                        _BGMPlayer.Play(4);
+                        bp.Play(4);
                         break;
                 }
 
@@ -137,7 +137,7 @@ public class Type3Manager : CraneManager
 
             if (craneStatus == 2)
             { //右移動中
-                _BGMPlayer.Stop(soundType);
+                bp.Stop(soundType);
                 DetectKey(craneStatus);
                 //コイン投入無効化;
                 switch (soundType)

@@ -30,21 +30,20 @@ public class Type1Manager : CraneManager
     async void Start()
     {
         Transform temp;
-        Transform xLimit = this.transform.Find("Floor").Find("XLimit");
-        Transform zLimit = this.transform.Find("Floor").Find("ZLimit");
-        Transform downLimit = this.transform.Find("Floor").Find("DownLimit");
+        Transform xLimit = transform.Find("Floor").Find("XLimit");
+        Transform zLimit = transform.Find("Floor").Find("ZLimit");
+        Transform downLimit = transform.Find("Floor").Find("DownLimit");
 
         craneStatus = -3;
         craneType = 1;
 
         // 様々なコンポーネントの取得
-        host = this.transform.root.Find("CP").GetComponent<MachineHost>();
-        canvas = this.transform.Find("Canvas").gameObject;
-        creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        //_BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        sp = this.transform.Find("SE").GetComponent<SEPlayer>();
-        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
-        temp = this.transform.Find("CraneUnit").transform;
+        host = transform.root.Find("CP").GetComponent<MachineHost>();
+        canvas = transform.Find("Canvas").gameObject;
+        creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        //sp = transform.Find("SE").GetComponent<SEPlayer>();
+        getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
         creditSystem.rateSet[0, 0] = priceSet[0];
@@ -57,7 +56,7 @@ public class Type1Manager : CraneManager
         preset[3].text = timesSet[1].ToString();
 
         // ロープとアームコントローラに関する処理
-        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
         armController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
@@ -68,7 +67,7 @@ public class Type1Manager : CraneManager
 
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(sp);
-        getPoint.SetManager(-1);
+        getPoint.SetManager(this);
         ropeManager.Up();
         creditSystem.SetCreditSound(0);
         creditSystem.SetSEPlayer(sp);
@@ -87,10 +86,10 @@ public class Type1Manager : CraneManager
 
         if (!button3)
         {
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
-            this.transform.Find("Floor").Find("Button3").gameObject.SetActive(false);
+            transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
+            transform.Find("Floor").Find("Button3").gameObject.SetActive(false);
         }
-        else this.transform.Find("Floor").Find("Button3Disabled").gameObject.SetActive(false);
+        else transform.Find("Floor").Find("Button3Disabled").gameObject.SetActive(false);
 
         // イニシャル移動とinsertFlagを後に実行
         while (!ropeManager.UpFinished())

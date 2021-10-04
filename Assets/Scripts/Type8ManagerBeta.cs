@@ -82,7 +82,7 @@ public class Type8ManagerBeta : CraneManager
         bp.SetAudioPitch(audioPitch);
         sp.SetAudioPitch(audioPitch);
 
-        getPoint.SetManager(3);
+        getPoint.SetManager(this);
 
         await Task.Delay(300);
         ropeManager.Up();

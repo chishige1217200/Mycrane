@@ -17,7 +17,7 @@ public class Type2Manager : CraneManager
     [SerializeField] int releaseTiming = 2; //0:設定無し，1:上昇開始後，2:移動開始後
     [SerializeField] int waitTime = 1; //n秒計測に使用（releaseTiming = 1,2で有効）
     public float armPower; //現在のアームパワー
-    BGMPlayer _BGMPlayer;
+    BGMPlayer bp;
     Type2ArmController armController;
     RopeManager ropeManager;
     Lever lever;
@@ -34,15 +34,15 @@ public class Type2Manager : CraneManager
         craneType = 2;
 
         // 様々なコンポーネントの取得
-        host = this.transform.Find("CP").GetComponent<MachineHost>();
-        canvas = this.transform.Find("Canvas").gameObject;
-        creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        _BGMPlayer = this.transform.Find("BGM").GetComponent<BGMPlayer>();
-        sp = this.transform.Find("SE").GetComponent<SEPlayer>();
-        lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
-        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
-        timer = this.transform.Find("Timer").GetComponent<Timer>();
-        temp = this.transform.Find("CraneUnit").transform;
+        host = transform.Find("CP").GetComponent<MachineHost>();
+        canvas = transform.Find("Canvas").gameObject;
+        creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        bp = transform.Find("BGM").GetComponent<BGMPlayer>();
+        //sp = transform.Find("SE").GetComponent<SEPlayer>();
+        lever = transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
+        getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        timer = transform.Find("Timer").GetComponent<Timer>();
+        temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
         creditSystem.rateSet[0, 0] = priceSet[0];
@@ -55,7 +55,7 @@ public class Type2Manager : CraneManager
         preset[3].text = timesSet[1].ToString();
 
         // ロープとアームコントローラに関する処理
-        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
         armController = temp.Find("ArmUnit").GetComponent<Type2ArmController>();
 
         // CraneBoxに関する処理
@@ -80,10 +80,10 @@ public class Type2Manager : CraneManager
             timer.SetAlertSound(11);
         }
         getSoundNum = 5;
-        _BGMPlayer.SetAudioPitch(audioPitch);
+        bp.SetAudioPitch(audioPitch);
         sp.SetAudioPitch(audioPitch);
 
-        getPoint.SetManager(2);
+        getPoint.SetManager(this);
         ropeManager.Up();
 
         for (int i = 0; i < 12; i++)
@@ -92,16 +92,16 @@ public class Type2Manager : CraneManager
         // ControlGroupの制御
         if (operationType == 0)
         {
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(false);
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(false);
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(false);
-            this.transform.Find("Floor").Find("Type2B").gameObject.SetActive(true);
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(false);
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(false);
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(false);
+            transform.Find("Floor").Find("Type2B").gameObject.SetActive(true);
         }
         else if (operationType == 1)
         {
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(false);
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(false);
-            this.transform.Find("Floor").Find("Type2L").gameObject.SetActive(true);
+            transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(false);
+            transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(false);
+            transform.Find("Floor").Find("Type2L").gameObject.SetActive(true);
         }
 
         while (!ropeManager.UpFinished())
@@ -123,8 +123,8 @@ public class Type2Manager : CraneManager
 
         if (craneStatus == 0)
         {
-            _BGMPlayer.Stop(1 + 2 * soundType);
-            _BGMPlayer.Play(2 * soundType);
+            bp.Stop(1 + 2 * soundType);
+            bp.Play(2 * soundType);
             //コイン投入有効化;
         }
         else
@@ -134,8 +134,8 @@ public class Type2Manager : CraneManager
                 if (craneStatus == 1)
                 {
                     //コイン投入有効化;
-                    _BGMPlayer.Stop(2 * soundType);
-                    _BGMPlayer.Play(1 + 2 * soundType);
+                    bp.Stop(2 * soundType);
+                    bp.Play(1 + 2 * soundType);
                     DetectKey(craneStatus);     //右移動ボタン有効化;
                 }
 
@@ -175,8 +175,8 @@ public class Type2Manager : CraneManager
             {
                 if (craneStatus == 1)
                 {
-                    _BGMPlayer.Stop(2 * soundType);
-                    _BGMPlayer.Play(1 + 2 * soundType);
+                    bp.Stop(2 * soundType);
+                    bp.Play(1 + 2 * soundType);
                     //レバー操作有効化;
                     //降下ボタン有効化;
                 }

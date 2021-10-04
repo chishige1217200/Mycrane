@@ -37,7 +37,7 @@ public class Type8Manager : CraneManager
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         bp = transform.Find("BGM").GetComponent<BGMPlayer>();
-        sp = transform.Find("SE").GetComponent<SEPlayer>();
+        //sp = transform.Find("SE").GetComponent<SEPlayer>();
         lever = transform.Find("Canvas").Find("ControlGroup").Find("Lever").GetComponent<Lever>();
         getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         timer = transform.Find("Timer").GetComponent<Timer>();
@@ -80,7 +80,7 @@ public class Type8Manager : CraneManager
         bp.SetAudioPitch(audioPitch);
         sp.SetAudioPitch(audioPitch);
 
-        getPoint.SetManager(-1); // テスト中
+        getPoint.SetManager(this); // テスト中
 
         await Task.Delay(300);
         ropeManager.Up();

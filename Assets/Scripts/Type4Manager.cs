@@ -36,20 +36,20 @@ public class Type4Manager : CraneManager
     async void Start()
     {
         Transform temp;
-        Transform xLimit = this.transform.Find("Floor").Find("XLimit");
-        Transform zLimit = this.transform.Find("Floor").Find("ZLimit");
-        Transform downLimit = this.transform.Find("Floor").Find("DownLimit");
+        Transform xLimit = transform.Find("Floor").Find("XLimit");
+        Transform zLimit = transform.Find("Floor").Find("ZLimit");
+        Transform downLimit = transform.Find("Floor").Find("DownLimit");
 
         craneStatus = -2;
         craneType = 4;
         // 様々なコンポーネントの取得
-        host = this.transform.root.Find("CP").GetComponent<MachineHost>();
-        canvas = this.transform.Find("Canvas").gameObject;
-        creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        sp = this.transform.Find("SE").GetComponent<SEPlayer>();
-        lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
-        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
-        temp = this.transform.Find("CraneUnit").transform;
+        host = transform.root.Find("CP").GetComponent<MachineHost>();
+        canvas = transform.Find("Canvas").gameObject;
+        creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        //sp = transform.Find("SE").GetComponent<SEPlayer>();
+        lever = transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
+        getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
         creditSystem.rateSet[0, 0] = priceSet[0];
@@ -62,12 +62,12 @@ public class Type4Manager : CraneManager
         preset[3].text = timesSet[1].ToString();
 
         // ロープとアームコントローラに関する処理
-        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
         armController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
         nail[1] = temp.Find("ArmUnit").Find("Arm2").Find("Nail2").GetComponent<ArmNail>();
-        videoManager = this.transform.Find("VideoPlay").GetComponent<Type4VideoManager>();
+        videoManager = transform.Find("VideoPlay").GetComponent<Type4VideoManager>();
         roter = temp.Find("ArmUnit").Find("Main").GetComponent<Type4ArmunitRoter>();
 
         // CraneBoxに関する処理
@@ -75,7 +75,7 @@ public class Type4Manager : CraneManager
 
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(sp);
-        getPoint.SetManager(-1);
+        getPoint.SetManager(this);
         getSoundNum = 6;
         ropeManager.Up();
         creditSystem.SetCreditSound(0);
@@ -98,10 +98,10 @@ public class Type4Manager : CraneManager
         // ControlGroupの制御
         if (operationType == 0)
         {
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(false);
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(false);
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(false);
-            this.transform.Find("Floor").Find("ButtonUnit").gameObject.SetActive(true);
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(false);
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(false);
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(false);
+            transform.Find("Floor").Find("ButtonUnit").gameObject.SetActive(true);
             if (!player2)
             {
                 downButtonAlpha = KeyCode.Alpha3;
@@ -115,10 +115,10 @@ public class Type4Manager : CraneManager
         }
         else if (operationType == 1)
         {
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(false);
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(false);
-            this.transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
-            this.transform.Find("Floor").Find("LeverUnit").gameObject.SetActive(true);
+            transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(false);
+            transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(false);
+            transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
+            transform.Find("Floor").Find("LeverUnit").gameObject.SetActive(true);
             if (!player2)
             {
                 downButtonAlpha = KeyCode.Alpha2;

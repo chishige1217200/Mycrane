@@ -29,7 +29,7 @@ public class Type9Manager : CraneManager
         host = transform.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        sp = transform.Find("SE").GetComponent<SEPlayer>();
+        //sp = transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = transform.Find("CraneUnit").transform;
 
@@ -57,7 +57,7 @@ public class Type9Manager : CraneManager
         creditSystem.SetCreditSound(0);
         getSoundNum = 4;
 
-        getPoint.SetManager(-1); // テスト中
+        getPoint.SetManager(this); // テスト中
 
         await Task.Delay(300);
         ropeManager.Up();

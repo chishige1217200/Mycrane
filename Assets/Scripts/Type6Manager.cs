@@ -38,21 +38,21 @@ public class Type6Manager : CraneManager
     async void Start()
     {
         Transform temp;
-        Transform xLimit = this.transform.Find("Floor").Find("XLimit");
-        Transform zLimit = this.transform.Find("Floor").Find("ZLimit");
-        Transform downLimit = this.transform.Find("Floor").Find("DownLimit");
+        Transform xLimit = transform.Find("Floor").Find("XLimit");
+        Transform zLimit = transform.Find("Floor").Find("ZLimit");
+        Transform downLimit = transform.Find("Floor").Find("DownLimit");
 
         craneStatus = -2;
         craneType = 6;
         // 様々なコンポーネントの取得
-        host = this.transform.root.Find("CP").GetComponent<MachineHost>();
-        canvas = this.transform.Find("Canvas").gameObject;
-        creditSystem = this.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        //sp = this.transform.Find("SE").GetComponent<SEPlayer>();
-        lever = this.transform.Find("Canvas").Find("ControlGroup").Find("Lever").GetComponent<Lever>();
-        getPoint = this.transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
-        timer = this.transform.Find("Timer").GetComponent<Timer>();
-        temp = this.transform.Find("CraneUnit").transform;
+        host = transform.root.Find("CP").GetComponent<MachineHost>();
+        canvas = transform.Find("Canvas").gameObject;
+        creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        //sp = transform.Find("SE").GetComponent<SEPlayer>();
+        lever = transform.Find("Canvas").Find("ControlGroup").Find("Lever").GetComponent<Lever>();
+        getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        timer = transform.Find("Timer").GetComponent<Timer>();
+        temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
         creditSystem.rateSet[0, 0] = priceSet[0];
@@ -65,7 +65,7 @@ public class Type6Manager : CraneManager
         preset[3].text = timesSet[1].ToString();
 
         // ロープとアームコントローラに関する処理
-        ropeManager = this.transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
         armController = temp.Find("ArmUnit").GetComponent<Type6ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
@@ -79,7 +79,7 @@ public class Type6Manager : CraneManager
         creditSystem.SetSEPlayer(sp);
         timer.limitTime = limitTimeSet;
         timer.SetSEPlayer(sp);
-        getPoint.SetManager(-1);
+        getPoint.SetManager(this);
         getSoundNum = 7;
         ropeManager.Up();
         await Task.Delay(500);
