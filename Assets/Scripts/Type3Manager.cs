@@ -54,7 +54,7 @@ public class Type3Manager : CraneManager
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(sp);
         support.SetManager(this);
-        support.SetRopeManager(ropeManager);
+        support.SetLifter(ropeManager);
         if (soundType == 0) creditSystem.SetCreditSound(0);
         if (soundType == 1) creditSystem.SetCreditSound(6);
         if (soundType == 2) creditSystem.SetCreditSound(13);

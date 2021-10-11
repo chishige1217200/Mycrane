@@ -81,13 +81,13 @@ public class Type4Manager : CraneManager
         creditSystem.SetCreditSound(0);
         creditSystem.SetSEPlayer(sp);
         //support.SetManager(4);
-        support.SetRopeManager(ropeManager);
+        support.SetLifter(ropeManager);
         roter.SetSEPlayer(sp);
         support.pushTime = 300; // 押し込みパワーの調整
         for (int i = 0; i < 2; i++)
         {
             nail[i].SetManager(this);
-            nail[i].SetRopeManager(ropeManager);
+            nail[i].SetLifter(ropeManager);
         }
 
         for (int i = 0; i < 15; i++)

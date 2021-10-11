@@ -85,14 +85,14 @@ public class Type6Manager : CraneManager
         creditSystem.SetCreditSound(0);
         creditSystem.SetSEPlayer(sp);
         support.SetManager(this);
-        support.SetRopeManager(ropeManager);
+        support.SetLifter(ropeManager);
         support.pushTime = 300; // 押し込みパワーの調整
         await Task.Delay(500);
 
         for (int i = 0; i < 3; i++)
         {
             nail[i].SetManager(this);
-            nail[i].SetRopeManager(ropeManager);
+            nail[i].SetLifter(ropeManager);
         }
 
         for (int i = 0; i < 11; i++)

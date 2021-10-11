@@ -24,8 +24,8 @@ public class Type5Manager : CraneManager
     public Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
     public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標
     Type5ArmController armController;
-    RopeManager ropeManager;
     ArmControllerSupport support;
+    ArmUnitLifter lifter;
     ArmNail[] nail = new ArmNail[2];
     [SerializeField] TextMesh credit3d;
     [SerializeField] TextMesh[] preset = new TextMesh[4];
@@ -60,7 +60,7 @@ public class Type5Manager : CraneManager
         preset[3].text = timesSet[1].ToString();
 
         // ロープとアームコントローラに関する処理
-        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
+        lifter = temp.Find("CraneBox").Find("Tube").Find("TubePoint").GetComponent<ArmUnitLifter>();
         armController = temp.Find("ArmUnit").GetComponent<Type5ArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
@@ -83,19 +83,19 @@ public class Type5Manager : CraneManager
                 getSoundNum = 15;
                 break;
         }
-        ropeManager.Up();
+        lifter.Up();
 
         if (soundType == 0 || soundType == 1 || soundType == 2) creditSystem.SetCreditSound(0);
         else creditSystem.SetCreditSound(8);
         creditSystem.SetSEPlayer(sp);
         support.SetManager(this);
-        support.SetRopeManager(ropeManager);
+        support.SetLifter(lifter);
         support.pushTime = 300; // 押し込みパワーの調整
         await Task.Delay(500);
         for (int i = 0; i < 2; i++)
         {
             nail[i].SetManager(this);
-            nail[i].SetRopeManager(ropeManager);
+            nail[i].SetLifter(lifter);
         }
 
         for (int i = 0; i < 15; i++)
@@ -108,7 +108,7 @@ public class Type5Manager : CraneManager
         }
 
         // イニシャル移動とinsertFlagを後に実行
-        while (!ropeManager.UpFinished())
+        while (!lifter.UpFinished())
         {
             await Task.Delay(100);
         }
@@ -276,10 +276,10 @@ public class Type5Manager : CraneManager
                             sp.Play(12);
                             break;
                     }
-                    if (craneStatus == 6) ropeManager.Down(); //awaitによる時差実行を防止
+                    if (craneStatus == 6) lifter.Down(); //awaitによる時差実行を防止
                 }
                 DetectKey(craneStatus);
-                if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
+                if (lifter.DownFinished() && craneStatus == 6) craneStatus = 7;
                 //アーム下降音再生
                 //アーム下降;
             }
@@ -358,7 +358,7 @@ public class Type5Manager : CraneManager
                             sp.Play(14);
                             break;
                     }
-                    ropeManager.Up();
+                    lifter.Up();
                     /*await Task.Delay(1000);
                     if (craneStatus < 11)
                     {
@@ -380,7 +380,7 @@ public class Type5Manager : CraneManager
                 armController.SetMotorPower(armLPower, 0);
                 armController.SetMotorPower(armRPower, 1);
 
-                if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
+                if (lifter.UpFinished() && craneStatus == 8) craneStatus = 9;
                 //アーム上昇;
             }
 
@@ -713,12 +713,12 @@ public class Type5Manager : CraneManager
                 case 6:
                     if ((Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) && !player2 && button3)
                     {
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneStatus = 7;
                     }
                     if ((Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9)) && player2 && button3)
                     {
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneStatus = 7;
                     }
                     break;
@@ -757,7 +757,7 @@ public class Type5Manager : CraneManager
                 case 3:
                     if (craneStatus == 6)
                     {
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneStatus = 7;
                     }
                     break;
