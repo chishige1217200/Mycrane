@@ -21,7 +21,8 @@ public class Type4Manager : CraneManager
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool rotation = true; //回転機能の使用可否
     [SerializeField] bool downStop = true; //下降停止機能の使用可否
-    Type1ArmController armController;
+    [SerializeField] int[] armSize = new int[2]; // 0:なし，1・2:M，3:L
+    TwinArmController armController;
     ArmUnitLifter lifter;
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[2];
@@ -63,12 +64,36 @@ public class Type4Manager : CraneManager
 
         // ロープとアームコントローラに関する処理
         lifter = temp.Find("CraneBox").Find("Tube").Find("TubePoint").GetComponent<ArmUnitLifter>();
-        armController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
+        armController = temp.Find("ArmUnit").GetComponent<TwinArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
-        nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
-        nail[1] = temp.Find("ArmUnit").Find("Arm2").Find("Nail2").GetComponent<ArmNail>();
         videoManager = transform.Find("VideoPlay").GetComponent<Type4VideoManager>();
         roter = temp.Find("ArmUnit").Find("Main").GetComponent<Type4ArmunitRoter>();
+
+        for (int i = 0; i < 2; i++)
+        {
+            if (armSize[i] == 1) armSize[i] = 2;
+            string a = "Arm" + (i + 1).ToString();
+            GameObject arm;
+            switch (armSize[i])
+            {
+                case 1:
+                    a += "S";
+                    break;
+                case 0:
+                case 2:
+                    a += "M";
+                    break;
+                case 3:
+                    a += "L";
+                    break;
+            }
+            arm = temp.Find("ArmUnit").Find(a).gameObject;
+            nail[i] = arm.transform.Find("Nail").GetComponent<ArmNail>();
+            if (armSize[i] != 0) arm.SetActive(true);
+            armController.SetArm(i, armSize[i]);
+        }
+
+        await Task.Delay(3000);
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
@@ -144,7 +169,7 @@ public class Type4Manager : CraneManager
             await Task.Delay(100);
         }
         armController.SetLimit(armApertures);
-        armController.FinalClose();
+        armController.Close(30f);
 
         craneStatus = -1;
     }
@@ -453,7 +478,7 @@ public class Type4Manager : CraneManager
             {
                 if (!isExecuted[craneStatus])
                 {
-                    armController.FinalClose();
+                    armController.Close(30f);
                     await Task.Delay(1000);
                     if (craneStatus == 14) craneStatus = 15;
                 }

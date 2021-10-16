@@ -15,10 +15,10 @@ public class TwinArmController : MonoBehaviour
 
         switch (size)
         {
-            case 0:
             case 1:
                 a += "S";
                 break;
+            case 0:
             case 2:
                 a += "M";
                 break;
