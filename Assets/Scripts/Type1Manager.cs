@@ -21,7 +21,7 @@ public class Type1Manager : CraneManager
     public Vector2 startPoint; // 開始位置座標定義
     public Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
     public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標
-    Type1ArmController armController;
+    TwinArmController armController;
     ArmUnitLifter lifter;
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[2];
@@ -58,7 +58,7 @@ public class Type1Manager : CraneManager
 
         // ロープとアームコントローラに関する処理
         lifter = temp.Find("CraneBox").Find("Tube").Find("TubePoint").GetComponent<ArmUnitLifter>();
-        armController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
+        armController = temp.Find("ArmUnit").GetComponent<TwinArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
 
         for (int i = 0; i < 2; i++)
@@ -404,7 +404,7 @@ public class Type1Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    armController.FinalClose();
+                    armController.Close(50f);
                     await Task.Delay(1000);
                     if (craneStatus == 12) craneStatus = 13;
                 }
