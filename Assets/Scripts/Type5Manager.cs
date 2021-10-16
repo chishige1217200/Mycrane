@@ -20,10 +20,11 @@ public class Type5Manager : CraneManager
     public float armRPower;
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool button3 = true; //button3の使用可否
+    [SerializeField] int[] armSize = new int[2]; // 0:なし，1:S，2:M，3:L
     public Vector2 startPoint; // 開始位置座標定義
     public Vector2 homePoint; // 獲得口座標定義（prizezoneTypeが9のとき使用）
     public int prizezoneType = 9; // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標
-    Type5ArmController armController;
+    TwinArmController armController;
     ArmControllerSupport support;
     ArmUnitLifter lifter;
     ArmNail[] nail = new ArmNail[2];
@@ -61,11 +62,33 @@ public class Type5Manager : CraneManager
 
         // ロープとアームコントローラに関する処理
         lifter = temp.Find("CraneBox").Find("Tube").Find("TubePoint").GetComponent<ArmUnitLifter>();
-        armController = temp.Find("ArmUnit").GetComponent<Type5ArmController>();
+        armController = temp.Find("ArmUnit").GetComponent<TwinArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
-        nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
-        nail[1] = temp.Find("ArmUnit").Find("Arm2").Find("Nail2").GetComponent<ArmNail>();
 
+        for (int i = 0; i < 2; i++)
+        {
+            string a = "Arm" + (i + 1).ToString();
+            GameObject arm;
+            switch (armSize[i])
+            {
+                case 0:
+                case 1:
+                    a += "S";
+                    break;
+                case 2:
+                    a += "M";
+                    break;
+                case 3:
+                    a += "L";
+                    break;
+            }
+            arm = temp.Find("ArmUnit").Find(a).gameObject;
+            nail[i] = arm.transform.Find("Nail").GetComponent<ArmNail>();
+            if (armSize[i] != 0) arm.SetActive(true);
+            armController.SetArm(i, armSize[i]);
+        }
+
+        await Task.Delay(3000);
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
