@@ -68,7 +68,7 @@ public class ArmUnitLifter : BaseLifter
         {
             if (collider.GetComponent<Tube>().parent)
             {
-                Debug.Log("Top Stop");
+                //Debug.Log("Top Stop");
                 upRefusedFlag = true;
             }
             else if (collider.GetComponent<Tube>().last)

@@ -69,6 +69,7 @@ public class ArmControllerSupport : MonoBehaviour
         {
             Debug.Log("prize inTrigger");
             prizeCount++;
+            if (craneManager == null) return;
             switch (craneManager.GetCType())
             {
                 case 3:
@@ -105,7 +106,7 @@ public class ArmControllerSupport : MonoBehaviour
         }
     }
 
-    void OnTriggerStay(Collider collider)
+    /*void OnTriggerStay(Collider collider)
     {
         if (collider.tag == "ReleaseCheck")
         {
@@ -120,7 +121,7 @@ public class ArmControllerSupport : MonoBehaviour
                     break;
             }
         }
-    }
+    }*/
 
     void OnTriggerExit(Collider collider)
     {

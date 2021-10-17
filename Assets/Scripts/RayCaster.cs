@@ -44,7 +44,7 @@ public class RayCaster : MonoBehaviour
             }
         }
         else if (num == 0)
-            if (hit.collider.gameObject.tag == "prize")
+            if (hit.collider.CompareTag("prize"))
             {
                 if (hit.collider.gameObject.TryGetComponent(out prize))
                 {

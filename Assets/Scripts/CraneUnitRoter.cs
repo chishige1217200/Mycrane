@@ -11,7 +11,7 @@ public class CraneUnitRoter : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(transform.localEulerAngles.y);
+        //Debug.Log(transform.localEulerAngles.y);
     }
 
     void FixedUpdate() // 1秒間に60回呼ばれる
