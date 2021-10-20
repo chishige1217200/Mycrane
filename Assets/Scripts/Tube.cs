@@ -11,12 +11,15 @@ public class Tube : MonoBehaviour
 
     void Start()
     {
-        craneUnit = transform.parent.parent.parent.Find("ArmUnit").Find("Main").Find("TubePoint").gameObject;
+        craneUnit = transform.parent.Find("TubePoint").gameObject;
     }
 
     void FixedUpdate()
     {
-        if (craneUnit.transform.position.y > tube.transform.position.y - tube.transform.lossyScale.y * 2.0f)
-            transform.position = new Vector3(transform.position.x, craneUnit.transform.position.y, transform.position.z);
+        if (!parent)
+        {
+            if (craneUnit.transform.position.y > tube.transform.position.y - tube.transform.lossyScale.y * 2.0f)
+                transform.position = new Vector3(transform.position.x, craneUnit.transform.position.y, transform.position.z);
+        }
     }
 }

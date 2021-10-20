@@ -97,8 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 9679ff57d5f94df42adbff832e9cd7e2,
-    type: 2}
+  m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -1517,7 +1516,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0f0d73bf2b6c084ca42acb4af7c3584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNumber: 2
 --- !u!59 &260952855
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -3998,7 +3996,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0f0d73bf2b6c084ca42acb4af7c3584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNumber: 1
 --- !u!59 &939411925
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -4103,7 +4100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d85221ad8c7e7842bd63741608384d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNumber: 1
   pushTime: 0
   prizeCount: 0
   isShieldcollis: 0
@@ -4545,7 +4541,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0f0d73bf2b6c084ca42acb4af7c3584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNumber: 2
 --- !u!59 &970796792
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -4962,7 +4957,7 @@ PrefabInstance:
     - target: {fileID: 3535530924035680015, guid: f0995853bd162e94284c28a386aeb1ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7272393439926314596, guid: f0995853bd162e94284c28a386aeb1ed,
         type: 3}
@@ -4972,7 +4967,7 @@ PrefabInstance:
     - target: {fileID: 7409925060179839268, guid: f0995853bd162e94284c28a386aeb1ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9037032911683746315, guid: f0995853bd162e94284c28a386aeb1ed,
         type: 3}
@@ -5076,6 +5071,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9037032913109288805, guid: f0995853bd162e94284c28a386aeb1ed,
         type: 3}
+      propertyPath: armSize.Array.data[0]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032913109288805, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armSize.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032913109288805, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
       propertyPath: priceSet.Array.data[1]
       value: 500
       objectReference: {fileID: 0}
@@ -5093,6 +5098,36 @@ PrefabInstance:
         type: 3}
       propertyPath: boxRestrictions.Array.data[1]
       value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032913109288805, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armLPowerConfigSuccess.Array.data[0]
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032913109288805, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armLPowerConfigSuccess.Array.data[1]
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032913109288805, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armLPowerConfigSuccess.Array.data[2]
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032913109288805, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armRPowerConfigSuccess.Array.data[0]
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032913109288805, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armRPowerConfigSuccess.Array.data[1]
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037032913109288805, guid: f0995853bd162e94284c28a386aeb1ed,
+        type: 3}
+      propertyPath: armRPowerConfigSuccess.Array.data[2]
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 9037032913261784621, guid: f0995853bd162e94284c28a386aeb1ed,
         type: 3}
@@ -7371,7 +7406,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0f0d73bf2b6c084ca42acb4af7c3584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNumber: 1
 --- !u!59 &1786527213
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -8603,7 +8637,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d85221ad8c7e7842bd63741608384d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNumber: 2
   pushTime: 0
   prizeCount: 0
   isShieldcollis: 0

@@ -12,7 +12,8 @@ public class CraneBox : MonoBehaviour
     public float moveSpeed = 0.001f;
     [SerializeField] bool supportDirectionChanger = false; // true:x-move false:z-move
     GameObject craneBoxSupport;
-    GameObject ropeHost;
+    [SerializeField] GameObject ropeHost;
+    //[SerializeField] GameObject tubePoint;
     public Vector2 goPoint; // GoPosition関数の目的地
     public bool goPositionFlag = false; // GoPosition関数の実行フラグ
     public bool limitIgnoreFlag = false; // trueのとき，refusedFlagの影響を受けない
@@ -23,7 +24,10 @@ public class CraneBox : MonoBehaviour
     void Start()
     {
         craneBoxSupport = transform.parent.Find("CraneBoxSupport").gameObject;
-        ropeHost = ropeHost = transform.parent.Find("Rope").gameObject;
+        //transform.Find("Rope").TryGetComponent<GameObject>(out ropeHost);
+        //ropeHost = transform.parent.Find("Rope").gameObject; //要対策
+        //transform.Find("ArmUnit").Find("TubePoint").TryGetComponent<GameObject>(out tubePoint);
+        //tubePoint = transform.Find("ArmUnit").Find("TubePoint").gameObject;
     }
 
     void FixedUpdate()
@@ -84,7 +88,10 @@ public class CraneBox : MonoBehaviour
         {
             checker++;
             if (transform.localPosition.x - goPoint.x != 0)
+            {
                 transform.localPosition = new Vector3(goPoint.x, transform.localPosition.y, transform.localPosition.z);
+                //if (tubePoint != null) tubePoint.transform.localPosition = new Vector3(goPoint.x, transform.localPosition.y, transform.localPosition.z);
+            }
         }
         else
         {
@@ -95,7 +102,10 @@ public class CraneBox : MonoBehaviour
         {
             checker++;
             if (transform.localPosition.z - goPoint.y != 0)
+            {
                 transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, goPoint.y);
+                //if (tubePoint != null) tubePoint.transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, goPoint.y);
+            }
         }
         else
         {
@@ -118,7 +128,8 @@ public class CraneBox : MonoBehaviour
         if (!rightRefusedFlag || limitIgnoreFlag)
         {
             transform.localPosition += new Vector3(moveSpeed, 0, 0);
-            ropeHost.transform.localPosition += new Vector3(moveSpeed, 0, 0);
+            if (ropeHost != null) ropeHost.transform.localPosition += new Vector3(moveSpeed, 0, 0);
+            //if (tubePoint != null) tubePoint.transform.localPosition += new Vector3(moveSpeed, 0, 0);
             if (!supportDirectionChanger) craneBoxSupport.transform.localPosition += new Vector3(moveSpeed, 0, 0);
         }
     }
@@ -128,7 +139,8 @@ public class CraneBox : MonoBehaviour
         if (!leftRefusedFlag || limitIgnoreFlag || leftDummyFlag)
         {
             transform.localPosition -= new Vector3(moveSpeed, 0, 0);
-            ropeHost.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
+            if (ropeHost != null) ropeHost.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
+            //if (tubePoint != null) tubePoint.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
             if (!supportDirectionChanger) craneBoxSupport.transform.localPosition -= new Vector3(moveSpeed, 0, 0);
         }
     }
@@ -138,7 +150,8 @@ public class CraneBox : MonoBehaviour
         if (!backRefusedFlag || limitIgnoreFlag)
         {
             transform.localPosition += new Vector3(0, 0, moveSpeed);
-            ropeHost.transform.localPosition += new Vector3(0, 0, moveSpeed);
+            if (ropeHost != null) ropeHost.transform.localPosition += new Vector3(0, 0, moveSpeed);
+            //if (tubePoint != null) tubePoint.transform.localPosition += new Vector3(0, 0, moveSpeed);
             if (supportDirectionChanger) craneBoxSupport.transform.localPosition += new Vector3(0, 0, moveSpeed);
         }
     }
@@ -148,7 +161,8 @@ public class CraneBox : MonoBehaviour
         if (!forwardRefusedFlag || limitIgnoreFlag)
         {
             transform.localPosition -= new Vector3(0, 0, moveSpeed);
-            ropeHost.transform.localPosition -= new Vector3(0, 0, moveSpeed);
+            if (ropeHost != null) ropeHost.transform.localPosition -= new Vector3(0, 0, moveSpeed);
+            //if (tubePoint != null) tubePoint.transform.localPosition -= new Vector3(0, 0, moveSpeed);
             if (supportDirectionChanger) craneBoxSupport.transform.localPosition -= new Vector3(0, 0, moveSpeed);
         }
     }

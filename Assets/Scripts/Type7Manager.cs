@@ -61,7 +61,7 @@ public class Type7Manager : CraneManager
         timer.limitTimeNow = limitTimeSet;
         timer.limitTime = limitTimeSet;
         support.SetManager(this);
-        support.SetRopeManager(ropeManager);
+        support.SetLifter(ropeManager);
         creditSystem.SetCreditSound(0);
         armController.SetManager(7);
         armController.autoPower = autoPower;

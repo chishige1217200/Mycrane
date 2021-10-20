@@ -13,8 +13,9 @@ public class Type9Manager : CraneManager
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     Type9ArmController armController;
-    RopeManager ropeManager; //暫定
-    //ArmUnitLifter lifter;
+    ArmUnitLifter lifter;
+    ArmControllerSupport support;
+    ArmNail[] nail = new ArmNail[2];
     CraneUnitRoter roter;
     [SerializeField] TextMesh credit3d;
     [SerializeField] TextMesh[] preset = new TextMesh[4];
@@ -44,8 +45,11 @@ public class Type9Manager : CraneManager
         preset[3].text = timesSet[1].ToString();
 
         // ロープとアームコントローラに関する処理
-        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
+        lifter = temp.Find("CraneBox").Find("Tube").Find("TubePoint").GetComponent<ArmUnitLifter>();
         armController = temp.Find("ArmUnit").GetComponent<Type9ArmController>();
+        support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
+        nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
+        nail[1] = temp.Find("ArmUnit").Find("Arm2").Find("Nail2").GetComponent<ArmNail>();
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
@@ -55,13 +59,21 @@ public class Type9Manager : CraneManager
         creditSystem.SetSEPlayer(sp);
 
         creditSystem.SetCreditSound(0);
+        support.SetManager(this);
+        support.SetLifter(lifter);
+        support.pushTime = 300; // 押し込みパワーの調整
         getSoundNum = 4;
+        for (int i = 0; i < 2; i++)
+        {
+            nail[i].SetManager(this);
+            nail[i].SetLifter(lifter);
+        }
 
-        getPoint.SetManager(this); // テスト中
+        getPoint.SetManager(this);
 
         await Task.Delay(300);
-        ropeManager.Up();
-        while (!ropeManager.UpFinished())
+        lifter.Up();
+        while (!lifter.UpFinished())
         {
             await Task.Delay(100);
         }
@@ -128,7 +140,7 @@ public class Type9Manager : CraneManager
                     await Task.Delay(1500);
                     if (craneStatus == 5)
                     {
-                        ropeManager.Down();
+                        lifter.Down();
                         IncrimentStatus();
                     }
                 }
@@ -140,7 +152,7 @@ public class Type9Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     sp.Play(3, 1);
                 }
-                if (ropeManager.DownFinished() && craneStatus == 6) IncrimentStatus();
+                if (lifter.DownFinished() && craneStatus == 6) IncrimentStatus();
             }
             if (craneStatus == 7) //アーム閉じる
             {
@@ -163,14 +175,14 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    ropeManager.Up();
+                    lifter.Up();
                     if (craneStatus < 11)
                     {
                         armController.SetMotorPower(leftCatchArmpower, 0);
                         armController.SetMotorPower(rightCatchArmpower, 1);
                     }
                 }
-                if (ropeManager.UpFinished() && craneStatus == 8) IncrimentStatus();
+                if (lifter.UpFinished() && craneStatus == 8) IncrimentStatus();
             }
             if (craneStatus == 9) //上昇停止
             {

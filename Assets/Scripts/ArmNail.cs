@@ -5,7 +5,7 @@ using UnityEngine;
 public class ArmNail : MonoBehaviour
 {
     CraneManager craneManager;
-    RopeManager ropeManager;
+    BaseLifter lifter;
 
     void OnTriggerEnter(Collider collider)
     {
@@ -15,10 +15,11 @@ public class ArmNail : MonoBehaviour
             {
                 case 1:
                 case 5:
+                case 9:
                     if (craneManager.GetStatus() == 6)
                     {
                         Debug.Log("床");
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneManager.IncrimentStatus();
                     }
                     break;
@@ -26,7 +27,7 @@ public class ArmNail : MonoBehaviour
                     if (craneManager.GetStatus() == 8)
                     {
                         Debug.Log("床");
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneManager.IncrimentStatus();
                     }
                     break;
@@ -34,7 +35,7 @@ public class ArmNail : MonoBehaviour
                     if (craneManager.GetStatus() == 4)
                     {
                         Debug.Log("床");
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneManager.IncrimentStatus();
                     }
                     break;
@@ -47,8 +48,8 @@ public class ArmNail : MonoBehaviour
         craneManager = c;
     }
 
-    public void SetRopeManager(RopeManager r)
+    public void SetLifter(BaseLifter r)
     {
-        ropeManager = r;
+        lifter = r;
     }
 }

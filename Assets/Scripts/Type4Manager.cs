@@ -21,8 +21,9 @@ public class Type4Manager : CraneManager
     [SerializeField] bool player2 = false; //player2の場合true
     [SerializeField] bool rotation = true; //回転機能の使用可否
     [SerializeField] bool downStop = true; //下降停止機能の使用可否
-    Type1ArmController armController;
-    RopeManager ropeManager;
+    [SerializeField] int[] armSize = new int[2]; // 0:なし，1・2:M，3:L
+    TwinArmController armController;
+    ArmUnitLifter lifter;
     ArmControllerSupport support;
     ArmNail[] nail = new ArmNail[2];
     Lever lever;
@@ -62,13 +63,37 @@ public class Type4Manager : CraneManager
         preset[3].text = timesSet[1].ToString();
 
         // ロープとアームコントローラに関する処理
-        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
-        armController = temp.Find("ArmUnit").GetComponent<Type1ArmController>();
+        lifter = temp.Find("CraneBox").Find("Tube").Find("TubePoint").GetComponent<ArmUnitLifter>();
+        armController = temp.Find("ArmUnit").GetComponent<TwinArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
-        nail[0] = temp.Find("ArmUnit").Find("Arm1").Find("Nail1").GetComponent<ArmNail>();
-        nail[1] = temp.Find("ArmUnit").Find("Arm2").Find("Nail2").GetComponent<ArmNail>();
         videoManager = transform.Find("VideoPlay").GetComponent<Type4VideoManager>();
         roter = temp.Find("ArmUnit").Find("Main").GetComponent<Type4ArmunitRoter>();
+
+        for (int i = 0; i < 2; i++)
+        {
+            if (armSize[i] == 1) armSize[i] = 2;
+            string a = "Arm" + (i + 1).ToString();
+            GameObject arm;
+            switch (armSize[i])
+            {
+                case 1:
+                    a += "S";
+                    break;
+                case 0:
+                case 2:
+                    a += "M";
+                    break;
+                case 3:
+                    a += "L";
+                    break;
+            }
+            arm = temp.Find("ArmUnit").Find(a).gameObject;
+            nail[i] = arm.transform.Find("Nail").GetComponent<ArmNail>();
+            if (armSize[i] != 0) arm.SetActive(true);
+            armController.SetArm(i, armSize[i]);
+        }
+
+        await Task.Delay(3000);
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
@@ -77,17 +102,17 @@ public class Type4Manager : CraneManager
         creditSystem.SetSEPlayer(sp);
         getPoint.SetManager(this);
         getSoundNum = 6;
-        ropeManager.Up();
+        lifter.Up();
         creditSystem.SetCreditSound(0);
         creditSystem.SetSEPlayer(sp);
         //support.SetManager(4);
-        support.SetRopeManager(ropeManager);
+        support.SetLifter(lifter);
         roter.SetSEPlayer(sp);
         support.pushTime = 300; // 押し込みパワーの調整
         for (int i = 0; i < 2; i++)
         {
             nail[i].SetManager(this);
-            nail[i].SetRopeManager(ropeManager);
+            nail[i].SetLifter(lifter);
         }
 
         for (int i = 0; i < 15; i++)
@@ -139,12 +164,12 @@ public class Type4Manager : CraneManager
         if (downRestriction < 100) downLimit.localPosition = new Vector3(downLimit.localPosition.x, 1.37f - 0.0051f * downRestriction, downLimit.localPosition.z);
 
         // イニシャル移動とinsertFlagを後に実行
-        while (!ropeManager.UpFinished())
+        while (!lifter.UpFinished())
         {
             await Task.Delay(100);
         }
         armController.SetLimit(armApertures);
-        armController.FinalClose();
+        armController.Close(30f);
 
         craneStatus = -1;
     }
@@ -383,10 +408,10 @@ public class Type4Manager : CraneManager
                     sp.Stop(3);
                     sp.Stop(4);
                     sp.Play(5, 1);
-                    if (craneStatus == 8) ropeManager.Down(); //awaitによる時差実行を防止
+                    if (craneStatus == 8) lifter.Down(); //awaitによる時差実行を防止
                 }
                 DetectKey(craneStatus);
-                if (ropeManager.DownFinished() && craneStatus == 8) craneStatus = 9;
+                if (lifter.DownFinished() && craneStatus == 8) craneStatus = 9;
             }
             if (craneStatus == 9)
             {   //アーム掴む
@@ -410,7 +435,7 @@ public class Type4Manager : CraneManager
                     if (!isExecuted[craneStatus])
                     {
                         isExecuted[craneStatus] = true;
-                        ropeManager.Up();
+                        lifter.Up();
                         await Task.Delay(1000);
                         if (craneStatus < 13)
                         {
@@ -418,7 +443,7 @@ public class Type4Manager : CraneManager
                             armController.SetMotorPower(rightCatchArmpower, 1);
                         }
                     }
-                    if (ropeManager.UpFinished() && craneStatus == 10) craneStatus = 11;
+                    if (lifter.UpFinished() && craneStatus == 10) craneStatus = 11;
                 }
             }
             if (craneStatus == 11)
@@ -453,7 +478,7 @@ public class Type4Manager : CraneManager
             {
                 if (!isExecuted[craneStatus])
                 {
-                    armController.FinalClose();
+                    armController.Close(30f);
                     await Task.Delay(1000);
                     if (craneStatus == 14) craneStatus = 15;
                 }
@@ -630,7 +655,7 @@ public class Type4Manager : CraneManager
                     {
                         if (downStop)
                         {
-                            ropeManager.DownForceStop();
+                            lifter.DownForceStop();
                             craneStatus = 9;
                         }
                     }
@@ -738,7 +763,7 @@ public class Type4Manager : CraneManager
                     {
                         if (downStop)
                         {
-                            ropeManager.DownForceStop();
+                            lifter.DownForceStop();
                             craneStatus = 9;
                         }
                     }

@@ -7,7 +7,7 @@ public class ArmControllerSupport : MonoBehaviour
 {
     Type3ArmController _Type3ArmController;
     CraneManager craneManager;
-    RopeManager ropeManager;
+    BaseLifter lifter;
     public int pushTime = 0;
     public int prizeCount = 0; // プライズがアームにいくつ検知されているか
     public bool isShieldcollis = false; // アームがShieldに衝突しているかどうか
@@ -43,7 +43,7 @@ public class ArmControllerSupport : MonoBehaviour
                     if (craneManager.GetStatus() == 6)
                     {
                         Debug.Log("下降制限に接触");
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneManager.IncrimentStatus();
                     }
                     break;
@@ -51,7 +51,7 @@ public class ArmControllerSupport : MonoBehaviour
                     if (craneManager.GetStatus() == 8)
                     {
                         Debug.Log("下降制限に接触");
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneManager.IncrimentStatus();
                     }
                     break;
@@ -59,7 +59,7 @@ public class ArmControllerSupport : MonoBehaviour
                     if (craneManager.GetStatus() == 4)
                     {
                         Debug.Log("下降制限に接触");
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneManager.IncrimentStatus();
                     }
                     break;
@@ -69,6 +69,7 @@ public class ArmControllerSupport : MonoBehaviour
         {
             Debug.Log("prize inTrigger");
             prizeCount++;
+            if (craneManager == null) return;
             switch (craneManager.GetCType())
             {
                 case 3:
@@ -77,7 +78,7 @@ public class ArmControllerSupport : MonoBehaviour
                         await Task.Delay(700);
                         if (craneManager.GetStatus() == 6)
                         {
-                            ropeManager.DownForceStop();
+                            lifter.DownForceStop();
                             craneManager.IncrimentStatus();
                         }
 
@@ -95,7 +96,7 @@ public class ArmControllerSupport : MonoBehaviour
                         await Task.Delay(1000);
                         if (craneManager.GetStatus() == 6)
                         {
-                            ropeManager.DownForceStop();
+                            lifter.DownForceStop();
                             craneManager.IncrimentStatus();
                         }
                     }
@@ -105,7 +106,7 @@ public class ArmControllerSupport : MonoBehaviour
         }
     }
 
-    void OnTriggerStay(Collider collider)
+    /*void OnTriggerStay(Collider collider)
     {
         if (collider.tag == "ReleaseCheck")
         {
@@ -120,7 +121,7 @@ public class ArmControllerSupport : MonoBehaviour
                     break;
             }
         }
-    }
+    }*/
 
     void OnTriggerExit(Collider collider)
     {
@@ -146,23 +147,24 @@ public class ArmControllerSupport : MonoBehaviour
 
                 case 1:
                 case 5:
+                case 9:
                     if (craneManager.GetStatus() == 6)
                     {
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneManager.IncrimentStatus();
                     }
                     break;
                 case 4:
                     if (craneManager.GetStatus() == 8)
                     {
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneManager.IncrimentStatus();
                     }
                     break;
                 case 6:
                     if (craneManager.GetStatus() == 4)
                     {
-                        ropeManager.DownForceStop();
+                        lifter.DownForceStop();
                         craneManager.IncrimentStatus();
                     }
                     break;
@@ -180,8 +182,8 @@ public class ArmControllerSupport : MonoBehaviour
         if (num == 3 || num == 7)
             _Type3ArmController = transform.parent.parent.gameObject.GetComponent<Type3ArmController>();
     }
-    public void SetRopeManager(RopeManager r)
+    public void SetLifter(BaseLifter r)
     {
-        ropeManager = r;
+        lifter = r;
     }
 }
