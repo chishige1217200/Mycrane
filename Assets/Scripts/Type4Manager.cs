@@ -105,7 +105,7 @@ public class Type4Manager : CraneManager
         lifter.Up();
         creditSystem.SetCreditSound(0);
         creditSystem.SetSEPlayer(sp);
-        //support.SetManager(4);
+        support.SetManager(this);
         support.SetLifter(lifter);
         roter.SetSEPlayer(sp);
         support.pushTime = 300; // 押し込みパワーの調整
