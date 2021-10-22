@@ -27,7 +27,7 @@ public class Type9Manager : CraneManager
         craneStatus = -2;
         craneType = 9;
         // 様々なコンポーネントの取得
-        host = transform.Find("CP").GetComponent<MachineHost>();
+        //host = transform.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         //sp = transform.Find("SE").GetComponent<SEPlayer>();

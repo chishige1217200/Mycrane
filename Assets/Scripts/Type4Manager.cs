@@ -44,7 +44,7 @@ public class Type4Manager : CraneManager
         craneStatus = -2;
         craneType = 4;
         // 様々なコンポーネントの取得
-        host = transform.root.Find("CP").GetComponent<MachineHost>();
+        //host = transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         //sp = transform.Find("SE").GetComponent<SEPlayer>();

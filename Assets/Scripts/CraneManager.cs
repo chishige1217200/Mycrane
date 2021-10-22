@@ -12,7 +12,7 @@ public abstract class CraneManager : MonoBehaviour
     public SEPlayer sp;
     protected CraneBox craneBox;
     protected GetPoint getPoint;
-    protected MachineHost host;
+    public MachineHost host;
     protected GameObject canvas;
 
     public virtual void GetPrize()

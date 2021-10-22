@@ -33,7 +33,7 @@ public class Type8Manager : CraneManager
         craneStatus = -2;
         craneType = 8;
         // 様々なコンポーネントの取得
-        host = transform.Find("CP").GetComponent<MachineHost>();
+        //host = transform.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         bp = transform.Find("BGM").GetComponent<BGMPlayer>();

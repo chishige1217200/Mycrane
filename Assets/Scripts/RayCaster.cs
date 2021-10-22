@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class RayCaster : MonoBehaviour
 {
-    Ray ray; // Ray情報
-    RaycastHit hit; // 衝突した物体についての情報
     MachineHost host; // 現在プレイ中の筐体情報
     PrizePanel panel;
     Prize prize;
@@ -26,17 +24,18 @@ public class RayCaster : MonoBehaviour
 
     void Cast(int num) // Rayを飛ばす
     {
-        ray = new Ray(transform.position, transform.forward);
-        Physics.Raycast(ray, out hit, 3);
+        Ray ray = new Ray(transform.position, transform.forward); // Ray情報
+        RaycastHit hit; // 衝突した物体についての情報
+        Physics.Raycast(ray, out hit, 10);
         if (num == 1)
         {
-            if (hit.collider.gameObject.name == "CP") // 操作パネルにRayがあたった場合（要コライダー）
+            if (hit.collider.CompareTag("CP")) // 操作パネルにRayがあたった場合（要コライダー）
             {
                 if (!isFirst) host.playable = false; // 古い方の筐体は再度ロック
                 host = hit.collider.gameObject.GetComponent<MachineHost>();
                 host.playable = true;
                 isFirst = false;
-                Debug.Log("Activate Successfully.");
+                //Debug.Log("Activate Successfully.");
             }
             else
             {
