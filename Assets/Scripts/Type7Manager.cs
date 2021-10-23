@@ -237,7 +237,7 @@ public class Type7Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     armController.Open();
-                    await Task.Delay(2000);
+                    await Task.Delay(1000);
                     if (craneStatus == 11) craneStatus = 12;
                 }
                 //アーム開く音再生;
