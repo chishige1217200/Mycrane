@@ -11,13 +11,12 @@ public class Type4ArmunitRoter : MonoBehaviour
     SEPlayer _SEPlayer;
     public float rotateSpeed = 20f;
     bool rotationFlag = false; //回転中
-    bool rotationDirection = true; //trueなら時計回りに回転
+    public bool rotationDirection = true; //trueなら時計回りに回転
     bool rotateInitialFlag = false; //trueなら初期化確認
-    bool isExecuted = false; //1回だけ実行するのに使用
 
     void Start()
     {
-        joint = this.gameObject.GetComponent<HingeJoint>();
+        joint = gameObject.GetComponent<HingeJoint>();
         motor = joint.motor;
         limit = joint.limits;
 
@@ -28,16 +27,17 @@ public class Type4ArmunitRoter : MonoBehaviour
     {
         if (rotationFlag)
         {
-            if (this.transform.localEulerAngles.z <= 270 && this.transform.localEulerAngles.z >= 90) //限界に達すると回転方向を反転
+            //Debug.Log(transform.localEulerAngles.z);
+            if (transform.localEulerAngles.z <= 270 && transform.localEulerAngles.z >= 265 && rotationDirection)
             {
-                if (!isExecuted)
-                {
-                    isExecuted = true;
-                    rotationDirection = !rotationDirection;
-                    RotateDirection(rotationDirection);
-                }
+                rotationDirection = false;
+                RotateDirection(rotationDirection);
             }
-            else isExecuted = false;
+            else if (transform.localEulerAngles.z >= 90 && transform.localEulerAngles.z <= 95 && !rotationDirection)
+            {
+                rotationDirection = true;
+                RotateDirection(rotationDirection);
+            }
             if (rotationDirection)
             {
                 _SEPlayer.Stop(4);
@@ -51,7 +51,7 @@ public class Type4ArmunitRoter : MonoBehaviour
         }
         if (rotateInitialFlag) //位置初期化確認
         {
-            if (this.transform.localEulerAngles.z >= 359.7 || this.transform.localEulerAngles.z <= 0.3)
+            if (transform.localEulerAngles.z >= 359.7 || transform.localEulerAngles.z <= 0.3)
             {
                 rotateInitialFlag = false;
                 motor.targetVelocity = 0f;
@@ -80,20 +80,20 @@ public class Type4ArmunitRoter : MonoBehaviour
         rotationFlag = false;
         motor.targetVelocity = 0f;
         joint.motor = motor;
-        low = Mathf.FloorToInt(this.transform.localEulerAngles.z); //下方向に丸める
+        low = Mathf.FloorToInt(transform.localEulerAngles.z); //下方向に丸める
         if (low > 180) low -= 360; //Limitの角度が-180,180でしか設定できないため
         SetLimit(low, low + 1);
     }
 
     public void RotateToHome() //0度に向かって回転
     {
-        if (this.transform.localEulerAngles.z > 0.3 && this.transform.localEulerAngles.z <= 91)
+        if (transform.localEulerAngles.z > 0.3 && transform.localEulerAngles.z <= 91)
         {
             rotationDirection = true; //時計回りに回転
             SetLimit(0, 90);
         }
 
-        else if (this.transform.localEulerAngles.z < 359.7 && this.transform.localEulerAngles.z >= 269)
+        else if (transform.localEulerAngles.z < 359.7 && transform.localEulerAngles.z >= 269)
         {
             rotationDirection = false;
             SetLimit(-90, 0);
