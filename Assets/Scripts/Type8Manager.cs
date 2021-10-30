@@ -236,18 +236,21 @@ public class Type8Manager : CraneManager
                         limitTimedisplayed.text = "99";
                         credit3d.text = "99.";
                     }
-                    ropeManager.Down();
-                    if (downTime > 0 && downTime <= 5000)
+                    if (craneStatus == 4)
                     {
-                        await Task.Delay(downTime);
-                        if (craneStatus == 4)
+                        ropeManager.Down();
+                        if (downTime > 0 && downTime <= 5000)
                         {
-                            ropeManager.DownForceStop();
-                            IncrimentStatus();
+                            await Task.Delay(downTime);
+                            if (craneStatus == 4)
+                            {
+                                ropeManager.DownForceStop();
+                                IncrimentStatus();
+                            }
                         }
                     }
                 }
-                if (isExecuted[craneStatus]) DetectKey(craneStatus);
+                if (craneStatus == 4 && isExecuted[4]) DetectKey(craneStatus);
                 if (soundType == 3 && !sp.audioSource[9].isPlaying) bp.Play(soundType * 2 + 1);
                 if (ropeManager.DownFinished() && craneStatus == 4) IncrimentStatus();
             }
