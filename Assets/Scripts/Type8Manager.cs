@@ -251,7 +251,7 @@ public class Type8Manager : CraneManager
                     }
                 }
                 if (craneStatus == 4 && isExecuted[4]) DetectKey(craneStatus);
-                if (soundType == 3 && !sp.audioSource[9].isPlaying) bp.Play(soundType * 2 + 1);
+                if (soundType == 3 && !sp.audioSource[9].isPlaying && !sp.audioSource[10].isPlaying) bp.Play(soundType * 2 + 1);
                 if (ropeManager.DownFinished() && craneStatus == 4) IncrimentStatus();
             }
 
@@ -458,6 +458,10 @@ public class Type8Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     switch (soundType)
                     {
+                        case 1:
+                        case 2:
+                            sp.Play(3, 1);
+                            break;
                         case 3:
                         case 4:
                             sp.Play(8);
@@ -476,6 +480,11 @@ public class Type8Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     switch (soundType)
                     {
+                        case 1:
+                        case 2:
+                            sp.Stop(3);
+                            sp.Play(4, 1);
+                            break;
                         case 3:
                             sp.Stop(8);
                             bp.Play(soundType * 2 + 1);
