@@ -68,7 +68,7 @@ public class Type4ArmunitRoter : MonoBehaviour
 
     public void RotateStart()
     {
-        SetLimit(-90, 90);
+        SetLimit(-91, 91);
         rotationDirection = true; //時計回りに回転
         RotateDirection(rotationDirection);
         rotationFlag = true;
