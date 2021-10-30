@@ -33,7 +33,7 @@ public class Type8Manager : CraneManager
         craneStatus = -2;
         craneType = 8;
         // 様々なコンポーネントの取得
-        host = transform.Find("CP").GetComponent<MachineHost>();
+        //host = transform.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         bp = transform.Find("BGM").GetComponent<BGMPlayer>();
@@ -236,19 +236,22 @@ public class Type8Manager : CraneManager
                         limitTimedisplayed.text = "99";
                         credit3d.text = "99.";
                     }
-                    ropeManager.Down();
-                    if (downTime > 0 && downTime <= 5000)
+                    if (craneStatus == 4)
                     {
-                        await Task.Delay(downTime);
-                        if (craneStatus == 4)
+                        ropeManager.Down();
+                        if (downTime > 0 && downTime <= 5000)
                         {
-                            ropeManager.DownForceStop();
-                            IncrimentStatus();
+                            await Task.Delay(downTime);
+                            if (craneStatus == 4)
+                            {
+                                ropeManager.DownForceStop();
+                                IncrimentStatus();
+                            }
                         }
                     }
                 }
-                if (isExecuted[craneStatus]) DetectKey(craneStatus);
-                if (soundType == 3 && !sp.audioSource[9].isPlaying) bp.Play(soundType * 2 + 1);
+                if (craneStatus == 4 && isExecuted[4]) DetectKey(craneStatus);
+                if (soundType == 3 && !sp.audioSource[9].isPlaying && !sp.audioSource[10].isPlaying) bp.Play(soundType * 2 + 1);
                 if (ropeManager.DownFinished() && craneStatus == 4) IncrimentStatus();
             }
 
@@ -455,6 +458,10 @@ public class Type8Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     switch (soundType)
                     {
+                        case 1:
+                        case 2:
+                            sp.Play(3, 1);
+                            break;
                         case 3:
                         case 4:
                             sp.Play(8);
@@ -473,6 +480,11 @@ public class Type8Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     switch (soundType)
                     {
+                        case 1:
+                        case 2:
+                            sp.Stop(3);
+                            sp.Play(4, 1);
+                            break;
                         case 3:
                             sp.Stop(8);
                             bp.Play(soundType * 2 + 1);

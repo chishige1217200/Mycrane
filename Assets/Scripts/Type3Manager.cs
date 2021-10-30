@@ -29,7 +29,7 @@ public class Type3Manager : CraneManager
         craneType = 3;
 
         // 様々なコンポーネントの取得
-        host = transform.Find("CP").GetComponent<MachineHost>();
+        //host = transform.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         bp = transform.Find("BGM").GetComponent<BGMPlayer>();
@@ -411,7 +411,7 @@ public class Type3Manager : CraneManager
                             sp.Play(24, 1);
                             break;
                     }
-                    await Task.Delay(2000);
+                    await Task.Delay(1000);
                     if (craneStatus == 11) craneStatus = 12;
                 }
                 //アーム開く音再生;

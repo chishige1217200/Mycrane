@@ -34,7 +34,7 @@ public class Type2Manager : CraneManager
         craneType = 2;
 
         // 様々なコンポーネントの取得
-        host = transform.Find("CP").GetComponent<MachineHost>();
+        //host = transform.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         bp = transform.Find("BGM").GetComponent<BGMPlayer>();
@@ -234,28 +234,25 @@ public class Type2Manager : CraneManager
 
             if (craneStatus == 7)
             {
-                if (craneStatus == 7) //awaitによる時差実行を防止
+                switch (soundType)
                 {
-                    switch (soundType)
-                    {
-                        case 0:
-                            sp.Stop(1); //アーム下降音再生停止;
-                            sp.Play(2, 1); //アーム掴む音再生;
-                            break;
-                        case 1:
-                            sp.Stop(8);
-                            break;
-                        case 2:
-                            sp.Stop(12);
-                            break;
-                    }
-                    if (probability) armPower = armPowerConfigSuccess[0];
-                    else armPower = armPowerConfig[0];
-                    armController.MotorPower(armPower);
-                    armController.Close();
-                    await Task.Delay(1000);
-                    if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
+                    case 0:
+                        sp.Stop(1); //アーム下降音再生停止;
+                        sp.Play(2, 1); //アーム掴む音再生;
+                        break;
+                    case 1:
+                        sp.Stop(8);
+                        break;
+                    case 2:
+                        sp.Stop(12);
+                        break;
                 }
+                if (probability) armPower = armPowerConfigSuccess[0];
+                else armPower = armPowerConfig[0];
+                armController.MotorPower(armPower);
+                armController.Close();
+                await Task.Delay(1000);
+                if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
                 //アーム掴む;
             }
 

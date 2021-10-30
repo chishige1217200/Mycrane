@@ -44,7 +44,7 @@ public class Type4Manager : CraneManager
         craneStatus = -2;
         craneType = 4;
         // 様々なコンポーネントの取得
-        host = transform.root.Find("CP").GetComponent<MachineHost>();
+        //host = transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         //sp = transform.Find("SE").GetComponent<SEPlayer>();
@@ -105,7 +105,7 @@ public class Type4Manager : CraneManager
         lifter.Up();
         creditSystem.SetCreditSound(0);
         creditSystem.SetSEPlayer(sp);
-        //support.SetManager(4);
+        support.SetManager(this);
         support.SetLifter(lifter);
         roter.SetSEPlayer(sp);
         support.pushTime = 300; // 押し込みパワーの調整
