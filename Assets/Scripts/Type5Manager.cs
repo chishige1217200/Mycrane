@@ -88,7 +88,7 @@ public class Type5Manager : CraneManager
             armController.SetArm(i, armSize[i]);
         }
 
-        await Task.Delay(3000);
+        await Task.Delay(500);
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
