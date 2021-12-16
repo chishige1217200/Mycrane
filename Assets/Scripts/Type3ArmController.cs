@@ -64,10 +64,10 @@ public class Type3ArmController : MonoBehaviour
 
     public async void Release()
     {
-        if (craneType == 3) _Type3Manager.armPower = 0f;
-        else if (craneType == 7) _Type7Manager.armPower = 0f;
         if (autoPower)
         {
+            if (craneType == 3) _Type3Manager.armPower = 0f;
+            else if (craneType == 7) _Type7Manager.armPower = 0f;
             for (int i = 0; i < 3; i++)
             {
                 motor[i].targetVelocity = 50f;
