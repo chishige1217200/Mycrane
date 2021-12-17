@@ -12,7 +12,7 @@ public class Type7Manager : CraneManager
     [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
     [SerializeField] int limitTimeSet = 60; //操作制限時間
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
-    [SerializeField] bool autoPower = true;
+    private bool autoPower = true; //使用不可能なオプション．trueのみ動作
     public float armPower; //現在のアームパワー
     BGMPlayer bp;
     Type3ArmController armController;
