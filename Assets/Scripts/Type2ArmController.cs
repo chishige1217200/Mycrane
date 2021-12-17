@@ -103,14 +103,19 @@ public class Type2ArmController : MonoBehaviour
             if (power > 50)
             {
                 motor[i].force = power;
-                joint[i].motor = motor[i];
             }
-            else
+            else if (power > 0)
             {
                 motor[i].targetVelocity = power - 50f;
                 motor[i].force = 1f;
-                joint[i].motor = motor[i];
             }
+            else
+            {
+                motor[i].targetVelocity = -power - 50f;
+                motor[i].force = 1f;
+
+            }
+            joint[i].motor = motor[i];
         }
     }
 

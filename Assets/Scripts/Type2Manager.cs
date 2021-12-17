@@ -249,8 +249,8 @@ public class Type2Manager : CraneManager
                 }
                 if (probability) armPower = armPowerConfigSuccess[0];
                 else armPower = armPowerConfig[0];
-                armController.MotorPower(armPower);
                 armController.Close();
+                armController.MotorPower(armPower);
                 await Task.Delay(1000);
                 if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
                 //アーム掴む;
