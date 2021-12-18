@@ -10,7 +10,7 @@ public class Type10Manager : CraneManager
     public int[] timesSet = new int[2];
     [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
     [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
-    [SerializeField] int operationType = 1; //0:ボタン式，1:レバー式
+    public int operationType = 0; //0:ボタン式，1:レバー式
     [SerializeField] int limitTimeSet = 15; //レバー式の場合，残り時間を設定
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
@@ -25,7 +25,7 @@ public class Type10Manager : CraneManager
     Timer timer;
     ArmControllerSupport support;
     public Text limitTimedisplayed;
-    [SerializeField] TextMesh credit3d;
+    TextMesh credit3d;
 
     async void Start()
     {
@@ -40,7 +40,9 @@ public class Type10Manager : CraneManager
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         //bp = transform.Find("BGM").GetComponent<BGMPlayer>();
         //sp = transform.Find("SE").GetComponent<SEPlayer>();
+        lever = transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
         getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        timer = transform.Find("Timer").GetComponent<Timer>();
         temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
@@ -59,6 +61,8 @@ public class Type10Manager : CraneManager
 
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(sp);
+        timer.limitTime = limitTimeSet;
+        timer.SetSEPlayer(sp);
         support.SetManager(this);
         support.SetLifter(ropeManager);
         creditSystem.SetCreditSound(0);
@@ -68,6 +72,26 @@ public class Type10Manager : CraneManager
 
         getPoint.SetManager(this);
 
+        for (int i = 0; i < 12; i++)
+            isExecuted[i] = false;
+
+        // ControlGroupの制御
+        if (operationType == 0)
+        {
+            transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(true);
+            transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(true);
+            transform.Find("Floor").Find("Type10B").gameObject.SetActive(true);
+            credit3d = transform.Find("Floor").Find("Type10B").Find("7Seg").GetComponent<TextMesh>();
+        }
+        else if (operationType == 1)
+        {
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(true);
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(true);
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(true);
+            transform.Find("Floor").Find("Type10L").gameObject.SetActive(true);
+            credit3d = transform.Find("Floor").Find("Type10L").Find("7Seg").GetComponent<TextMesh>();
+        }
+
         await Task.Delay(300);
         ropeManager.Up();
         while (!ropeManager.UpFinished())
@@ -76,9 +100,6 @@ public class Type10Manager : CraneManager
         }
         armController.Close();
 
-        for (int i = 0; i < 12; i++)
-            isExecuted[i] = false;
-
         craneStatus = -1;
     }
 
@@ -86,14 +107,34 @@ public class Type10Manager : CraneManager
     {
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
-        if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
+        if (!player2 && (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
+        else if (player2 && (Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus))) InsertCoin();
 
         if (craneStatus == -1)
-            if (craneBox.CheckPos(1)) craneStatus = 0;
+            if ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2)) craneStatus = 0;
 
         if (craneStatus == 0)
         {
-
+            if (creditSystem.Pay(0) > 0)
+            {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    await Task.Delay(100);
+                    int credit = creditSystem.PlayStart();
+                    if (operationType == 0)
+                    {
+                        if (credit < 10) credit3d.text = credit.ToString("");
+                        else credit3d.text = "9.";
+                    }
+                    else
+                    {
+                        if (credit < 100) credit3d.text = credit.ToString("D2");
+                        else credit3d.text = "99.";
+                    }
+                    if (craneStatus == 0) craneStatus = 1;
+                }
+            }
             //コイン投入有効化;
         }
         else
@@ -109,7 +150,12 @@ public class Type10Manager : CraneManager
                 if (craneStatus == 2)
                 { //右移動中
                     DetectKey(craneStatus);
-                    if (craneBox.CheckPos(7))
+                    if (!player2 & craneBox.CheckPos(7))
+                    {
+                        buttonPushed = false;
+                        craneStatus = 3;
+                    }
+                    if (player2 & craneBox.CheckPos(5))
                     {
                         buttonPushed = false;
                         craneStatus = 3;
@@ -140,11 +186,6 @@ public class Type10Manager : CraneManager
 
             if (operationType == 1)
             {
-                if (craneStatus == 1)
-                {
-                    //レバー操作有効化;
-                    //降下ボタン有効化;
-                }
                 if (craneStatus == 3)
                 {
                     if (!isExecuted[craneStatus])
@@ -166,6 +207,7 @@ public class Type10Manager : CraneManager
                     await Task.Delay(300);
                     timer.CancelTimer();
                     creditSystem.segUpdateFlag = true;
+                    armController.Open();
                     int credit = creditSystem.Pay(0);
                     if (operationType == 0)
                     {
@@ -174,8 +216,16 @@ public class Type10Manager : CraneManager
                     }
                     else
                     {
-                        if (credit < 100) credit3d.text = credit.ToString("D2");
-                        else credit3d.text = "99.";
+                        if (credit < 100)
+                        {
+                            limitTimedisplayed.text = credit.ToString("D2");
+                            credit3d.text = credit.ToString("D2");
+                        }
+                        else
+                        {
+                            limitTimedisplayed.text = "99";
+                            credit3d.text = "99.";
+                        }
                     }
 
                     await Task.Delay(1000);
@@ -195,10 +245,10 @@ public class Type10Manager : CraneManager
                     switch (operationType)
                     {
                         case 0:
-                            sp.Play(1);
+                            sp.Play(3);
                             break;
                         case 1:
-                            sp.Play(3);
+                            sp.Play(1);
                             break;
                     }
                     if (downTime > 0 && downTime <= 4600)
@@ -221,15 +271,16 @@ public class Type10Manager : CraneManager
             {
                 if (!isExecuted[craneStatus])
                 {
+                    isExecuted[craneStatus] = true;
                     switch (operationType)
                     {
                         case 0:
-                            sp.Stop(1); //アーム下降音再生停止;
-                            sp.Play(2, 1); //アーム掴む音再生;
+                            sp.Stop(3); //アーム下降音再生停止;
+                            sp.Play(4, 1); //アーム掴む音再生;
                             break;
                         case 1:
-                            sp.Stop(3);
-                            sp.Play(4, 1);
+                            sp.Stop(1);
+                            sp.Play(2, 1);
                             break;
                     }
                     if (probability) armPower = armPowerConfigSuccess[0];
@@ -244,20 +295,18 @@ public class Type10Manager : CraneManager
 
             if (craneStatus == 8)
             {
-
-
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
                     switch (operationType)
                     {
                         case 0:
-                            sp.Stop(2);
-                            sp.Play(1);
-                            break;
-                        case 1:
                             sp.Stop(4);
                             sp.Play(3);
+                            break;
+                        case 1:
+                            sp.Stop(2);
+                            sp.Play(1);
                             break;
                     }
                     ropeManager.Up();
@@ -289,6 +338,9 @@ public class Type10Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    if (operationType == 0) sp.Stop(3);
+                    await Task.Delay(500);
+                    if (operationType == 0) sp.Play(3);
                     if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
                     if (craneStatus == 9) craneStatus = 10;
                 }
@@ -330,12 +382,12 @@ public class Type10Manager : CraneManager
                     switch (operationType)
                     {
                         case 0:
-                            sp.Stop(1); //アーム下降音再生停止;
-                            sp.Play(2, 1); //アーム掴む音再生;
-                            break;
-                        case 1:
                             sp.Stop(3);
                             sp.Play(4, 1);
+                            break;
+                        case 1:
+                            sp.Stop(1);
+                            sp.Play(2, 1);
                             break;
                     }
                     await Task.Delay(1000);
@@ -355,7 +407,7 @@ public class Type10Manager : CraneManager
 
                     for (int i = 0; i < 12; i++)
                         isExecuted[i] = false;
-                    await Task.Delay(1000);
+                    await Task.Delay(2000);
 
                     craneStatus = 0;
                     //アーム閉じる音再生;
@@ -408,7 +460,6 @@ public class Type10Manager : CraneManager
     {
         if (host.playable)
         {
-            int credit = 0;
             switch (num)
             {
                 case 1:
@@ -418,9 +469,6 @@ public class Type10Manager : CraneManager
                         if (craneStatus == 1)
                         {
                             creditSystem.ResetPayment();
-                            credit = creditSystem.PlayStart();
-                            if (credit < 10) credit3d.text = credit.ToString();
-                            else credit3d.text = "9.";
                             isExecuted[12] = false;
                         }
                         craneStatus = 2;
@@ -431,9 +479,6 @@ public class Type10Manager : CraneManager
                         if (craneStatus == 1)
                         {
                             creditSystem.ResetPayment();
-                            credit = creditSystem.PlayStart();
-                            if (credit < 10) credit3d.text = credit.ToString();
-                            else credit3d.text = "9.";
                             isExecuted[12] = false;
                         }
                         craneStatus = 2;
@@ -441,28 +486,45 @@ public class Type10Manager : CraneManager
                     break;
                 //投入を無効化
                 case 2:
-                    if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed)
+                    if ((Input.GetKeyUp(KeyCode.Keypad1) || Input.GetKeyUp(KeyCode.Alpha1)) && buttonPushed && !player2)
+                    {
+                        craneStatus = 3;
+                        buttonPushed = false;
+                    }
+                    if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonPushed && player2)
                     {
                         craneStatus = 3;
                         buttonPushed = false;
                     }
                     break;
                 case 3:
-                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed)
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !buttonPushed && !player2)
+                    {
+                        buttonPushed = true;
+                        craneStatus = 4;
+                    }
+                    if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonPushed && player2)
                     {
                         buttonPushed = true;
                         craneStatus = 4;
                     }
                     break;
                 case 4:
-                    if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed)
+                    if ((Input.GetKeyUp(KeyCode.Keypad2) || Input.GetKeyUp(KeyCode.Alpha2)) && buttonPushed && !player2)
+                    {
+                        craneStatus = 5;
+                        buttonPushed = false;
+                    }
+                    if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonPushed && player2)
                     {
                         craneStatus = 5;
                         buttonPushed = false;
                     }
                     break;
                 case 5: // レバー操作時に使用
-                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && craneStatus == 3)
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !player2 && craneStatus == 3)
+                        craneStatus = 5;
+                    if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && player2 && craneStatus == 3)
                         craneStatus = 5;
                     break;
             }
@@ -473,28 +535,50 @@ public class Type10Manager : CraneManager
     {
         if (host.playable)
         {
-            if (Input.GetKey(KeyCode.H) || lever.rightFlag)
-                craneBox.Right();
-            if (Input.GetKey(KeyCode.F) || lever.leftFlag)
-                craneBox.Left();
-            if (Input.GetKey(KeyCode.T) || lever.backFlag)
-                craneBox.Back();
-            if (Input.GetKey(KeyCode.G) || lever.forwardFlag)
-                craneBox.Forward();
+            if (!player2)
+            {
+                if (Input.GetKey(KeyCode.H) || lever.rightFlag)
+                    craneBox.Right();
+                if (Input.GetKey(KeyCode.F) || lever.leftFlag)
+                    craneBox.Left();
+                if (Input.GetKey(KeyCode.T) || lever.backFlag)
+                    craneBox.Back();
+                if (Input.GetKey(KeyCode.G) || lever.forwardFlag)
+                    craneBox.Forward();
 
-            if (Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
-            || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) // 初動時にタイマーを起動
-                if (craneStatus == 1)
-                {
-                    craneStatus = 3;
-                    creditSystem.ResetPayment();
-                    int credit = creditSystem.PlayStart();
-                    if (credit < 100) credit3d.text = credit.ToString("D2");
-                    else credit3d.text = "99.";
-                    isExecuted[12] = false;
-                    probability = creditSystem.ProbabilityCheck();
-                    Debug.Log("Probability:" + probability);
-                }
+                if (Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
+                || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
+                    if (craneStatus == 1)
+                    {
+                        craneStatus = 3;
+                        creditSystem.ResetPayment();
+                        isExecuted[12] = false;
+                        probability = creditSystem.ProbabilityCheck();
+                        Debug.Log("Probability:" + probability);
+                    }
+            }
+            else //2Pレバー
+            {
+                if (Input.GetKey(KeyCode.L) || lever.rightFlag)
+                    craneBox.Right();
+                if (Input.GetKey(KeyCode.J) || lever.leftFlag)
+                    craneBox.Left();
+                if (Input.GetKey(KeyCode.I) || lever.backFlag)
+                    craneBox.Back();
+                if (Input.GetKey(KeyCode.K) || lever.forwardFlag)
+                    craneBox.Forward();
+
+                if (Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
+                || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
+                    if (craneStatus == 1)
+                    {
+                        craneStatus = 3;
+                        creditSystem.ResetPayment();
+                        isExecuted[12] = false;
+                        probability = creditSystem.ProbabilityCheck();
+                        Debug.Log("Probability:" + probability);
+                    }
+            }
         }
     }
 
@@ -510,9 +594,6 @@ public class Type10Manager : CraneManager
                         buttonPushed = true;
                         craneStatus = 2;
                         creditSystem.ResetPayment();
-                        int credit = creditSystem.PlayStart();
-                        if (credit < 100) credit3d.text = credit.ToString("D2");
-                        else credit3d.text = "99.";
                         isExecuted[12] = false;
                         probability = creditSystem.ProbabilityCheck();
                         Debug.Log("Probability:" + probability);
