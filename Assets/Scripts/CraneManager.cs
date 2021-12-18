@@ -29,9 +29,9 @@ public abstract class CraneManager : MonoBehaviour
                 creditSystem.ResetCostProbability();
                 break;
         }
-        if (!sp.audioSource[getSoundNum].isPlaying)
+        if (getSoundNum != -1)
         {
-            if (getSoundNum != -1)
+            if (!sp.audioSource[getSoundNum].isPlaying)
                 sp.Play(getSoundNum, 1);
         }
     }
