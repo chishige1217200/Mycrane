@@ -98,7 +98,8 @@ public class ArmControllerSupport : MonoBehaviour
                 case 10:
                     if (craneManager.GetStatus() == 6)
                     {
-                        await Task.Delay(1000);
+                        if (craneManager.GetCType() == 3) await Task.Delay(1000);
+                        else if (craneManager.GetCType() == 10) await Task.Delay(300);
                         if (craneManager.GetStatus() == 6)
                         {
                             lifter.DownForceStop();
