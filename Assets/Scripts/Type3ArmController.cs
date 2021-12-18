@@ -11,6 +11,7 @@ public class Type3ArmController : MonoBehaviour
     ArmControllerSupport support;
     Type3Manager _Type3Manager;
     Type7Manager _Type7Manager;
+    Type10Manager _Type10Manager;
     public bool autoPower = true; //trueなら強制射出
     int craneType = 3;
     void Start()
@@ -68,6 +69,7 @@ public class Type3ArmController : MonoBehaviour
         {
             if (craneType == 3) _Type3Manager.armPower = 0f;
             else if (craneType == 7) _Type7Manager.armPower = 0f;
+            else _Type10Manager.armPower = 0f;
             for (int i = 0; i < 3; i++)
             {
                 motor[i].targetVelocity = 50f;
@@ -100,6 +102,7 @@ public class Type3ArmController : MonoBehaviour
         craneType = num;
         if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
         if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
+        if (craneType == 10) _Type10Manager = transform.root.gameObject.GetComponent<Type10Manager>();
         support = transform.Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
         support.SetArmController(craneType);
     }
