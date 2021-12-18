@@ -121,18 +121,23 @@ public class Type10Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     await Task.Delay(100);
-                    int credit = creditSystem.PlayStart();
-                    if (operationType == 0)
+                    if (craneStatus == 0)
                     {
-                        if (credit < 10) credit3d.text = credit.ToString("");
-                        else credit3d.text = "9.";
+                        int credit = creditSystem.PlayStart();
+                        if (operationType == 0)
+                        {
+                            if (credit < 10) credit3d.text = credit.ToString("");
+                            else if (credit < 0) credit3d.text = "0";
+                            else credit3d.text = "9.";
+                        }
+                        else
+                        {
+                            if (credit < 100) credit3d.text = credit.ToString("D2");
+                            else if (credit < 0) credit3d.text = "00";
+                            else credit3d.text = "99.";
+                        }
+                        craneStatus = 1;
                     }
-                    else
-                    {
-                        if (credit < 100) credit3d.text = credit.ToString("D2");
-                        else credit3d.text = "99.";
-                    }
-                    if (craneStatus == 0) craneStatus = 1;
                 }
             }
             //コイン投入有効化;
@@ -251,7 +256,7 @@ public class Type10Manager : CraneManager
                             sp.Play(1);
                             break;
                     }
-                    if (downTime > 0 && downTime <= 4600)
+                    if (downTime > 0)
                     {
                         await Task.Delay(downTime);
                         if (craneStatus == 6)
@@ -390,7 +395,7 @@ public class Type10Manager : CraneManager
                             sp.Play(2, 1);
                             break;
                     }
-                    await Task.Delay(1000);
+                    await Task.Delay(1500);
                     craneStatus = 12;
                 }
                 //アーム開く音再生;
@@ -407,7 +412,7 @@ public class Type10Manager : CraneManager
 
                     for (int i = 0; i < 12; i++)
                         isExecuted[i] = false;
-                    await Task.Delay(2000);
+                    await Task.Delay(1500);
 
                     craneStatus = 0;
                     //アーム閉じる音再生;
