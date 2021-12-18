@@ -107,6 +107,7 @@ public class CreditSystem : MonoBehaviour
         if (creditSoundNum != -1) _SEPlayer.ForcePlay(creditSoundNum); //サウンド再生
 
         if (creditDisplayed >= 100) Credit.text = "99."; //表示更新
+        else if (creditDisplayed < 0) Credit.text = "00";
         else Credit.text = creditDisplayed.ToString("D2");
 
         return creditDisplayed;
@@ -129,6 +130,7 @@ public class CreditSystem : MonoBehaviour
         creditPlayedSum++; //合計プレイ数を1加算
 
         if (creditDisplayed >= 100) Credit.text = "99."; //表示更新
+        else if (creditDisplayed < 0) Credit.text = "00";
         else Credit.text = creditDisplayed.ToString("D2");
 
         return creditOld;
