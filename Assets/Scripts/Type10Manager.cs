@@ -75,6 +75,7 @@ public class Type10Manager : CraneManager
         for (int i = 0; i < 12; i++)
             isExecuted[i] = false;
 
+        await Task.Delay(300);
         // ControlGroupの制御
         if (operationType == 0)
         {
@@ -91,8 +92,6 @@ public class Type10Manager : CraneManager
             transform.Find("Floor").Find("Type10L").gameObject.SetActive(true);
             credit3d = transform.Find("Floor").Find("Type10L").Find("7Seg").GetComponent<TextMesh>();
         }
-
-        await Task.Delay(300);
         ropeManager.Up();
         while (!ropeManager.UpFinished())
         {
@@ -315,6 +314,7 @@ public class Type10Manager : CraneManager
                             break;
                     }
                     ropeManager.Up();
+                    await Task.Delay(1500);
                     if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); //上昇中に離す振り分け(autoPower設定時のみ)
                 }
                 if (probability && armPower > armPowerConfigSuccess[1])
@@ -475,6 +475,8 @@ public class Type10Manager : CraneManager
                         {
                             creditSystem.ResetPayment();
                             isExecuted[12] = false;
+                            probability = creditSystem.ProbabilityCheck();
+                            Debug.Log("Probability:" + probability);
                         }
                         craneStatus = 2;
                     }
@@ -485,6 +487,8 @@ public class Type10Manager : CraneManager
                         {
                             creditSystem.ResetPayment();
                             isExecuted[12] = false;
+                            probability = creditSystem.ProbabilityCheck();
+                            Debug.Log("Probability:" + probability);
                         }
                         craneStatus = 2;
                     }
