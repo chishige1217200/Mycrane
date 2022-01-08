@@ -172,7 +172,7 @@ public class Type7Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     ropeManager.Up();
                     await Task.Delay(1500);
-                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
+                    if (!probability && UnityEngine.Random.Range(0, 3) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
                 }
                 if (probability && armPower > armPowerConfigSuccess[1])
                 {

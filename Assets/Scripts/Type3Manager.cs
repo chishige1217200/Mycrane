@@ -311,7 +311,7 @@ public class Type3Manager : CraneManager
                     }
                     ropeManager.Up();
                     await Task.Delay(1500);
-                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); //上昇中に離す振り分け(autoPower設定時のみ)
+                    if (!probability && UnityEngine.Random.Range(0, 3) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); //上昇中に離す振り分け(autoPower設定時のみ)
                 }
                 if (soundType == 2)
                     if (!sp.audioSource[15].isPlaying)
