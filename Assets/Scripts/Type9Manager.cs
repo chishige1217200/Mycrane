@@ -186,7 +186,12 @@ public class Type9Manager : CraneManager
             }
             if (craneStatus == 9) //上昇停止
             {
-                IncrimentStatus();
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    await Task.Delay(200);
+                    if (craneStatus == 9) IncrimentStatus();
+                }
             }
             if (craneStatus == 10) //帰還中
             {

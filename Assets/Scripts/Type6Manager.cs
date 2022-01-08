@@ -339,20 +339,24 @@ public class Type6Manager : CraneManager
 
             if (craneStatus == 7) //アーム上昇停止
             {
-                if (releaseTiming == 0)
+                if (!isExecuted[craneStatus])
                 {
-                    if (probability)
+                    isExecuted[craneStatus] = true;
+                    await Task.Delay(200);
+                    if (releaseTiming == 0)
                     {
-                        armPower = armPowerConfigSuccess[1];
+                        if (probability)
+                        {
+                            armPower = armPowerConfigSuccess[1];
+                        }
+                        else
+                        {
+                            armPower = armPowerConfig[1];
+                        }
+                        armController.MotorPower(armPower);
                     }
-                    else
-                    {
-                        armPower = armPowerConfig[1];
-                    }
-                    armController.MotorPower(armPower);
+                    if (craneStatus == 7) craneStatus = 8;
                 }
-
-                craneStatus = 8;
             }
 
             if (craneStatus == 8) //帰還中
