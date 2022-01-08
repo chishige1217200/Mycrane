@@ -342,6 +342,7 @@ public class Type3Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    await Task.Delay(200);
                     switch (soundType)
                     {
                         case 3:
@@ -412,6 +413,7 @@ public class Type3Manager : CraneManager
                             break;
                     }
                     await Task.Delay(1000);
+                    if (soundType == 3) await Task.Delay(1500);
                     craneStatus = 12;
                 }
                 //アーム開く音再生;
@@ -439,7 +441,7 @@ public class Type3Manager : CraneManager
                     }
                     for (int i = 0; i < 12; i++)
                         isExecuted[i] = false;
-                    await Task.Delay(1000);
+                    await Task.Delay(1500);
                     if (soundType == 3) await Task.Delay(1000);
                     switch (soundType)
                     {

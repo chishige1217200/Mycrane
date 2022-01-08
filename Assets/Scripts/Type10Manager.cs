@@ -383,6 +383,7 @@ public class Type10Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    await Task.Delay(500);
                     armController.Open();
                     switch (operationType)
                     {

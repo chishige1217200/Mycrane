@@ -411,18 +411,7 @@ public class Type5Manager : CraneManager
             {
                 //アーム上昇停止音再生;
                 //アーム上昇停止;
-                if (probability)
-                {
-                    armLPower = armLPowerConfigSuccess[1];
-                    armRPower = armRPowerConfigSuccess[1];
-                }
-                else
-                {
-                    armLPower = armLPowerConfig[1];
-                    armRPower = armRPowerConfig[1];
-                }
-                armController.SetMotorPower(armLPower, 0);
-                armController.SetMotorPower(armRPower, 1);
+
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -431,8 +420,21 @@ public class Type5Manager : CraneManager
                         craneBox.goPoint = homePoint;
                         craneBox.goPositionFlag = true;
                     }
+                    await Task.Delay(200);
+                    if (probability)
+                    {
+                        armLPower = armLPowerConfigSuccess[1];
+                        armRPower = armRPowerConfigSuccess[1];
+                    }
+                    else
+                    {
+                        armLPower = armLPowerConfig[1];
+                        armRPower = armRPowerConfig[1];
+                    }
+                    armController.SetMotorPower(armLPower, 0);
+                    armController.SetMotorPower(armRPower, 1);
+                    if (craneStatus == 9) craneStatus = 10;
                 }
-                if (isExecuted[craneStatus] && craneStatus == 9) craneStatus = 10;
             }
 
             if (craneStatus == 10)
