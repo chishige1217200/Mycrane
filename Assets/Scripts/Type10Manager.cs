@@ -45,11 +45,36 @@ public class Type10Manager : CraneManager
         timer = transform.Find("Timer").GetComponent<Timer>();
         temp = transform.Find("CraneUnit").transform;
 
+        // ControlGroupの制御
+        if (operationType == 0)
+        {
+            transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(true);
+            transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(true);
+            transform.Find("Floor").Find("Type10B").gameObject.SetActive(true);
+            credit3d = transform.Find("Floor").Find("Type10B").Find("7Seg").GetComponent<TextMesh>();
+        }
+        else if (operationType == 1)
+        {
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(true);
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(true);
+            transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(true);
+            transform.Find("Floor").Find("Type10L").gameObject.SetActive(true);
+            credit3d = transform.Find("Floor").Find("Type10L").Find("7Seg").GetComponent<TextMesh>();
+        }
+
         // クレジット情報登録
         creditSystem.rateSet[0, 0] = priceSet[0];
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
+        if (isHibernate)
+        {
+            if (operationType == 0)
+                credit3d.text = "-";
+            else
+                credit3d.text = "--";
+            creditSystem.SetHibernate();
+        }
 
         // ロープとアームコントローラに関する処理
         ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -76,22 +101,7 @@ public class Type10Manager : CraneManager
             isExecuted[i] = false;
 
         await Task.Delay(300);
-        // ControlGroupの制御
-        if (operationType == 0)
-        {
-            transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(true);
-            transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(true);
-            transform.Find("Floor").Find("Type10B").gameObject.SetActive(true);
-            credit3d = transform.Find("Floor").Find("Type10B").Find("7Seg").GetComponent<TextMesh>();
-        }
-        else if (operationType == 1)
-        {
-            transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(true);
-            transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(true);
-            transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(true);
-            transform.Find("Floor").Find("Type10L").gameObject.SetActive(true);
-            credit3d = transform.Find("Floor").Find("Type10L").Find("7Seg").GetComponent<TextMesh>();
-        }
+
         ropeManager.Up();
         while (!ropeManager.UpFinished())
         {

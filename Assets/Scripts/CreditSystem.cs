@@ -23,7 +23,6 @@ public class CreditSystem : MonoBehaviour
     async void Start()
     {
         await Task.Delay(100);
-
         if (rateSet[0, 0] == 0 || rateSet[0, 1] == 0)
         {
             rateSet[0, 0] = 100;
@@ -50,6 +49,16 @@ public class CreditSystem : MonoBehaviour
         }
 
         Credit.text = "00";
+    }
+
+    public async void SetHibernate()
+    {
+        await Task.Delay(150);
+        Credit.text = "--";
+        timesSet[0].text = "-";
+        timesSet[1].text = "-";
+        priceSet[0].text = "---";
+        priceSet[1].text = "---";
     }
 
     public int Pay(int cost)

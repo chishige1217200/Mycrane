@@ -42,6 +42,11 @@ public class Type3Manager : CraneManager
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
+        if (isHibernate)
+        {
+            credit3d.text = "-";
+            creditSystem.SetHibernate();
+        }
 
         // ロープとアームコントローラに関する処理
         ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();

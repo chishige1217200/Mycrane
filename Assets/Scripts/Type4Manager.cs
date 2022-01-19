@@ -57,10 +57,22 @@ public class Type4Manager : CraneManager
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
-        preset[0].text = priceSet[0].ToString();
-        preset[1].text = priceSet[1].ToString();
-        preset[2].text = timesSet[0].ToString();
-        preset[3].text = timesSet[1].ToString();
+        if (isHibernate)
+        {
+            credit3d.text = "-";
+            creditSystem.SetHibernate();
+            preset[0].text = "---";
+            preset[1].text = "---";
+            preset[2].text = "-";
+            preset[3].text = "-";
+        }
+        else
+        {
+            preset[0].text = priceSet[0].ToString();
+            preset[1].text = priceSet[1].ToString();
+            preset[2].text = timesSet[0].ToString();
+            preset[3].text = timesSet[1].ToString();
+        }
 
         // ロープとアームコントローラに関する処理
         lifter = temp.Find("CraneBox").Find("Tube").Find("TubePoint").GetComponent<ArmUnitLifter>();
