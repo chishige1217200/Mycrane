@@ -8,7 +8,7 @@ public class CameraChanger : MonoBehaviour
     GameObject downCamera;
     List<GameObject> downCameras;
     List<GameObject> upCameras; // *downCamerasと同じ数存在する必要あり
-    bool cameraSelectFlag = false; // trueなら上方向からのカメラ
+    bool cameraUpFlag = false; // trueなら上方向からのカメラ
     int cameraStatus = 0;
 
     //呼び出し時に実行される関数
@@ -41,7 +41,7 @@ public class CameraChanger : MonoBehaviour
             else upCameras[i].SetActive(false);
         }
 
-        upCamera.SetActive(cameraSelectFlag);
+        upCamera.SetActive(cameraUpFlag);
 
         if (downCameras.Count != upCameras.Count) Debug.Log("downCamerasとupCamerasの個数が一致しません");
     }
@@ -56,7 +56,7 @@ public class CameraChanger : MonoBehaviour
 
     public void ChangeCameraStatus(int num)
     {
-        if (num == 0) cameraSelectFlag = !cameraSelectFlag; // downCameras，upCameras切り替え
+        if (num == 0) cameraUpFlag = !cameraUpFlag; // downCameras，upCameras切り替え
         else
         {
             cameraStatus = cameraStatus + num;
@@ -80,6 +80,6 @@ public class CameraChanger : MonoBehaviour
             else upCameras[i].SetActive(false);
         }
 
-        upCamera.SetActive(cameraSelectFlag); // downCameras，upCameras切り替え
+        upCamera.SetActive(cameraUpFlag); // downCameras，upCameras切り替え
     }
 }
