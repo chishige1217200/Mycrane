@@ -368,15 +368,18 @@ public class Type3Manager : CraneManager
                             sp.Stop(4);
                             sp.Play(1);
                             break;
+                        case 2:
+                            sp.Stop(15);
+                            sp.Stop(14);
+                            sp.Play(14);
+                            break;
                         case 3:
                             sp.Play(23);
                             break;
                     }
 
                 }
-                if (soundType == 2)
-                    if (!sp.audioSource[15].isPlaying)
-                        sp.Play(14);
+
                 if (!armController.autoPower)
                 {
                     if (support.prizeCount > 0)
