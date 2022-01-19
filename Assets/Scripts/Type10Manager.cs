@@ -650,7 +650,7 @@ public class Type10Manager : CraneManager
 
     public override void InsertCoin()
     {
-        if (host.playable && craneStatus >= 0)
+        if (!isHibernate && host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             if (operationType == 0)
