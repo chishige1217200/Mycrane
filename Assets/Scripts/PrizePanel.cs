@@ -11,9 +11,9 @@ public class PrizePanel : MonoBehaviour
     Text dateText;
     void Start()
     {
-        canvas = this.transform.Find("Canvas").gameObject;
-        prizeText = this.transform.Find("Canvas").Find("Panel").Find("PrizeText").GetComponent<Text>();
-        dateText = this.transform.Find("Canvas").Find("Panel").Find("DateText").GetComponent<Text>();
+        canvas = this.transform.Find("Canvas").Find("PrizePanel").gameObject;
+        prizeText = this.transform.Find("Canvas").Find("PrizePanel").Find("PrizeText").GetComponent<Text>();
+        dateText = this.transform.Find("Canvas").Find("PrizePanel").Find("DateText").GetComponent<Text>();
     }
 
     void Update()
