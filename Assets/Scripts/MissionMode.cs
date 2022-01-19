@@ -66,7 +66,6 @@ public class MissionMode : MonoBehaviour
                 isExecuted = true;
                 GameOver();
             }
-            // 数秒待ってゲームオーバー
         }
         else if (playerCount == 2 && c[0].isHibernate && c[1].isHibernate && c[0].GetStatus() == 0 && c[1].GetStatus() == 0 && creditSystem[0].Pay(0) == 0 && creditSystem[1].Pay(0) == 0)
         {
@@ -75,13 +74,13 @@ public class MissionMode : MonoBehaviour
                 isExecuted = true;
                 GameOver();
             }
-            // 数秒待ってゲームオーバー
         }
     }
 
     public void GameClear()
     {
         gameClear = true;
+        CloseMissionPanel();
         gameOverPanel.SetActive(false);
         gameClearPanel.SetActive(true);
         // ゲームクリア画面の表示
@@ -92,6 +91,7 @@ public class MissionMode : MonoBehaviour
         await Task.Delay(3000);
         if (!gameClear)
         {
+            CloseMissionPanel();
             gameOverPanel.SetActive(true);
         }
         // ゲームオーバー画面の表示
