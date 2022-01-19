@@ -361,7 +361,7 @@ public class Type7Manager : CraneManager
     }
     public override void InsertCoin()
     {
-        if (host.playable && craneStatus >= 0 && creditSystem.creditDisplayed == 0)
+        if (!isHibernate && host.playable && craneStatus >= 0 && creditSystem.creditDisplayed == 0)
             if (creditSystem.Pay(100) >= 1) craneStatus = 1;
     }
 }
