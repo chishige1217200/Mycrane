@@ -80,6 +80,7 @@ public class CameraChanger : MonoBehaviour
             else upCameras[i].SetActive(false);
         }
 
+        downCamera.SetActive(!cameraUpFlag);
         upCamera.SetActive(cameraUpFlag); // downCameras，upCameras切り替え
     }
 }
