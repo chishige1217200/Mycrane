@@ -47,6 +47,7 @@ public class Type7Manager : CraneManager
         creditSystem.rateSet[1, 0] = 0;
         creditSystem.rateSet[0, 1] = times;
         creditSystem.rateSet[1, 1] = 0;
+        if (isHibernate) creditSystem.SetHibernate();
 
         // ロープとアームコントローラに関する処理
         ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
