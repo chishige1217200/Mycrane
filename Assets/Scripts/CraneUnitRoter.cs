@@ -17,8 +17,8 @@ public class CraneUnitRoter : MonoBehaviour
     void FixedUpdate() // 1秒間に60回呼ばれる
     {
 
-        if (Input.GetKey(KeyCode.RightArrow)) Right();
-        if (Input.GetKey(KeyCode.LeftArrow)) Left();
+        //if (Input.GetKey(KeyCode.RightArrow)) Right();
+        //if (Input.GetKey(KeyCode.LeftArrow)) Left();
     }
 
     public bool CheckPos(int mode) // 1：左，2：右
