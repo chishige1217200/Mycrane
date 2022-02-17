@@ -45,6 +45,8 @@ public class Type10Manager : CraneManager
         timer = transform.Find("Timer").GetComponent<Timer>();
         temp = transform.Find("CraneUnit").transform;
 
+        await Task.Delay(50);
+
         // ControlGroupの制御
         if (operationType == 0)
         {
