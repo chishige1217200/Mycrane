@@ -137,11 +137,11 @@ public class Type3Manager : CraneManager
                         bp.Play(4);
                         break;
                 }
-
             }
 
             if (craneStatus == 2)
-            { //右移動中
+            {
+                //右移動中
                 bp.Stop(soundType);
                 DetectKey(craneStatus);
                 //コイン投入無効化;
@@ -177,7 +177,8 @@ public class Type3Manager : CraneManager
             }
 
             if (craneStatus == 4)
-            { //奥移動中
+            {
+                //奥移動中
                 DetectKey(craneStatus);
                 //クレーン奥移動;
                 switch (soundType)
@@ -431,7 +432,6 @@ public class Type3Manager : CraneManager
 
             if (craneStatus == 12)
             {
-
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
