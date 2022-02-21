@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LockOnProbability : MonoBehaviour
 {
-    public int creditProbability = 3;
+    [SerializeField] int creditProbability = 3;
     int timesTargeted = 0;
     // Start is called before the first frame update
     void Start()

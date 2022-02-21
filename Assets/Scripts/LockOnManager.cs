@@ -7,9 +7,11 @@ public class LockOnManager : CraneManager
 {
     [SerializeField] int[] priceSet = new int[2];
     [SerializeField] int[] timesSet = new int[2];
-    bool[] isExecuted = new bool[10]; //各craneStatusで1度しか実行しない処理の管理
+    bool[] isExecuted = new bool[11]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     BGMPlayer bp;
+    LockOnProbabilityChecker lc;
+    LockOnStretcher ls;
     [SerializeField] TextMesh credit3d;
     // Start is called before the first frame update
     async void Start()
@@ -38,6 +40,8 @@ public class LockOnManager : CraneManager
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
+        lc = temp.Find("CraneBox").Find("JudgePoint").GetComponent<LockOnProbabilityChecker>();
+        ls = temp.Find("CraneBox").Find("Stretcher").GetComponent<LockOnStretcher>();
 
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(sp);
@@ -45,15 +49,17 @@ public class LockOnManager : CraneManager
 
         await Task.Delay(300);
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 11; i++)
             isExecuted[i] = false;
 
         craneStatus = -1;
+        lc.ResetJudge();
     }
 
     // Update is called once per frame
     async void Update()
     {
+        Debug.Log(craneStatus);
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
@@ -110,7 +116,9 @@ public class LockOnManager : CraneManager
             if (craneStatus == 5)
             {
                 // 滑り動作
-                if (!isExecuted[craneStatus])
+                if (!lc.GetInJudge()) craneStatus = 6;
+
+                /*if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
                     await Task.Delay(1000);
@@ -120,12 +128,12 @@ public class LockOnManager : CraneManager
                 {
                     buttonPushed = false;
                     if (craneStatus == 5) craneStatus = 6;
-                }
+                }*/
             }
 
             if (craneStatus == 6)
             {
-                // 伸びる動作
+                // 待機動作
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -138,21 +146,19 @@ public class LockOnManager : CraneManager
 
             if (craneStatus == 7)
             {
-                // 待機動作
-                if (!isExecuted[craneStatus])
-                {
-                    isExecuted[craneStatus] = true;
-                    await Task.Delay(1000);
-                    if (craneStatus == 7) craneStatus = 8;
-                }
+                // 伸びる動作
+                if (ls.CheckPos(1)) craneStatus = 8;
             }
 
             if (craneStatus == 8)
             {
-                // 縮む動作
+                // 待機動作
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    lc.IncrimentTarget();
+                    sp.Stop(1);
+                    if (!sp.audioSource[3].isPlaying) sp.Play(2, 1);
                     await Task.Delay(1000);
                     if (craneStatus == 8) craneStatus = 9;
                 }
@@ -160,12 +166,22 @@ public class LockOnManager : CraneManager
 
             if (craneStatus == 9)
             {
+                // 縮む動作
+                if (ls.CheckPos(2))
+                {
+                    await Task.Delay(500);
+                    if (craneStatus == 9) craneStatus = 10;
+                }
+            }
+
+            if (craneStatus == 10)
+            {
                 if (craneBox.CheckPos(1))
                 {
                     if (!isExecuted[craneStatus])
                     {
                         isExecuted[craneStatus] = true;
-                        for (int i = 0; i < 9; i++)
+                        for (int i = 0; i < 10; i++)
                             isExecuted[i] = false;
                         Debug.Log("Machine Reseted.");
                         if (creditSystem.creditDisplayed > 0)
@@ -182,19 +198,23 @@ public class LockOnManager : CraneManager
     {
         if (craneStatus != 0)
         {
-            if (craneStatus == -1 || craneStatus == 9)
+            if (craneStatus == -1 || craneStatus == 10)
             {
                 craneBox.Left();
                 craneBox.Down();
             }
             else if (craneStatus == 2) craneBox.Up();
             else if (craneStatus == 4 || craneStatus == 5) craneBox.Right();
+            if (craneStatus == 7) ls.Stretch();
+            if (craneStatus == 9) ls.Shrink();
         }
     }
 
-    public override void GetPrize()
+    public override async void GetPrize()
     {
-        sp.Play(3);
+        await Task.Delay(500);
+        sp.Stop(1);
+        if (!sp.audioSource[3].isPlaying) sp.Play(3, 1);
     }
 
     protected override void DetectKey(int num)
@@ -213,7 +233,8 @@ public class LockOnManager : CraneManager
                             int credit = creditSystem.PlayStart();
                             if (credit < 10) credit3d.text = credit.ToString();
                             else credit3d.text = "9.";
-                            isExecuted[9] = false;
+                            lc.ResetJudge();
+                            isExecuted[10] = false;
                             //probability = creditSystem.ProbabilityCheck();
                             //Debug.Log("Probability:" + probability);
                         }
@@ -261,7 +282,8 @@ public class LockOnManager : CraneManager
                         int credit = creditSystem.PlayStart();
                         if (credit < 10) credit3d.text = credit.ToString();
                         else credit3d.text = "9.";
-                        isExecuted[9] = false;
+                        lc.ResetJudge();
+                        isExecuted[10] = false;
                         //probability = creditSystem.ProbabilityCheck();
                         //Debug.Log("Probability:" + probability);
                     }

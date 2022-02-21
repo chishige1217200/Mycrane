@@ -4,15 +4,34 @@ using UnityEngine;
 
 public class LockOnProbabilityChecker : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    LockOnProbability l;
+    bool inJudge = false;
+
+    public void ResetJudge()
     {
-        
+        inJudge = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool GetInJudge()
     {
-        
+        return inJudge;
+    }
+
+    public void IncrimentTarget()
+    {
+        if (l != null) l.IncrimentTarget();
+        else Debug.Log("No Probability Zone");
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.CompareTag("JudgePoint")) inJudge = true;
+        if (collider.CompareTag("Flag")) l = collider.GetComponent<LockOnProbability>();
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (collider.CompareTag("JudgePoint")) inJudge = false;
+        if (collider.CompareTag("Flag")) l = null;
     }
 }
