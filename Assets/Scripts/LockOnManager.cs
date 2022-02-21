@@ -12,6 +12,7 @@ public class LockOnManager : CraneManager
     BGMPlayer bp;
     LockOnProbabilityChecker lc;
     LockOnStretcher ls;
+    GameObject internalCamera;
     [SerializeField] TextMesh credit3d;
     // Start is called before the first frame update
     async void Start()
@@ -42,6 +43,7 @@ public class LockOnManager : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
         lc = temp.Find("CraneBox").Find("JudgePoint").GetComponent<LockOnProbabilityChecker>();
         ls = temp.Find("CraneBox").Find("Stretcher").GetComponent<LockOnStretcher>();
+        internalCamera = temp.Find("CraneBox").Find("Camera").gameObject;
 
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(sp);
@@ -61,7 +63,12 @@ public class LockOnManager : CraneManager
     {
         Debug.Log(craneStatus);
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
-        else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
+        else if (!host.playable && canvas.activeSelf)
+        {
+            canvas.SetActive(false);
+            if (internalCamera.activeSelf) internalCamera.SetActive(false);
+        }
+        if (host.playable && (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadPeriod))) internalCamera.SetActive(!internalCamera.activeSelf);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
 
         if (craneStatus == -1)
@@ -78,7 +85,7 @@ public class LockOnManager : CraneManager
             {
                 // 待機中
                 DetectKey(craneStatus);
-                if (!sp.audioSource[0].isPlaying) bp.Play(0);
+                if (!sp.audioSource[0].isPlaying && !sp.audioSource[2].isPlaying && !sp.audioSource[3].isPlaying) bp.Play(0);
             }
 
             if (craneStatus == 2)
@@ -169,7 +176,6 @@ public class LockOnManager : CraneManager
                 // 縮む動作
                 if (ls.CheckPos(2))
                 {
-                    await Task.Delay(500);
                     if (craneStatus == 9) craneStatus = 10;
                 }
             }
@@ -327,14 +333,11 @@ public class LockOnManager : CraneManager
     {
         if (!isHibernate && host.playable && craneStatus >= 0)
         {
+            bp.Stop(0);
             int credit = creditSystem.Pay(100);
             if (credit < 10) credit3d.text = credit.ToString();
             else credit3d.text = "9.";
-            if (credit > 0 && craneStatus == 0)
-            {
-                craneStatus = 1;
-                bp.Stop(0);
-            }
+            if (credit > 0 && craneStatus == 0) craneStatus = 1;
         }
     }
 }
