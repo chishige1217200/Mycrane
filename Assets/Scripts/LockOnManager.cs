@@ -61,7 +61,6 @@ public class LockOnManager : CraneManager
     // Update is called once per frame
     async void Update()
     {
-        Debug.Log(craneStatus);
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf)
         {
@@ -189,7 +188,6 @@ public class LockOnManager : CraneManager
                         isExecuted[craneStatus] = true;
                         for (int i = 0; i < 10; i++)
                             isExecuted[i] = false;
-                        Debug.Log("Machine Reseted.");
                         if (creditSystem.creditDisplayed > 0)
                             craneStatus = 1;
                         else

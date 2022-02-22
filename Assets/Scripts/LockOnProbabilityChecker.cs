@@ -14,6 +14,7 @@ public class LockOnProbabilityChecker : MonoBehaviour
 
     public bool GetInJudge()
     {
+        if (inJudge) Debug.Log("Machine will slip!");
         return inJudge;
     }
 

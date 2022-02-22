@@ -25,7 +25,7 @@ public class LockOnStretcher : MonoBehaviour
         if (!stretchRefusedFlag)
         {
             shrinkRefusedFlag = false;
-            if (transform.localPosition.z < 1) transform.localPosition += new Vector3(0, 0, 0.01f);
+            if (transform.localPosition.z < 0.95f) transform.localPosition += new Vector3(0, 0, 0.01f);
             else stretchRefusedFlag = true;
         }
     }
@@ -47,14 +47,11 @@ public class LockOnStretcher : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("Collision Enter");
-        Debug.Log(collider.tag);
         if (collider.CompareTag("Shield")) stretchRefusedFlag = true;
     }
 
     void OnTriggerExit(Collider collider)
     {
-        Debug.Log("Collision End");
         if (collider.CompareTag("Shield")) stretchRefusedFlag = false;
     }
 }
