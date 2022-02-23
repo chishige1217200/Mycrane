@@ -12,7 +12,8 @@ public class LockOnManager : CraneManager
     BGMPlayer bp;
     LockOnProbabilityChecker lc;
     LockOnStretcher ls;
-    GameObject internalCamera;
+    GameObject[] internalCamera = new GameObject[2];
+    GameObject blackLine;
     [SerializeField] TextMesh credit3d;
     // Start is called before the first frame update
     async void Start()
@@ -43,7 +44,9 @@ public class LockOnManager : CraneManager
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
         lc = temp.Find("CraneBox").Find("JudgePoint").GetComponent<LockOnProbabilityChecker>();
         ls = temp.Find("CraneBox").Find("Stretcher").GetComponent<LockOnStretcher>();
-        internalCamera = temp.Find("CraneBox").Find("Camera").gameObject;
+        internalCamera[0] = temp.Find("CraneBox").Find("Camera").gameObject;
+        internalCamera[1] = temp.Find("CraneBox").Find("Camera (1)").gameObject;
+        blackLine = canvas.transform.Find("ControlGroup").Find("Black Line").gameObject;
 
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(sp);
@@ -65,9 +68,19 @@ public class LockOnManager : CraneManager
         else if (!host.playable && canvas.activeSelf)
         {
             canvas.SetActive(false);
-            if (internalCamera.activeSelf) internalCamera.SetActive(false);
+            if (internalCamera[0].activeSelf)
+            {
+                internalCamera[0].SetActive(false);
+                internalCamera[1].SetActive(false);
+                blackLine.SetActive(false);
+            }
         }
-        if (host.playable && (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadPeriod))) internalCamera.SetActive(!internalCamera.activeSelf);
+        if (host.playable && (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadPeriod)))
+        {
+            internalCamera[0].SetActive(!internalCamera[0].activeSelf);
+            internalCamera[1].SetActive(internalCamera[0].activeSelf); // internalCamera[0]とActive状態を合わせる
+            blackLine.SetActive(internalCamera[0].activeSelf);
+        }
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
 
         if (craneStatus == -1)
