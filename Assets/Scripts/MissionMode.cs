@@ -27,7 +27,7 @@ public class MissionMode : MonoBehaviour
         gameClearPanel = this.transform.Find("Canvas").Find("GameClearPanel").gameObject;
         if (c[0] == null) Debug.LogError("Mission: 基準のCraneManagerがセットされていません");
         if (target == null) Debug.LogError("Mission: 基準のGameObjectがセットされていません");
-        await Task.Delay(500);
+        await Task.Delay(500); // c[0].GetCTypeで正常に番号を取得できない問題を解消
         switch (c[0].GetCType())
         {
             case 1:
