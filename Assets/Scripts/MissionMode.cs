@@ -7,9 +7,10 @@ using UnityEngine.SceneManagement;
 
 public class MissionMode : MonoBehaviour
 {
-    [SerializeField] GameObject t;
+    [SerializeField] GameObject target;
     [SerializeField] CraneManager[] c = new CraneManager[2];
     [SerializeField] int limitCost = 1000;
+    [SerializeField] int limitPrize = 1; // n個以上獲得しなければクリアにはならない
     CreditSystem[] creditSystem = new CreditSystem[2];
     GameObject missionPanel;
     GameObject gameOverPanel;
@@ -17,29 +18,33 @@ public class MissionMode : MonoBehaviour
     bool gameClear = false;
     bool isExecuted = false;
     int playerCount = 1;
-    void Start()
+    int prizeCount = 0;
+    async void Start()
     {
         //credit = this.transform.Find("Canvas").Find("Credit").GetComponent<Text>();
         missionPanel = this.transform.Find("Canvas").Find("MissionPanel").gameObject;
         gameOverPanel = this.transform.Find("Canvas").Find("GameOverPanel").gameObject;
         gameClearPanel = this.transform.Find("Canvas").Find("GameClearPanel").gameObject;
         if (c[0] == null) Debug.LogError("Mission: 基準のCraneManagerがセットされていません");
-        if (t == null) Debug.LogError("Mission: 基準のGameObjectがセットされていません");
+        if (target == null) Debug.LogError("Mission: 基準のGameObjectがセットされていません");
+        await Task.Delay(500);
         switch (c[0].GetCType())
         {
             case 1:
-            case 4 - 6:
+            case 4:
+            case 5:
+            case 6:
             case 10:
                 playerCount = 2;
-                c[1] = t.transform.Find("2P").GetComponent<CraneManager>();
-                creditSystem[0] = t.transform.Find("1P").Find("CreditSystem").GetComponent<CreditSystem>();
-                creditSystem[1] = t.transform.Find("2P").Find("CreditSystem").GetComponent<CreditSystem>();
+                c[1] = target.transform.Find("2P").GetComponent<CraneManager>();
+                creditSystem[0] = target.transform.Find("1P").Find("CreditSystem").GetComponent<CreditSystem>();
+                creditSystem[1] = target.transform.Find("2P").Find("CreditSystem").GetComponent<CreditSystem>();
                 break;
             case 9:
-                creditSystem[0] = t.transform.Find("1P").Find("CreditSystem").GetComponent<CreditSystem>();
+                creditSystem[0] = target.transform.Find("1P").Find("CreditSystem").GetComponent<CreditSystem>();
                 break;
             default:
-                creditSystem[0] = t.transform.Find("CreditSystem").GetComponent<CreditSystem>();
+                creditSystem[0] = target.transform.Find("CreditSystem").GetComponent<CreditSystem>();
                 break;
         }
     }
@@ -79,11 +84,15 @@ public class MissionMode : MonoBehaviour
 
     public void GameClear()
     {
-        gameClear = true;
-        CloseMissionPanel();
-        gameOverPanel.SetActive(false);
-        gameClearPanel.SetActive(true);
-        // ゲームクリア画面の表示
+        prizeCount++;
+        if (prizeCount >= limitPrize)
+        {
+            gameClear = true;
+            CloseMissionPanel();
+            gameOverPanel.SetActive(false);
+            gameClearPanel.SetActive(true);
+            // ゲームクリア画面の表示
+        }
     }
 
     async void GameOver()
