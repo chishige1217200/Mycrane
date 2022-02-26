@@ -55,10 +55,40 @@ public class Type5Manager : CraneManager
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
-        preset[0].text = priceSet[0].ToString();
-        preset[1].text = priceSet[1].ToString();
-        preset[2].text = timesSet[0].ToString();
-        preset[3].text = timesSet[1].ToString();
+        if (isHibernate)
+        {
+            creditSystem.SetHibernate();
+        }
+        else
+        {
+            preset[0].text = priceSet[0].ToString();
+            preset[1].text = priceSet[1].ToString();
+            preset[2].text = timesSet[0].ToString();
+            preset[3].text = timesSet[1].ToString();
+        }
+
+        if (isHibernate | priceSet[1] == 0 || timesSet[1] == 0 || (float)priceSet[0] / timesSet[0] < (float)priceSet[1] / timesSet[1])
+        // 未入力の場合，低価格設定を反映 //高額のレートになるとコストが多くなる設定エラーのとき
+        {
+            if (!player2)
+                transform.parent.Find("LCD Component").Find("SegUnit2").gameObject.SetActive(false);// 第2クレジット表示無効に
+            else
+                transform.parent.Find("LCD Component").Find("SegUnit2 (1)").gameObject.SetActive(false);// 第2クレジット表示無効に
+        }
+
+        if (isHibernate)
+        {
+            if (!player2)
+            {
+                transform.parent.Find("LCD Component").Find("SegUnit3").gameObject.SetActive(false);
+                transform.parent.Find("LCD Component").Find("SegUnit1").gameObject.SetActive(false);
+            }
+            else
+            {
+                transform.parent.Find("LCD Component").Find("SegUnit3 (1)").gameObject.SetActive(false);
+                transform.parent.Find("LCD Component").Find("SegUnit1 (1)").gameObject.SetActive(false);
+            }
+        }
 
         // ロープとアームコントローラに関する処理
         lifter = temp.Find("CraneBox").Find("Tube").Find("TubePoint").GetComponent<ArmUnitLifter>();
@@ -411,18 +441,7 @@ public class Type5Manager : CraneManager
             {
                 //アーム上昇停止音再生;
                 //アーム上昇停止;
-                if (probability)
-                {
-                    armLPower = armLPowerConfigSuccess[1];
-                    armRPower = armRPowerConfigSuccess[1];
-                }
-                else
-                {
-                    armLPower = armLPowerConfig[1];
-                    armRPower = armRPowerConfig[1];
-                }
-                armController.SetMotorPower(armLPower, 0);
-                armController.SetMotorPower(armRPower, 1);
+
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -431,8 +450,21 @@ public class Type5Manager : CraneManager
                         craneBox.goPoint = homePoint;
                         craneBox.goPositionFlag = true;
                     }
+                    await Task.Delay(200);
+                    if (probability)
+                    {
+                        armLPower = armLPowerConfigSuccess[1];
+                        armRPower = armRPowerConfigSuccess[1];
+                    }
+                    else
+                    {
+                        armLPower = armLPowerConfig[1];
+                        armRPower = armRPowerConfig[1];
+                    }
+                    armController.SetMotorPower(armLPower, 0);
+                    armController.SetMotorPower(armRPower, 1);
+                    if (craneStatus == 9) craneStatus = 10;
                 }
-                if (isExecuted[craneStatus] && craneStatus == 9) craneStatus = 10;
             }
 
             if (craneStatus == 10)
@@ -835,7 +867,7 @@ public class Type5Manager : CraneManager
 
     public override void InsertCoin()
     {
-        if (host.playable && craneStatus >= 0)
+        if (!isHibernate && host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 100) credit3d.text = credit.ToString();

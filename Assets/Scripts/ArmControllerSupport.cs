@@ -19,6 +19,7 @@ public class ArmControllerSupport : MonoBehaviour
             switch (craneManager.GetCType())
             {
                 case 3:
+                case 10:
                     if (!craneManager.GetProbability() && craneManager.GetStatus() >= 8 && prizeCount > 0)
                     {
                         Debug.Log("Released.");
@@ -73,15 +74,18 @@ public class ArmControllerSupport : MonoBehaviour
             switch (craneManager.GetCType())
             {
                 case 3:
+                case 10:
                     if (craneManager.GetStatus() == 6)
                     {
-                        await Task.Delay(700);
+                        if (craneManager.GetCType() == 3)
+                            await Task.Delay(700);
+                        if (craneManager.GetCType() == 10)
+                            await Task.Delay(500);
                         if (craneManager.GetStatus() == 6)
                         {
                             lifter.DownForceStop();
                             craneManager.IncrimentStatus();
                         }
-
                     }
                     break;
             }
@@ -91,9 +95,11 @@ public class ArmControllerSupport : MonoBehaviour
             switch (craneManager.GetCType())
             {
                 case 3:
+                case 10:
                     if (craneManager.GetStatus() == 6)
                     {
-                        await Task.Delay(1000);
+                        if (craneManager.GetCType() == 3) await Task.Delay(1000);
+                        else if (craneManager.GetCType() == 10) await Task.Delay(300);
                         if (craneManager.GetStatus() == 6)
                         {
                             lifter.DownForceStop();
@@ -177,9 +183,9 @@ public class ArmControllerSupport : MonoBehaviour
         craneManager = c;
     }
 
-    public void SetArmController(int num)
+    public void SetArmController(int num) // Type3ArmControllerから呼ばれる
     {
-        if (num == 3 || num == 7)
+        if (num == 3 || num == 7 || num == 10)
             _Type3ArmController = transform.parent.parent.gameObject.GetComponent<Type3ArmController>();
     }
     public void SetLifter(BaseLifter r)

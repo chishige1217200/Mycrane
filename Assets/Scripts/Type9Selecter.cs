@@ -5,12 +5,12 @@ using UnityEngine;
 public class Type9Selecter : MonoBehaviour
 {
     [SerializeField] Type9Manager[] manager = new Type9Manager[4];
-    BGMPlayer _BGMPlayer;
+    BGMPlayer bp;
     [SerializeField] int soundType = 0; //0，1，2
 
     void Start()
     {
-        _BGMPlayer = transform.Find("BGM").GetComponent<BGMPlayer>();
+        bp = transform.Find("BGM").GetComponent<BGMPlayer>();
     }
 
     void Update()
@@ -19,13 +19,13 @@ public class Type9Selecter : MonoBehaviour
         {
             if (!IsPlaying())
             {
-                _BGMPlayer.Stop(3);
-                _BGMPlayer.Play(soundType);
+                bp.Stop(3);
+                bp.Play(soundType);
             }
             else
             {
-                _BGMPlayer.Stop(soundType);
-                _BGMPlayer.Play(3);
+                bp.Stop(soundType);
+                bp.Play(3);
             }
         }
     }

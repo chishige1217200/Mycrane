@@ -49,10 +49,22 @@ public class Type2Manager : CraneManager
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
-        preset[0].text = priceSet[0].ToString();
-        preset[1].text = priceSet[1].ToString();
-        preset[2].text = timesSet[0].ToString();
-        preset[3].text = timesSet[1].ToString();
+        if (isHibernate)
+        {
+            credit3d.text = "--";
+            creditSystem.SetHibernate();
+            preset[0].text = "---";
+            preset[1].text = "---";
+            preset[2].text = "-";
+            preset[3].text = "-";
+        }
+        else
+        {
+            preset[0].text = priceSet[0].ToString();
+            preset[1].text = priceSet[1].ToString();
+            preset[2].text = timesSet[0].ToString();
+            preset[3].text = timesSet[1].ToString();
+        }
 
         // ロープとアームコントローラに関する処理
         ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -249,8 +261,8 @@ public class Type2Manager : CraneManager
                 }
                 if (probability) armPower = armPowerConfigSuccess[0];
                 else armPower = armPowerConfig[0];
-                armController.MotorPower(armPower);
                 armController.Close();
+                armController.MotorPower(armPower);
                 await Task.Delay(1000);
                 if (craneStatus == 7) craneStatus = 8; //awaitによる時差実行を防止
                 //アーム掴む;
@@ -576,7 +588,7 @@ public class Type2Manager : CraneManager
 
     public override void InsertCoin()
     {
-        if (host.playable && craneStatus >= 0)
+        if (!isHibernate && host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 100) credit3d.text = credit.ToString("D2");

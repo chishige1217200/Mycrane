@@ -12,7 +12,7 @@ public class Type7Manager : CraneManager
     [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
     [SerializeField] int limitTimeSet = 60; //操作制限時間
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
-    [SerializeField] bool autoPower = true;
+    private bool autoPower = true; //使用不可能なオプション．trueのみ動作
     public float armPower; //現在のアームパワー
     BGMPlayer bp;
     Type3ArmController armController;
@@ -47,6 +47,7 @@ public class Type7Manager : CraneManager
         creditSystem.rateSet[1, 0] = 0;
         creditSystem.rateSet[0, 1] = times;
         creditSystem.rateSet[1, 1] = 0;
+        if (isHibernate) creditSystem.SetHibernate();
 
         // ロープとアームコントローラに関する処理
         ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -172,7 +173,7 @@ public class Type7Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     ropeManager.Up();
                     await Task.Delay(1500);
-                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
+                    if (!probability && UnityEngine.Random.Range(0, 3) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
                 }
                 if (probability && armPower > armPowerConfigSuccess[1])
                 {
@@ -361,7 +362,7 @@ public class Type7Manager : CraneManager
     }
     public override void InsertCoin()
     {
-        if (host.playable && craneStatus >= 0 && creditSystem.creditDisplayed == 0)
+        if (!isHibernate && host.playable && craneStatus >= 0 && creditSystem.creditDisplayed == 0)
             if (creditSystem.Pay(100) >= 1) craneStatus = 1;
     }
 }

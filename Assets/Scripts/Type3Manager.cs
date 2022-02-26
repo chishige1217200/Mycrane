@@ -42,6 +42,11 @@ public class Type3Manager : CraneManager
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
+        if (isHibernate)
+        {
+            credit3d.text = "-";
+            creditSystem.SetHibernate();
+        }
 
         // ロープとアームコントローラに関する処理
         ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
@@ -132,11 +137,11 @@ public class Type3Manager : CraneManager
                         bp.Play(4);
                         break;
                 }
-
             }
 
             if (craneStatus == 2)
-            { //右移動中
+            {
+                //右移動中
                 bp.Stop(soundType);
                 DetectKey(craneStatus);
                 //コイン投入無効化;
@@ -172,7 +177,8 @@ public class Type3Manager : CraneManager
             }
 
             if (craneStatus == 4)
-            { //奥移動中
+            {
+                //奥移動中
                 DetectKey(craneStatus);
                 //クレーン奥移動;
                 switch (soundType)
@@ -280,8 +286,8 @@ public class Type3Manager : CraneManager
                     }
                     if (probability) armPower = armPowerConfigSuccess[0];
                     else armPower = armPowerConfig[0];
-                    armController.MotorPower(armPower);
                     armController.Close();
+                    armController.MotorPower(armPower);
                     await Task.Delay(1000);
                     if (craneStatus == 7) craneStatus = 8;
                 }
@@ -311,7 +317,7 @@ public class Type3Manager : CraneManager
                     }
                     ropeManager.Up();
                     await Task.Delay(1500);
-                    if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
+                    if (!probability && UnityEngine.Random.Range(0, 3) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); //上昇中に離す振り分け(autoPower設定時のみ)
                 }
                 if (soundType == 2)
                     if (!sp.audioSource[15].isPlaying)
@@ -342,6 +348,7 @@ public class Type3Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    await Task.Delay(200);
                     switch (soundType)
                     {
                         case 3:
@@ -367,15 +374,18 @@ public class Type3Manager : CraneManager
                             sp.Stop(4);
                             sp.Play(1);
                             break;
+                        case 2:
+                            sp.Stop(15);
+                            sp.Stop(14);
+                            sp.Play(14);
+                            break;
                         case 3:
                             sp.Play(23);
                             break;
                     }
 
                 }
-                if (soundType == 2)
-                    if (!sp.audioSource[15].isPlaying)
-                        sp.Play(14);
+
                 if (!armController.autoPower)
                 {
                     if (support.prizeCount > 0)
@@ -412,7 +422,8 @@ public class Type3Manager : CraneManager
                             break;
                     }
                     await Task.Delay(1000);
-                    if (craneStatus == 11) craneStatus = 12;
+                    if (soundType == 3) await Task.Delay(1500);
+                    craneStatus = 12;
                 }
                 //アーム開く音再生;
                 //アーム開く;
@@ -421,7 +432,6 @@ public class Type3Manager : CraneManager
 
             if (craneStatus == 12)
             {
-
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -439,7 +449,7 @@ public class Type3Manager : CraneManager
                     }
                     for (int i = 0; i < 12; i++)
                         isExecuted[i] = false;
-                    await Task.Delay(1000);
+                    await Task.Delay(1500);
                     if (soundType == 3) await Task.Delay(1000);
                     switch (soundType)
                     {
@@ -607,7 +617,7 @@ public class Type3Manager : CraneManager
 
     public override void InsertCoin()
     {
-        if (host.playable && craneStatus >= 0)
+        if (!isHibernate && host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 10) credit3d.text = credit.ToString();

@@ -14,6 +14,7 @@ public abstract class CraneManager : MonoBehaviour
     protected GetPoint getPoint;
     public MachineHost host;
     protected GameObject canvas;
+    public bool isHibernate = false;
 
     public virtual void GetPrize()
     {
@@ -29,9 +30,9 @@ public abstract class CraneManager : MonoBehaviour
                 creditSystem.ResetCostProbability();
                 break;
         }
-        if (!sp.audioSource[getSoundNum].isPlaying)
+        if (getSoundNum != -1)
         {
-            if (getSoundNum != -1)
+            if (!sp.audioSource[getSoundNum].isPlaying)
                 sp.Play(getSoundNum, 1);
         }
     }

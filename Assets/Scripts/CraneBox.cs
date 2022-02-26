@@ -167,6 +167,22 @@ public class CraneBox : MonoBehaviour
         }
     }
 
+    public void Up()
+    {
+        if (!backRefusedFlag || limitIgnoreFlag)
+        {
+            transform.localPosition += new Vector3(0, moveSpeed, 0);
+        }
+    }
+
+    public void Down()
+    {
+        if (!forwardRefusedFlag || limitIgnoreFlag)
+        {
+            transform.localPosition -= new Vector3(0, moveSpeed, 0);
+        }
+    }
+
     async void EnableLeftDummy()
     {
         leftDummyFlag = true;

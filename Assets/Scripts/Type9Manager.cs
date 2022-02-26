@@ -39,10 +39,22 @@ public class Type9Manager : CraneManager
         creditSystem.rateSet[1, 0] = priceSet[1];
         creditSystem.rateSet[0, 1] = timesSet[0];
         creditSystem.rateSet[1, 1] = timesSet[1];
-        preset[0].text = priceSet[0].ToString();
-        preset[1].text = priceSet[1].ToString();
-        preset[2].text = timesSet[0].ToString();
-        preset[3].text = timesSet[1].ToString();
+        if (isHibernate)
+        {
+            credit3d.text = "---";
+            creditSystem.SetHibernate();
+            preset[0].text = "---";
+            preset[1].text = "---";
+            preset[2].text = "-";
+            preset[3].text = "-";
+        }
+        else
+        {
+            preset[0].text = priceSet[0].ToString();
+            preset[1].text = priceSet[1].ToString();
+            preset[2].text = timesSet[0].ToString();
+            preset[3].text = timesSet[1].ToString();
+        }
 
         // ロープとアームコントローラに関する処理
         lifter = temp.Find("CraneBox").Find("Tube").Find("TubePoint").GetComponent<ArmUnitLifter>();
@@ -186,7 +198,12 @@ public class Type9Manager : CraneManager
             }
             if (craneStatus == 9) //上昇停止
             {
-                IncrimentStatus();
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    await Task.Delay(200);
+                    if (craneStatus == 9) IncrimentStatus();
+                }
             }
             if (craneStatus == 10) //帰還中
             {
@@ -340,7 +357,7 @@ public class Type9Manager : CraneManager
 
     public override void InsertCoin()
     {
-        if (host.playable && craneStatus >= 0)
+        if (!isHibernate && host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 100) credit3d.text = credit.ToString();
