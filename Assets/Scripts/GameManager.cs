@@ -21,4 +21,14 @@ public class GameManager : MonoBehaviour
     {
         Application.OpenURL("https://sites.google.com/view/mycrane");
     }
+
+    public void OpenYouTube()
+    {
+        Application.OpenURL("https://www.youtube.com/channel/UCs5Z8JDmjCh__vymU6BdMWQ");
+    }
+
+    public void OpenTwitter()
+    {
+        Application.OpenURL("https://twitter.com/mycraneofficial");
+    }
 }
