@@ -70,16 +70,12 @@ public class LockOnManager : CraneManager
             canvas.SetActive(false);
             if (internalCamera[0].activeSelf)
             {
-                internalCamera[0].SetActive(false);
-                internalCamera[1].SetActive(false);
-                blackLine.SetActive(false);
+                MultiCamera(false);
             }
         }
         if (host.playable && (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadPeriod)))
         {
-            internalCamera[0].SetActive(!internalCamera[0].activeSelf);
-            internalCamera[1].SetActive(internalCamera[0].activeSelf); // internalCamera[0]とActive状態を合わせる
-            blackLine.SetActive(internalCamera[0].activeSelf);
+            MultiCamera(!internalCamera[0].activeSelf);
         }
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
 
@@ -350,5 +346,28 @@ public class LockOnManager : CraneManager
             else credit3d.text = "9.";
             if (credit > 0 && craneStatus == 0) craneStatus = 1;
         }
+    }
+
+    public void MultiCamera(bool flag)
+    {
+        if (flag)
+        {
+            internalCamera[0].SetActive(true);
+            internalCamera[1].SetActive(true);
+            blackLine.SetActive(true);
+        }
+        else
+        {
+            internalCamera[0].SetActive(false);
+            internalCamera[1].SetActive(false);
+            blackLine.SetActive(false);
+        }
+    }
+
+    public void MultiCameraAuto()
+    {
+        internalCamera[0].SetActive(!internalCamera[0].activeSelf);
+        internalCamera[1].SetActive(internalCamera[0].activeSelf);
+        blackLine.SetActive(internalCamera[0].activeSelf);
     }
 }
