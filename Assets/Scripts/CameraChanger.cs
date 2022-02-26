@@ -10,6 +10,7 @@ public class CameraChanger : MonoBehaviour
     List<GameObject> upCameras; // *downCamerasと同じ数存在する必要あり
     bool cameraUpFlag = false; // trueなら上方向からのカメラ
     int cameraStatus = 0;
+    [SerializeField] LockOnManager lm;
 
     //呼び出し時に実行される関数
     void Start()
@@ -56,6 +57,7 @@ public class CameraChanger : MonoBehaviour
 
     public void ChangeCameraStatus(int num)
     {
+        if (lm != null) lm.MultiCamera(false); // LockOn内部カメラの無効化
         if (num == 0) cameraUpFlag = !cameraUpFlag; // downCameras，upCameras切り替え
         else
         {
