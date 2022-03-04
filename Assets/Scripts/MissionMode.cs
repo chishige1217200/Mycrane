@@ -15,6 +15,7 @@ public class MissionMode : MonoBehaviour
     GameObject missionPanel;
     GameObject gameOverPanel;
     GameObject gameClearPanel;
+    [SerializeField] int gameOverTime = 3000;
     bool gameClear = false;
     bool isExecuted = false;
     int playerCount = 1;
@@ -97,7 +98,7 @@ public class MissionMode : MonoBehaviour
 
     async void GameOver()
     {
-        await Task.Delay(3000);
+        await Task.Delay(gameOverTime);
         if (!gameClear)
         {
             CloseMissionPanel();
