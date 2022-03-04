@@ -109,6 +109,8 @@ public class Type7Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     await Task.Delay(3000);
                     isExecuted[12] = false;
+                    creditSystem.ResetPayment();
+                    creditSystem.PlayStart();
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
                     sp.Play(1, 1);
@@ -144,8 +146,6 @@ public class Type7Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     sp.Stop(3);
                     sp.Play(5, 1);
-                    creditSystem.ResetPayment();
-                    creditSystem.PlayStart();
                     ropeManager.DownForceStop();
                     ropeManager.UpForceStop();
                     leverState = 0;
