@@ -205,6 +205,7 @@ public class Type7Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     errorTimer.CancelTimer();
+                    await Task.Delay(200);
                     if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
                     if (craneStatus == 9) craneStatus = 10;
                 }

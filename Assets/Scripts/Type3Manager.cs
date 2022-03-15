@@ -252,7 +252,7 @@ public class Type3Manager : CraneManager
                     switch (soundType)
                     {
                         case 2:
-                            sp.Play(15, 2);
+                            sp.Play(15, 1);
                             break;
                         case 3:
                             sp.Play(21);
