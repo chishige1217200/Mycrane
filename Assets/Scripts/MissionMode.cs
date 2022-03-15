@@ -52,6 +52,7 @@ public class MissionMode : MonoBehaviour
 
     void Update()
     {
+        if (missionPanel.activeSelf && Input.GetKeyDown(KeyCode.LeftShift)) missionPanel.SetActive(false);
         if (Input.GetMouseButtonDown(0) || (playerCount == 1 && (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0))) || (playerCount == 2 && (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadPeriod))))
         {
             if (playerCount == 1 && creditSystem[0].nowpaidSum >= limitCost)
