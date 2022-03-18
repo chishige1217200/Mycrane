@@ -349,20 +349,6 @@ public class Type6Manager : CraneManager
                         if (craneStatus <= 8 && craneStatus >= 6) armController.Release();
                     }
                 }
-
-                if (releaseTiming == 0)
-                {
-                    if (probability)
-                    {
-                        if (armPower > armPowerConfigSuccess[1]) armPower -= 0.1f;
-                    }
-                    else
-                    {
-                        if (armPower > armPowerConfig[1]) armPower -= 0.1f;
-                    }
-                    armController.MotorPower(armPower);
-                }
-
                 if (lifter.UpFinished() && craneStatus == 6) craneStatus = 7;
             }
 
@@ -403,20 +389,6 @@ public class Type6Manager : CraneManager
                         if (craneStatus == 8) armController.Release();
                     }
                 }
-
-                if (releaseTiming == 0)
-                {
-                    if (probability)
-                    {
-                        if (armPower > armPowerConfigSuccess[2]) armPower -= 0.1f;
-                    }
-                    else
-                    {
-                        if (armPower > armPowerConfig[2]) armPower -= 0.1f;
-                    }
-                    armController.MotorPower(armPower);
-                }
-
                 if ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2)) craneStatus = 9;
             }
 
@@ -479,12 +451,42 @@ public class Type6Manager : CraneManager
         {
             if (craneStatus == -1 || craneStatus == 8)
             {
+                if (craneStatus == 8)
+                {
+                    if (releaseTiming == 0)
+                    {
+                        if (probability)
+                        {
+                            if (armPower > armPowerConfigSuccess[2]) armPower -= 0.15f;
+                        }
+                        else
+                        {
+                            if (armPower > armPowerConfig[2]) armPower -= 0.15f;
+                        }
+                        armController.MotorPower(armPower);
+                    }
+                }
                 if (!player2) craneBox.Left();
                 else craneBox.Right();
                 craneBox.Forward();
             }
             else if (craneStatus == 1 || craneStatus == 2)
                 DetectLever();
+            else if (craneStatus == 6)
+            {
+                if (releaseTiming == 0)
+                {
+                    if (probability)
+                    {
+                        if (armPower > armPowerConfigSuccess[1]) armPower -= 0.15f;
+                    }
+                    else
+                    {
+                        if (armPower > armPowerConfig[1]) armPower -= 0.15f;
+                    }
+                    armController.MotorPower(armPower);
+                }
+            }
         }
     }
 

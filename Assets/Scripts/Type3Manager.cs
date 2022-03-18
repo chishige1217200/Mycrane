@@ -446,8 +446,21 @@ public class Type3Manager : CraneManager
     {
         if (craneStatus != 0)
         {
-            if (craneStatus == -1)
+            if (craneStatus == -1 || craneStatus == 10)
             {
+                if (craneStatus == 10)
+                {
+                    if (!armController.autoPower)
+                    {
+                        if (support.prizeCount > 0)
+                        {
+                            if (probability && armPower > armPowerConfigSuccess[2]) armPower -= 0.5f;
+                            else if (!probability && armPower > armPowerConfig[2]) armPower -= 0.5f;
+                            armController.MotorPower(armPower);
+                        }
+                        else armController.MotorPower(100f);
+                    }
+                }
                 craneBox.Left();
                 craneBox.Forward();
             }
@@ -455,38 +468,9 @@ public class Type3Manager : CraneManager
             else if (craneStatus == 4) craneBox.Back();
             else if (craneStatus == 8)
             {
-                if (probability && armPower > armPowerConfigSuccess[1])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
-                else if (!probability && armPower > armPowerConfig[1])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
-            }
-            else if (craneStatus == 10)
-            {
-                craneBox.Left();
-                craneBox.Forward();
-                if (!armController.autoPower)
-                {
-                    if (support.prizeCount > 0)
-                    {
-                        if (probability && armPower > armPowerConfigSuccess[2])
-                        {
-                            armPower -= 0.5f;
-                            armController.MotorPower(armPower);
-                        }
-                        else if (!probability && armPower > armPowerConfig[2])
-                        {
-                            armPower -= 0.5f;
-                            armController.MotorPower(armPower);
-                        }
-                    }
-                    else armController.MotorPower(100f);
-                }
+                if (probability && armPower > armPowerConfigSuccess[1]) armPower -= 0.5f;
+                else if (!probability && armPower > armPowerConfig[1]) armPower -= 0.5f;
+                armController.MotorPower(armPower);
             }
         }
     }
