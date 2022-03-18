@@ -468,9 +468,16 @@ public class Type3Manager : CraneManager
             else if (craneStatus == 4) craneBox.Back();
             else if (craneStatus == 8)
             {
-                if (probability && armPower > armPowerConfigSuccess[1]) armPower -= 0.5f;
-                else if (!probability && armPower > armPowerConfig[1]) armPower -= 0.5f;
-                armController.MotorPower(armPower);
+                if (!armController.autoPower)
+                {
+                    if (support.prizeCount > 0)
+                    {
+                        if (probability && armPower > armPowerConfigSuccess[1]) armPower -= 0.5f;
+                        else if (!probability && armPower > armPowerConfig[1]) armPower -= 0.5f;
+                        armController.MotorPower(armPower);
+                    }
+                    else armController.MotorPower(100f);
+                }
             }
         }
     }
