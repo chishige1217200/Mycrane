@@ -324,17 +324,6 @@ public class Type8Manager : CraneManager
                     if (soundType == 3) bp.Play(soundType * 2 + 1);
                     if (soundType == 4) bp.Play(6);
                 }
-
-                if (probability)
-                {
-                    if (armPower > armPowerConfigSuccess[1]) armPower -= 0.1f;
-                }
-                else
-                {
-                    if (armPower > armPowerConfig[1]) armPower -= 0.1f;
-                }
-                armController.SetMotorPower(armPower);
-
                 if (ropeManager.UpFinished() && craneStatus == 6) IncrimentStatus();
             }
 
@@ -371,15 +360,7 @@ public class Type8Manager : CraneManager
                     if (soundType == 3) bp.Play(soundType * 2 + 1);
                     if (soundType == 4) bp.Play(6);
                 }
-                if (probability)
-                {
-                    if (armPower > armPowerConfigSuccess[2]) armPower -= 0.1f;
-                }
-                else
-                {
-                    if (armPower > armPowerConfig[2]) armPower -= 0.1f;
-                }
-                armController.SetMotorPower(armPower);
+
                 if (craneBox.CheckPos(8)) IncrimentStatus();
             }
 
@@ -396,15 +377,6 @@ public class Type8Manager : CraneManager
                     if (soundType == 3) bp.Play(soundType * 2 + 1);
                     if (soundType == 4) bp.Play(6);
                 }
-                if (probability)
-                {
-                    if (armPower > armPowerConfigSuccess[2]) armPower -= 0.1f;
-                }
-                else
-                {
-                    if (armPower > armPowerConfig[2]) armPower -= 0.1f;
-                }
-                armController.SetMotorPower(armPower);
                 if (craneBox.CheckPos(9)) IncrimentStatus();
             }
 
@@ -541,7 +513,43 @@ public class Type8Manager : CraneManager
                 craneBox.Forward();
             }
             else if (craneStatus == 2 || craneStatus == 3) DetectLever();
-            else if (craneStatus == 8) craneBox.Back();
+            else if (craneStatus == 6)
+            {
+                if (probability)
+                {
+                    if (armPower > armPowerConfigSuccess[1]) armPower -= 0.1f;
+                }
+                else
+                {
+                    if (armPower > armPowerConfig[1]) armPower -= 0.1f;
+                }
+                armController.SetMotorPower(armPower);
+            }
+            else if (craneStatus == 8)
+            {
+                craneBox.Back();
+                if (probability)
+                {
+                    if (armPower > armPowerConfigSuccess[2]) armPower -= 0.2f;
+                }
+                else
+                {
+                    if (armPower > armPowerConfig[2]) armPower -= 0.2f;
+                }
+                armController.SetMotorPower(armPower);
+            }
+            else if (craneStatus == 9)
+            {
+                if (probability)
+                {
+                    if (armPower > armPowerConfigSuccess[2]) armPower -= 0.2f;
+                }
+                else
+                {
+                    if (armPower > armPowerConfig[2]) armPower -= 0.2f;
+                }
+                armController.SetMotorPower(armPower);
+            }
         }
     }
 

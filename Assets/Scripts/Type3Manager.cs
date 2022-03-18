@@ -252,7 +252,7 @@ public class Type3Manager : CraneManager
                     switch (soundType)
                     {
                         case 2:
-                            sp.Play(15, 2);
+                            sp.Play(15, 1);
                             break;
                         case 3:
                             sp.Play(21);
@@ -322,16 +322,6 @@ public class Type3Manager : CraneManager
                 if (soundType == 2)
                     if (!sp.audioSource[15].isPlaying)
                         sp.Play(14);
-                if (probability && armPower > armPowerConfigSuccess[1])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
-                else if (!probability && armPower > armPowerConfig[1])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
                 if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
                 //アーム上昇音再生;
                 //アーム上昇;
@@ -385,25 +375,6 @@ public class Type3Manager : CraneManager
                     }
 
                 }
-
-                if (!armController.autoPower)
-                {
-                    if (support.prizeCount > 0)
-                    {
-                        if (probability && armPower > armPowerConfigSuccess[2])
-                        {
-                            armPower -= 0.5f;
-                            armController.MotorPower(armPower);
-                        }
-                        else if (!probability && armPower > armPowerConfig[2])
-                        {
-                            armPower -= 0.5f;
-                            armController.MotorPower(armPower);
-                        }
-                    }
-                    else armController.MotorPower(100f);
-                }
-
                 if (craneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
                 //アーム獲得口ポジションへ;
             }
@@ -477,11 +448,37 @@ public class Type3Manager : CraneManager
         {
             if (craneStatus == -1 || craneStatus == 10)
             {
+                if (craneStatus == 10)
+                {
+                    if (!armController.autoPower)
+                    {
+                        if (support.prizeCount > 0)
+                        {
+                            if (probability && armPower > armPowerConfigSuccess[2]) armPower -= 0.5f;
+                            else if (!probability && armPower > armPowerConfig[2]) armPower -= 0.5f;
+                            armController.MotorPower(armPower);
+                        }
+                        else armController.MotorPower(100f);
+                    }
+                }
                 craneBox.Left();
                 craneBox.Forward();
             }
             else if (craneStatus == 2) craneBox.Right();
             else if (craneStatus == 4) craneBox.Back();
+            else if (craneStatus == 8)
+            {
+                if (!armController.autoPower)
+                {
+                    if (support.prizeCount > 0)
+                    {
+                        if (probability && armPower > armPowerConfigSuccess[1]) armPower -= 0.5f;
+                        else if (!probability && armPower > armPowerConfig[1]) armPower -= 0.5f;
+                        armController.MotorPower(armPower);
+                    }
+                    else armController.MotorPower(100f);
+                }
+            }
         }
     }
 

@@ -15,6 +15,7 @@ public class MissionMode : MonoBehaviour
     GameObject missionPanel;
     GameObject gameOverPanel;
     GameObject gameClearPanel;
+    [SerializeField] int gameOverTime = 3000;
     bool gameClear = false;
     bool isExecuted = false;
     int playerCount = 1;
@@ -51,6 +52,7 @@ public class MissionMode : MonoBehaviour
 
     void Update()
     {
+        if (missionPanel.activeSelf && Input.GetKeyDown(KeyCode.LeftShift)) missionPanel.SetActive(false);
         if (Input.GetMouseButtonDown(0) || (playerCount == 1 && (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0))) || (playerCount == 2 && (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadPeriod))))
         {
             if (playerCount == 1 && creditSystem[0].nowpaidSum >= limitCost)
@@ -97,7 +99,7 @@ public class MissionMode : MonoBehaviour
 
     async void GameOver()
     {
-        await Task.Delay(3000);
+        await Task.Delay(gameOverTime);
         if (!gameClear)
         {
             CloseMissionPanel();

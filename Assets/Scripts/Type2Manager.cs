@@ -290,21 +290,6 @@ public class Type2Manager : CraneManager
                         if (craneStatus <= 10 && craneStatus >= 8) armController.Release();
                     }
                 }
-
-                if (releaseTiming == 0)
-                {
-                    if (probability && armPower > armPowerConfigSuccess[1])
-                    {
-                        armPower -= 0.5f;
-                        armController.MotorPower(armPower);
-                    }
-                    else if (!probability && armPower > armPowerConfig[1])
-                    {
-                        armPower -= 0.5f;
-                        armController.MotorPower(armPower);
-                    }
-                }
-
                 if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
                 //アーム上昇音再生;
                 //アーム上昇;
@@ -351,14 +336,6 @@ public class Type2Manager : CraneManager
                         if (craneStatus == 10) armController.Release();
                     }
                 }
-
-                if (releaseTiming == 0)
-                {
-                    if (probability && armPower > armPowerConfigSuccess[2]) armPower -= 0.5f;
-                    else if (!probability && armPower > armPowerConfig[2]) armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
-
                 if (craneBox.CheckPos(1)) craneStatus = 11;
                 //アーム獲得口ポジション移動音再生;
                 //アーム獲得口ポジションへ;
@@ -416,8 +393,26 @@ public class Type2Manager : CraneManager
         {
             if (craneStatus == -1 || craneStatus == 10)
             {
+                if (craneStatus == 10)
+                {
+                    if (releaseTiming == 0)
+                    {
+                        if (probability && armPower > armPowerConfigSuccess[2]) armPower -= 0.5f;
+                        else if (!probability && armPower > armPowerConfig[2]) armPower -= 0.5f;
+                        armController.MotorPower(armPower);
+                    }
+                }
                 craneBox.Left();
                 craneBox.Forward();
+            }
+            else if (craneStatus == 8)
+            {
+                if (releaseTiming == 0)
+                {
+                    if (probability && armPower > armPowerConfigSuccess[1]) armPower -= 0.5f;
+                    else if (!probability && armPower > armPowerConfig[1]) armPower -= 0.5f;
+                    armController.MotorPower(armPower);
+                }
             }
             if (operationType == 0)
             {

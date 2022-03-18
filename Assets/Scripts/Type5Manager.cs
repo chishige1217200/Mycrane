@@ -419,20 +419,6 @@ public class Type5Manager : CraneManager
                         armController.SetMotorPower(rightCatchArmpower, 1);
                     }*/
                 }
-
-                if (probability)
-                {
-                    if (armLPower > armLPowerConfigSuccess[1]) armLPower -= 0.1f;
-                    if (armRPower > armRPowerConfigSuccess[1]) armRPower -= 0.1f;
-                }
-                else
-                {
-                    if (armLPower > armLPowerConfig[1]) armLPower -= 0.1f;
-                    if (armRPower > armRPowerConfig[1]) armRPower -= 0.1f;
-                }
-                armController.SetMotorPower(armLPower, 0);
-                armController.SetMotorPower(armRPower, 1);
-
                 if (lifter.UpFinished() && craneStatus == 8) craneStatus = 9;
                 //アーム上昇;
             }
@@ -486,20 +472,6 @@ public class Type5Manager : CraneManager
                             break;
                     }
                 }
-
-                if (probability)
-                {
-                    if (armLPower > armLPowerConfigSuccess[2]) armLPower -= 0.1f;
-                    if (armRPower > armRPowerConfigSuccess[2]) armRPower -= 0.1f;
-                }
-                else
-                {
-                    if (armLPower > armLPowerConfig[2]) armLPower -= 0.1f;
-                    if (armRPower > armRPowerConfig[2]) armRPower -= 0.1f;
-                }
-                armController.SetMotorPower(armLPower, 0);
-                armController.SetMotorPower(armRPower, 1);
-
                 if (craneBox.CheckPos(prizezoneType)) craneStatus = 11;
                 //アーム獲得口ポジション移動音再生;
                 //アーム獲得口ポジションへ;
@@ -640,8 +612,38 @@ public class Type5Manager : CraneManager
                 else craneBox.Right();
                 craneBox.Forward();
             }
+            else if (craneStatus == 8)
+            {
+                if (probability)
+                {
+                    if (armLPower > armLPowerConfigSuccess[1]) armLPower -= 0.15f;
+                    if (armRPower > armRPowerConfigSuccess[1]) armRPower -= 0.15f;
+                }
+                else
+                {
+                    if (armLPower > armLPowerConfig[1]) armLPower -= 0.15f;
+                    if (armRPower > armRPowerConfig[1]) armRPower -= 0.15f;
+                }
+                armController.SetMotorPower(armLPower, 0);
+                armController.SetMotorPower(armRPower, 1);
+            }
             else if (craneStatus == 10 || craneStatus == 15)
             {
+                if (craneStatus == 10)
+                {
+                    if (probability)
+                    {
+                        if (armLPower > armLPowerConfigSuccess[2]) armLPower -= 0.15f;
+                        if (armRPower > armRPowerConfigSuccess[2]) armRPower -= 0.15f;
+                    }
+                    else
+                    {
+                        if (armLPower > armLPowerConfig[2]) armLPower -= 0.15f;
+                        if (armRPower > armRPowerConfig[2]) armRPower -= 0.15f;
+                    }
+                    armController.SetMotorPower(armLPower, 0);
+                    armController.SetMotorPower(armRPower, 1);
+                }
                 switch (prizezoneType) // 1:左手前，2：左奥，3：右手前，4：右奥，5：左，6：手前，7：右，8：奥，9：特定座標
                 {
                     case 1:

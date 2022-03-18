@@ -18,7 +18,7 @@ public class CreditSystem : MonoBehaviour
     public Text[] priceSet = new Text[2]; //プレイ回数に対応する金額表示(timesSetと連携)
     public Text[] timesSet = new Text[2]; //プレイ回数対応表示
     private SEPlayer sp;
-    [SerializeField] Text Credit; //残クレジット
+    public Text Credit; //残クレジット
     //-------------------------------------------------
     async void Start()
     {

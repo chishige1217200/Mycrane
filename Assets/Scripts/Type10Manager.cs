@@ -329,16 +329,7 @@ public class Type10Manager : CraneManager
                     await Task.Delay(1500);
                     if (!probability && UnityEngine.Random.Range(0, 3) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); //上昇中に離す振り分け(autoPower設定時のみ)
                 }
-                if (probability && armPower > armPowerConfigSuccess[1])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
-                else if (!probability && armPower > armPowerConfig[1])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
+
                 if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
                 //アーム上昇音再生;
                 //アーム上昇;
@@ -368,24 +359,6 @@ public class Type10Manager : CraneManager
             if (craneStatus == 10)
             {
                 //アーム獲得口ポジション移動音再生;
-                if (!armController.autoPower)
-                {
-                    if (support.prizeCount > 0)
-                    {
-                        if (probability && armPower > armPowerConfigSuccess[2])
-                        {
-                            armPower -= 0.5f;
-                            armController.MotorPower(armPower);
-                        }
-                        else if (!probability && armPower > armPowerConfig[2])
-                        {
-                            armPower -= 0.5f;
-                            armController.MotorPower(armPower);
-                        }
-                    }
-                    else armController.MotorPower(100f);
-                }
-
                 if (((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2)) && craneStatus == 10) craneStatus = 11;
                 //アーム獲得口ポジションへ;
             }
@@ -455,9 +428,35 @@ public class Type10Manager : CraneManager
         {
             if (craneStatus == -1 || craneStatus == 10)
             {
+                if (craneStatus == 10)
+                {
+                    if (!armController.autoPower)
+                    {
+                        if (support.prizeCount > 0)
+                        {
+                            if (probability && armPower > armPowerConfigSuccess[2]) armPower -= 0.3f;
+                            else if (!probability && armPower > armPowerConfig[2]) armPower -= 0.3f;
+                            armController.MotorPower(armPower);
+                        }
+                        else armController.MotorPower(100f);
+                    }
+                }
                 if (!player2) craneBox.Left();
                 else craneBox.Right();
                 craneBox.Forward();
+            }
+            else if (craneStatus == 8)
+            {
+                if (!armController.autoPower)
+                {
+                    if (support.prizeCount > 0)
+                    {
+                        if (probability && armPower > armPowerConfigSuccess[1]) armPower -= 0.3f;
+                        else if (!probability && armPower > armPowerConfig[1]) armPower -= 0.3f;
+                        armController.MotorPower(armPower);
+                    }
+                    else armController.MotorPower(100f);
+                }
             }
             if (operationType == 0)
             {

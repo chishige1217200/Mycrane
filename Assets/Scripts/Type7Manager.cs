@@ -20,6 +20,7 @@ public class Type7Manager : CraneManager
     ArmControllerSupport support;
     Lever[] lever = new Lever[2];
     Timer timer;
+    Timer errorTimer;
     int leverState = 0; // 0:ニュートラル，1:下降中，2:上昇中
     int armState = 0; // 0:閉じている，1:開いている
     public TextMesh limitTimedisplayed;
@@ -41,6 +42,7 @@ public class Type7Manager : CraneManager
         getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = transform.Find("CraneUnit").transform;
         timer = transform.Find("Timer").GetComponent<Timer>();
+        errorTimer = transform.Find("ErrorTimer").GetComponent<Timer>();
 
         // クレジット情報登録
         creditSystem.rateSet[0, 0] = price;
@@ -85,7 +87,7 @@ public class Type7Manager : CraneManager
 
     async void Update()
     {
-        limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
+        if (craneStatus != 99) limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
 
@@ -109,6 +111,8 @@ public class Type7Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     await Task.Delay(3000);
                     isExecuted[12] = false;
+                    creditSystem.ResetPayment();
+                    creditSystem.PlayStart();
                     probability = creditSystem.ProbabilityCheck();
                     Debug.Log("Probability:" + probability);
                     sp.Play(1, 1);
@@ -144,8 +148,6 @@ public class Type7Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     sp.Stop(3);
                     sp.Play(5, 1);
-                    creditSystem.ResetPayment();
-                    creditSystem.PlayStart();
                     ropeManager.DownForceStop();
                     ropeManager.UpForceStop();
                     leverState = 0;
@@ -171,19 +173,10 @@ public class Type7Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    errorTimer.StartTimer();
                     ropeManager.Up();
                     await Task.Delay(1500);
                     if (!probability && UnityEngine.Random.Range(0, 3) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); // 上昇中に離す振り分け
-                }
-                if (probability && armPower > armPowerConfigSuccess[1])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
-                else if (!probability && armPower > armPowerConfig[1])
-                {
-                    armPower -= 0.5f;
-                    armController.MotorPower(armPower);
                 }
                 if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
                 //アーム上昇音再生;
@@ -201,6 +194,8 @@ public class Type7Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    errorTimer.CancelTimer();
+                    await Task.Delay(200);
                     if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
                     if (craneStatus == 9) craneStatus = 10;
                 }
@@ -211,23 +206,6 @@ public class Type7Manager : CraneManager
             if (craneStatus == 10)
             {
                 //アーム獲得口ポジション移動音再生;
-                if (!armController.autoPower)
-                {
-                    if (support.prizeCount > 0)
-                    {
-                        if (probability && armPower > armPowerConfigSuccess[2])
-                        {
-                            armPower -= 0.5f;
-                            armController.MotorPower(armPower);
-                        }
-                        else if (!probability && armPower > armPowerConfig[2])
-                        {
-                            armPower -= 0.5f;
-                            armController.MotorPower(armPower);
-                        }
-                    }
-                    else armController.MotorPower(100f);
-                }
                 if (craneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
                 //アーム獲得口ポジションへ;
             }
@@ -248,7 +226,6 @@ public class Type7Manager : CraneManager
 
             if (craneStatus == 12)
             {
-
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
@@ -266,6 +243,22 @@ public class Type7Manager : CraneManager
                     //アーム閉じる;
                 }
             }
+
+            if (errorTimer.limitTimeNow == 0) // Error
+            {
+                if (!isExecuted[0])
+                {
+                    isExecuted[0] = true;
+                    ropeManager.UpForceStop();
+                    Debug.Log("Type7 Error! CraneStatus: " + craneStatus);
+                    isHibernate = true;
+                    limitTimedisplayed.text = "Er";
+                    creditSystem.Credit.text = "Er";
+                    sp.Play(6);
+                }
+                craneStatus = 99;
+                limitTimedisplayed.text = "Er";
+            }
         }
     }
 
@@ -275,10 +268,36 @@ public class Type7Manager : CraneManager
         {
             if (craneStatus == -1 || craneStatus == 10)
             {
+                if (craneStatus == 10)
+                {
+                    if (!armController.autoPower)
+                    {
+                        if (support.prizeCount > 0)
+                        {
+                            if (probability && armPower > armPowerConfigSuccess[2]) armPower -= 0.5f;
+                            else if (!probability && armPower > armPowerConfig[2]) armPower -= 0.5f;
+                            armController.MotorPower(armPower);
+                        }
+                        else armController.MotorPower(100f);
+                    }
+                }
                 craneBox.Left();
                 craneBox.Forward();
             }
-            if (craneStatus == 2) DetectLever();
+            else if (craneStatus == 2) DetectLever();
+            else if (craneStatus == 8)
+            {
+                if (!armController.autoPower)
+                {
+                    if (support.prizeCount > 0)
+                    {
+                        if (probability && armPower > armPowerConfigSuccess[1]) armPower -= 0.5f;
+                        else if (!probability && armPower > armPowerConfig[1]) armPower -= 0.5f;
+                        armController.MotorPower(armPower);
+                    }
+                    else armController.MotorPower(100f);
+                }
+            }
         }
     }
 
@@ -362,7 +381,7 @@ public class Type7Manager : CraneManager
     }
     public override void InsertCoin()
     {
-        if (!isHibernate && host.playable && craneStatus >= 0 && creditSystem.creditDisplayed == 0)
+        if (!isHibernate && host.playable && craneStatus == 0 && creditSystem.creditDisplayed == 0)
             if (creditSystem.Pay(100) >= 1) craneStatus = 1;
     }
 }
