@@ -421,6 +421,7 @@ public class Type3Manager : CraneManager
                     for (int i = 0; i < 12; i++)
                         isExecuted[i] = false;
                     await Task.Delay(1500);
+                    if (soundType == 0 || soundType == 1) await Task.Delay(500);
                     if (soundType == 3) await Task.Delay(1000);
                     switch (soundType)
                     {
