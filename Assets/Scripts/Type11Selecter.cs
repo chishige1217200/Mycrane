@@ -7,7 +7,7 @@ public class Type11Selecter : MonoBehaviour
     [SerializeField] Type11Manager[] manager = new Type11Manager[2];
     BGMPlayer bp;
     [SerializeField] float audioPitch = 1.0f;
-    int nextPlay = 6;
+    int nextPlay = 1; // 1:初期音源，2：ループ音源，3：Bonus音源
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +21,39 @@ public class Type11Selecter : MonoBehaviour
     void Update()
     {
         if (manager[0].GetStatus() == 0 && manager[1].GetStatus() == 0)
+        {
+            bp.Stop(1);
+            bp.Stop(2);
+            bp.Stop(3);
             bp.Play(0);
+            nextPlay = 1;
+        }
+
+        else if (manager[0].GetStatus() > 0 || manager[1].GetStatus() > 0)
+        {
+            bp.Stop(0);
+            // ボーナスゲームチェック
+            if (manager[0].isBonus || manager[1].isBonus)
+            {
+                bp.Stop(1);
+                bp.Stop(2);
+                bp.Play(3);
+            }
+            else
+            {
+                if (!bp.audioSource[1].isPlaying)
+                {
+                    if (nextPlay == 1)
+                    {
+                        bp.Play(1);
+                        nextPlay = 2;
+                    }
+                    else
+                    {
+                        bp.Play(2);
+                    }
+                }
+            }
+        }
     }
 }
