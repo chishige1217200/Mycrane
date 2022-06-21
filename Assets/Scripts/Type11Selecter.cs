@@ -38,9 +38,11 @@ public class Type11Selecter : MonoBehaviour
                 bp.Stop(1);
                 bp.Stop(2);
                 bp.Play(3);
+                nextPlay = 1;
             }
             else
             {
+                bp.Stop(3);
                 if (!bp.audioSource[1].isPlaying)
                 {
                     if (nextPlay == 1)
