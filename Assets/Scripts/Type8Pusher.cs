@@ -23,9 +23,4 @@ public class Type8Pusher : MonoBehaviour
         if (forward && rb.velocity.z >= -0.05f) rb.AddForce(new Vector3(0, 0, -10f));
         if (!forward && rb.velocity.z <= 0.05f) rb.AddForce(new Vector3(0, 0, 10f));
     }
-
-    void OnTriggerEnter(Collider collider)
-    {
-        //if (collider.CompareTag("PusherStop")) forward = !forward;
-    }
 }
