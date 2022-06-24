@@ -9,7 +9,7 @@ public class Type11Manager : CraneManager
     public int[] timesSet = new int[2];
     [SerializeField] int[] downTime = new int[2];
     public bool isBonus { get; private set; } = false;
-    bool[] isExecuted = new bool[18]; //各craneStatusで1度しか実行しない処理の管理
+    bool[] isExecuted = new bool[17]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] bool player2 = false; //player2の場合true
     float moveSpeedBackup = 0f;
@@ -128,24 +128,39 @@ public class Type11Manager : CraneManager
                 if (!player2 && craneBox.CheckPos(7))
                 {
                     buttonPushed = false;
-                    craneStatus = 5;
+                    craneStatus = 6;
                 }
                 if (player2 && craneBox.CheckPos(5))
                 {
                     buttonPushed = false;
-                    craneStatus = 5;
+                    craneStatus = 6;
                 }
             }
 
             if (craneStatus == 5)
             {
-                sp.Stop(4);
-                await Task.Delay(500);
-                if (craneStatus == 5)
-                    craneStatus = 6;
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    int slipTime = Random.Range(50, 201);
+                    if (!probability)
+                    {
+                        Debug.Log("Machine will slip! : " + slipTime + "ms");
+                        await Task.Delay(slipTime);
+                    }
+                    if (craneStatus == 5) craneStatus = 6;
+                }
+
             }
 
             if (craneStatus == 6)
+            {
+                sp.Stop(4);
+                await Task.Delay(500);
+                if (craneStatus == 6) craneStatus = 7;
+            }
+
+            if (craneStatus == 7)
             {
                 if (!isExecuted[craneStatus])
                 {
@@ -153,41 +168,36 @@ public class Type11Manager : CraneManager
                     sp.Play(5, 1);
                     craneBox.moveSpeed = 0.0015f;
                 }
-                if (s.CheckPos(1))
-                    craneStatus = 7;
-            }
-
-            if (craneStatus == 7)
-            {
-                await Task.Delay(200);
-                if (craneStatus == 7)
-                    craneStatus = 8;
+                if (s.CheckPos(1)) craneStatus = 8;
             }
 
             if (craneStatus == 8)
             {
-                if (craneBox.CheckPos(6))
-                    craneStatus = 9;
-                if (!isExecuted[craneStatus])
-                {
-                    isExecuted[craneStatus] = true;
-                    if (craneStatus == 8) sp.Play(6);
-                    if (isBonus) await Task.Delay(downTime[1]);
-                    else await Task.Delay(downTime[0]);
-                    if (craneStatus == 8)
-                        craneStatus = 9;
-                }
+                await Task.Delay(200);
+                if (craneStatus == 8) craneStatus = 9;
             }
 
             if (craneStatus == 9)
             {
-                sp.Stop(6);
-                await Task.Delay(200);
-                if (craneStatus == 9)
-                    craneStatus = 10;
+                if (craneBox.CheckPos(6)) craneStatus = 10;
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    if (craneStatus == 9) sp.Play(6);
+                    if (isBonus) await Task.Delay(downTime[1]);
+                    else await Task.Delay(downTime[0]);
+                    if (craneStatus == 9) craneStatus = 10;
+                }
             }
 
             if (craneStatus == 10)
+            {
+                sp.Stop(6);
+                await Task.Delay(200);
+                if (craneStatus == 10) craneStatus = 11;
+            }
+
+            if (craneStatus == 11)
             {
                 if (!isExecuted[craneStatus])
                 {
@@ -195,55 +205,35 @@ public class Type11Manager : CraneManager
                     sp.Play(7, 1);
                     craneBox.moveSpeed = moveSpeedBackup;
                 }
-                if (s.CheckPos(2))
-                    craneStatus = 14;
+                if (s.CheckPos(2)) craneStatus = 12;
             }
 
-            // if (craneStatus == 11)
-            // {
-            //     await Task.Delay(200);
-            //     if (craneStatus == 11)
-            //         craneStatus = 12;
-            // }
+            if (craneStatus == 12)
+            {
+                await Task.Delay(200);
+                if (craneStatus == 12) craneStatus = 13;
+            }
 
-            // if (craneStatus == 12)
-            // {
-            //     if (isBonus) await Task.Delay(downTime[1]);
-            //     else await Task.Delay(downTime[0]);
-            //     if (craneStatus == 12)
-            //         craneStatus = 13;
-            // }
-
-            // if (craneStatus == 13)
-            // {
-            //     await Task.Delay(200);
-            //     if (craneStatus == 13)
-            //         craneStatus = 14;
-            // }
+            if (craneStatus == 13)
+            {
+                sp.Play(8);
+                if (!player2 && craneBox.CheckPos(5)) craneStatus = 14;
+                if (player2 && craneBox.CheckPos(7)) craneStatus = 14;
+            }
 
             if (craneStatus == 14)
             {
-                sp.Play(8);
-                if (!player2 && craneBox.CheckPos(5))
-                    craneStatus = 15;
-                if (player2 && craneBox.CheckPos(7))
-                    craneStatus = 15;
+                sp.Stop(8);
+                craneStatus = 15;
             }
 
             if (craneStatus == 15)
             {
-                sp.Stop(8);
-                craneStatus = 16;
+                sp.Play(6);
+                if (craneBox.CheckPos(6)) craneStatus = 16;
             }
 
             if (craneStatus == 16)
-            {
-                sp.Play(6);
-                if (craneBox.CheckPos(6))
-                    craneStatus = 17;
-            }
-
-            if (craneStatus == 17)
             {
                 if (!isExecuted[craneStatus])
                 {
@@ -253,7 +243,7 @@ public class Type11Manager : CraneManager
 
                     isBonus = false;
 
-                    for (int i = 0; i < 17; i++)
+                    for (int i = 0; i < 16; i++)
                         isExecuted[i] = false;
 
                     if (creditSystem.creditDisplayed > 0)
@@ -276,20 +266,18 @@ public class Type11Manager : CraneManager
                 craneBox.Down();
             }
             else if (craneStatus == 2) craneBox.Up();
-            else if (craneStatus == 4)
+            else if (craneStatus == 4 || craneStatus == 5)
             {
                 if (!player2) craneBox.Right();
                 else craneBox.Left();
             }
-            else if (craneStatus == 6)
+            else if (craneStatus == 7)
                 s.Stretch();
-            else if (craneStatus == 8 || craneStatus == 16)
+            else if (craneStatus == 9 || craneStatus == 15)
                 craneBox.Down();
-            else if (craneStatus == 10)
+            else if (craneStatus == 11)
                 s.Shrink();
-            else if (craneStatus == 12)
-                craneBox.Up();
-            else if (craneStatus == 14)
+            else if (craneStatus == 13)
             {
                 if (!player2) craneBox.Left();
                 else craneBox.Right();
@@ -314,7 +302,9 @@ public class Type11Manager : CraneManager
                             credit = creditSystem.PlayStart();
                             // if (credit < 10) credit3d.text = credit.ToString();
                             // else credit3d.text = "9.";
-                            isExecuted[17] = false;
+                            isExecuted[16] = false;
+                            probability = creditSystem.ProbabilityCheck();
+                            Debug.Log("Probability:" + probability);
                         }
                         craneStatus = 2;
                     }
@@ -327,7 +317,9 @@ public class Type11Manager : CraneManager
                             credit = creditSystem.PlayStart();
                             // if (credit < 10) credit3d.text = credit.ToString();
                             // else credit3d.text = "9.";
-                            isExecuted[17] = false;
+                            isExecuted[16] = false;
+                            probability = creditSystem.ProbabilityCheck();
+                            Debug.Log("Probability:" + probability);
                         }
                         craneStatus = 2;
                     }
@@ -388,7 +380,9 @@ public class Type11Manager : CraneManager
                         credit = creditSystem.PlayStart();
                         // if (credit < 10) credit3d.text = credit.ToString();
                         // else credit3d.text = "9.";
-                        isExecuted[17] = false;
+                        isExecuted[16] = false;
+                        probability = creditSystem.ProbabilityCheck();
+                        Debug.Log("Probability:" + probability);
                     }
                     break;
                 case 2:
@@ -396,18 +390,6 @@ public class Type11Manager : CraneManager
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                    }
-                    break;
-                case 3: // player2 case 1:
-                    if (craneStatus == 1 && !buttonPushed)
-                    {
-                        buttonPushed = true;
-                        craneStatus = 2;
-                        creditSystem.ResetPayment();
-                        credit = creditSystem.PlayStart();
-                        // if (credit < 10) credit3d.text = credit.ToString();
-                        // else credit3d.text = "9.";
-                        isExecuted[17] = false;
                     }
                     break;
             }
@@ -431,13 +413,6 @@ public class Type11Manager : CraneManager
                     if (craneStatus == 4 && buttonPushed)
                     {
                         craneStatus = 5;
-                        buttonPushed = false;
-                    }
-                    break;
-                case 3: // player2 case 1:
-                    if (craneStatus == 2 && buttonPushed)
-                    {
-                        craneStatus = 3;
                         buttonPushed = false;
                     }
                     break;
