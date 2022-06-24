@@ -223,14 +223,14 @@ public class Type4Manager : CraneManager
                 if (craneStatus == 2)
                 { //右移動中
                     DetectKey(craneStatus);
-                    if (!player2 & craneBox.CheckPos(7))
+                    if (!player2 && craneBox.CheckPos(7))
                     {
                         sp.Stop(1);
                         sp.Play(2, 1);
                         buttonPushed = false;
                         craneStatus = 3;
                     }
-                    if (player2 & craneBox.CheckPos(5))
+                    if (player2 && craneBox.CheckPos(5))
                     {
                         sp.Stop(1);
                         sp.Play(2, 1);
