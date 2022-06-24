@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pusher : MonoBehaviour
+public class Type8Pusher : MonoBehaviour
 {
     [SerializeField] bool forward = true;
     Rigidbody rb;
@@ -10,6 +10,12 @@ public class Pusher : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+    }
+
+    void Update()
+    {
+        if (!forward && transform.localPosition.z >= 0.25f) forward = true;
+        else if (forward && transform.localPosition.z <= 0.11f) forward = false;
     }
 
     void FixedUpdate()
@@ -20,6 +26,6 @@ public class Pusher : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("PusherStop")) forward = !forward;
+        //if (collider.CompareTag("PusherStop")) forward = !forward;
     }
 }
