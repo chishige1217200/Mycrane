@@ -13,6 +13,11 @@ public class ProbabilitySystem : MonoBehaviour
                                 //private List<int> costList = new List<int>(); //投入された金額をリセット毎に分けて保存
     public int probabilityMode; //0：確率なし，1:ランダム確率，2:クレジット回数天井設定，3:クレジット回数周期設定，(4:設定金額天井設定，5:設定金額周期設定)
 
+    public void NewPlay()
+    {
+        creditPlayed++; //確率用プレイ数を1加算
+    }
+
     public bool ProbabilityCheck()
     {
         if (probabilityMode == 0) return true; //常に確率

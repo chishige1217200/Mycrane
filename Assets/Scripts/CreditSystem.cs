@@ -100,7 +100,7 @@ public class CreditSystem : ProbabilitySystem
     {
         creditOld--;
         creditDisplayed = creditOld;
-        creditPlayed++; //確率用プレイ数を1加算
+        NewPlay();         //ProbabilitySystemの確率用プレイ数を1加算
         creditPlayedSum++; //合計プレイ数を1加算
 
         if (creditDisplayed >= 100) Credit.text = "99."; //表示更新
