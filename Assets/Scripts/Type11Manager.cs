@@ -26,7 +26,7 @@ public class Type11Manager : CraneManager
         // 様々なコンポーネントの取得
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
-        //getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
@@ -60,7 +60,7 @@ public class Type11Manager : CraneManager
 
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(sp);
-        //getPoint.SetManager(this);
+        getPoint.SetManager(this);
         creditSystem.SetCreditSound(0);
 
         for (int i = 0; i < isExecuted.Length; i++)
