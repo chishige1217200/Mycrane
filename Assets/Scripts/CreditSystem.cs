@@ -22,6 +22,7 @@ public class CreditSystem : ProbabilitySystem
     //-------------------------------------------------
     async void Start()
     {
+        base.Start();
         await Task.Delay(100);
         if (rateSet[0, 0] == 0 || rateSet[0, 1] == 0)
         {

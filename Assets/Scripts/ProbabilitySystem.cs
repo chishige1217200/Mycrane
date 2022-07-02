@@ -9,9 +9,23 @@ public class ProbabilitySystem : MonoBehaviour
                                                 //private int nowPaidforProbability = 0; //確率設定用の投入金額
                                                 //private int creditRemainbyCost = -1; //設定金額到達時の残クレジット数（初期化時-1）
     protected int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
-    [SerializeField] int n = 3; //ランダム確率設定n
-                                //private List<int> costList = new List<int>(); //投入された金額をリセット毎に分けて保存
+    [SerializeField] int[] n = new int[2]; //ランダム確率設定n[0]/n[1]
+                                           //private List<int> costList = new List<int>(); //投入された金額をリセット毎に分けて保存
     public int probabilityMode; //0：確率なし，1:ランダム確率，2:クレジット回数天井設定，3:クレジット回数周期設定，(4:設定金額天井設定，5:設定金額周期設定)
+
+    protected void Start()
+    {
+        if (probabilityMode == 1)
+        {
+            if (n.Length < 2) Debug.LogError("確率分数が適切に設定されていません");
+            if (n[0] > n[1]) // 確率分数に不正な値が設定されたとき
+            {
+                int temp = n[0];
+                n[0] = n[1];
+                n[1] = temp;
+            }
+        }
+    }
 
     public void NewPlay()
     {
@@ -21,7 +35,7 @@ public class ProbabilitySystem : MonoBehaviour
     public bool ProbabilityCheck()
     {
         if (probabilityMode == 0) return true; //常に確率
-        if (probabilityMode == 1 && UnityEngine.Random.Range(1, n + 1) == 1) return true; // 1/nの確率（nの数値有効）
+        if (probabilityMode == 1 && UnityEngine.Random.Range(1, n[0] + 1) <= n[0]) return true; // 1/nの確率（nの数値有効）
         if (probabilityMode == 2 && creditPlayed >= creditProbability) return true;
         // *景品獲得時にResetCreditProbability()の処理が必要
 
