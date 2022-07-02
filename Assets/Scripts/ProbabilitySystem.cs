@@ -35,7 +35,7 @@ public class ProbabilitySystem : MonoBehaviour
     public bool ProbabilityCheck()
     {
         if (probabilityMode == 0) return true; //常に確率
-        if (probabilityMode == 1 && UnityEngine.Random.Range(1, n[0] + 1) <= n[0]) return true; // 1/nの確率（nの数値有効）
+        if (probabilityMode == 1 && UnityEngine.Random.Range(1, n[1] + 1) <= n[0]) return true; // 1/nの確率（nの数値有効）
         if (probabilityMode == 2 && creditPlayed >= creditProbability) return true;
         // *景品獲得時にResetCreditProbability()の処理が必要
 
