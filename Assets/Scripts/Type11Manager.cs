@@ -13,10 +13,11 @@ public class Type11Manager : CraneManager
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] bool player2 = false; //player2の場合true
     float moveSpeedBackup = 0f;
+    ProbabilitySystem probabilitySystem;
     Type11Stretcher s;
     [SerializeField] TextMesh credit3d;
     [SerializeField] TextMesh[] preset = new TextMesh[4];
-    // Start is called before the first frame update
+
     async void Start()
     {
         Transform temp;
@@ -26,6 +27,7 @@ public class Type11Manager : CraneManager
         // 様々なコンポーネントの取得
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
+        probabilitySystem = transform.Find("ProbabilitySystem").GetComponent<ProbabilitySystem>();
         getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         temp = transform.Find("CraneUnit").transform;
 
@@ -69,7 +71,6 @@ public class Type11Manager : CraneManager
         craneStatus = -1;
     }
 
-    // Update is called once per frame
     async void Update()
     {
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
