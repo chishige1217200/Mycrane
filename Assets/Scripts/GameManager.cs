@@ -5,6 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] bool isMenu = false;
+    void Start()
+    {
+        if (isMenu)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
     //　ゲーム終了ボタンを押したら実行する
     public void EndGame()
     {
@@ -30,5 +39,11 @@ public class GameManager : MonoBehaviour
     public void OpenTwitter()
     {
         Application.OpenURL("https://twitter.com/mycraneofficial");
+    }
+
+    public void ResetCursor()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 }
