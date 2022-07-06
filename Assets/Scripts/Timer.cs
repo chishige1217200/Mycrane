@@ -10,10 +10,10 @@ public class Timer : MonoBehaviour
     public int limitTimeNow = 0; //実際のカウントダウン
     public int thresholdTimeCount = 10; //この秒数以下になると警告音
     public int soundNum = -1;
-    SEPlayer _SEPlayer;
+    SEPlayer sp;
     public void SetSEPlayer(SEPlayer s)
     {
-        _SEPlayer = s;
+        sp = s;
     }
 
     public void SetAlertSound(int num)
@@ -33,7 +33,7 @@ public class Timer : MonoBehaviour
             }
             if (limitTimeNow <= thresholdTimeCount)
             {
-                if (soundNum != -1) _SEPlayer.ForcePlay(soundNum);
+                if (soundNum != -1) sp.ForcePlay(soundNum);
             }
             await Task.Delay(1000);
             limitTimeNow--;
