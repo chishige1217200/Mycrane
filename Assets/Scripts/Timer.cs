@@ -44,5 +44,4 @@ public class Timer : MonoBehaviour
     {
         limitTimeNow = -1;
     }
-
 }
