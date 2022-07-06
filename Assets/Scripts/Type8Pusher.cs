@@ -18,7 +18,7 @@ public class Type8Pusher : MonoBehaviour
         else if (forward && transform.localPosition.z <= 0.11f) forward = false;
     }
 
-    void FixedUpdate()
+    void FixedUpdate() // BUG:回転したときにPusherが動作しない不具合
     {
         if (forward && rb.velocity.z >= -0.05f) rb.AddForce(new Vector3(0, 0, -10f));
         if (!forward && rb.velocity.z <= 0.05f) rb.AddForce(new Vector3(0, 0, 10f));
