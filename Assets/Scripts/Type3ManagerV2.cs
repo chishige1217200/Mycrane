@@ -14,16 +14,18 @@ public class Type3ManagerV2 : CraneManager
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
     public float armPower; //現在のアームパワー
+    int releaseTiming = 0;
     BGMPlayer bp;
     Type3ArmController armController;
     RopeManager ropeManager;
+    Timer errorTimer;
     [SerializeField] TextMesh credit3d;
 
-    async void Start()
+    void Start()
     {
         Transform temp;
 
-        craneStatus = -2;
+        craneStatus = -3;
         craneType = 3;
 
         // 様々なコンポーネントの取得
@@ -33,6 +35,7 @@ public class Type3ManagerV2 : CraneManager
         bp = transform.Find("BGM").GetComponent<BGMPlayer>();
         //sp = transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
+        errorTimer = transform.Find("Timer").GetComponent<Timer>();
         temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
@@ -62,29 +65,60 @@ public class Type3ManagerV2 : CraneManager
         sp.SetAudioPitch(audioPitch);
         armController.SetManager(3);
         getPoint.SetManager(this);
+        getSoundNum = 3;
 
         Invoke("Initialize", 1);
     }
 
     public async void Initialize()
     {
-        armController.Open();
-        ropeManager.Up();
-        while (!ropeManager.UpFinished())
+        if (craneStatus == -3 || craneStatus == 99)
         {
-            await Task.Delay(100);
+            craneStatus = -2;
+            sp.Stop(5);
+            credit3d.text = romVer.ToString("f1");
+            errorTimer.StartTimer();
+            armController.Open();
+            ropeManager.Up();
+            while (!ropeManager.UpFinished())
+            {
+                if (craneStatus == 99) return;
+                await Task.Delay(100);
+            }
+
+            errorTimer.CancelTimer();
+
+            for (int i = 0; i < 12; i++)
+                isExecuted[i] = false;
+
+            int credit = creditSystem.Pay(0);
+            if (credit < 0x100) credit3d.text = credit.ToString("X");
+            else credit3d.text = "FF.";
+
+            craneStatus = -1;
         }
+    }
 
-        for (int i = 0; i < 12; i++)
-            isExecuted[i] = false;
-
-        credit3d.text = "00";
-
-        craneStatus = -1;
+    public void Error()
+    {
+        craneStatus = 99;
+        ropeManager.UpForceStop();
+        ropeManager.DownForceStop();
+        credit3d.text = "E6";
+        sp.Stop(1);
+        sp.Stop(2);
+        sp.Stop(3);
+        sp.Stop(4);
+        sp.Play(5);
+        if (craneStatus == 2)
+        {
+            //アームを切断する
+        }
     }
 
     async void Update()
     {
+        if (host.playable && craneStatus == 99 && Input.GetKeyDown(KeyCode.R)) Initialize();
         if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
@@ -166,6 +200,7 @@ public class Type3ManagerV2 : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    errorTimer.StartTimer();
                     sp.Play(2, 1);
                     if (downTime > 0 && downTime <= 4600)
                     {
@@ -187,6 +222,7 @@ public class Type3ManagerV2 : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    errorTimer.CancelTimer();
                     armPower = armPowerConfig[0];
                     armController.Close();
                     armController.MotorPower(armPower);
@@ -204,6 +240,7 @@ public class Type3ManagerV2 : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     ropeManager.Up();
+                    errorTimer.StartTimer();
                     await Task.Delay(1500);
                 }
                 if (!sp.audioSource[2].isPlaying)
@@ -215,12 +252,12 @@ public class Type3ManagerV2 : CraneManager
 
             if (craneStatus == 9)
             {
-
                 armPower = armPowerConfig[1];
                 armController.MotorPower(armPower);
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    errorTimer.CancelTimer();
                     await Task.Delay(200);
                     if (craneStatus == 9) craneStatus = 10;
                 }
@@ -276,6 +313,12 @@ public class Type3ManagerV2 : CraneManager
                     //アーム閉じる;
                 }
             }
+
+            if (errorTimer.limitTimeNow == 0 && craneStatus != 99) // Error
+            {
+                errorTimer.CancelTimer();
+                Error();
+            }
         }
     }
 
@@ -295,7 +338,6 @@ public class Type3ManagerV2 : CraneManager
 
     public override void GetPrize()
     {
-        getSoundNum = 3;
         sp.Stop(1);
         sp.Stop(4);
         base.GetPrize();
@@ -407,7 +449,7 @@ public class Type3ManagerV2 : CraneManager
 
     public override void InsertCoin()
     {
-        if (!isHibernate && host.playable && craneStatus >= 0)
+        if (!isHibernate && host.playable && craneStatus >= 0 && craneStatus != 99)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 0x100) credit3d.text = credit.ToString("X");
