@@ -29,7 +29,7 @@ public class PrizePanel : MonoBehaviour
 
     public void PanelActive(bool t)
     {
-        if (!canvas.activeSelf && t) canvas.SetActive(true);
+        if (CraneManager.useUI && !canvas.activeSelf && t) canvas.SetActive(true);
         if (canvas.activeSelf && !t) canvas.SetActive(false);
     }
 }

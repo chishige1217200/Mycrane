@@ -7,7 +7,7 @@ public class Type3ManagerV2 : CraneManager
 {
     [SerializeField] int[] priceSet = new int[2];
     [SerializeField] int[] timesSet = new int[2];
-    [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%)
+    [SerializeField] float[] armPowerConfig = new float[2]; //アームパワー(%)
     [SerializeField] float audioPitch = 1f; //サウンドのピッチ
     [SerializeField] float romVer = 1.7f;
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
@@ -109,7 +109,6 @@ public class Type3ManagerV2 : CraneManager
                     bp.Stop(0);
                 }
                 DetectKey(craneStatus);     //右移動ボタン有効化;
-
             }
 
             if (craneStatus == 2)
@@ -286,21 +285,11 @@ public class Type3ManagerV2 : CraneManager
         {
             if (craneStatus == -1 || craneStatus == 10)
             {
-                if (craneStatus == 10)
-                {
-                    if (armPower > armPowerConfig[2]) armPower -= 0.5f;
-                    armController.MotorPower(armPower);
-                }
                 craneBox.Left();
                 craneBox.Forward();
             }
             else if (craneStatus == 2) craneBox.Right();
             else if (craneStatus == 4) craneBox.Back();
-            else if (craneStatus == 8)
-            {
-                if (armPower > armPowerConfig[1]) armPower -= 0.5f;
-                else armController.MotorPower(armPower);
-            }
         }
     }
 

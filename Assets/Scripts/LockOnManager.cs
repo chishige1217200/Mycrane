@@ -63,7 +63,7 @@ public class LockOnManager : CraneManager
 
     async void Update()
     {
-        if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf)
         {
             canvas.SetActive(false);

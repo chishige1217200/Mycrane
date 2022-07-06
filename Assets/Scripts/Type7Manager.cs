@@ -88,7 +88,7 @@ public class Type7Manager : CraneManager
     async void Update()
     {
         if (craneStatus != 99) limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
-        if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
 
         if (craneStatus == -1)

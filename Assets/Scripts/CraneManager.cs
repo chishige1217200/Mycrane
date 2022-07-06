@@ -15,6 +15,7 @@ public abstract class CraneManager : MonoBehaviour
     public MachineHost host;
     protected GameObject canvas;
     public bool isHibernate = false;
+    public static bool useUI = true;
 
     public virtual void GetPrize()
     {
