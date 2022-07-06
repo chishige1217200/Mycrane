@@ -243,8 +243,8 @@ public class LockOnManager : CraneManager
                         {
                             creditSystem.ResetPayment();
                             int credit = creditSystem.PlayStart();
-                            if (credit < 100) credit3d.text = credit.ToString();
-                            else credit3d.text = "99.";
+                            if (credit < 0x100) credit3d.text = credit.ToString();
+                            else credit3d.text = "FF.";
                             lc.ResetJudge();
                             isExecuted[10] = false;
                             //probability = creditSystem.ProbabilityCheck();
@@ -292,8 +292,8 @@ public class LockOnManager : CraneManager
                         craneStatus = 2;
                         creditSystem.ResetPayment();
                         int credit = creditSystem.PlayStart();
-                        if (credit < 100) credit3d.text = credit.ToString();
-                        else credit3d.text = "99.";
+                        if (credit < 0x100) credit3d.text = credit.ToString();
+                        else credit3d.text = "FF.";
                         lc.ResetJudge();
                         isExecuted[10] = false;
                         //probability = creditSystem.ProbabilityCheck();
@@ -341,8 +341,8 @@ public class LockOnManager : CraneManager
         {
             bp.Stop(0);
             int credit = creditSystem.Pay(100);
-            if (credit < 100) credit3d.text = credit.ToString();
-            else credit3d.text = "99.";
+            if (credit < 0x100) credit3d.text = credit.ToString();
+            else credit3d.text = "FF.";
             if (credit > 0 && craneStatus == 0) craneStatus = 1;
         }
     }
