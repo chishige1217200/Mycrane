@@ -18,6 +18,7 @@ public class Type3ManagerV2 : CraneManager
     BGMPlayer bp;
     Type3ArmController armController;
     RopeManager ropeManager;
+    ArmControllerSupport support;
     Timer errorTimer;
     [SerializeField] TextMesh credit3d;
 
@@ -54,11 +55,14 @@ public class Type3ManagerV2 : CraneManager
         // ロープとアームコントローラに関する処理
         ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
         armController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
+        support = temp.Find("ArmUnit").Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
 
         // ロープにマネージャー情報をセット
+        support.SetManager(this);
+        support.SetLifter(ropeManager);
         creditSystem.SetSEPlayer(sp);
         creditSystem.SetCreditSound(0);
         bp.SetAudioPitch(audioPitch);
@@ -124,7 +128,12 @@ public class Type3ManagerV2 : CraneManager
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
 
         if (craneStatus == -1)
-            if (craneBox.CheckPos(1)) craneStatus = 0;
+            if (craneBox.CheckPos(1))
+            {
+                craneStatus = 0;
+                int credit = creditSystem.Pay(0);
+                if (credit > 0 && craneStatus == 0) craneStatus = 1;
+            }
 
         if (craneStatus == 0)
         {
