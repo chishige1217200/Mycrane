@@ -42,8 +42,8 @@ MIT Licenseが適用されますが，適用対象はソースコードのみで
 Font "DSEG" by けしかん
 
 # 製作
-プログラム制御・モデリング・UI設計・音声 : chishige1217200
-
-モデリング・マッピング : ゐづる
+プログラム制御・モデリング・UI設計・音声 : chishige1217200  
+モデリング・マッピング : ゐづる  
+フォント : Google Fonts，けしかん
 
 MYCRANE PROJECT
