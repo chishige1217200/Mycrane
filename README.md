@@ -37,7 +37,8 @@
 
 ## ライセンスについて
 MIT Licenseが適用されますが，適用対象はソースコードのみです．
-"DESG"のライセンスは，DSEG-LICENSE.txtの内容が適用されます．
+
+"DESG"のライセンスは，DSEG-LICENSE.txtの内容が適用されます．  
 Font "DSEG" by けしかん
 
 # 製作
