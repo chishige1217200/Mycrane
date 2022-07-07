@@ -22,8 +22,9 @@ public class Type3ManagerV2 : CraneManager
     [SerializeField] int[] upStopDisableProbability = new int[2]; //上昇停止スイッチが反応しない確率
     bool upStopDisable = false;
     bool revWingNow = false;
+    bool doHuman = false;
     float[] unitCoordinate = new float[2];
-    int releaseTiming = 0; //離すタイミングの抽選 0-2
+    int releaseTiming = -1; //離すタイミングの抽選 0-2
     BGMPlayer bp;
     Type3ArmController armController;
     RopeManager ropeManager;
@@ -143,6 +144,11 @@ public class Type3ManagerV2 : CraneManager
             armPowerConfig[1] = armPowerConfig[1] / 2;
         }
 
+        if (UnityEngine.Random.Range(1, humanProbability[1] + 1) <= humanProbability[0])
+        {
+            doHuman = true;
+        }
+
         craneStatus = -3;
         Invoke("Initialize", 1);
     }
@@ -194,6 +200,7 @@ public class Type3ManagerV2 : CraneManager
             r.GetComponent<HingeJoint>().breakForce = 0.01f;
         }
         craneStatus = 99;
+        errorTimer.CancelTimer();
         ropeManager.UpForceStop();
         ropeManager.DownForceStop();
         credit3d.text = "E6";
@@ -206,7 +213,7 @@ public class Type3ManagerV2 : CraneManager
 
     public async void Human()
     {
-        if (UnityEngine.Random.Range(1, humanProbability[1] + 1) <= humanProbability[0])
+        if (doHuman)
         {
             HingeJoint h = transform.Find("CraneUnit").Find("ArmUnit").Find("Head").GetComponent<HingeJoint>();
             h.useMotor = true;
@@ -219,7 +226,7 @@ public class Type3ManagerV2 : CraneManager
     {
         if (UnityEngine.Random.Range(1, downStopProbability[1] + 1) <= downStopProbability[0])
         {
-            int downErrorTime = UnityEngine.Random.Range(1, downTime + 1);
+            int downErrorTime = UnityEngine.Random.Range(1, 2001);
             await Task.Delay(downErrorTime);
             if (craneStatus == 6)
             {
@@ -263,7 +270,7 @@ public class Type3ManagerV2 : CraneManager
     async void Update()
     {
         if (host.playable && craneStatus == 99 && Input.GetKeyDown(KeyCode.R)) Initialize();
-        if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
 
@@ -336,7 +343,8 @@ public class Type3ManagerV2 : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     sp.Stop(1);
-                    releaseTiming = UnityEngine.Random.Range(0, 3);
+                    if (probability) releaseTiming = -1;
+                    else releaseTiming = UnityEngine.Random.Range(0, 3);
                     if (releaseTiming == 2)
                     {
                         if (romVer < 2)
@@ -511,7 +519,7 @@ public class Type3ManagerV2 : CraneManager
 
             if (errorTimer.limitTimeNow == 0 && craneStatus != 99) // Error
             {
-                errorTimer.CancelTimer();
+                //if (craneStatus != -2) errorTimer.CancelTimer();
                 Error();
             }
         }
@@ -526,8 +534,20 @@ public class Type3ManagerV2 : CraneManager
                 craneBox.Left();
                 craneBox.Forward();
             }
-            else if (craneStatus == 2) craneBox.Right();
-            else if (craneStatus == 4) craneBox.Back();
+            else if (craneStatus == 1)
+            {
+
+            }
+            else if (craneStatus == 2)
+            {
+                unitCoordinate[0] += craneBox.moveSpeed;
+                craneBox.Right();
+            }
+            else if (craneStatus == 4)
+            {
+                unitCoordinate[1] += craneBox.moveSpeed;
+                craneBox.Back();
+            }
         }
     }
 
