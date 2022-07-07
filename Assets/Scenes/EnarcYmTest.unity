@@ -412,7 +412,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -2074,7 +2074,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -2652,7 +2652,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -3086,7 +3086,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -5991,7 +5991,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -6367,7 +6367,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -7898,7 +7898,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -8162,7 +8162,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -8579,7 +8579,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -8854,7 +8854,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -9023,7 +9023,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -11576,7 +11576,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: -2.5}
+  m_Center: {x: 0, y: 0, z: -2.7}
 --- !u!23 &1723877898
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12692,8 +12692,8 @@ HingeJoint:
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
-    targetVelocity: 0
-    force: 0
+    targetVelocity: 150
+    force: 100
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -12818,7 +12818,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 2.7}
 --- !u!23 &1887412827
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14295,7 +14295,13 @@ MonoBehaviour:
   audioPitch: 1
   romVer: 1.7
   downTime: 0
-  armPower: 0
+  armPowerErrorProbability: 010000000a000000
+  ropeBreakProbability: 010000000a000000
+  revWingProbability: 010000000a000000
+  downStopProbability: 010000000a000000
+  humanProbability: 010000000a000000
+  upStopErrorProbability: 010000000a000000
+  upStopDisableProbability: 010000000a000000
   credit3d: {fileID: 1232722236}
 --- !u!1 &2104180856
 GameObject:
@@ -14330,7 +14336,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -14580,7 +14586,7 @@ Rigidbody:
   m_Mass: 0.5
   m_Drag: 0.1
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0

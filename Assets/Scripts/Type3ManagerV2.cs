@@ -13,8 +13,17 @@ public class Type3ManagerV2 : CraneManager
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
-    public float armPower; //現在のアームパワー
-    int releaseTiming = 0;
+    [SerializeField] int[] armPowerErrorProbability = new int[2]; //アームパワーが弱くなる確率
+    [SerializeField] int[] ropeBreakProbability = new int[2]; //ロープが切れる確率
+    [SerializeField] int[] revWingProbability = new int[2]; //逆巻きする確率
+    [SerializeField] int[] downStopProbability = new int[2]; //途中で下降停止してしまう確率
+    [SerializeField] int[] humanProbability = new int[2]; //ヒューマンする確率
+    [SerializeField] int[] upStopErrorProbability = new int[2]; //上昇停止スイッチが誤反応する確率
+    [SerializeField] int[] upStopDisableProbability = new int[2]; //上昇停止スイッチが反応しない確率
+    bool upStopDisable = false;
+    bool revWingNow = false;
+    float[] unitCoordinate = new float[2];
+    int releaseTiming = 0; //離すタイミングの抽選 0-2
     BGMPlayer bp;
     Type3ArmController armController;
     RopeManager ropeManager;
@@ -26,7 +35,7 @@ public class Type3ManagerV2 : CraneManager
     {
         Transform temp;
 
-        craneStatus = -3;
+        craneStatus = -4;
         craneType = 3;
 
         // 様々なコンポーネントの取得
@@ -71,6 +80,70 @@ public class Type3ManagerV2 : CraneManager
         getPoint.SetManager(this);
         getSoundNum = 3;
 
+        // 確率変数エラーチェック
+        if (armPowerErrorProbability.Length < 2) Debug.LogError("確率分数が適切に設定されていません");
+        if (armPowerErrorProbability[0] > armPowerErrorProbability[1]) // 確率分数に不正な値が設定されたとき
+        {
+            int swap = armPowerErrorProbability[0];
+            armPowerErrorProbability[0] = armPowerErrorProbability[1];
+            armPowerErrorProbability[1] = swap;
+        }
+
+        if (ropeBreakProbability.Length < 2) Debug.LogError("確率分数が適切に設定されていません");
+        if (ropeBreakProbability[0] > ropeBreakProbability[1]) // 確率分数に不正な値が設定されたとき
+        {
+            int swap = ropeBreakProbability[0];
+            ropeBreakProbability[0] = ropeBreakProbability[1];
+            ropeBreakProbability[1] = swap;
+        }
+
+        if (revWingProbability.Length < 2) Debug.LogError("確率分数が適切に設定されていません");
+        if (revWingProbability[0] > revWingProbability[1]) // 確率分数に不正な値が設定されたとき
+        {
+            int swap = revWingProbability[0];
+            revWingProbability[0] = revWingProbability[1];
+            revWingProbability[1] = swap;
+        }
+
+        if (downStopProbability.Length < 2) Debug.LogError("確率分数が適切に設定されていません");
+        if (downStopProbability[0] > downStopProbability[1]) // 確率分数に不正な値が設定されたとき
+        {
+            int swap = downStopProbability[0];
+            downStopProbability[0] = downStopProbability[1];
+            downStopProbability[1] = swap;
+        }
+
+        if (humanProbability.Length < 2) Debug.LogError("確率分数が適切に設定されていません");
+        if (humanProbability[0] > humanProbability[1]) // 確率分数に不正な値が設定されたとき
+        {
+            int swap = humanProbability[0];
+            humanProbability[0] = humanProbability[1];
+            humanProbability[1] = swap;
+        }
+
+        if (upStopErrorProbability.Length < 2) Debug.LogError("確率分数が適切に設定されていません");
+        if (upStopErrorProbability[0] > upStopErrorProbability[1]) // 確率分数に不正な値が設定されたとき
+        {
+            int swap = upStopErrorProbability[0];
+            upStopErrorProbability[0] = upStopErrorProbability[1];
+            upStopErrorProbability[1] = swap;
+        }
+
+        if (upStopDisableProbability.Length < 2) Debug.LogError("確率分数が適切に設定されていません");
+        if (upStopDisableProbability[0] > upStopDisableProbability[1]) // 確率分数に不正な値が設定されたとき
+        {
+            int swap = upStopDisableProbability[0];
+            upStopDisableProbability[0] = upStopDisableProbability[1];
+            upStopDisableProbability[1] = swap;
+        }
+
+        if (UnityEngine.Random.Range(1, armPowerErrorProbability[1] + 1) <= armPowerErrorProbability[0]) //アームパワー半減エラー
+        {
+            armPowerConfig[0] = armPowerConfig[0] / 2;
+            armPowerConfig[1] = armPowerConfig[1] / 2;
+        }
+
+        craneStatus = -3;
         Invoke("Initialize", 1);
     }
 
@@ -99,12 +172,27 @@ public class Type3ManagerV2 : CraneManager
             if (credit < 0x100) credit3d.text = credit.ToString("X");
             else credit3d.text = "FF.";
 
+            //ropeManager.SetUpSpeed(0.0015f);
+            //ropeManager.SetDownSpeed(0.0015f);
+            ResetCoordinate();
+
             craneStatus = -1;
         }
     }
 
+    public void ResetCoordinate()
+    {
+        unitCoordinate[0] = 0f;
+        unitCoordinate[1] = 0f;
+    }
+
     public void Error()
     {
+        if (craneStatus == -2)
+        {
+            RopePoint r = ropeManager.ropePoint[ropeManager.ropePoint.Length - 1];
+            r.GetComponent<HingeJoint>().breakForce = 0.01f;
+        }
         craneStatus = 99;
         ropeManager.UpForceStop();
         ropeManager.DownForceStop();
@@ -114,10 +202,62 @@ public class Type3ManagerV2 : CraneManager
         sp.Stop(3);
         sp.Stop(4);
         sp.Play(5);
-        if (craneStatus == 2)
+    }
+
+    public async void Human()
+    {
+        if (UnityEngine.Random.Range(1, humanProbability[1] + 1) <= humanProbability[0])
         {
-            //アームを切断する
+            HingeJoint h = transform.Find("CraneUnit").Find("ArmUnit").Find("Head").GetComponent<HingeJoint>();
+            h.useMotor = true;
+            await Task.Delay(500);
+            h.useMotor = false;
         }
+    }
+
+    public async void DownStopError()
+    {
+        if (UnityEngine.Random.Range(1, downStopProbability[1] + 1) <= downStopProbability[0])
+        {
+            int downErrorTime = UnityEngine.Random.Range(1, downTime + 1);
+            await Task.Delay(downErrorTime);
+            if (craneStatus == 6)
+            {
+                ropeManager.DownForceStop();
+                craneStatus = 7;
+            }
+        }
+    }
+    public async void UpStopError()
+    {
+        if (UnityEngine.Random.Range(1, upStopErrorProbability[1] + 1) <= upStopErrorProbability[0])
+        {
+            int upErrorTime = UnityEngine.Random.Range(1, downTime + 1);
+            await Task.Delay(upErrorTime);
+            if (craneStatus == 8)
+            {
+                ropeManager.UpForceStop();
+                craneStatus = 9;
+            }
+        }
+    }
+
+    public async void RopeBreak()
+    {
+        if (UnityEngine.Random.Range(1, ropeBreakProbability[1] + 1) <= ropeBreakProbability[0])
+        {
+            int waitTime = UnityEngine.Random.Range(500, 3001);
+            await Task.Delay(waitTime);
+            RopePoint r = ropeManager.ropePoint[ropeManager.ropePoint.Length - 1];
+            r.GetComponent<HingeJoint>().breakForce = 0.01f;
+        }
+    }
+
+    public bool UpStopDisable()
+    {
+        if (UnityEngine.Random.Range(1, upStopDisableProbability[1] + 1) <= upStopDisableProbability[0])
+            return true;
+        return false;
     }
 
     async void Update()
@@ -196,6 +336,33 @@ public class Type3ManagerV2 : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     sp.Stop(1);
+                    releaseTiming = UnityEngine.Random.Range(0, 3);
+                    if (releaseTiming == 2)
+                    {
+                        if (romVer < 2)
+                            releaseTiming = UnityEngine.Random.Range(0, 2);
+                        else if (romVer == 4.2f)
+                        {
+                            if (UnityEngine.Random.Range(1, 101) <= 99)
+                                releaseTiming = UnityEngine.Random.Range(0, 2);
+                        }
+                    }
+
+                    if (revWingNow || UnityEngine.Random.Range(1, revWingProbability[1] + 1) <= revWingProbability[0])
+                    {
+                        revWingNow = true;
+                        int speedt = UnityEngine.Random.Range(1, 3);
+                        int start6 = UnityEngine.Random.Range(0, 6);
+                        float speed = 0f;
+                        if (speedt == 1) // 早くなる方向
+                            speed = UnityEngine.Random.Range(0.005f, 0.1f);
+                        else // 遅くなる方向
+                            speed = UnityEngine.Random.Range(0.0002f, 0.001f);
+
+                        for (int i = start6; i < start6 + 7; i++)
+                            ropeManager.SetDownSpeed(speed, i);
+                    }
+
                     ropeManager.Down();
                     if (craneStatus == 5) craneStatus = 6;
                 }
@@ -211,6 +378,7 @@ public class Type3ManagerV2 : CraneManager
                     isExecuted[craneStatus] = true;
                     errorTimer.StartTimer();
                     sp.Play(2, 1);
+                    DownStopError();
                     if (downTime > 0 && downTime <= 4600)
                     {
                         await Task.Delay(downTime);
@@ -232,9 +400,9 @@ public class Type3ManagerV2 : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     errorTimer.CancelTimer();
-                    armPower = armPowerConfig[0];
                     armController.Close();
-                    armController.MotorPower(armPower);
+                    armController.MotorPower(armPowerConfig[0]);
+                    upStopDisable = UpStopDisable();
                     await Task.Delay(1000);
                     if (craneStatus == 7) craneStatus = 8;
                 }
@@ -248,25 +416,41 @@ public class Type3ManagerV2 : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+
+                    if (revWingNow)
+                    {
+                        revWingNow = false;
+                        if (UnityEngine.Random.Range(1, 3) <= 1)
+                        {
+                            int start6 = UnityEngine.Random.Range(0, 6);
+                            float speed = UnityEngine.Random.Range(0.0002f, 0.001f);
+
+                            for (int i = start6; i < start6 + 7; i++)
+                                ropeManager.SetUpSpeed(speed, i);
+                        }
+                    }
                     ropeManager.Up();
+                    UpStopError();
+                    RopeBreak();
                     errorTimer.StartTimer();
                     await Task.Delay(1500);
+                    if (releaseTiming == 0) armController.MotorPower(armPowerConfig[1]);
                 }
                 if (!sp.audioSource[2].isPlaying)
                     sp.Play(1);
-                if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
+                if (!upStopDisable && ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
                 //アーム上昇音再生;
                 //アーム上昇;
             }
 
             if (craneStatus == 9)
             {
-                armPower = armPowerConfig[1];
-                armController.MotorPower(armPower);
+                if (releaseTiming == 1) armController.MotorPower(armPowerConfig[1]);
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
                     errorTimer.CancelTimer();
+                    Human();
                     await Task.Delay(200);
                     if (craneStatus == 9) craneStatus = 10;
                 }
@@ -293,6 +477,8 @@ public class Type3ManagerV2 : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    ResetCoordinate();
+                    upStopDisable = false;
                     armController.Open();
                     await Task.Delay(1000);
                     craneStatus = 12;
