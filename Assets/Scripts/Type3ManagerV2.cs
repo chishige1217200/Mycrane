@@ -303,6 +303,7 @@ public class Type3ManagerV2 : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     bp.Stop(0);
+                    Debug.Log("EnarcYm ROM: " + romVer);
                 }
                 DetectKey(craneStatus);     //右移動ボタン有効化;
             }
@@ -359,7 +360,7 @@ public class Type3ManagerV2 : CraneManager
                     else releaseTiming = UnityEngine.Random.Range(0, 3);
                     if (releaseTiming == 2)
                     {
-                        if (romVer < 2)
+                        if (romVer < 2.0f || (romVer >= 4.0f && coord.pushBeforeStart))
                             releaseTiming = UnityEngine.Random.Range(0, 2);
                         else if (romVer == 4.2f)
                         {
@@ -367,6 +368,8 @@ public class Type3ManagerV2 : CraneManager
                                 releaseTiming = UnityEngine.Random.Range(0, 2);
                         }
                     }
+
+                    Debug.Log("ReleaseTiming: " + releaseTiming);
 
                     if (!ropeManager.DownFinished() && (revWingNow || UnityEngine.Random.Range(1, revWingProbability[1] + 1) <= revWingProbability[0]))
                     {

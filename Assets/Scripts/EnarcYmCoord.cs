@@ -26,7 +26,7 @@ public class EnarcYmCoord : MonoBehaviour
                 ReleaseButton(0);
             if (Input.GetKeyUp(KeyCode.Alpha2) || Input.GetKeyUp(KeyCode.Keypad2))
                 ReleaseButton(1);
-            Debug.Log(unitCoordinate[0].ToString() + ", " + unitCoordinate[1].ToString());
+            //Debug.Log(unitCoordinate[0].ToString() + ", " + unitCoordinate[1].ToString());
         }
     }
 
@@ -64,8 +64,12 @@ public class EnarcYmCoord : MonoBehaviour
             }
 
             if (m.GetStatus() == 0 || m.GetStatus() == 1 || m.GetStatus() == 12) // 4以上対策コード
-                if (m.romVer >= 4.0f && (isPushed[0] || isPushed[1]))
+                if (m.romVer >= 4.0f && (isPushed[0] || isPushed[1]) && !pushBeforeStart)
+                {
+                    Debug.Log("BeforeStart");
                     pushBeforeStart = true;
+                }
+
         }
     }
 
