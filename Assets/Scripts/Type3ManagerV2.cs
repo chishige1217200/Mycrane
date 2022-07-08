@@ -24,7 +24,6 @@ public class Type3ManagerV2 : CraneManager
     bool revWingNow = false;
     bool doHuman = false;
     bool ropeBroken = false;
-    float[] unitCoordinate = new float[2];
     int releaseTiming = -1; //離すタイミングの抽選 0-2
     BGMPlayer bp;
     Type3ArmController armController;
@@ -32,6 +31,7 @@ public class Type3ManagerV2 : CraneManager
     ArmControllerSupport support;
     Timer errorTimer;
     [SerializeField] TextMesh credit3d;
+    EnarcYmCoord coord;
 
     void Start()
     {
@@ -48,6 +48,7 @@ public class Type3ManagerV2 : CraneManager
         //sp = transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPoint>();
         errorTimer = transform.Find("Timer").GetComponent<Timer>();
+        coord = GetComponent<EnarcYmCoord>();
         temp = transform.Find("CraneUnit").transform;
 
         // クレジット情報登録
@@ -80,6 +81,7 @@ public class Type3ManagerV2 : CraneManager
         sp.SetAudioPitch(audioPitch);
         armController.SetManager(3);
         getPoint.SetManager(this);
+        coord.SetManager(this);
         getSoundNum = 3;
 
         // 確率変数エラーチェック
@@ -174,6 +176,8 @@ public class Type3ManagerV2 : CraneManager
             }
 
             errorTimer.CancelTimer();
+            coord.ResetCoordinate();
+            coord.ResetBeforePush();
 
             for (int i = 0; i < 12; i++)
                 isExecuted[i] = false;
@@ -184,16 +188,10 @@ public class Type3ManagerV2 : CraneManager
 
             //ropeManager.SetUpSpeed(0.0015f);
             //ropeManager.SetDownSpeed(0.0015f);
-            ResetCoordinate();
+            //ResetCoordinate();
 
             craneStatus = -1;
         }
-    }
-
-    public void ResetCoordinate()
-    {
-        unitCoordinate[0] = 0f;
-        unitCoordinate[1] = 0f;
     }
 
     public void Error()
@@ -327,6 +325,11 @@ public class Type3ManagerV2 : CraneManager
 
             if (craneStatus == 3)
             {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    coord.ReleaseButton(0);
+                }
                 DetectKey(craneStatus);         //奥移動ボタン有効化;
                 //右移動効果音ループ再生停止;
             }
@@ -351,6 +354,7 @@ public class Type3ManagerV2 : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     sp.Stop(1);
+                    coord.ReleaseButton(1);
                     if (probability) releaseTiming = -1;
                     else releaseTiming = UnityEngine.Random.Range(0, 3);
                     if (releaseTiming == 2)
@@ -482,6 +486,8 @@ public class Type3ManagerV2 : CraneManager
 
             if (craneStatus == 10)
             {
+                if (releaseTiming == 2 && coord.isOnHome())
+                    armController.MotorPower(armPowerConfig[1]);
                 //アーム獲得口ポジション移動音再生;
                 if (!isExecuted[craneStatus])
                 {
@@ -499,7 +505,8 @@ public class Type3ManagerV2 : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    ResetCoordinate();
+                    coord.ResetCoordinate();
+                    coord.ResetBeforePush();
                     upStopDisable = false;
                     armController.Open();
                     await Task.Delay(1000);
@@ -548,20 +555,10 @@ public class Type3ManagerV2 : CraneManager
                 craneBox.Left();
                 craneBox.Forward();
             }
-            else if (craneStatus == 1)
-            {
-
-            }
             else if (craneStatus == 2)
-            {
-                unitCoordinate[0] += craneBox.moveSpeed;
                 craneBox.Right();
-            }
             else if (craneStatus == 4)
-            {
-                unitCoordinate[1] += craneBox.moveSpeed;
                 craneBox.Back();
-            }
         }
     }
 
