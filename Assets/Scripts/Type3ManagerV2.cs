@@ -162,7 +162,8 @@ public class Type3ManagerV2 : CraneManager
         {
             craneStatus = -2;
             sp.Stop(5);
-            credit3d.text = romVer.ToString("f1");
+            if (romVer != 2.1f) credit3d.text = romVer.ToString("f1");
+            else credit3d.text = "2.0"; // 2.0改
             errorTimer.StartTimer();
             if (!ropeBroken)
             {
