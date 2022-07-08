@@ -9,7 +9,7 @@ public class Type3ManagerV2 : CraneManager
     [SerializeField] int[] timesSet = new int[2];
     [SerializeField] float[] armPowerConfig = new float[2]; //アームパワー(%)
     [SerializeField] float audioPitch = 1f; //サウンドのピッチ
-    [SerializeField] float romVer = 1.7f;
+    public float romVer = 1.7f;
     bool[] isExecuted = new bool[13]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
@@ -23,6 +23,7 @@ public class Type3ManagerV2 : CraneManager
     bool upStopDisable = false;
     bool revWingNow = false;
     bool doHuman = false;
+    bool ropeBroken = false;
     float[] unitCoordinate = new float[2];
     int releaseTiming = -1; //離すタイミングの抽選 0-2
     BGMPlayer bp;
@@ -161,8 +162,11 @@ public class Type3ManagerV2 : CraneManager
             sp.Stop(5);
             credit3d.text = romVer.ToString("f1");
             errorTimer.StartTimer();
-            armController.Open();
-            ropeManager.Up();
+            if (!ropeBroken)
+            {
+                armController.Open();
+                ropeManager.Up();
+            }
             while (!ropeManager.UpFinished())
             {
                 if (craneStatus == 99) return;
@@ -194,7 +198,7 @@ public class Type3ManagerV2 : CraneManager
 
     public void Error()
     {
-        if (craneStatus == -2)
+        if (craneStatus == -2 && !ropeBroken)
         {
             RopePoint r = ropeManager.ropePoint[ropeManager.ropePoint.Length - 1];
             r.GetComponent<HingeJoint>().breakForce = 0.01f;
@@ -239,7 +243,7 @@ public class Type3ManagerV2 : CraneManager
     {
         if (UnityEngine.Random.Range(1, upStopErrorProbability[1] + 1) <= upStopErrorProbability[0])
         {
-            int upErrorTime = UnityEngine.Random.Range(1, downTime + 1);
+            int upErrorTime = UnityEngine.Random.Range(1, 2001);
             await Task.Delay(upErrorTime);
             if (craneStatus == 8)
             {
@@ -255,8 +259,12 @@ public class Type3ManagerV2 : CraneManager
         {
             int waitTime = UnityEngine.Random.Range(500, 3001);
             await Task.Delay(waitTime);
-            RopePoint r = ropeManager.ropePoint[ropeManager.ropePoint.Length - 1];
-            r.GetComponent<HingeJoint>().breakForce = 0.01f;
+            if (!ropeBroken)
+            {
+                ropeBroken = true;
+                RopePoint r = ropeManager.ropePoint[ropeManager.ropePoint.Length - 1];
+                r.GetComponent<HingeJoint>().breakForce = 0.01f;
+            }
         }
     }
 
@@ -356,14 +364,14 @@ public class Type3ManagerV2 : CraneManager
                         }
                     }
 
-                    if (revWingNow || UnityEngine.Random.Range(1, revWingProbability[1] + 1) <= revWingProbability[0])
+                    if (!ropeManager.DownFinished() && (revWingNow || UnityEngine.Random.Range(1, revWingProbability[1] + 1) <= revWingProbability[0]))
                     {
                         revWingNow = true;
                         int speedt = UnityEngine.Random.Range(1, 3);
                         int start6 = UnityEngine.Random.Range(0, 6);
                         float speed = 0f;
                         if (speedt == 1) // 早くなる方向
-                            speed = UnityEngine.Random.Range(0.005f, 0.1f);
+                            speed = UnityEngine.Random.Range(0.005f, 0.01f);
                         else // 遅くなる方向
                             speed = UnityEngine.Random.Range(0.0002f, 0.001f);
 
@@ -437,8 +445,11 @@ public class Type3ManagerV2 : CraneManager
                                 ropeManager.SetUpSpeed(speed, i);
                         }
                     }
-                    ropeManager.Up();
-                    UpStopError();
+                    if (!ropeBroken)
+                    {
+                        ropeManager.Up();
+                        UpStopError();
+                    }
                     RopeBreak();
                     errorTimer.StartTimer();
                     await Task.Delay(1500);
@@ -446,7 +457,11 @@ public class Type3ManagerV2 : CraneManager
                 }
                 if (!sp.audioSource[2].isPlaying)
                     sp.Play(1);
-                if (!upStopDisable && ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
+                if (!upStopDisable && ropeManager.UpFinished() && craneStatus == 8)
+                {
+                    Human();
+                    craneStatus = 9;
+                }
                 //アーム上昇音再生;
                 //アーム上昇;
             }
@@ -458,7 +473,6 @@ public class Type3ManagerV2 : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     errorTimer.CancelTimer();
-                    Human();
                     await Task.Delay(200);
                     if (craneStatus == 9) craneStatus = 10;
                 }
