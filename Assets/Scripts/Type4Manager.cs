@@ -655,7 +655,7 @@ public class Type4Manager : CraneManager
 
                     break;
                 case 6:
-                    if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonPushed)
+                    if ((Input.GetKeyUp(downButtonNumpad) || Input.GetKeyUp(downButtonAlpha)) && !buttonPushed)
                     {
                         craneStatus = 7;
                         roter.RotateStop();
@@ -765,12 +765,7 @@ public class Type4Manager : CraneManager
                             videoManager.Play(3);
                         }
                     }
-                    else if (craneStatus == 6)
-                    {
-                        craneStatus = 7;
-                        roter.RotateStop();
-                        videoManager.Play(3);
-                    }
+
                     else if (craneStatus == 8)
                     {
                         if (downStop)
@@ -819,6 +814,14 @@ public class Type4Manager : CraneManager
                         sp.Stop(1);
                         sp.Play(2, 1);
                         buttonPushed = false;
+                    }
+                    break;
+                case 3:
+                    if (craneStatus == 6)
+                    {
+                        craneStatus = 7;
+                        roter.RotateStop();
+                        videoManager.Play(3);
                     }
                     break;
                 case 4: // player2 case 1:
