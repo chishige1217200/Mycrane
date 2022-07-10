@@ -18,7 +18,7 @@ public class Type4Selecter : MonoBehaviour
         sp[1] = transform.Find("2P").Find("SE").GetComponent<SEPlayer>();
         videoManager[0].Play(temp);
         videoManager[1].Play(temp);
-        RandomVideoPlay();
+        StartCoroutine("RandomVideoPlay2");
     }
 
     void Update()
@@ -42,7 +42,7 @@ public class Type4Selecter : MonoBehaviour
         }
     }
 
-    async void RandomVideoPlay()
+    IEnumerator RandomVideoPlay2()
     {
         int randomValue;
         float playTime;
@@ -53,10 +53,24 @@ public class Type4Selecter : MonoBehaviour
             playTime = Random.Range(3, 8);
             if (manager[0].GetStatus() == 0 && videoManager[0].randomMode) videoManager[0].Play(randomValue);
             if (manager[1].GetStatus() == 0 && videoManager[1].randomMode) videoManager[1].Play(randomValue);
-            await Task.Delay((int)(playTime * 1000));
+            yield return new WaitForSeconds(playTime);
         }
-
     }
+
+    // async void RandomVideoPlay()
+    // {
+    //     int randomValue;
+    //     float playTime;
+
+    //     while (true)
+    //     {
+    //         randomValue = Random.Range(0, videoManager[0].videoClips.Length);
+    //         playTime = Random.Range(3, 8);
+    //         if (manager[0].GetStatus() == 0 && videoManager[0].randomMode) videoManager[0].Play(randomValue);
+    //         if (manager[1].GetStatus() == 0 && videoManager[1].randomMode) videoManager[1].Play(randomValue);
+    //         await Task.Delay((int)(playTime * 1000));
+    //     }
+    // }
 
     public Type4Manager GetManager(int num)
     {
