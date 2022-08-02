@@ -11,7 +11,7 @@ public class Type12Manager : CraneManager
     [SerializeField] float armApertures = 80f; //開口率
     [SerializeField] float[] boxRestrictions = new float[2]; //横・縦の順で移動制限設定
     [SerializeField] float downRestriction = 100f;
-    [SerializeField] int operationType = 1; //0:ボタン式，1:レバー式
+    public int operationType = 1; //0:ボタン式，1:レバー式
     [SerializeField] int catchLong = 2000; //キャッチに要する時間(m秒)
     [SerializeField] int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
     [SerializeField] int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
@@ -78,7 +78,7 @@ public class Type12Manager : CraneManager
         lifter = temp.Find("CraneBox").Find("Tube").Find("TubePoint").GetComponent<ArmUnitLifter>();
         armController = temp.Find("ArmUnit").GetComponent<TwinArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
-        lightManager = transform.Find("VideoPlay").GetComponent<Type12LightManager>();
+        lightManager = temp.Find("ArmUnit").Find("Main").Find("LightGroup").GetComponent<Type12LightManager>();
         roter = temp.Find("ArmUnit").Find("Main").GetComponent<Type12ArmunitRoter>();
 
         for (int i = 0; i < 2; i++)
@@ -113,7 +113,7 @@ public class Type12Manager : CraneManager
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(sp);
         getPoint.SetManager(this);
-        getSoundNum = 6;
+        getSoundNum = 7;
         lifter.Up();
         creditSystem.SetCreditSound(0);
         creditSystem.SetSEPlayer(sp);
@@ -138,9 +138,10 @@ public class Type12Manager : CraneManager
             transform.Find("Canvas").Find("ControlGroup").Find("Lever Hole").gameObject.SetActive(false);
             transform.Find("Canvas").Find("ControlGroup").Find("Lever 1").gameObject.SetActive(false);
             transform.Find("Canvas").Find("ControlGroup").Find("Lever 2").gameObject.SetActive(false);
-            transform.Find("Floor").Find("ButtonUnit").gameObject.SetActive(true);
+
             if (!player2)
             {
+                transform.Find("Floor").Find("ButtonUnit").gameObject.SetActive(true);
                 downButtonAlpha = KeyCode.Alpha3;
                 downButtonNumpad = KeyCode.Keypad3;
             }
@@ -155,9 +156,9 @@ public class Type12Manager : CraneManager
             transform.Find("Canvas").Find("ControlGroup").Find("Button 1").gameObject.SetActive(false);
             transform.Find("Canvas").Find("ControlGroup").Find("Button 2").gameObject.SetActive(false);
             transform.Find("Canvas").Find("ControlGroup").Find("Button 3").gameObject.SetActive(false);
-            transform.Find("Floor").Find("LeverUnit").gameObject.SetActive(true);
             if (!player2)
             {
+                transform.Find("Floor").Find("LeverUnit").gameObject.SetActive(true);
                 downButtonAlpha = KeyCode.Alpha2;
                 downButtonNumpad = KeyCode.Keypad2;
             }

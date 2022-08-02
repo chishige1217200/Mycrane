@@ -8,7 +8,7 @@ public class Type12ArmunitRoter : MonoBehaviour
     HingeJoint joint;
     JointMotor motor;
     JointLimits limit;
-    SEPlayer _SEPlayer;
+    SEPlayer sp;
     public float rotateSpeed = 20f;
     bool rotationFlag = false; //回転中
     public bool rotationDirection = true; //trueなら時計回りに回転
@@ -40,13 +40,13 @@ public class Type12ArmunitRoter : MonoBehaviour
             }
             if (rotationDirection)
             {
-                _SEPlayer.Stop(4);
-                _SEPlayer.Play(3, 2147483647);
+                sp.Stop(4);
+                sp.Play(3, 2147483647);
             }
             else
             {
-                _SEPlayer.Stop(3);
-                _SEPlayer.Play(4, 2147483647);
+                sp.Stop(3);
+                sp.Play(4, 2147483647);
             }
         }
         if (rotateInitialFlag) //位置初期化確認
@@ -63,7 +63,7 @@ public class Type12ArmunitRoter : MonoBehaviour
 
     public void SetSEPlayer(SEPlayer s)
     {
-        _SEPlayer = s;
+        sp = s;
     }
 
     public void RotateStart()
