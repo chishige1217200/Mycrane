@@ -227,14 +227,12 @@ public class Type12Manager : CraneManager
                     if (!player2 && craneBox.CheckPos(7))
                     {
                         sp.Stop(1);
-                        sp.Play(2, 1);
                         buttonPushed = false;
                         craneStatus = 3;
                     }
                     if (player2 && craneBox.CheckPos(5))
                     {
                         sp.Stop(1);
-                        sp.Play(2, 1);
                         buttonPushed = false;
                         craneStatus = 3;
                     }
@@ -252,7 +250,6 @@ public class Type12Manager : CraneManager
                     if (craneBox.CheckPos(8))
                     {
                         sp.Stop(1);
-                        sp.Play(2, 1);
                         buttonPushed = false;
                         craneStatus = 5;
                     }
@@ -271,23 +268,12 @@ public class Type12Manager : CraneManager
                     }
                     if (!player2)
                     {
-                        if (isExecuted[15] && ((Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)) // 初回用の処理
-                        {
-                            leverTilted = true;
-                            isExecuted[15] = false;
-                            lightManager.Play(1);
-                            sp.Stop(2);
-                            sp.Play(1, 1);
-                        }
-
                         if ((Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.G)
                         || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                         {
                             leverTilted = true;
                             lightManager.Play(1);
-                            sp.Stop(2);
-                            sp.Play(1, 1);
+                            sp.Play(1);
                         }
                         if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
@@ -295,29 +281,16 @@ public class Type12Manager : CraneManager
                             leverTilted = false;
                             lightManager.Play(0);
                             sp.Stop(1);
-                            sp.Play(2, 1);
                         }
                     }
                     else
                     {
-                        if (isExecuted[15] && ((Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)) // 初回用の処理
-                        {
-                            leverTilted = true;
-                            isExecuted[15] = false;
-                            lightManager.Play(1);
-                            sp.Stop(2);
-                            sp.Play(1, 1);
-                        }
-
-
                         if ((Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.K)
                         || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                         {
                             leverTilted = true;
                             lightManager.Play(1);
-                            sp.Stop(2);
-                            sp.Play(1, 1);
+                            sp.Play(1);
                         }
                         if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
@@ -325,7 +298,6 @@ public class Type12Manager : CraneManager
                             leverTilted = false;
                             lightManager.Play(0);
                             sp.Stop(1);
-                            sp.Play(2, 1);
                         }
                     }
                 }
@@ -333,23 +305,12 @@ public class Type12Manager : CraneManager
                 {
                     if (!player2)
                     {
-                        if (isExecuted[15] && ((Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)) // 初回用の処理
-                        {
-                            leverTilted = true;
-                            isExecuted[15] = false;
-                            lightManager.Play(1);
-                            sp.Stop(2);
-                            sp.Play(1, 1);
-                        }
-
                         if ((Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.G)
                         || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                         {
                             leverTilted = true;
                             lightManager.Play(1);
-                            sp.Stop(2);
-                            sp.Play(1, 1);
+                            sp.Play(1);
                         }
                         if (((!Input.GetKey(KeyCode.H) && !Input.GetKey(KeyCode.F) && !Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.G)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
@@ -357,29 +318,16 @@ public class Type12Manager : CraneManager
                             leverTilted = false;
                             lightManager.Play(0);
                             sp.Stop(1);
-                            sp.Play(2, 1);
                         }
                     }
                     else
                     {
-                        if (isExecuted[15] && ((Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
-                        || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)) // 初回用の処理
-                        {
-                            leverTilted = true;
-                            isExecuted[15] = false;
-                            lightManager.Play(1);
-                            sp.Stop(2);
-                            sp.Play(1, 1);
-                        }
-
-
                         if ((Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.K)
                         || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag) && !leverTilted && host.playable)
                         {
                             leverTilted = true;
                             lightManager.Play(1);
-                            sp.Stop(2);
-                            sp.Play(1, 1);
+                            sp.Play(1);
                         }
                         if (((!Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K)
                         && !lever.rightFlag && !lever.leftFlag && !lever.backFlag && !lever.forwardFlag) && leverTilted && host.playable) || (leverTilted && !host.playable))
@@ -387,7 +335,6 @@ public class Type12Manager : CraneManager
                             leverTilted = false;
                             lightManager.Play(0);
                             sp.Stop(1);
-                            sp.Play(2, 1);
                         }
 
                     }
@@ -418,9 +365,9 @@ public class Type12Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    sp.Stop(2);
                     sp.Stop(3);
-                    sp.Stop(4);
-                    sp.Play(5, 1);
+                    sp.Play(4);
                     if (craneStatus == 8) lifter.Down(); //awaitによる時差実行を防止
                 }
                 DetectKey(craneStatus);
@@ -432,6 +379,8 @@ public class Type12Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     if (catchTiming > 0) await Task.Delay(catchTiming);
+                    sp.Stop(4);
+                    sp.Play(5);
                     if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
                     {
                         if (leftCatchArmpower >= rightCatchArmpower) armController.Close(leftCatchArmpower);
@@ -448,6 +397,8 @@ public class Type12Manager : CraneManager
                     if (!isExecuted[craneStatus])
                     {
                         isExecuted[craneStatus] = true;
+                        sp.Stop(5);
+                        sp.Play(4);
                         lifter.Up();
                         await Task.Delay(1000);
                         if (craneStatus < 13)
@@ -463,6 +414,7 @@ public class Type12Manager : CraneManager
             {   //アーム上昇停止
                 if (!isExecuted[craneStatus])
                 {
+                    sp.Stop(4);
                     if (backTime > 0) await Task.Delay(backTime);
                     craneStatus = 12;
                 }
@@ -478,6 +430,7 @@ public class Type12Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     lightManager.Play(5);
+                    sp.Play(5, 1);
                     armController.SetLimit(100f); // アーム開口度を100に
                     armController.Open();
                     await Task.Delay(2000);
@@ -507,7 +460,7 @@ public class Type12Manager : CraneManager
                     for (int i = 0; i < 14; i++)
                         isExecuted[i] = false;
                     armController.SetLimit(armApertures); //アーム開口度リセット
-                    if (!sp.audioSource[6].isPlaying) sp.Play(7, 1);
+                    if (!sp.audioSource[7].isPlaying) sp.Play(8, 1);
 
                     creditSystem.ResetPayment();
                     int credit = creditSystem.PlayStart();
@@ -553,7 +506,7 @@ public class Type12Manager : CraneManager
 
     public override void GetPrize()
     {
-        sp.Stop(7);
+        sp.Stop(8);
         base.GetPrize();
     }
 
@@ -575,7 +528,7 @@ public class Type12Manager : CraneManager
                             isExecuted[15] = false;
                         }
                         craneStatus = 2;
-                        sp.Play(1, 1);
+                        sp.Play(1);
                     }
                     if ((Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7)) && !buttonPushed && player2)
                     {
@@ -588,7 +541,7 @@ public class Type12Manager : CraneManager
                             isExecuted[15] = false;
                         }
                         craneStatus = 2;
-                        sp.Play(1, 1);
+                        sp.Play(1);
                     }
                     break;
                 //投入を無効化
@@ -597,14 +550,12 @@ public class Type12Manager : CraneManager
                     {
                         craneStatus = 3;
                         sp.Stop(1);
-                        sp.Play(2, 1);
                         buttonPushed = false;
                     }
                     if ((Input.GetKeyUp(KeyCode.Keypad7) || Input.GetKeyUp(KeyCode.Alpha7)) && buttonPushed && player2)
                     {
                         craneStatus = 3;
                         sp.Stop(1);
-                        sp.Play(2, 1);
                         buttonPushed = false;
                     }
                     break;
@@ -613,13 +564,13 @@ public class Type12Manager : CraneManager
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        sp.ForcePlay(1);
+                        sp.Play(1);
                     }
                     if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && !buttonPushed && player2)
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        sp.ForcePlay(1);
+                        sp.Play(1);
                     }
                     break;
                 case 4:
@@ -627,14 +578,12 @@ public class Type12Manager : CraneManager
                     {
                         craneStatus = 5;
                         sp.Stop(1);
-                        sp.ForcePlay(2);
                         buttonPushed = false;
                     }
                     if ((Input.GetKeyUp(KeyCode.Keypad8) || Input.GetKeyUp(KeyCode.Alpha8)) && buttonPushed && player2)
                     {
                         craneStatus = 5;
                         sp.Stop(1);
-                        sp.ForcePlay(2);
                         buttonPushed = false;
                     }
                     break;
@@ -736,11 +685,11 @@ public class Type12Manager : CraneManager
                         craneStatus = 2;
                         creditSystem.ResetPayment();
                         lightManager.Play(1);
-                        sp.Play(1, 1);
+                        sp.Play(1);
                         isExecuted[15] = false;
                     }
                     if (craneStatus == 2 && buttonPushed)
-                        sp.Play(1, 1);
+                        sp.Play(1);
 
                     break;
                 case 2:
@@ -748,7 +697,7 @@ public class Type12Manager : CraneManager
                     {
                         buttonPushed = true;
                         craneStatus = 4;
-                        sp.Play(1, 1);
+                        sp.Play(1);
                     }
                     break;
                 case 3:
@@ -776,19 +725,6 @@ public class Type12Manager : CraneManager
                         }
                     }
                     break;
-                case 4: // player2 case 1:
-                    if (craneStatus == 1 && !buttonPushed)
-                    {
-                        buttonPushed = true;
-                        craneStatus = 2;
-                        creditSystem.ResetPayment();
-                        lightManager.Play(1);
-                        sp.Play(1, 1);
-                        isExecuted[15] = false;
-                    }
-                    if (craneStatus == 2 && buttonPushed)
-                        sp.Play(1, 1);
-                    break;
             }
         }
     }
@@ -804,7 +740,6 @@ public class Type12Manager : CraneManager
                     {
                         craneStatus = 3;
                         sp.Stop(1);
-                        sp.Play(2, 1);
                         buttonPushed = false;
                     }
                     break;
@@ -813,7 +748,6 @@ public class Type12Manager : CraneManager
                     {
                         craneStatus = 5;
                         sp.Stop(1);
-                        sp.Play(2, 1);
                         buttonPushed = false;
                     }
                     break;
@@ -823,15 +757,6 @@ public class Type12Manager : CraneManager
                         craneStatus = 7;
                         roter.RotateStop();
                         lightManager.Play(3);
-                    }
-                    break;
-                case 4: // player2 case 1:
-                    if (craneStatus == 2 && buttonPushed)
-                    {
-                        craneStatus = 3;
-                        sp.Stop(1);
-                        sp.Play(2, 1);
-                        buttonPushed = false;
                     }
                     break;
             }

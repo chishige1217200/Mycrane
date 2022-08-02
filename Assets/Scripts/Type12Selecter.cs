@@ -17,8 +17,8 @@ public class Type12Selecter : MonoBehaviour
         manager[1].operationType = operationType;
         // int temp = Random.Range(0, videoManager[0].videoClips.Length);
         bp = transform.Find("BGM").GetComponent<BGMPlayer>();
-        // sp[0] = transform.Find("1P").Find("SE").GetComponent<SEPlayer>();
-        // sp[1] = transform.Find("2P").Find("SE").GetComponent<SEPlayer>();
+        sp[0] = transform.Find("1P").Find("SE").GetComponent<SEPlayer>();
+        sp[1] = transform.Find("2P").Find("SE").GetComponent<SEPlayer>();
         // videoManager[0].Play(temp);
         // videoManager[1].Play(temp);
         // StartCoroutine("RandomVideoPlay2");
@@ -26,12 +26,12 @@ public class Type12Selecter : MonoBehaviour
 
     void Update()
     {
-        if (!bp.audioSource[0].isPlaying && !manager[0].sp.audioSource[7].isPlaying && !manager[0].sp.audioSource[8].isPlaying && !manager[1].sp.audioSource[7].isPlaying && !manager[1].sp.audioSource[8].isPlaying && (manager[0].GetStatus() == 0 && manager[1].GetStatus() == 0))
+        if (!bp.audioSource[0].isPlaying && !sp[0].audioSource[7].isPlaying && !sp[0].audioSource[8].isPlaying && !sp[1].audioSource[7].isPlaying && !sp[1].audioSource[8].isPlaying && (manager[0].GetStatus() == 0 && manager[1].GetStatus() == 0))
         {
             bp.Stop(1);
             bp.Play(0);
         }
-        else if (!manager[0].sp.audioSource[7].isPlaying && !manager[0].sp.audioSource[8].isPlaying && !manager[1].sp.audioSource[7].isPlaying && !manager[1].sp.audioSource[8].isPlaying && (manager[0].GetStatus() >= 1 || manager[1].GetStatus() >= 1))
+        else if (!sp[0].audioSource[7].isPlaying && !sp[0].audioSource[8].isPlaying && !sp[1].audioSource[7].isPlaying && !sp[1].audioSource[8].isPlaying && (manager[0].GetStatus() >= 1 || manager[1].GetStatus() >= 1))
         {
             bp.Stop(0);
 
