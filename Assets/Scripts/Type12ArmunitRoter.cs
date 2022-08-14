@@ -12,18 +12,11 @@ public class Type12ArmunitRoter : MonoBehaviour
     public bool rotationDirection = true; //trueなら下向きに回転
     bool rotateInitialFlag = false; //trueなら初期化確認
 
-    void Start()
-    {
-        Debug.Log(Quaternion.Euler(75, 0, 180));
-        Debug.Log(Quaternion.Euler(75, 180, 0));
-    }
-
     void Update()
     {
         if (rotationFlag)
         {
-            Debug.Log(transform.localEulerAngles);
-            if (transform.localRotation == Quaternion.Euler(75, 0, 180))
+            if (rotationDirection && (transform.localRotation == Quaternion.Euler(75, 0, 180) || transform.localRotation == Quaternion.Euler(75 - rotateEulerSpeed, 0, 180)))
             {
                 rotationDirection = false;
                 if (useSE)
@@ -32,7 +25,7 @@ public class Type12ArmunitRoter : MonoBehaviour
                     sp.Play(3);
                 }
             }
-            else if (transform.localRotation == Quaternion.Euler(105, 0, 180))
+            else if (!rotationDirection && (transform.localRotation == Quaternion.Euler(105, 0, 180) || transform.localRotation == Quaternion.Euler(75 - rotateEulerSpeed, 180, 0)))
             {
                 rotationDirection = true;
                 if (useSE)
@@ -90,6 +83,7 @@ public class Type12ArmunitRoter : MonoBehaviour
         else if (transform.localEulerAngles.x == 90) return;
 
         rotateInitialFlag = true; //初期化用Updateの実行
+        useSE = false;
         rotationFlag = true;
     }
 }
