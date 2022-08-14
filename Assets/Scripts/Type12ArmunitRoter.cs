@@ -16,22 +16,25 @@ public class Type12ArmunitRoter : MonoBehaviour
     {
         if (rotationFlag)
         {
-            if (rotationDirection && (transform.localRotation == Quaternion.Euler(75, 0, 180) || transform.localRotation == Quaternion.Euler(75 - rotateEulerSpeed, 0, 180)))
+            if (transform.localEulerAngles.x <= 75)
             {
-                rotationDirection = false;
-                if (useSE)
+                if (rotationDirection && transform.localEulerAngles.z == 180)
                 {
-                    sp.Stop(2);
-                    sp.Play(3);
+                    rotationDirection = false;
+                    if (useSE)
+                    {
+                        sp.Stop(2);
+                        sp.Play(3);
+                    }
                 }
-            }
-            else if (!rotationDirection && (transform.localRotation == Quaternion.Euler(105, 0, 180) || transform.localRotation == Quaternion.Euler(75 - rotateEulerSpeed, 180, 0)))
-            {
-                rotationDirection = true;
-                if (useSE)
+                else if (!rotationDirection && transform.localEulerAngles.y == 180)
                 {
-                    sp.Stop(3);
-                    sp.Play(2);
+                    rotationDirection = true;
+                    if (useSE)
+                    {
+                        sp.Stop(3);
+                        sp.Play(2);
+                    }
                 }
             }
         }
