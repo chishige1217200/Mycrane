@@ -593,7 +593,7 @@ public class Type12Manager : CraneManager
                         if (rotation)
                         {
                             craneStatus = 6;
-                            roter.RotateStart();
+                            roter.RotateStart(true);
                             lightManager.Play(2);
                         }
                         else
@@ -706,7 +706,7 @@ public class Type12Manager : CraneManager
                         if (rotation)
                         {
                             craneStatus = 6;
-                            roter.RotateStart();
+                            roter.RotateStart(true);
                             lightManager.Play(2);
                         }
                         else

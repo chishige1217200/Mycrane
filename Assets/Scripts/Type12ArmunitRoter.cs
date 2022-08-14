@@ -5,59 +5,52 @@ using UnityEngine;
 
 public class Type12ArmunitRoter : MonoBehaviour
 {
-    HingeJoint joint;
-    JointMotor motor;
-    JointLimits limit;
     SEPlayer sp;
-    public float rotateSpeed = 20f;
+    public float rotateEulerSpeed = 0.3f;
+    bool useSE = false;
     bool rotationFlag = false; //回転中
-    public bool rotationDirection = true; //trueなら時計回りに回転
+    public bool rotationDirection = true; //trueなら下向きに回転
     bool rotateInitialFlag = false; //trueなら初期化確認
-
-    void Start()
-    {
-        joint = gameObject.GetComponent<HingeJoint>();
-        motor = joint.motor;
-        limit = joint.limits;
-
-        SetLimit(-1, 1);
-    }
 
     void Update()
     {
         if (rotationFlag)
         {
-            //Debug.Log(transform.localEulerAngles.z);
-            if (transform.localEulerAngles.z <= 270 && transform.localEulerAngles.z >= 265 && rotationDirection)
+            Debug.Log(transform.localEulerAngles);
+            if (rotationDirection && transform.rotation == Quaternion.Euler(75, 0, 180))
             {
                 rotationDirection = false;
-                RotateDirection(rotationDirection);
+                if (useSE)
+                {
+                    sp.Stop(2);
+                    sp.Play(3);
+                }
             }
-            else if (transform.localEulerAngles.z >= 90 && transform.localEulerAngles.z <= 95 && !rotationDirection)
+            else if (!rotationDirection && transform.rotation == Quaternion.Euler(75, 180, 0))
             {
                 rotationDirection = true;
-                RotateDirection(rotationDirection);
-            }
-            if (rotationDirection)
-            {
-                sp.Stop(4);
-                sp.Play(3, 2147483647);
-            }
-            else
-            {
-                sp.Stop(3);
-                sp.Play(4, 2147483647);
+                if (useSE)
+                {
+                    sp.Stop(3);
+                    sp.Play(2);
+                }
             }
         }
-        if (rotateInitialFlag) //位置初期化確認
+        if (rotateInitialFlag && transform.localEulerAngles.x == 90) //位置初期化確認
         {
-            if (transform.localEulerAngles.z >= 359.7 || transform.localEulerAngles.z <= 0.3)
-            {
-                rotateInitialFlag = false;
-                motor.targetVelocity = 0f;
-                joint.motor = motor;
-                SetLimit(-1, 1);
-            }
+            RotateStop();
+            rotateInitialFlag = false;
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (rotationFlag)
+        {
+            if (rotationDirection)
+                transform.Rotate(rotateEulerSpeed, 0, 0);
+            else
+                transform.Rotate(-rotateEulerSpeed, 0, 0);
         }
     }
 
@@ -66,58 +59,30 @@ public class Type12ArmunitRoter : MonoBehaviour
         sp = s;
     }
 
-    public void RotateStart()
+    public void RotateStart(bool b)
     {
-        SetLimit(-91, 91);
-        rotationDirection = true; //時計回りに回転
-        RotateDirection(rotationDirection);
+        useSE = b;
         rotationFlag = true;
+        rotationDirection = true;
+        if (useSE)
+        {
+            sp.Play(2);
+        }
     }
 
     public void RotateStop()
     {
-        int low; //角度の小さい側
         rotationFlag = false;
-        motor.targetVelocity = 0f;
-        joint.motor = motor;
-        low = Mathf.FloorToInt(transform.localEulerAngles.z); //下方向に丸める
-        if (low > 180) low -= 360; //Limitの角度が-180,180でしか設定できないため
-        SetLimit(low, low + 1);
     }
 
     public void RotateToHome() //0度に向かって回転
     {
-        if (transform.localEulerAngles.z > 0.3 && transform.localEulerAngles.z <= 91)
-        {
-            rotationDirection = true; //時計回りに回転
-            SetLimit(0, 90);
-        }
-
-        else if (transform.localEulerAngles.z < 359.7 && transform.localEulerAngles.z >= 269)
-        {
+        if (transform.rotation.z == 180)
             rotationDirection = false;
-            SetLimit(-90, 0);
-        }
-        else
-        {
-            SetLimit(-1, 1);
-            return;
-        }
-        RotateDirection(rotationDirection);
+        else if (transform.rotation.y == 180)
+            rotationDirection = true;
+        else if (transform.rotation.x == 90) return;
+
         rotateInitialFlag = true; //初期化用Updateの実行
-    }
-
-    void RotateDirection(bool direction) //回転指令を実行
-    {
-        if (direction) motor.targetVelocity = -rotateSpeed;
-        else motor.targetVelocity = rotateSpeed;
-        joint.motor = motor;
-    }
-
-    void SetLimit(int min, int max) //回転領域の制限
-    {
-        limit.min = min;
-        limit.max = max;
-        joint.limits = limit;
     }
 }
