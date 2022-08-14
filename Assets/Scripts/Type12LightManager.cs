@@ -4,10 +4,20 @@ using System.Threading.Tasks;
 
 public class Type12LightManager : MonoBehaviour
 {
-    public bool randomMode = false; //trueのときランダムにビデオを再生
+    Animator light;
 
-    public void Play(int num) // videoPlayer.isPreparedがfalseのときに呼び出してはいけない可能性
+    void Start()
     {
+        light = GetComponent<Animator>();
+    }
 
+    public void Pattern(int num)
+    {
+        light.SetInteger("LightNumber", num);
+    }
+
+    public void Reset()
+    {
+        light.SetTrigger("Reset");
     }
 }
