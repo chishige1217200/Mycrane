@@ -19,9 +19,9 @@ public class Type12Selecter : MonoBehaviour
         bp = transform.Find("BGM").GetComponent<BGMPlayer>();
         sp[0] = transform.Find("1P").Find("SE").GetComponent<SEPlayer>();
         sp[1] = transform.Find("2P").Find("SE").GetComponent<SEPlayer>();
-        // videoManager[0].Play(temp);
-        // videoManager[1].Play(temp);
-        // StartCoroutine("RandomVideoPlay2");
+        lightManager[0] = transform.Find("1P").Find("CraneUnit").Find("ArmUnit").Find("Main").Find("LightGroup").GetComponent<Type12LightManager>();
+        lightManager[1] = transform.Find("2P").Find("CraneUnit").Find("ArmUnit").Find("Main").Find("LightGroup").GetComponent<Type12LightManager>();
+
     }
 
     void Update()
@@ -44,38 +44,11 @@ public class Type12Selecter : MonoBehaviour
         else if (manager[0].GetStatus() == 15 || manager[1].GetStatus() == 15) bp.Stop(1);
     }
 
-    // IEnumerator RandomVideoPlay2()
-    // {
-    //     int randomValue;
-    //     float playTime;
-
-    //     while (true)
-    //     {
-    //         randomValue = Random.Range(0, videoManager[0].videoClips.Length);
-    //         playTime = Random.Range(3, 8);
-    //         if (manager[0].GetStatus() == 0 && videoManager[0].randomMode) videoManager[0].Play(randomValue);
-    //         if (manager[1].GetStatus() == 0 && videoManager[1].randomMode) videoManager[1].Play(randomValue);
-    //         yield return new WaitForSeconds(playTime);
-    //     }
-    // }
-
-    // async void RandomVideoPlay()
-    // {
-    //     int randomValue;
-    //     float playTime;
-
-    //     while (true)
-    //     {
-    //         randomValue = Random.Range(0, videoManager[0].videoClips.Length);
-    //         playTime = Random.Range(3, 8);
-    //         if (manager[0].GetStatus() == 0 && videoManager[0].randomMode) videoManager[0].Play(randomValue);
-    //         if (manager[1].GetStatus() == 0 && videoManager[1].randomMode) videoManager[1].Play(randomValue);
-    //         await Task.Delay((int)(playTime * 1000));
-    //     }
-    // }
-
-    public Type12Manager GetManager(int num)
+    public void LightReset()
     {
-        return manager[num - 1];
+        lightManager[0].Pattern(0);
+        lightManager[1].Pattern(0);
+        lightManager[0].Reset();
+        lightManager[1].Reset();
     }
 }
