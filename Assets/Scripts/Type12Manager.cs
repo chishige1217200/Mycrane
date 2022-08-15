@@ -81,6 +81,8 @@ public class Type12Manager : CraneManager
         lightManager = temp.Find("ArmUnit").Find("Main").Find("LightGroup").GetComponent<Type12LightManager>();
         roter = temp.Find("ArmUnit").Find("Main").GetComponent<Type12ArmunitRoter>();
 
+        roter.SetManager(this);
+
         for (int i = 0; i < 2; i++)
         {
             if (armSize[i] == 1) armSize[i] = 2;
@@ -604,7 +606,6 @@ public class Type12Manager : CraneManager
                         {
                             craneStatus = 6;
                             roter.RotateStart(true);
-                            lightManager.Pattern(10);
                         }
                         else
                         {
@@ -714,7 +715,6 @@ public class Type12Manager : CraneManager
                         {
                             craneStatus = 6;
                             roter.RotateStart(true);
-                            lightManager.Pattern(10);
                         }
                         else
                         {
@@ -767,6 +767,13 @@ public class Type12Manager : CraneManager
             }
         }
     }
+
+    public void Pattern(int num)
+    {
+        lightManager.Pattern(num);
+    }
+
+
     public override void InsertCoin()
     {
         if (!isHibernate && host.playable && craneStatus >= 0)

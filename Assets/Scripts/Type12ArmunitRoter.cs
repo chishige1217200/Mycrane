@@ -11,6 +11,7 @@ public class Type12ArmunitRoter : MonoBehaviour
     bool rotationFlag = false; //回転中
     public bool rotationDirection = true; //trueなら下向きに回転
     bool rotateInitialFlag = false; //trueなら初期化確認
+    Type12Manager manager;
 
     void Update()
     {
@@ -24,6 +25,7 @@ public class Type12ArmunitRoter : MonoBehaviour
                     if (useSE)
                     {
                         sp.Stop(2);
+                        manager.Pattern(11);
                         sp.Play(3);
                     }
                 }
@@ -33,6 +35,7 @@ public class Type12ArmunitRoter : MonoBehaviour
                     if (useSE)
                     {
                         sp.Stop(3);
+                        manager.Pattern(10);
                         sp.Play(2);
                     }
                 }
@@ -68,6 +71,7 @@ public class Type12ArmunitRoter : MonoBehaviour
         rotationDirection = true;
         if (useSE)
         {
+            manager.Pattern(10);
             sp.Play(2);
         }
     }
@@ -88,5 +92,10 @@ public class Type12ArmunitRoter : MonoBehaviour
         rotateInitialFlag = true; //初期化用Updateの実行
         useSE = false;
         rotationFlag = true;
+    }
+
+    public void SetManager(Type12Manager m)
+    {
+        manager = m;
     }
 }
