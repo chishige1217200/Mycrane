@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 
 public class Type12LightManager : MonoBehaviour
 {
-    Animator light;
+    Animator ani;
 
     void Start()
     {
-        light = GetComponent<Animator>();
+        ani = GetComponent<Animator>();
     }
 
     public void Pattern(int num)
     {
-        light.SetInteger("LightNumber", num);
+        ani.SetInteger("LightNumber", num);
     }
 
     public void Reset()
     {
-        light.SetTrigger("Reset");
+        ani.SetTrigger("Reset");
     }
 }
