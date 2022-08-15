@@ -218,7 +218,11 @@ public class Type12Manager : CraneManager
                 if (craneStatus == 2)
                 { //右移動中
                     DetectKey(craneStatus);
-                    lightManager.Pattern(2);
+                    if (!isExecuted[craneStatus])
+                    {
+                        isExecuted[craneStatus] = true;
+                        lightManager.Pattern(2);
+                    }
                     if (!player2 && craneBox.CheckPos(7))
                     {
                         sp.Stop(1);
@@ -412,6 +416,7 @@ public class Type12Manager : CraneManager
             {   //アーム上昇停止
                 if (!isExecuted[craneStatus])
                 {
+                    isExecuted[craneStatus] = true;
                     sp.Stop(4);
                     if (backTime > 0) await Task.Delay(backTime);
                     lightManager.Pattern(7);

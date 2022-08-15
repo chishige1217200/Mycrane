@@ -14,9 +14,10 @@ public class Type12LightManager : MonoBehaviour
     public void Pattern(int num)
     {
         ani.SetInteger("LightNumber", num);
+        Reset();
     }
 
-    public void Reset()
+    void Reset()
     {
         ani.SetTrigger("Reset");
     }

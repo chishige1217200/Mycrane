@@ -21,7 +21,6 @@ public class Type12Selecter : MonoBehaviour
         sp[1] = transform.Find("2P").Find("SE").GetComponent<SEPlayer>();
         lightManager[0] = transform.Find("1P").Find("CraneUnit").Find("ArmUnit").Find("Main").Find("LightGroup").GetComponent<Type12LightManager>();
         lightManager[1] = transform.Find("2P").Find("CraneUnit").Find("ArmUnit").Find("Main").Find("LightGroup").GetComponent<Type12LightManager>();
-
     }
 
     void Update()
@@ -46,9 +45,14 @@ public class Type12Selecter : MonoBehaviour
 
     public void LightReset()
     {
-        lightManager[0].Pattern(0);
-        lightManager[1].Pattern(0);
-        lightManager[0].Reset();
-        lightManager[1].Reset();
+        if (manager[0].GetStatus() == 0)
+        {
+            lightManager[0].Pattern(0);
+        }
+
+        if (manager[1].GetStatus() == 0)
+        {
+            lightManager[1].Pattern(0);
+        }
     }
 }
