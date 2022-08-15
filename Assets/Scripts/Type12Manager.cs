@@ -388,7 +388,13 @@ public class Type12Manager : CraneManager
                         else armController.Close(rightCatchArmpower);
                     }
                     else armController.Close(30f);
-                    if (catchLong > 0) await Task.Delay(catchLong);
+                    if (catchLong > 0)
+                    {
+                        await Task.Delay(catchLong);
+                        sp.Stop(5);
+                        sp.Play(6, 1);
+                    }
+                    await Task.Delay(1000);
                     if (craneStatus == 9) craneStatus = 10;
                 }
             }
