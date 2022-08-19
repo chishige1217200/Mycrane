@@ -400,9 +400,11 @@ public class Type6Manager : CraneManager
 
                     sp.Stop(6);
                     sp.Play(3, 1);
+                    if (probability) await Task.Delay(500);
                     armController.ArmLimit(100f); // アーム開口度を100に
                     armController.ArmOpen();
-                    await Task.Delay(2500);
+                    if (probability) await Task.Delay(2000);
+                    else await Task.Delay(2500);
                     if (craneStatus == 9) craneStatus = 10;
                 }
             }
