@@ -17,6 +17,11 @@ public class Type12LightManager : MonoBehaviour
         Reset();
     }
 
+    public void Reverse(bool b)
+    {
+        ani.SetBool("isReverse", b);
+    }
+
     void Reset()
     {
         ani.SetTrigger("Reset");

@@ -4,6 +4,169 @@ using UnityEngine.UI;
 
 public class Type12Manager : CraneManager
 {
+    class MoveDirectionPresever
+    {
+        public bool isBack
+        {
+            get { return _isBack; }
+            set
+            {
+                if (!_isBack)
+                {
+                    _isBack = true;
+                    timing[0] = Time.time;
+                }
+                else
+                {
+                    _isBack = false;
+                    timing[0] = -1;
+                }
+                UpdateLight(0);
+            }
+        }
+        bool _isBack = false;
+        public bool isLeft
+        {
+            get { return _isLeft; }
+            set
+            {
+                if (!_isLeft)
+                {
+                    _isLeft = true;
+                    timing[1] = Time.time;
+                }
+                else
+                {
+                    _isLeft = false;
+                    timing[1] = -1;
+                }
+                UpdateLight(1);
+            }
+        }
+        bool _isLeft = false;
+        public bool isForward
+        {
+            get { return _isForward; }
+            set
+            {
+                if (!_isForward)
+                {
+                    _isForward = true;
+                    timing[2] = Time.time;
+                }
+                else
+                {
+                    _isForward = false;
+                    timing[2] = -1;
+                }
+                UpdateLight(2);
+            }
+        }
+        bool _isForward = false;
+        public bool isRight
+        {
+            get { return _isRight; }
+            set
+            {
+                if (!_isRight)
+                {
+                    _isRight = true;
+                    timing[3] = Time.time;
+                }
+                else
+                {
+                    _isRight = false;
+                    timing[3] = -1;
+                }
+                UpdateLight(3);
+            }
+        }
+        bool _isRight = false;
+        float[] timing = new float[4]; // 押し込まれたタイミングを記録（最も遅いものを適用するため）
+        int nowPlaying = -1;
+        Type12LightManager lm;
+
+        public void SetManager(Type12LightManager m)
+        {
+            lm = m;
+        }
+
+        public void Reset()
+        {
+            _isBack = false;
+            _isLeft = false;
+            _isForward = false;
+            _isRight = false;
+            nowPlaying = -1;
+
+            for (int i = 0; i < timing.Length; i++)
+                timing[i] = -1;
+        }
+
+        // public bool Push(int id, float tim)
+        // {
+        //     isPushed[id] = true;
+        //     timing[id] = tim;
+
+        //     bool isFirst = true;
+        //     int count = 0;
+        //     for (int i = 0; i < isPushed.Length; i++)
+        //         if (isPushed[i]) count++;
+
+        //     if (count >= 2) isFirst = false;
+        //     return isFirst;
+        // }
+
+        // public bool UnPush(int id)
+        // {
+        //     isPushed[id] = false;
+        //     timing[id] = -1;
+
+        //     bool isLast = true;
+        //     for (int i = 0; i < isPushed.Length; i++)
+        //         if (isPushed[i]) isLast = false;
+        //     return isLast; // 離したものが最後だったかどうか
+        // }
+
+        void UpdateLight(int alreadyID)
+        {
+            int id = -1;
+            float tim = -1;
+
+            for (int i = 0; i < timing.Length; i++)
+            {
+                if (timing[i] != -1 && tim < timing[i])
+                {
+                    id = i;
+                    tim = timing[i];
+                }
+            }
+
+            if (id != -1 && id != nowPlaying)
+            {
+                nowPlaying = id;
+                Debug.Log("Light will update to" + id);
+                switch (id)
+                {
+                    case 0:
+                        lm.Pattern(3);
+                        break;
+                    case 1:
+                        lm.Reverse(false);
+                        lm.Pattern(2);
+                        break;
+                    case 2:
+                        lm.Pattern(4);
+                        break;
+                    case 3:
+                        lm.Reverse(true);
+                        lm.Pattern(2);
+                        break;
+                }
+            }
+        }
+    }
+
     public int[] priceSet = new int[2];
     public int[] timesSet = new int[2];
     [SerializeField] float leftCatchArmpower = 20f; //左アームパワー
@@ -29,6 +192,7 @@ public class Type12Manager : CraneManager
     Lever lever;
     Type12LightManager lightManager;
     Type12ArmunitRoter roter;
+    MoveDirectionPresever mdp = new MoveDirectionPresever();
     KeyCode downButtonAlpha;
     KeyCode downButtonNumpad;
     [SerializeField] TextMesh credit3d;
@@ -79,8 +243,9 @@ public class Type12Manager : CraneManager
         armController = temp.Find("ArmUnit").GetComponent<TwinArmController>();
         support = temp.Find("ArmUnit").Find("Main").GetComponent<ArmControllerSupport>();
         lightManager = temp.Find("ArmUnit").Find("Main").Find("LightGroup").GetComponent<Type12LightManager>();
+        mdp.SetManager(lightManager);
+        mdp.Reset();
         roter = temp.Find("ArmUnit").Find("Main").GetComponent<Type12ArmunitRoter>();
-
         roter.SetManager(this);
 
         for (int i = 0; i < 2; i++)
@@ -470,6 +635,7 @@ public class Type12Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     lightManager.Pattern(8);
+                    if (operationType == 1) mdp.Reset();
                     for (int i = 0; i < 14; i++)
                         isExecuted[i] = false;
                     armController.SetLimit(armApertures); //アーム開口度リセット
@@ -641,13 +807,41 @@ public class Type12Manager : CraneManager
             if (!player2)
             {
                 if (Input.GetKey(KeyCode.H) || lever.rightFlag)
+                {
                     craneBox.Right();
+                    if (!mdp.isRight) mdp.isRight = true;
+                }
+                else
+                {
+                    if (mdp.isRight) mdp.isRight = false;
+                }
                 if (Input.GetKey(KeyCode.F) || lever.leftFlag)
+                {
                     craneBox.Left();
+                    if (!mdp.isLeft) mdp.isLeft = true;
+                }
+                else
+                {
+                    if (mdp.isLeft) mdp.isLeft = false;
+                }
                 if (Input.GetKey(KeyCode.T) || lever.backFlag)
+                {
                     craneBox.Back();
+                    if (!mdp.isBack) mdp.isBack = true;
+                }
+                else
+                {
+                    if (mdp.isBack) mdp.isBack = false;
+                }
                 if (Input.GetKey(KeyCode.G) || lever.forwardFlag)
+                {
                     craneBox.Forward();
+                    if (!mdp.isForward) mdp.isForward = true;
+                }
+                else
+                {
+                    if (mdp.isForward) mdp.isForward = false;
+                }
 
                 if (Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.T) || Input.GetKey(KeyCode.G)
                 || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
@@ -661,13 +855,41 @@ public class Type12Manager : CraneManager
             else //2Pレバー
             {
                 if (Input.GetKey(KeyCode.L) || lever.rightFlag)
+                {
                     craneBox.Right();
+                    if (!mdp.isRight) mdp.isRight = true;
+                }
+                else
+                {
+                    if (mdp.isRight) mdp.isRight = false;
+                }
                 if (Input.GetKey(KeyCode.J) || lever.leftFlag)
+                {
                     craneBox.Left();
+                    if (!mdp.isLeft) mdp.isLeft = true;
+                }
+                else
+                {
+                    if (mdp.isLeft) mdp.isLeft = false;
+                }
                 if (Input.GetKey(KeyCode.I) || lever.backFlag)
+                {
                     craneBox.Back();
+                    if (!mdp.isBack) mdp.isBack = true;
+                }
+                else
+                {
+                    if (mdp.isBack) mdp.isBack = false;
+                }
                 if (Input.GetKey(KeyCode.K) || lever.forwardFlag)
+                {
                     craneBox.Forward();
+                    if (!mdp.isForward) mdp.isForward = true;
+                }
+                else
+                {
+                    if (mdp.isForward) mdp.isForward = false;
+                }
 
                 if (Input.GetKey(KeyCode.L) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.I) || Input.GetKey(KeyCode.K)
                 || lever.rightFlag || lever.leftFlag || lever.backFlag || lever.forwardFlag)
