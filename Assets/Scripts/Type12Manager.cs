@@ -430,7 +430,7 @@ public class Type12Manager : CraneManager
                     if (!isExecuted[craneStatus])
                     {
                         isExecuted[craneStatus] = true;
-                        lightManager.Pattern(0);
+                        lightManager.Pattern(1);
                     }
                     if (!player2)
                     {
