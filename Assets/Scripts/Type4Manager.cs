@@ -189,7 +189,7 @@ public class Type4Manager : CraneManager
     // Update is called once per frame
     async void Update()
     {
-        if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if (!player2 && (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
         else if (player2 && (Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus))) InsertCoin();
@@ -223,14 +223,14 @@ public class Type4Manager : CraneManager
                 if (craneStatus == 2)
                 { //右移動中
                     DetectKey(craneStatus);
-                    if (!player2 & craneBox.CheckPos(7))
+                    if (!player2 && craneBox.CheckPos(7))
                     {
                         sp.Stop(1);
                         sp.Play(2, 1);
                         buttonPushed = false;
                         craneStatus = 3;
                     }
-                    if (player2 & craneBox.CheckPos(5))
+                    if (player2 && craneBox.CheckPos(5))
                     {
                         sp.Stop(1);
                         sp.Play(2, 1);
@@ -655,7 +655,7 @@ public class Type4Manager : CraneManager
 
                     break;
                 case 6:
-                    if ((Input.GetKeyDown(downButtonNumpad) || Input.GetKeyDown(downButtonAlpha)) && !buttonPushed)
+                    if ((Input.GetKeyUp(downButtonNumpad) || Input.GetKeyUp(downButtonAlpha)) && !buttonPushed)
                     {
                         craneStatus = 7;
                         roter.RotateStop();
@@ -765,12 +765,7 @@ public class Type4Manager : CraneManager
                             videoManager.Play(3);
                         }
                     }
-                    else if (craneStatus == 6)
-                    {
-                        craneStatus = 7;
-                        roter.RotateStop();
-                        videoManager.Play(3);
-                    }
+
                     else if (craneStatus == 8)
                     {
                         if (downStop)
@@ -819,6 +814,14 @@ public class Type4Manager : CraneManager
                         sp.Stop(1);
                         sp.Play(2, 1);
                         buttonPushed = false;
+                    }
+                    break;
+                case 3:
+                    if (craneStatus == 6)
+                    {
+                        craneStatus = 7;
+                        roter.RotateStop();
+                        videoManager.Play(3);
                     }
                     break;
                 case 4: // player2 case 1:

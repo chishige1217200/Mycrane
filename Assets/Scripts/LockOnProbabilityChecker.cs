@@ -27,12 +27,12 @@ public class LockOnProbabilityChecker : MonoBehaviour
     void OnTriggerEnter(Collider collider)
     {
         if (collider.CompareTag("JudgePoint")) inJudge = true;
-        if (collider.CompareTag("Flag")) l = collider.GetComponent<LockOnProbability>();
+        if (collider.CompareTag("LockOnProbability")) l = collider.GetComponent<LockOnProbability>();
     }
 
     void OnTriggerExit(Collider collider)
     {
         if (collider.CompareTag("JudgePoint")) inJudge = false;
-        if (collider.CompareTag("Flag")) l = null;
+        if (collider.CompareTag("LockOnProbability")) l = null;
     }
 }

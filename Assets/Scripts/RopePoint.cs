@@ -66,29 +66,29 @@ public class RopePoint : MonoBehaviour
     {
         if (upRefusedFlag) moveUpFlag = false;
         if (transform.localPosition.y >= 0.02f) transform.localPosition = new Vector3(0, 0, 0);
-        if (!rb.isKinematic)
+        /* if (!rb.isKinematic)
         {
             if (transform.localPosition.x < -0.01f)
-                rb.AddForce(new Vector3(upSpeed / 2, 0, 0), ForceMode.Impulse);
+                rb.AddForce(new Vector3(upSpeed / 2, 0, 0), ForceMode.Force);
             if (transform.localPosition.x > 0.01f)
-                rb.AddForce(new Vector3(-upSpeed / 2, 0, 0), ForceMode.Impulse);
+                rb.AddForce(new Vector3(-upSpeed / 2, 0, 0), ForceMode.Force);
             if (transform.localPosition.z < -0.01f)
-                rb.AddForce(new Vector3(0, 0, upSpeed / 2), ForceMode.Impulse);
+                rb.AddForce(new Vector3(0, 0, upSpeed / 2), ForceMode.Force);
             if (transform.localPosition.z > 0.01f)
-                rb.AddForce(new Vector3(0, 0, -upSpeed / 2), ForceMode.Impulse);
+                rb.AddForce(new Vector3(0, 0, -upSpeed / 2), ForceMode.Force);
         }
         else
-        {
-            transform.localPosition += new Vector3(0, upSpeed, 0);
-            if (transform.localPosition.x < -0.5f)
-                transform.localPosition += new Vector3(0.5f, 0, 0);
-            else if (transform.localPosition.x > 0.5f)
-                transform.localPosition -= new Vector3(0.5f, 0, 0);
-            if (transform.localPosition.z < -0.5f)
-                transform.localPosition += new Vector3(0, 0, 0.5f);
-            else if (transform.localPosition.z > 0.5f)
-                transform.localPosition -= new Vector3(0, 0, 0.5f);
-        }
+        { */
+        transform.localPosition += new Vector3(0, upSpeed, 0);
+        if (transform.localPosition.x < -0.5f)
+            transform.localPosition += new Vector3(0.5f, 0, 0);
+        else if (transform.localPosition.x > 0.5f)
+            transform.localPosition -= new Vector3(0.5f, 0, 0);
+        if (transform.localPosition.z < -0.5f)
+            transform.localPosition += new Vector3(0, 0, 0.5f);
+        else if (transform.localPosition.z > 0.5f)
+            transform.localPosition -= new Vector3(0, 0, 0.5f);
+        // }
     }
 
     void Down()

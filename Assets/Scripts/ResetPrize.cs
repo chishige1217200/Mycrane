@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
 
 public class ResetPrize : MonoBehaviour
 {
@@ -12,15 +11,17 @@ public class ResetPrize : MonoBehaviour
     private MachineHost host;
     [SerializeField] bool player2 = false;
     // Start is called before the first frame update
-    async void Start()
+    void Start()
     {
         c = this.GetComponent<CraneManager>();
         host = c.host;
         if (c == null || targetObjects == null) Debug.LogError("エラー: ResetPrize");
         if (targetObjects.activeSelf) targetObjects.SetActive(false);
+        Invoke("Init", 1f);
+    }
 
-        await Task.Delay(1000);
-
+    void Init()
+    {
         switch (c.GetCType())
         {
             case 2:
@@ -29,7 +30,7 @@ public class ResetPrize : MonoBehaviour
             case 8:
                 targetParent = transform;
                 break;
-            default:
+            default: // 2人用筐体の場合
                 targetParent = transform.parent;
                 break;
         }

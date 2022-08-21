@@ -155,7 +155,7 @@ public class Type6Manager : CraneManager
 
     async void Update()
     {
-        if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if (!player2 && (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
         else if (player2 && (Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus))) InsertCoin();
@@ -400,9 +400,11 @@ public class Type6Manager : CraneManager
 
                     sp.Stop(6);
                     sp.Play(3, 1);
+                    if (probability) await Task.Delay(500);
                     armController.ArmLimit(100f); // アーム開口度を100に
                     armController.ArmOpen();
-                    await Task.Delay(2500);
+                    if (probability) await Task.Delay(2000);
+                    else await Task.Delay(2500);
                     if (craneStatus == 9) craneStatus = 10;
                 }
             }

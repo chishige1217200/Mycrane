@@ -116,7 +116,7 @@ public class Type10Manager : CraneManager
 
     async void Update()
     {
-        if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if (!player2 && (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
         else if (player2 && (Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus))) InsertCoin();
@@ -166,12 +166,12 @@ public class Type10Manager : CraneManager
                 if (craneStatus == 2)
                 { //右移動中
                     DetectKey(craneStatus);
-                    if (!player2 & craneBox.CheckPos(7))
+                    if (!player2 && craneBox.CheckPos(7))
                     {
                         buttonPushed = false;
                         craneStatus = 3;
                     }
-                    if (player2 & craneBox.CheckPos(5))
+                    if (player2 && craneBox.CheckPos(5))
                     {
                         buttonPushed = false;
                         craneStatus = 3;

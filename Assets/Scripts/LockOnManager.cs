@@ -15,7 +15,7 @@ public class LockOnManager : CraneManager
     GameObject[] internalCamera = new GameObject[2];
     GameObject blackLine;
     [SerializeField] TextMesh credit3d;
-    // Start is called before the first frame update
+
     async void Start()
     {
         Transform temp;
@@ -61,10 +61,9 @@ public class LockOnManager : CraneManager
         lc.ResetJudge();
     }
 
-    // Update is called once per frame
     async void Update()
     {
-        if (host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf)
         {
             canvas.SetActive(false);
@@ -244,8 +243,8 @@ public class LockOnManager : CraneManager
                         {
                             creditSystem.ResetPayment();
                             int credit = creditSystem.PlayStart();
-                            if (credit < 10) credit3d.text = credit.ToString();
-                            else credit3d.text = "9.";
+                            if (credit < 0x100) credit3d.text = credit.ToString();
+                            else credit3d.text = "FF.";
                             lc.ResetJudge();
                             isExecuted[10] = false;
                             //probability = creditSystem.ProbabilityCheck();
@@ -293,8 +292,8 @@ public class LockOnManager : CraneManager
                         craneStatus = 2;
                         creditSystem.ResetPayment();
                         int credit = creditSystem.PlayStart();
-                        if (credit < 10) credit3d.text = credit.ToString();
-                        else credit3d.text = "9.";
+                        if (credit < 0x100) credit3d.text = credit.ToString();
+                        else credit3d.text = "FF.";
                         lc.ResetJudge();
                         isExecuted[10] = false;
                         //probability = creditSystem.ProbabilityCheck();
@@ -342,8 +341,8 @@ public class LockOnManager : CraneManager
         {
             bp.Stop(0);
             int credit = creditSystem.Pay(100);
-            if (credit < 10) credit3d.text = credit.ToString();
-            else credit3d.text = "9.";
+            if (credit < 0x100) credit3d.text = credit.ToString();
+            else credit3d.text = "FF.";
             if (credit > 0 && craneStatus == 0) craneStatus = 1;
         }
     }

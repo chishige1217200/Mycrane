@@ -10,11 +10,12 @@ public abstract class CraneManager : MonoBehaviour
     protected int getSoundNum = -1;
     protected CreditSystem creditSystem;
     public SEPlayer sp;
-    protected CraneBox craneBox;
+    public CraneBox craneBox;
     protected GetPoint getPoint;
     public MachineHost host;
     protected GameObject canvas;
     public bool isHibernate = false;
+    public static bool useUI = true;
 
     public virtual void GetPrize()
     {

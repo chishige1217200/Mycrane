@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class RopeManager : BaseLifter
 {
-    [SerializeField] RopePoint[] ropePoint = new RopePoint[30];
+    public RopePoint[] ropePoint = new RopePoint[30];
     private bool downCheckFlag = false; //降下処理の確認を行うか
     private int ropePointNum; //降下処理用
 
@@ -73,5 +73,29 @@ public class RopeManager : BaseLifter
     {
         if (ropePoint[ropePoint.Length - 1].upRefusedFlag && !ropePoint[ropePoint.Length - 1].moveUpFlag) return true;
         else return false;
+    }
+
+    public void SetDownSpeed(float f)
+    {
+        for (int i = 0; i < ropePoint.Length; i++)
+            ropePoint[i].downSpeed = f;
+    }
+
+    public void SetDownSpeed(float f, int target)
+    {
+        if (target >= ropePoint.Length || target < 0) return;
+        ropePoint[target].downSpeed = f;
+    }
+
+    public void SetUpSpeed(float f)
+    {
+        for (int i = 0; i < ropePoint.Length; i++)
+            ropePoint[i].upSpeed = f;
+    }
+
+    public void SetUpSpeed(float f, int target)
+    {
+        if (target >= ropePoint.Length || target < 0) return;
+        ropePoint[target].upSpeed = f;
     }
 }
