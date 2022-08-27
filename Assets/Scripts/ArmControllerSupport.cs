@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class ArmControllerSupport : MonoBehaviour
@@ -11,8 +10,12 @@ public class ArmControllerSupport : MonoBehaviour
     public int pushTime = 0;
     public int prizeCount = 0; // プライズがアームにいくつ検知されているか
     public bool isShieldcollis = false; // アームがShieldに衝突しているかどうか
-
-    async void OnTriggerEnter(Collider collider)
+    private IEnumerator DelayCoroutine(float miliseconds, Action action)
+    {
+        yield return new WaitForSeconds(miliseconds / 1000f);
+        action?.Invoke();
+    }
+    void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "ReleaseCheck")
         {
@@ -78,13 +81,26 @@ public class ArmControllerSupport : MonoBehaviour
                     if (craneManager.GetStatus() == 6)
                     {
                         if (craneManager.GetCType() == 3)
-                            await Task.Delay(700);
-                        if (craneManager.GetCType() == 10)
-                            await Task.Delay(500);
-                        if (craneManager.GetStatus() == 6)
                         {
-                            lifter.DownForceStop();
-                            craneManager.IncrimentStatus();
+                            StartCoroutine(DelayCoroutine(700, () =>
+                            {
+                                if (craneManager.GetStatus() == 6)
+                                {
+                                    lifter.DownForceStop();
+                                    craneManager.IncrimentStatus();
+                                }
+                            }));
+                        }
+                        if (craneManager.GetCType() == 10)
+                        {
+                            StartCoroutine(DelayCoroutine(500, () =>
+                            {
+                                if (craneManager.GetStatus() == 6)
+                                {
+                                    lifter.DownForceStop();
+                                    craneManager.IncrimentStatus();
+                                }
+                            }));
                         }
                     }
                     break;
@@ -98,12 +114,27 @@ public class ArmControllerSupport : MonoBehaviour
                 case 10:
                     if (craneManager.GetStatus() == 6)
                     {
-                        if (craneManager.GetCType() == 3) await Task.Delay(1000);
-                        else if (craneManager.GetCType() == 10) await Task.Delay(300);
-                        if (craneManager.GetStatus() == 6)
+                        if (craneManager.GetCType() == 3)
                         {
-                            lifter.DownForceStop();
-                            craneManager.IncrimentStatus();
+                            StartCoroutine(DelayCoroutine(1000, () =>
+                            {
+                                if (craneManager.GetStatus() == 6)
+                                {
+                                    lifter.DownForceStop();
+                                    craneManager.IncrimentStatus();
+                                }
+                            }));
+                        }
+                        else if (craneManager.GetCType() == 10)
+                        {
+                            StartCoroutine(DelayCoroutine(300, () =>
+                            {
+                                if (craneManager.GetStatus() == 6)
+                                {
+                                    lifter.DownForceStop();
+                                    craneManager.IncrimentStatus();
+                                }
+                            }));
                         }
                     }
                     break;
@@ -142,39 +173,41 @@ public class ArmControllerSupport : MonoBehaviour
             isShieldcollis = false;
         }
     }
-    async void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "prize")
         {
             Debug.Log("景品に接触");
-            await Task.Delay(pushTime); //押し込みパワーの調整
-            switch (craneManager.GetCType())
+            StartCoroutine(DelayCoroutine(pushTime, () =>
             {
+                switch (craneManager.GetCType())
+                {
 
-                case 1:
-                case 5:
-                case 9:
-                    if (craneManager.GetStatus() == 6)
-                    {
-                        lifter.DownForceStop();
-                        craneManager.IncrimentStatus();
-                    }
-                    break;
-                case 4:
-                    if (craneManager.GetStatus() == 8)
-                    {
-                        lifter.DownForceStop();
-                        craneManager.IncrimentStatus();
-                    }
-                    break;
-                case 6:
-                    if (craneManager.GetStatus() == 4)
-                    {
-                        lifter.DownForceStop();
-                        craneManager.IncrimentStatus();
-                    }
-                    break;
-            }
+                    case 1:
+                    case 5:
+                    case 9:
+                        if (craneManager.GetStatus() == 6)
+                        {
+                            lifter.DownForceStop();
+                            craneManager.IncrimentStatus();
+                        }
+                        break;
+                    case 4:
+                        if (craneManager.GetStatus() == 8)
+                        {
+                            lifter.DownForceStop();
+                            craneManager.IncrimentStatus();
+                        }
+                        break;
+                    case 6:
+                        if (craneManager.GetStatus() == 4)
+                        {
+                            lifter.DownForceStop();
+                            craneManager.IncrimentStatus();
+                        }
+                        break;
+                }
+            }));
         }
     }
 
