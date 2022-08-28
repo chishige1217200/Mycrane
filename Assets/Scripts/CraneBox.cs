@@ -187,7 +187,6 @@ public class CraneBox : MonoBehaviour
     {
         leftDummyFlag = true;
         yield return new WaitForSeconds(dummyEnableTime / 1000f);
-        //await Task.Delay(dummyEnableTime);
         leftDummyFlag = false;
     }
 }
