@@ -1,5 +1,5 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 
@@ -15,8 +15,12 @@ public class LockOnManager : CraneManager
     GameObject[] internalCamera = new GameObject[2];
     GameObject blackLine;
     [SerializeField] TextMesh credit3d;
-
-    async void Start()
+    private IEnumerator DelayCoroutine(float miliseconds, Action action)
+    {
+        yield return new WaitForSeconds(miliseconds / 1000f);
+        action?.Invoke();
+    }
+    void Start()
     {
         Transform temp;
 
@@ -52,16 +56,18 @@ public class LockOnManager : CraneManager
         creditSystem.SetSEPlayer(sp);
         creditSystem.SetCreditSound(0);
 
-        await Task.Delay(300);
+        StartCoroutine(DelayCoroutine(300, () =>
+        {
 
-        for (int i = 0; i < 11; i++)
-            isExecuted[i] = false;
+            for (int i = 0; i < 11; i++)
+                isExecuted[i] = false;
 
-        craneStatus = -1;
-        lc.ResetJudge();
+            craneStatus = -1;
+            lc.ResetJudge();
+        }));
     }
 
-    async void Update()
+    void Update()
     {
         if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf)
@@ -131,18 +137,6 @@ public class LockOnManager : CraneManager
             {
                 // 滑り動作
                 if (!lc.GetInJudge()) craneStatus = 6;
-
-                /*if (!isExecuted[craneStatus])
-                {
-                    isExecuted[craneStatus] = true;
-                    await Task.Delay(1000);
-                    if (craneStatus == 5) craneStatus = 6;
-                }
-                if (craneBox.CheckPos(7))
-                {
-                    buttonPushed = false;
-                    if (craneStatus == 5) craneStatus = 6;
-                }*/
             }
 
             if (craneStatus == 6)
@@ -153,8 +147,10 @@ public class LockOnManager : CraneManager
                     isExecuted[craneStatus] = true;
                     bp.Stop(2);
                     sp.Play(1, 1);
-                    await Task.Delay(1000);
-                    if (craneStatus == 6) craneStatus = 7;
+                    StartCoroutine(DelayCoroutine(1000, () =>
+                    {
+                        if (craneStatus == 6) craneStatus = 7;
+                    }));
                 }
             }
 
@@ -173,8 +169,10 @@ public class LockOnManager : CraneManager
                     lc.IncrimentTarget();
                     sp.Stop(1);
                     if (!sp.audioSource[3].isPlaying) sp.Play(2, 1);
-                    await Task.Delay(1000);
-                    if (craneStatus == 8) craneStatus = 9;
+                    StartCoroutine(DelayCoroutine(1000, () =>
+                    {
+                        if (craneStatus == 8) craneStatus = 9;
+                    }));
                 }
             }
 
@@ -222,11 +220,13 @@ public class LockOnManager : CraneManager
         }
     }
 
-    public override async void GetPrize()
+    public override void GetPrize()
     {
-        await Task.Delay(500);
-        sp.Stop(1);
-        if (!sp.audioSource[3].isPlaying) sp.Play(3, 1);
+        StartCoroutine(DelayCoroutine(500, () =>
+        {
+            sp.Stop(1);
+            if (!sp.audioSource[3].isPlaying) sp.Play(3, 1);
+        }));
     }
 
     protected override void DetectKey(int num)
