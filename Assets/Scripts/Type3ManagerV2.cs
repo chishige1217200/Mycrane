@@ -156,7 +156,10 @@ public class Type3ManagerV2 : CraneManager
         }
 
         craneStatus = -3;
-        ResetButton();
+        StartCoroutine(DelayCoroutine(1000, () =>
+        {
+            ResetButton();
+        }));
     }
 
     public void ResetButton()
