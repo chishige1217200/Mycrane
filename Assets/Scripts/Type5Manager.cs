@@ -203,12 +203,9 @@ public class Type5Manager : CraneManager
             if (craneBox.CheckPos(9)) craneStatus = 0;
         }
 
-        if (craneStatus == 0)
+        if (craneStatus > 0)
         {
-            //コイン投入有効化;
-        }
-        else
-        {
+            if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.C) && !probability) probability = true; // テスト用隠しコマンド
             if (craneStatus == 1)
             {
                 //コイン投入有効化;

@@ -130,6 +130,7 @@ public class Type3Manager : CraneManager
         }
         else
         {
+            if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.C) && !probability) probability = true; // テスト用隠しコマンド
             if (craneStatus == 1)
             {
                 //コイン投入有効化;

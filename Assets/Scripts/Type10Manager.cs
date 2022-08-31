@@ -155,6 +155,7 @@ public class Type10Manager : CraneManager
         }
         else
         {
+            if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.C) && !probability) probability = true; // テスト用隠しコマンド
             if (operationType == 0)
             {
                 if (craneStatus == 1)

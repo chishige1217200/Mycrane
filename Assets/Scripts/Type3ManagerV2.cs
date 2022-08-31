@@ -175,6 +175,7 @@ public class Type3ManagerV2 : CraneManager
             sp.Stop(5);
             if (romVer != 2.1f) credit3d.text = romVer.ToString("f1");
             else credit3d.text = "2.0"; // 2.0改
+            Debug.Log("EnarcYm ROM: " + romVer);
             errorTimer.StartTimer();
             if (!ropeBroken)
             {
@@ -316,6 +317,7 @@ public class Type3ManagerV2 : CraneManager
         }
         else
         {
+            if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.C) && !probability) probability = true; // テスト用隠しコマンド
             if (craneStatus == 1)
             {
                 //コイン投入有効化;
@@ -323,7 +325,6 @@ public class Type3ManagerV2 : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     bp.Stop(0);
-                    Debug.Log("EnarcYm ROM: " + romVer);
                 }
                 DetectKey(craneStatus);     //右移動ボタン有効化;
             }

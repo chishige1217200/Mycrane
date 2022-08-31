@@ -81,6 +81,7 @@ public class Type11Manager : CraneManager
         if (craneStatus == -1 && ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2))) craneStatus = 0;
         if (craneStatus > 0)
         {
+            if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.C) && !probability) probability = true; // テスト用隠しコマンド
             if (craneStatus == 1)
             {
                 if (!isExecuted[craneStatus])
