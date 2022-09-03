@@ -8,7 +8,7 @@ public abstract class CraneManager : MonoBehaviour
     protected int craneStatus; //クレーン状態
     protected bool probability; //確率判定用
     protected int getSoundNum = -1;
-    protected CreditSystem creditSystem;
+    public CreditSystem creditSystem;
     public SEPlayer sp;
     public CraneBox craneBox;
     protected GetPoint getPoint;
