@@ -97,6 +97,7 @@ public class Type13Player : MonoBehaviour
         }
         if (craneStatus > 0)
         {
+            if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.C) && !probability) probability = true; // テスト用隠しコマンド
             if (craneStatus == 1)
             {
                 if (craneBox.CheckPos(9)) craneStatus = 2;
