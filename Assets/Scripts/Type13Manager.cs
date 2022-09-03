@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Type13Manager : CraneManager
 {
-    public int boothStatus = -2;
     public Type13Player[] player = new Type13Player[2];
     [SerializeField] int[] priceSet = new int[2];
     [SerializeField] int[] timesSet = new int[2];
@@ -13,10 +12,11 @@ public class Type13Manager : CraneManager
     public Animator[] animator = new Animator[2];
     [SerializeField] Text Credit;
     [SerializeField] TextMesh credit3d;
+    private int playingBooth = -1;
     // Start is called before the first frame update
     void Start()
     {
-        boothStatus = -2;
+        craneStatus = -2;
         craneType = 13;
 
         canvas = transform.Find("Canvas").gameObject;
@@ -52,7 +52,7 @@ public class Type13Manager : CraneManager
         if (!player2 && (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
         else if (player2 && (Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus))) InsertCoin();
 
-        if (boothStatus == 1)
+        if (craneStatus == 1)
         {
             DetectKey(1);
         }
@@ -67,7 +67,7 @@ public class Type13Manager : CraneManager
             if (credit < 1000) credit3d.text = credit.ToString("D3");
             else credit3d.text = "999.";
 
-            if (credit > 0 && boothStatus == 0) boothStatus = 1;
+            if (credit > 0 && craneStatus == 0) craneStatus = 1;
         }
     }
 
@@ -83,8 +83,8 @@ public class Type13Manager : CraneManager
         if (credit < 1000) credit3d.text = credit.ToString("D3");
         else credit3d.text = "999.";
 
-        if (credit > 0) boothStatus = 1;
-        else boothStatus = 0;
+        if (credit > 0) craneStatus = 1;
+        else craneStatus = 0;
     }
 
     public void SelectBooth(int id)
@@ -92,7 +92,8 @@ public class Type13Manager : CraneManager
         if (host.playable)
         {
             player[id].GameStart();
-            boothStatus = 2;
+            playingBooth = id;
+            craneStatus = 2;
         }
     }
 
@@ -105,6 +106,7 @@ public class Type13Manager : CraneManager
     {
         for (int i = 0; i < 2; i++) animator[i].SetTrigger("GetPrize");
         base.GetPrize();
+        player[playingBooth].GetPrize();
     }
 
     protected override void DetectKey(int num)
@@ -118,7 +120,7 @@ public class Type13Manager : CraneManager
 
     public override void ButtonDown(int num)
     {
-        if (boothStatus == 1)
+        if (craneStatus == 1)
             SelectBooth(num);
     }
 

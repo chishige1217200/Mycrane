@@ -29,13 +29,13 @@ public class Type13Selecter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (manager[0].boothStatus == 0 && manager[1].boothStatus == 0)
+        if (manager[0].GetStatus() == 0 && manager[1].GetStatus() == 0)
         {
             bp.Stop(1);
             bp.Play(0);
         }
 
-        else if (manager[0].boothStatus > 0 || manager[1].boothStatus > 0)
+        else if (manager[0].GetStatus() > 0 || manager[1].GetStatus() > 0)
         {
             bp.Stop(0);
             bp.Play(1);

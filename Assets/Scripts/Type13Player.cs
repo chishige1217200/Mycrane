@@ -206,6 +206,21 @@ public class Type13Player : MonoBehaviour
         }
     }
 
+    public void GetPrize()
+    {
+        switch (probabilitySystem.probabilityMode)
+        {
+            case 2:
+            case 3:
+                probabilitySystem.ResetCreditProbability();
+                break;
+            case 4:
+            case 5:
+                probabilitySystem.ResetCostProbability();
+                break;
+        }
+    }
+
     public void GameStart()
     {
         craneStatus = 1;
@@ -421,6 +436,6 @@ public class Type13Player : MonoBehaviour
     void LastStatusEvent(int status)
     {
         if (status == -1)
-            manager.boothStatus++;
+            manager.IncrimentStatus();
     }
 }
