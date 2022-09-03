@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Type13Manager : CraneManager
 {
@@ -10,6 +11,7 @@ public class Type13Manager : CraneManager
     [SerializeField] int[] timesSet = new int[2];
     [SerializeField] bool player2 = false; //player2の場合true
     public Animator[] animator = new Animator[2];
+    [SerializeField] Text Credit;
     [SerializeField] TextMesh credit3d;
     // Start is called before the first frame update
     void Start()
@@ -69,6 +71,11 @@ public class Type13Manager : CraneManager
         }
     }
 
+    public void PlayerStart()
+    {
+        creditSystem.PlayStart();
+    }
+
     public void PlayerEnd()
     {
         int credit = creditSystem.Pay(0);
@@ -85,7 +92,6 @@ public class Type13Manager : CraneManager
         if (host.playable)
         {
             player[id].GameStart();
-            creditSystem.PlayStart();
             boothStatus = 2;
         }
     }
@@ -122,5 +128,8 @@ public class Type13Manager : CraneManager
 
         if (credit < 1000) credit3d.text = credit.ToString("D3");
         else credit3d.text = "999.";
+
+        if (credit < 100) Credit.text = credit.ToString("D2");
+        else Credit.text = "99.";
     }
 }

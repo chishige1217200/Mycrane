@@ -2813,8 +2813,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6691179507163977098}
-        m_TargetAssemblyTypeName: Type12Manager, Assembly-CSharp
+      - m_Target: {fileID: 986255707}
+        m_TargetAssemblyTypeName: Type13Manager, Assembly-CSharp
         m_MethodName: InsertCoin
         m_Mode: 1
         m_Arguments:
@@ -2992,8 +2992,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creditProbability: 3
-  n: 0000000000000000
-  probabilityMode: 0
+  n: 0100000003000000
+  probabilityMode: 2
 --- !u!114 &67415360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3008,16 +3008,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boothNumber: 3
   armPowerConfig:
-  - 0
-  - 0
+  - 100
   - 0
   armPowerConfigSuccess:
-  - 0
-  - 0
-  - 0
-  limitTimeSet: 60
+  - 100
+  - 100
+  limitTimeSet: 30
   leverTilted: 0
-  downStop: 0
+  downStop: 1
   downTime: 1000
   armPower: 0
   craneBox: {fileID: 0}
@@ -5679,8 +5677,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 6691179507163977099}
-          m_TargetAssemblyTypeName: Type12Manager, Assembly-CSharp
+        - m_Target: {fileID: 1272930370}
+          m_TargetAssemblyTypeName: Type13Player, Assembly-CSharp
           m_MethodName: ButtonDown
           m_Mode: 3
           m_Arguments:
@@ -5691,18 +5689,38 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 6691179507163977099}
-          m_TargetAssemblyTypeName: Type12Manager, Assembly-CSharp
-          m_MethodName: ButtonUp
+        - m_Target: {fileID: 67415360}
+          m_TargetAssemblyTypeName: Type13Player, Assembly-CSharp
+          m_MethodName: ButtonDown
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 3
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1272930370}
+          m_TargetAssemblyTypeName: Type13Player, Assembly-CSharp
+          m_MethodName: ButtonDown
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 4
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 67415360}
+          m_TargetAssemblyTypeName: Type13Player, Assembly-CSharp
+          m_MethodName: ButtonDown
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 4
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
@@ -10847,7 +10865,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 258117995}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 5}
@@ -15464,7 +15482,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 380417454}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 5, z: 5}
@@ -15696,8 +15714,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creditProbability: 3
-  n: 0000000000000000
-  probabilityMode: 0
+  n: 0100000003000000
+  probabilityMode: 2
 --- !u!114 &391498111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15712,16 +15730,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boothNumber: 0
   armPowerConfig:
-  - 0
-  - 0
+  - 100
   - 0
   armPowerConfigSuccess:
-  - 0
-  - 0
-  - 0
-  limitTimeSet: 60
+  - 100
+  - 100
+  limitTimeSet: 30
   leverTilted: 0
-  downStop: 0
+  downStop: 1
   downTime: 1200
   armPower: 0
   craneBox: {fileID: 0}
@@ -19242,7 +19258,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 483373081}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 5}
@@ -19337,7 +19353,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 483807369}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 5}
@@ -21167,8 +21183,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creditProbability: 3
-  n: 0000000000000000
-  probabilityMode: 0
+  n: 0100000003000000
+  probabilityMode: 2
 --- !u!114 &533745430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21183,16 +21199,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boothNumber: 1
   armPowerConfig:
-  - 0
-  - 0
+  - 100
   - 0
   armPowerConfigSuccess:
-  - 0
-  - 0
-  - 0
-  limitTimeSet: 60
+  - 100
+  - 100
+  limitTimeSet: 30
   leverTilted: 0
-  downStop: 0
+  downStop: 1
   downTime: 1000
   armPower: 0
   craneBox: {fileID: 0}
@@ -24429,7 +24443,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 610795730}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 5}
@@ -26798,8 +26812,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6691179507163977099}
-        m_TargetAssemblyTypeName: Type12Manager, Assembly-CSharp
+      - m_Target: {fileID: 1474458205}
+        m_TargetAssemblyTypeName: Type13Manager, Assembly-CSharp
         m_MethodName: InsertCoin
         m_Mode: 1
         m_Arguments:
@@ -40661,6 +40675,7 @@ MonoBehaviour:
   animator:
   - {fileID: 0}
   - {fileID: 0}
+  Credit: {fileID: 1839723627}
   credit3d: {fileID: 1220640658}
 --- !u!114 &986255708
 MonoBehaviour:
@@ -42239,7 +42254,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1027677183}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 5}
@@ -43057,7 +43072,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1029557943}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 5}
@@ -45564,7 +45579,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1075263141}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 5, z: 5}
@@ -46287,7 +46302,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1095202346}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 5}
@@ -47403,8 +47418,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 6691179507163977098}
-          m_TargetAssemblyTypeName: Type12Manager, Assembly-CSharp
+        - m_Target: {fileID: 391498111}
+          m_TargetAssemblyTypeName: Type13Player, Assembly-CSharp
           m_MethodName: ButtonDown
           m_Mode: 3
           m_Arguments:
@@ -47415,18 +47430,38 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 6691179507163977098}
-          m_TargetAssemblyTypeName: Type12Manager, Assembly-CSharp
-          m_MethodName: ButtonUp
+        - m_Target: {fileID: 533745430}
+          m_TargetAssemblyTypeName: Type13Player, Assembly-CSharp
+          m_MethodName: ButtonDown
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 3
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 391498111}
+          m_TargetAssemblyTypeName: Type13Player, Assembly-CSharp
+          m_MethodName: ButtonDown
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 4
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 533745430}
+          m_TargetAssemblyTypeName: Type13Player, Assembly-CSharp
+          m_MethodName: ButtonDown
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 4
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
@@ -54114,8 +54149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creditProbability: 3
-  n: 0000000000000000
-  probabilityMode: 0
+  n: 0100000003000000
+  probabilityMode: 2
 --- !u!114 &1272930370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54130,16 +54165,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boothNumber: 2
   armPowerConfig:
-  - 0
-  - 0
+  - 100
   - 0
   armPowerConfigSuccess:
-  - 0
-  - 0
-  - 0
-  limitTimeSet: 60
+  - 100
+  - 100
+  limitTimeSet: 30
   leverTilted: 0
-  downStop: 0
+  downStop: 1
   downTime: 1200
   armPower: 0
   craneBox: {fileID: 0}
@@ -61946,6 +61979,7 @@ MonoBehaviour:
   animator:
   - {fileID: 0}
   - {fileID: 0}
+  Credit: {fileID: 1583207804}
   credit3d: {fileID: 1483698658}
 --- !u!114 &1474458206
 MonoBehaviour:
@@ -64975,7 +65009,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1543651677}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 5, z: 5}
@@ -69589,7 +69623,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682441920}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 5}
@@ -81896,7 +81930,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2015930354}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 5, z: 5}
@@ -91745,30 +91779,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71a2000123327a047a9093ce16132bff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6691179507163977098 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6691179506014111615, guid: b887c060cff541e40b547770bb063a25,
-    type: 3}
-  m_PrefabInstance: {fileID: 6691179507163977094}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea0cc7814be366f4aa2e59a35dbd7bcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6691179507163977099 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6691179506063749181, guid: b887c060cff541e40b547770bb063a25,
-    type: 3}
-  m_PrefabInstance: {fileID: 6691179507163977094}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea0cc7814be366f4aa2e59a35dbd7bcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!65 &7195903694633882224

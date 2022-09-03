@@ -21,8 +21,8 @@ public class Type13Player : MonoBehaviour
     protected bool probability; //確率判定用
     ProbabilitySystem probabilitySystem;
     Type13Manager manager;
-    [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
-    [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
+    [SerializeField] float[] armPowerConfig = new float[2]; //アームパワー(%，未確率時)
+    [SerializeField] float[] armPowerConfigSuccess = new float[2]; //アームパワー(%，確率時)
     [SerializeField] int limitTimeSet = 60; //残り時間を設定
     public bool leverTilted = false; //trueならレバーがアクティブ
     [SerializeField] bool downStop = true; //下降停止の利用可否
@@ -104,6 +104,7 @@ public class Type13Player : MonoBehaviour
             if (craneStatus == 3)
             {
                 if (!leverTilted) DetectKey(craneStatus);
+                if (timer.limitTimeNow <= 0) craneStatus = 4;
             }
             if (craneStatus == 4)
             {
@@ -217,12 +218,12 @@ public class Type13Player : MonoBehaviour
             {
                 case 3:
                     if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && boothNumber < 2)
-                        StartCoroutine(DelayCoroutine(500, () =>
+                        StartCoroutine(DelayCoroutine(300, () =>
                         {
                             if (craneStatus == 3) craneStatus = 4;
                         }));
                     if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && boothNumber >= 2)
-                        StartCoroutine(DelayCoroutine(500, () =>
+                        StartCoroutine(DelayCoroutine(300, () =>
                         {
                             if (craneStatus == 3) craneStatus = 4;
                         }));
@@ -283,7 +284,7 @@ public class Type13Player : MonoBehaviour
             switch (num)
             {
                 case 3:
-                    StartCoroutine(DelayCoroutine(500, () =>
+                    StartCoroutine(DelayCoroutine(300, () =>
                     {
                         if (craneStatus == 3) craneStatus = 4;
                     }));
@@ -300,14 +301,15 @@ public class Type13Player : MonoBehaviour
     {
         if (status == 1)
         {
-            if (boothNumber < 2) craneBox.goPoint = new Vector2(-0.2f, 0);
-            else craneBox.goPoint = new Vector2(0.2f, 0);
+            if (boothNumber < 2) craneBox.goPoint = new Vector2(-0.24f, 0);
+            else craneBox.goPoint = new Vector2(0.24f, 0);
 
             craneBox.goPositionFlag = true;
         }
         else if (status == 3)
         {
             manager.ResetPayment();
+            manager.PlayerStart();
             manager.creditSystem.segUpdateFlag = false;
             timer.StartTimer();
             probabilitySystem.NewPlay();
@@ -388,7 +390,7 @@ public class Type13Player : MonoBehaviour
                 StartCoroutine(DelayCoroutine(500, () =>
                 {
                     ropeManager.UpForceStop();
-                    StartCoroutine(DelayCoroutine(1000, () =>
+                    StartCoroutine(DelayCoroutine(500, () =>
                     {
                         if (craneStatus == 10) craneStatus = 11;
                     }));
@@ -397,13 +399,16 @@ public class Type13Player : MonoBehaviour
         }
         if (status == 11)
         {
-            armController.Open();
-            StartCoroutine(DelayCoroutine(2000, () =>
+            StartCoroutine(DelayCoroutine(500, () =>
             {
-                if (boothNumber % 2 == 0)
-                    craneStatus = 12;
-                else
-                    craneStatus = 14;
+                armController.Open();
+                StartCoroutine(DelayCoroutine(2000, () =>
+                {
+                    if (boothNumber % 2 == 0)
+                        craneStatus = 12;
+                    else
+                        craneStatus = 14;
+                }));
             }));
         }
         if (status == 12)
