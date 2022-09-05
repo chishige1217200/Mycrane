@@ -656,15 +656,15 @@ public class Type12Manager : CraneManager
             }
             if (craneStatus == 17)
             {
-                if (craneBox.CheckPos(6)) craneStatus = 18;
-            }
-            if (craneStatus == 18)
-            {
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
                     if (!sp.audioSource[7].isPlaying) sp.Play(8, 1);
                 }
+                if (craneBox.CheckPos(6)) craneStatus = 18;
+            }
+            if (craneStatus == 18)
+            {
                 if (!player2 && craneBox.CheckPos(5)) craneStatus = 19;
                 else if (player2 && craneBox.CheckPos(7)) craneStatus = 19;
             }
@@ -678,14 +678,14 @@ public class Type12Manager : CraneManager
                     for (int i = 0; i < 19; i++)
                         isExecuted[i] = false;
                     armController.SetLimit(armApertures); //アーム開口度リセット
-                    await Task.Delay(2000);
+                    await Task.Delay(1550);
 
                     creditSystem.ResetPayment();
                     int credit = creditSystem.PlayStart();
                     if (credit < 10) credit3d.text = credit.ToString();
                     else credit3d.text = "9.";
 
-                    await Task.Delay(1500);
+                    await Task.Delay(1550);
                     creditSystem.ResetPayment();
                     if (creditSystem.creditDisplayed > 0)
                         craneStatus = 1;
