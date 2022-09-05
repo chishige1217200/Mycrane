@@ -178,7 +178,7 @@ public class Type12Manager : CraneManager
     [SerializeField] int catchLong = 2000; //キャッチに要する時間(m秒)
     [SerializeField] int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
     [SerializeField] int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
-    bool[] isExecuted = new bool[16]; //各craneStatusで1度しか実行しない処理の管理
+    bool[] isExecuted = new bool[20]; //各craneStatusで1度しか実行しない処理の管理
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     public bool leverTilted = false; //trueならレバーがアクティブ
     [SerializeField] bool player2 = false; //player2の場合true
@@ -206,7 +206,7 @@ public class Type12Manager : CraneManager
         Transform downLimit = transform.Find("Floor").Find("DownLimit");
 
         craneStatus = -2;
-        craneType = 4;
+        craneType = 12;
         // 様々なコンポーネントの取得
         //host = transform.root.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
@@ -294,10 +294,10 @@ public class Type12Manager : CraneManager
             nail[i].SetLifter(lifter);
         }
 
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 19; i++)
             isExecuted[i] = false;
 
-        isExecuted[15] = true; //初回処理用（レバーを倒しっぱなしでプレイし始めるときの対策）
+        isExecuted[19] = true; //初回処理用（レバーを倒しっぱなしでプレイし始めるときの対策）
 
         // ControlGroupの制御
         if (operationType == 0)
@@ -342,6 +342,9 @@ public class Type12Manager : CraneManager
         }
         if (boxRestrictions[1] < 100) zLimit.localPosition = new Vector3(zLimit.localPosition.x, zLimit.localPosition.y, -0.13f + 0.0048f * boxRestrictions[1]);
         if (downRestriction < 100) downLimit.localPosition = new Vector3(downLimit.localPosition.x, 1.37f - 0.0051f * downRestriction, downLimit.localPosition.z);
+
+        if (!player2) craneBox.goPoint = new Vector2(-0.6f, -0.2f);
+        else craneBox.goPoint = new Vector2(0.6f, -0.2f);
 
         // イニシャル移動とinsertFlagを後に実行
         while (!lifter.UpFinished())
@@ -592,62 +595,97 @@ public class Type12Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     sp.Stop(4);
                     if (backTime > 0) await Task.Delay(backTime);
-                    lightManager.Pattern(7);
-                    craneStatus = 12;
+                    if (craneStatus == 11)
+                    {
+                        lightManager.Pattern(7);
+                        craneStatus = 12;
+                        craneBox.goPositionFlag = true;
+                    }
                 }
             }
-            if (craneStatus == 12)
+            if (craneStatus == 12) // 落とし口ポジションに移動
             {
-                if (craneBox.CheckPos(1) && !player2) craneStatus = 13;
-                if (craneBox.CheckPos(3) && player2) craneStatus = 13;
+                if (craneBox.CheckPos(9)) craneStatus = 13;
             }
             if (craneStatus == 13)
             {
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    lightManager.Pattern(9);
-                    sp.Play(5, 1);
-                    armController.SetLimit(100f); // アーム開口度を100に
-                    armController.Open();
-                    await Task.Delay(2000);
-                    if (craneStatus == 13) craneStatus = 14;
-                    //アーム開く音再生;
-                    //アーム開く;
-                    //1秒待機;
+                    roter.RotateToHome();
                 }
+                if (roter.transform.localEulerAngles.x == 90) craneStatus = 14;
             }
             if (craneStatus == 14)
             {
                 if (!isExecuted[craneStatus])
                 {
-                    armController.Close(30f);
-                    await Task.Delay(1000);
+                    isExecuted[craneStatus] = true;
+                    lightManager.Pattern(9);
+                    sp.Play(5, 1);
+                    await Task.Delay(1500);
+                    armController.SetLimit(100f); // アーム開口度を100に
+                    armController.Open();
+                    await Task.Delay(1500);
                     if (craneStatus == 14) craneStatus = 15;
+                    //アーム開く音再生;
+                    //アーム開く;
+                    //1秒待機;
                 }
-                //アーム閉じる音再生;
-                //アーム閉じる;
-                //1秒待機;
             }
             if (craneStatus == 15)
             {
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    armController.Close(30f);
+                    await Task.Delay(1000);
+                    roter.RotateStart(false);
+                    await Task.Delay(800);
+                    roter.RotateStop();
+                    roter.RotateToHome();
+                    if (craneStatus == 15) craneStatus = 16;
+                }
+                //アーム閉じる音再生;
+                //アーム閉じる;
+                //1秒待機;
+            }
+            if (craneStatus == 16)
+            {
+                if (roter.transform.localEulerAngles.x == 90) craneStatus = 17;
+            }
+            if (craneStatus == 17)
+            {
+                if (craneBox.CheckPos(6)) craneStatus = 18;
+            }
+            if (craneStatus == 18)
+            {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    if (!sp.audioSource[7].isPlaying) sp.Play(8, 1);
+                }
+                if (!player2 && craneBox.CheckPos(5)) craneStatus = 19;
+                else if (player2 && craneBox.CheckPos(7)) craneStatus = 19;
+            }
+            if (craneStatus == 19)
+            {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
                     lightManager.Pattern(8);
                     if (operationType == 1) mdp.Reset();
-                    for (int i = 0; i < 14; i++)
+                    for (int i = 0; i < 19; i++)
                         isExecuted[i] = false;
                     armController.SetLimit(armApertures); //アーム開口度リセット
-                    if (!sp.audioSource[7].isPlaying) sp.Play(8, 1);
+                    await Task.Delay(2000);
 
                     creditSystem.ResetPayment();
                     int credit = creditSystem.PlayStart();
                     if (credit < 10) credit3d.text = credit.ToString();
                     else credit3d.text = "9.";
 
-                    roter.RotateToHome();
-                    await Task.Delay(4000);
+                    await Task.Delay(1500);
                     creditSystem.ResetPayment();
                     if (creditSystem.creditDisplayed > 0)
                         craneStatus = 1;
@@ -665,12 +703,14 @@ public class Type12Manager : CraneManager
     {
         if (craneStatus != 0)
         {
-            if (craneStatus == -1 || craneStatus == 12)
+            if (craneStatus == -1 || craneStatus == 18)
             {
                 if (!player2) craneBox.Left();
                 else craneBox.Right();
-                craneBox.Forward();
+                if (craneStatus != 18) craneBox.Forward();
             }
+            if (craneStatus == 17) craneBox.Forward();
+
             if (operationType == 0)
             {
                 if (craneStatus == 2)
@@ -705,7 +745,7 @@ public class Type12Manager : CraneManager
                         if (craneStatus == 1)
                         {
                             creditSystem.ResetPayment();
-                            isExecuted[15] = false;
+                            isExecuted[19] = false;
                         }
                         craneStatus = 2;
                         sp.Play(1);
@@ -716,7 +756,7 @@ public class Type12Manager : CraneManager
                         if (craneStatus == 1)
                         {
                             creditSystem.ResetPayment();
-                            isExecuted[15] = false;
+                            isExecuted[19] = false;
                         }
                         craneStatus = 2;
                         sp.Play(1);
@@ -849,7 +889,7 @@ public class Type12Manager : CraneManager
                     {
                         craneStatus = 3;
                         creditSystem.ResetPayment();
-                        isExecuted[15] = false;
+                        isExecuted[19] = false;
                     }
             }
             else //2Pレバー
@@ -897,7 +937,7 @@ public class Type12Manager : CraneManager
                     {
                         craneStatus = 3;
                         creditSystem.ResetPayment();
-                        isExecuted[15] = false;
+                        isExecuted[19] = false;
                     }
             }
         }
@@ -916,7 +956,7 @@ public class Type12Manager : CraneManager
                         craneStatus = 2;
                         creditSystem.ResetPayment();
                         sp.Play(1);
-                        isExecuted[15] = false;
+                        isExecuted[19] = false;
                     }
                     if (craneStatus == 2 && buttonPushed)
                         sp.Play(1);

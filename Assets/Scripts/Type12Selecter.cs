@@ -40,7 +40,7 @@ public class Type12Selecter : MonoBehaviour
             }
             else bp.Stop(1);
         }
-        else if (manager[0].GetStatus() == 15 || manager[1].GetStatus() == 15) bp.Stop(1);
+        else if (manager[0].GetStatus() == 19 || manager[1].GetStatus() == 19) bp.Stop(1);
     }
 
     public void LightReset()
