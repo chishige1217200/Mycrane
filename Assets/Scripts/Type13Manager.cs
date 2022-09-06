@@ -64,8 +64,8 @@ public class Type13Manager : CraneManager
         {
             int credit = creditSystem.Pay(100);
 
-            if (credit < 1000) credit3d.text = credit.ToString("D3");
-            else credit3d.text = "999.";
+            if (credit < 100) credit3d.text = credit.ToString("D1");
+            else credit3d.text = "99.";
 
             if (credit > 0 && craneStatus == 0) craneStatus = 1;
         }
@@ -80,8 +80,8 @@ public class Type13Manager : CraneManager
     {
         int credit = creditSystem.Pay(0);
 
-        if (credit < 1000) credit3d.text = credit.ToString("D3");
-        else credit3d.text = "999.";
+        if (credit < 100) credit3d.text = credit.ToString("D1");
+        else credit3d.text = "99.";
 
         if (credit > 0) craneStatus = 1;
         else craneStatus = 0;
@@ -128,8 +128,8 @@ public class Type13Manager : CraneManager
     {
         int credit = creditSystem.Pay(0);
 
-        if (credit < 1000) credit3d.text = credit.ToString("D3");
-        else credit3d.text = "999.";
+        if (credit < 100) credit3d.text = credit.ToString("D1");
+        else credit3d.text = "99.";
 
         if (credit < 100) Credit.text = credit.ToString("D2");
         else Credit.text = "99.";
