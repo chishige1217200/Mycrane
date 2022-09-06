@@ -43,6 +43,7 @@ public class ArmControllerSupport : MonoBehaviour
             switch (craneManager.GetCType())
             {
                 case 1:
+                case 3:
                 case 5:
                     if (craneManager.GetStatus() == 6)
                     {
