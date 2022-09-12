@@ -17,7 +17,7 @@ public class Type3Manager : CraneManager
     public float armPower; //現在のアームパワー
     BGMPlayer bp;
     Type3ArmController armController;
-    RopeManager ropeManager;
+    BaseLifter ropeManager;
     ArmControllerSupport support;
     [SerializeField] TextMesh credit3d;
     private IEnumerator DelayCoroutine(float miliseconds, Action action)
@@ -54,7 +54,7 @@ public class Type3Manager : CraneManager
         }
 
         // ロープとアームコントローラに関する処理
-        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<BaseLifter>();
         armController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
         support = temp.Find("ArmUnit").Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
 
