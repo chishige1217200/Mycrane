@@ -11214,8 +11214,6 @@ GameObject:
   - component: {fileID: 5059423016134570742}
   - component: {fileID: 5059423016134570738}
   - component: {fileID: 5059423016134570739}
-  - component: {fileID: 5059423016134570740}
-  - component: {fileID: 5059423016134570741}
   m_Layer: 0
   m_Name: Rope
   m_TagString: Untagged
@@ -11378,37 +11376,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!54 &5059423016134570740
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5059423016134570743}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!138 &5059423016134570741
-FixedJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5059423016134570743}
-  m_ConnectedBody: {fileID: 5059423015156191353}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
 --- !u!1 &5059423016160907610
 GameObject:
   m_ObjectHideFlags: 0
@@ -12686,7 +12653,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a969c97536ef7c4888620d08e698174, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  creditSystem: {fileID: 0}
   sp: {fileID: 5059423015170704672}
+  craneBox: {fileID: 0}
   host: {fileID: 1734823391314460018}
   isHibernate: 0
   priceSet: 6400000000000000
