@@ -24,6 +24,7 @@ public class ArmNail : MonoBehaviour
                     }
                     break;
                 case 4:
+                case 12:
                     if (craneManager.GetStatus() == 8)
                     {
                         Debug.Log("床");

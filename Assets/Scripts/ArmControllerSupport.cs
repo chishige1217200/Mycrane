@@ -53,6 +53,7 @@ public class ArmControllerSupport : MonoBehaviour
                     }
                     break;
                 case 4:
+                case 12:
                     if (craneManager.GetStatus() == 8)
                     {
                         Debug.Log("下降制限に接触");
@@ -194,6 +195,7 @@ public class ArmControllerSupport : MonoBehaviour
                         }
                         break;
                     case 4:
+                    case 12:
                         if (craneManager.GetStatus() == 8)
                         {
                             lifter.DownForceStop();
