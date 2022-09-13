@@ -30,7 +30,7 @@ public class Type13Player : MonoBehaviour
     public float armPower; //現在のアームパワー
     public CraneBox craneBox;
     Type8ArmController armController;
-    RopeManager ropeManager;
+    BaseLifter ropeManager;
     Lever lever;
     Timer timer;
     [SerializeField] Text limitTimedisplayed;
@@ -55,7 +55,7 @@ public class Type13Player : MonoBehaviour
         //timer.SetSEPlayer(sp);
 
         // ロープとアームコントローラに関する処理
-        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<BaseLifter>();
         armController = temp.Find("ArmUnit").GetComponent<Type8ArmController>();
 
         // CraneBoxに関する処理
