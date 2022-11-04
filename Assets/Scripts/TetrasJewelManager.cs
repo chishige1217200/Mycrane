@@ -12,6 +12,7 @@ public class TetrasJewelManager : CraneManagerV2
     LockOnProbabilityChecker lc;
     LockOnStretcher ls;
     GameObject internalCamera;
+    GameObject blackLine;
     [SerializeField] TextMesh credit3d;
     private IEnumerator DelayCoroutine(float miliseconds, Action action)
     {
@@ -55,6 +56,7 @@ public class TetrasJewelManager : CraneManagerV2
             ls = temp.Find("JEWEL").Find("Stretcher").GetComponent<LockOnStretcher>();
         }
         internalCamera = temp.Find("Camera").gameObject;
+        blackLine = canvas.transform.Find("ControlGroup").Find("Black Line").gameObject;
 
         creditSystem.SetSEPlayer(sp);
         creditSystem.SetCreditSound(0);
@@ -67,7 +69,23 @@ public class TetrasJewelManager : CraneManagerV2
     void Update()
     {
         if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
-        else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
+        else if (!host.playable && canvas.activeSelf)
+        {
+            canvas.SetActive(false);
+            if (internalCamera.activeSelf)
+            {
+                MultiCamera(false);
+            }
+        }
+        if (host.playable && !player2 && Input.GetKeyDown(KeyCode.Slash))
+        {
+            MultiCamera(!internalCamera.activeSelf);
+        }
+        if (host.playable && player2 && Input.GetKeyDown(KeyCode.Backslash))
+        {
+            MultiCamera(!internalCamera.activeSelf);
+        }
+
         if (!player2 && (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
         else if (player2 && (Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Minus))) InsertCoin();
 
@@ -202,7 +220,7 @@ public class TetrasJewelManager : CraneManagerV2
 
     public override void GetPrize()
     {
-        sp.Play(1);
+        sp.Play(1, 1);
     }
 
     protected override void DetectKey(int num)
@@ -399,5 +417,6 @@ public class TetrasJewelManager : CraneManagerV2
     public void MultiCamera(bool flag)
     {
         internalCamera.SetActive(flag);
+        blackLine.SetActive(flag);
     }
 }

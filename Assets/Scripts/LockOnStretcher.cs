@@ -15,7 +15,7 @@ public class LockOnStretcher : MonoBehaviour
     {
         l = transform.parent.parent.parent.GetComponent<LockOnManager>();
 
-        if(shrinkLimit >= stretchLimit) Debug.LogWarning("正常に伸び縮みしない可能性があります");
+        if (shrinkLimit >= stretchLimit) Debug.LogWarning("正常に伸び縮みしない可能性があります");
     }
 
     public bool CheckPos(int mode) // 1:奥 2:手前
@@ -47,7 +47,8 @@ public class LockOnStretcher : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("prize")) l.GetPrize();
+        if (collision.gameObject.CompareTag("prize"))
+            if (l != null) l.GetPrize();
     }
 
     void OnTriggerEnter(Collider collider)
