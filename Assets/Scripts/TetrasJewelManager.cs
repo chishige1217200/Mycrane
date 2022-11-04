@@ -40,7 +40,7 @@ public class TetrasJewelManager : CraneManagerV2
         creditSystem.rateSet[1, 1] = timesSet[1];
         if (isHibernate)
         {
-            credit3d.text = "-";
+            credit3d.text = "--";
             creditSystem.SetHibernate();
         }
 
@@ -148,12 +148,6 @@ public class TetrasJewelManager : CraneManagerV2
                 if (ls.CheckPos(1)) craneStatus = 8;
             }
 
-            if (craneStatus == 8)
-            {
-                // 待機動作
-
-            }
-
             if (craneStatus == 9)
             {
                 // 縮む動作
@@ -237,7 +231,7 @@ public class TetrasJewelManager : CraneManagerV2
                         {
                             creditSystem.ResetPayment();
                             int credit = creditSystem.PlayStart();
-                            if (credit < 100) credit3d.text = credit.ToString();
+                            if (credit < 100) credit3d.text = credit.ToString("D2");
                             else credit3d.text = "99.";
                             lc.ResetJudge();
                             //probability = creditSystem.ProbabilityCheck();
@@ -252,7 +246,7 @@ public class TetrasJewelManager : CraneManagerV2
                         {
                             creditSystem.ResetPayment();
                             int credit = creditSystem.PlayStart();
-                            if (credit < 100) credit3d.text = credit.ToString();
+                            if (credit < 100) credit3d.text = credit.ToString("D2");
                             else credit3d.text = "99.";
                             lc.ResetJudge();
                             //probability = creditSystem.ProbabilityCheck();
@@ -315,7 +309,7 @@ public class TetrasJewelManager : CraneManagerV2
                         craneStatus = 2;
                         creditSystem.ResetPayment();
                         int credit = creditSystem.PlayStart();
-                        if (credit < 100) credit3d.text = credit.ToString();
+                        if (credit < 100) credit3d.text = credit.ToString("D2");
                         else credit3d.text = "99.";
                         lc.ResetJudge();
                         //probability = creditSystem.ProbabilityCheck();
@@ -362,7 +356,7 @@ public class TetrasJewelManager : CraneManagerV2
         if (!isHibernate && host.playable && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
-            if (credit < 100) credit3d.text = credit.ToString();
+            if (credit < 100) credit3d.text = credit.ToString("D2");
             else credit3d.text = "99.";
             if (credit > 0 && craneStatus == 0) craneStatus = 1;
         }
