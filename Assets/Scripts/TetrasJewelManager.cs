@@ -77,11 +77,11 @@ public class TetrasJewelManager : CraneManagerV2
                 MultiCamera(false);
             }
         }
-        if (host.playable && !player2 && Input.GetKeyDown(KeyCode.Slash))
+        if (host.playable && !player2 && Input.GetKeyDown(KeyCode.LeftBracket))
         {
             MultiCamera(!internalCamera.activeSelf);
         }
-        if (host.playable && player2 && Input.GetKeyDown(KeyCode.Backslash))
+        if (host.playable && player2 && Input.GetKeyDown(KeyCode.RightBracket))
         {
             MultiCamera(!internalCamera.activeSelf);
         }
