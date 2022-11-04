@@ -4318,7 +4318,7 @@ MonoBehaviour:
   shrinkRefusedFlag: 0
   stretchLimit: 0.15
   shrinkLimit: -0.06
-  moveSpeed: 0.01
+  moveSpeed: 0.001
 --- !u!54 &146927351
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8831,7 +8831,7 @@ Transform:
   - {fileID: 1908618273}
   - {fileID: 1519737832}
   m_Father: {fileID: 1357915937}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &288385585
 GameObject:
@@ -9313,7 +9313,7 @@ Transform:
   m_LocalScale: {x: 0.635, y: 0.049999997, z: 0.45}
   m_Children: []
   m_Father: {fileID: 2103590501}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &306489465
 MonoBehaviour:
@@ -9324,7 +9324,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 306489463}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f70a04029bf9af5419208accb0aa778d, type: 3}
+  m_Script: {fileID: 11500000, guid: c524d4b400617a144b8838ebea6fcfba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoDestroy: 0
@@ -9894,8 +9894,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Type10Manager, Assembly-CSharp
+        - m_Target: {fileID: 2103590502}
+          m_TargetAssemblyTypeName: TetrasJewelManager, Assembly-CSharp
           m_MethodName: ButtonDown
           m_Mode: 3
           m_Arguments:
@@ -9910,8 +9910,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Type10Manager, Assembly-CSharp
+        - m_Target: {fileID: 2103590502}
+          m_TargetAssemblyTypeName: TetrasJewelManager, Assembly-CSharp
           m_MethodName: ButtonUp
           m_Mode: 3
           m_Arguments:
@@ -10180,7 +10180,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8a2954aa0af55db4aabed62dfd782781, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.6
   m_Pitch: 1
   Loop: 1
@@ -13064,7 +13064,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2103590501}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &485437739
 AudioSource:
@@ -13078,7 +13078,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 58537275103aedf46bcde9e1bff11baf, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -13086,8 +13086,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 0.3
-  MaxDistance: 3
+  MinDistance: 0.4
+  MaxDistance: 4
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -13174,7 +13174,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7beeceb033cc1c3498eff3bbf395d2e5, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -13182,8 +13182,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 0.3
-  MaxDistance: 3
+  MinDistance: 0.4
+  MaxDistance: 4
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -14485,7 +14485,7 @@ MonoBehaviour:
   shrinkRefusedFlag: 0
   stretchLimit: 0.15
   shrinkLimit: -0.06
-  moveSpeed: 0.01
+  moveSpeed: 0.001
 --- !u!54 &533988419
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15002,8 +15002,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Type10Manager, Assembly-CSharp
+        - m_Target: {fileID: 1357915938}
+          m_TargetAssemblyTypeName: TetrasJewelManager, Assembly-CSharp
           m_MethodName: ButtonDown
           m_Mode: 3
           m_Arguments:
@@ -15018,8 +15018,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Type10Manager, Assembly-CSharp
+        - m_Target: {fileID: 1357915938}
+          m_TargetAssemblyTypeName: TetrasJewelManager, Assembly-CSharp
           m_MethodName: ButtonUp
           m_Mode: 3
           m_Arguments:
@@ -18317,8 +18317,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Type10Manager, Assembly-CSharp
+      - m_Target: {fileID: 1357915938}
+        m_TargetAssemblyTypeName: TetrasJewelManager, Assembly-CSharp
         m_MethodName: InsertCoin
         m_Mode: 1
         m_Arguments:
@@ -26114,8 +26114,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Type10Manager, Assembly-CSharp
+      - m_Target: {fileID: 2103590502}
+        m_TargetAssemblyTypeName: TetrasJewelManager, Assembly-CSharp
         m_MethodName: InsertCoin
         m_Mode: 1
         m_Arguments:
@@ -26278,66 +26278,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15f09ab6a02e55148b5af944c6787bb1, type: 3}
---- !u!114 &1043668458 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6153329546365024523, guid: 15f09ab6a02e55148b5af944c6787bb1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1043668456}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1043668459 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6153329544916805802, guid: 15f09ab6a02e55148b5af944c6787bb1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1043668456}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1043668460 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6153329546469458496, guid: 15f09ab6a02e55148b5af944c6787bb1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1043668456}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1043668461 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6153329545745506028, guid: 15f09ab6a02e55148b5af944c6787bb1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1043668456}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1043668462 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6153329544685116557, guid: 15f09ab6a02e55148b5af944c6787bb1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1043668456}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1045788794
 GameObject:
   m_ObjectHideFlags: 0
@@ -27770,7 +27710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd010bcc5ab6eb4ca61ea9d07e2d66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.0015
+  moveSpeed: 0.002
   supportDirectionChanger: 0
   ropeHost: {fileID: 0}
   goPoint: {x: 0, y: 0}
@@ -28003,7 +27943,7 @@ MonoBehaviour:
   shrinkRefusedFlag: 0
   stretchLimit: 0.15
   shrinkLimit: -0.06
-  moveSpeed: 0.01
+  moveSpeed: 0.001
 --- !u!64 &1149155836
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -29184,8 +29124,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Type10Manager, Assembly-CSharp
+        - m_Target: {fileID: 2103590502}
+          m_TargetAssemblyTypeName: TetrasJewelManager, Assembly-CSharp
           m_MethodName: ButtonDown
           m_Mode: 3
           m_Arguments:
@@ -29200,8 +29140,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Type10Manager, Assembly-CSharp
+        - m_Target: {fileID: 2103590502}
+          m_TargetAssemblyTypeName: TetrasJewelManager, Assembly-CSharp
           m_MethodName: ButtonUp
           m_Mode: 3
           m_Arguments:
@@ -29957,6 +29897,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1227398381}
+  - component: {fileID: 1227398382}
   m_Layer: 0
   m_Name: TetrasJewel
   m_TagString: Untagged
@@ -29985,6 +29926,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1227398382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227398380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d42bfa7f3c2bf274ca947463c8fbdac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager:
+  - {fileID: 1357915938}
+  - {fileID: 2103590502}
+  soundType: 1
+  audioPitch: 1
 --- !u!1 &1227880022
 GameObject:
   m_ObjectHideFlags: 0
@@ -30534,6 +30492,101 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1247785338}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1250093379
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1250093382}
+  - component: {fileID: 1250093381}
+  - component: {fileID: 1250093380}
+  m_Layer: 0
+  m_Name: 7Seg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!102 &1250093380
+TextMesh:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1250093379}
+  m_Text: 00
+  m_OffsetZ: 0
+  m_CharacterSize: 0.5
+  m_LineSpacing: 1
+  m_Anchor: 5
+  m_Alignment: 0
+  m_TabSize: 4
+  m_FontSize: 32
+  m_FontStyle: 0
+  m_RichText: 1
+  m_Font: {fileID: 12800000, guid: d06244a8d7a4720458b2ba4f75b1f849, type: 3}
+  m_Color:
+    serializedVersion: 2
+    rgba: 4278190335
+--- !u!23 &1250093381
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1250093379}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 29aae62a5508e79429410641e4f5b9c7, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!4 &1250093382
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1250093379}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0.3, y: 0.7825, z: -0.57}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_Children: []
+  m_Father: {fileID: 1357915937}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1251735870
 GameObject:
   m_ObjectHideFlags: 0
@@ -31736,6 +31789,101 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &1291447476
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1291447479}
+  - component: {fileID: 1291447478}
+  - component: {fileID: 1291447477}
+  m_Layer: 0
+  m_Name: 7Seg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!102 &1291447477
+TextMesh:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291447476}
+  m_Text: 00
+  m_OffsetZ: 0
+  m_CharacterSize: 0.5
+  m_LineSpacing: 1
+  m_Anchor: 5
+  m_Alignment: 0
+  m_TabSize: 4
+  m_FontSize: 32
+  m_FontStyle: 0
+  m_RichText: 1
+  m_Font: {fileID: 12800000, guid: d06244a8d7a4720458b2ba4f75b1f849, type: 3}
+  m_Color:
+    serializedVersion: 2
+    rgba: 4278190335
+--- !u!23 &1291447478
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291447476}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 29aae62a5508e79429410641e4f5b9c7, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!4 &1291447479
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291447476}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.3, y: 0.7825, z: -0.57}
+  m_LocalScale: {x: 0.01, y: 0.009999999, z: 0.009999999}
+  m_Children: []
+  m_Father: {fileID: 2103590501}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1296030730
 GameObject:
   m_ObjectHideFlags: 0
@@ -33098,6 +33246,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1357915937}
+  - component: {fileID: 1357915938}
   m_Layer: 0
   m_Name: 1P
   m_TagString: Untagged
@@ -33116,6 +33265,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1250093382}
   - {fileID: 1912304441}
   - {fileID: 1884574258}
   - {fileID: 1742601338}
@@ -33124,6 +33274,28 @@ Transform:
   m_Father: {fileID: 1227398381}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1357915938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357915936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9be77ed266a204885e1103aa1a52cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  creditSystem: {fileID: 1912304442}
+  sp: {fileID: 1742601343}
+  craneBox: {fileID: 1519737834}
+  host: {fileID: 1364240522}
+  isHibernate: 0
+  priceSet: 6400000000000000
+  timesSet: 0100000000000000
+  buttonPushed: 0
+  player2: 0
+  credit3d: {fileID: 1250093380}
 --- !u!1 &1364240520
 GameObject:
   m_ObjectHideFlags: 0
@@ -35127,7 +35299,7 @@ RectTransform:
   m_Children:
   - {fileID: 101518607}
   m_Father: {fileID: 2103590501}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -36330,7 +36502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd010bcc5ab6eb4ca61ea9d07e2d66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.0015
+  moveSpeed: 0.002
   supportDirectionChanger: 0
   ropeHost: {fileID: 0}
   goPoint: {x: 0, y: 0}
@@ -37847,7 +38019,7 @@ RectTransform:
   m_Children:
   - {fileID: 1601735267}
   m_Father: {fileID: 1357915937}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -38621,7 +38793,7 @@ MonoBehaviour:
   shrinkRefusedFlag: 0
   stretchLimit: 0.15
   shrinkLimit: -0.06
-  moveSpeed: 0.01
+  moveSpeed: 0.001
 --- !u!54 &1651409098
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -39066,7 +39238,7 @@ Transform:
   - {fileID: 2137643291}
   - {fileID: 1130852221}
   m_Father: {fileID: 2103590501}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1704674120
 GameObject:
@@ -40111,7 +40283,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1357915937}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1742601341
 AudioSource:
@@ -40125,7 +40297,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 58537275103aedf46bcde9e1bff11baf, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -40133,8 +40305,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 0.3
-  MaxDistance: 3
+  MinDistance: 0.4
+  MaxDistance: 4
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -40221,7 +40393,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7beeceb033cc1c3498eff3bbf395d2e5, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -40229,8 +40401,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 0.3
-  MaxDistance: 3
+  MinDistance: 0.4
+  MaxDistance: 4
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -40610,8 +40782,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Type10Manager, Assembly-CSharp
+        - m_Target: {fileID: 1357915938}
+          m_TargetAssemblyTypeName: TetrasJewelManager, Assembly-CSharp
           m_MethodName: ButtonDown
           m_Mode: 3
           m_Arguments:
@@ -40626,8 +40798,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Type10Manager, Assembly-CSharp
+        - m_Target: {fileID: 1357915938}
+          m_TargetAssemblyTypeName: TetrasJewelManager, Assembly-CSharp
           m_MethodName: ButtonUp
           m_Mode: 3
           m_Arguments:
@@ -41175,7 +41347,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2103590501}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1777942906
 MonoBehaviour:
@@ -41194,12 +41366,12 @@ MonoBehaviour:
   probabilityMode: 0
   segUpdateFlag: 1
   priceSet:
-  - {fileID: 1043668462}
-  - {fileID: 1043668461}
+  - {fileID: 1534715092}
+  - {fileID: 1015730385}
   timesSet:
-  - {fileID: 1043668460}
-  - {fileID: 1043668459}
-  Credit: {fileID: 1043668458}
+  - {fileID: 2071260583}
+  - {fileID: 109162205}
+  Credit: {fileID: 378598884}
 --- !u!1 &1801424747
 GameObject:
   m_ObjectHideFlags: 0
@@ -42591,7 +42763,7 @@ Transform:
   m_LocalScale: {x: 0.635, y: 0.049999997, z: 0.45}
   m_Children: []
   m_Father: {fileID: 1357915937}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1884574259
 MonoBehaviour:
@@ -42602,7 +42774,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1884574257}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f70a04029bf9af5419208accb0aa778d, type: 3}
+  m_Script: {fileID: 11500000, guid: c524d4b400617a144b8838ebea6fcfba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoDestroy: 0
@@ -43454,7 +43626,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1357915937}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1912304442
 MonoBehaviour:
@@ -43473,12 +43645,12 @@ MonoBehaviour:
   probabilityMode: 0
   segUpdateFlag: 1
   priceSet:
-  - {fileID: 1043668462}
-  - {fileID: 1043668461}
+  - {fileID: 762947296}
+  - {fileID: 431667425}
   timesSet:
-  - {fileID: 1043668460}
-  - {fileID: 1043668459}
-  Credit: {fileID: 1043668458}
+  - {fileID: 1283023967}
+  - {fileID: 2047778309}
+  Credit: {fileID: 1590053953}
 --- !u!1 &1916853904
 GameObject:
   m_ObjectHideFlags: 0
@@ -46912,6 +47084,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2103590501}
+  - component: {fileID: 2103590502}
   m_Layer: 0
   m_Name: 2P
   m_TagString: Untagged
@@ -46930,6 +47103,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1291447479}
   - {fileID: 1777942905}
   - {fileID: 306489464}
   - {fileID: 485437738}
@@ -46938,6 +47112,28 @@ Transform:
   m_Father: {fileID: 1227398381}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2103590502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103590500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9be77ed266a204885e1103aa1a52cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  creditSystem: {fileID: 1777942906}
+  sp: {fileID: 485437741}
+  craneBox: {fileID: 1130852223}
+  host: {fileID: 1364240522}
+  isHibernate: 0
+  priceSet: 6400000000000000
+  timesSet: 0100000000000000
+  buttonPushed: 0
+  player2: 1
+  credit3d: {fileID: 1291447477}
 --- !u!1 &2116230478
 GameObject:
   m_ObjectHideFlags: 0
