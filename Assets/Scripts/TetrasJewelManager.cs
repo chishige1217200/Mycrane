@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class TetrasJewelManager : CraneManagerV2
 {
-    [SerializeField] int[] priceSet = new int[2];
-    [SerializeField] int[] timesSet = new int[2];
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] bool player2 = false; //player2の場合true
     LockOnProbabilityChecker lc;

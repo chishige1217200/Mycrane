@@ -17,6 +17,8 @@ public abstract class CraneManagerV2 : MonoBehaviour
         }
     } //クレーン状態
     private int _craneStatus = 0;
+    public int[] priceSet = new int[2];
+    public int[] timesSet = new int[2];
     protected bool probability; //確率判定用
     protected int getSoundNum = -1;
     public CreditSystem creditSystem;
@@ -56,7 +58,7 @@ public abstract class CraneManagerV2 : MonoBehaviour
 
 
     protected abstract void LastStatusEvent(int status);
-    
+
 
     public int GetCType()
     {

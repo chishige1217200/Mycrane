@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 public class Type8Manager : CraneManager
 {
-    [SerializeField] int[] priceSet = new int[2];
-    [SerializeField] int[] timesSet = new int[2];
     [SerializeField] float[] armPowerConfig = new float[3]; //アームパワー(%，未確率時)
     [SerializeField] float[] armPowerConfigSuccess = new float[3]; //アームパワー(%，確率時)
     [SerializeField] int limitTimeSet = 60; //残り時間を設定
@@ -630,28 +628,40 @@ public class Type8Manager : CraneManager
 
     public override void ButtonDown(int num)
     {
-        if (host.playable)
+        switch (num)
         {
-            switch (num)
-            {
-                case 2:
-                    if (craneStatus == 3 && !leverTilted)
-                    {
-                        IncrimentStatus();
-                    }
-                    else if (craneStatus == 4 && downStop)
-                    {
-                        ropeManager.DownForceStop();
-                        IncrimentStatus();
-                    }
-                    break;
-            }
+            case 2:
+                if (craneStatus == 3 && !leverTilted)
+                {
+                    IncrimentStatus();
+                }
+                else if (craneStatus == 4 && downStop)
+                {
+                    ropeManager.DownForceStop();
+                    IncrimentStatus();
+                }
+                break;
         }
+    }
+
+    public override void ButtonUp(int num)
+    {
     }
 
     public override void InsertCoin()
     {
         if (!isHibernate && host.playable && craneStatus >= 0)
+        {
+            int credit = creditSystem.Pay(100);
+            if (credit < 100) credit3d.text = credit.ToString("D2");
+            else credit3d.text = "99.";
+            if (credit > 0 && craneStatus == 0) IncrimentStatus();
+        }
+    }
+
+    public override void InsertCoinAuto()
+    {
+        if (!isHibernate && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 100) credit3d.text = credit.ToString("D2");

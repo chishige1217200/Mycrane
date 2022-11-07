@@ -49,6 +49,8 @@ public class Type7Manager : CraneManager
         creditSystem.rateSet[1, 0] = 0;
         creditSystem.rateSet[0, 1] = times;
         creditSystem.rateSet[1, 1] = 0;
+        priceSet[0] = price;
+        timesSet[0] = times;
         if (isHibernate) creditSystem.SetHibernate();
 
         // ロープとアームコントローラに関する処理
@@ -363,26 +365,34 @@ public class Type7Manager : CraneManager
 
     public override void ButtonDown(int num)
     {
-        if (host.playable)
+        if (craneStatus >= 2 && craneStatus <= 3)
         {
-            if (craneStatus >= 2 && craneStatus <= 3)
+            if (num == 0 && armState == 0)
             {
-                if (num == 0 && armState == 0)
-                {
-                    armState = 1;
-                    armController.Open();
-                }
-                if (num == 1 && armState == 1)
-                {
-                    armState = 0;
-                    armController.Close();
-                }
+                armState = 1;
+                armController.Open();
+            }
+            if (num == 1 && armState == 1)
+            {
+                armState = 0;
+                armController.Close();
             }
         }
     }
+
+    public override void ButtonUp(int num)
+    {
+    }
+
     public override void InsertCoin()
     {
         if (!isHibernate && host.playable && craneStatus == 0 && creditSystem.creditDisplayed == 0)
+            if (creditSystem.Pay(100) >= 1) craneStatus = 1;
+    }
+
+    public override void InsertCoinAuto()
+    {
+        if (!isHibernate && craneStatus == 0 && creditSystem.creditDisplayed == 0)
             if (creditSystem.Pay(100) >= 1) craneStatus = 1;
     }
 }

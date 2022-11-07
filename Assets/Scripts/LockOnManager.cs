@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 
 public class LockOnManager : CraneManager
 {
-    [SerializeField] int[] priceSet = new int[2];
-    [SerializeField] int[] timesSet = new int[2];
     bool[] isExecuted = new bool[11]; //各craneStatusで1度しか実行しない処理の管理
     bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     BGMPlayer bp;
@@ -311,7 +309,7 @@ public class LockOnManager : CraneManager
         }
     }
 
-    public void ButtonUp(int num)
+    public override void ButtonUp(int num)
     {
         if (host.playable)
         {
@@ -338,6 +336,18 @@ public class LockOnManager : CraneManager
     public override void InsertCoin()
     {
         if (!isHibernate && host.playable && craneStatus >= 0)
+        {
+            bp.Stop(0);
+            int credit = creditSystem.Pay(100);
+            if (credit < 0x100) credit3d.text = credit.ToString();
+            else credit3d.text = "FF.";
+            if (credit > 0 && craneStatus == 0) craneStatus = 1;
+        }
+    }
+
+    public override void InsertCoinAuto()
+    {
+        if (!isHibernate && craneStatus >= 0)
         {
             bp.Stop(0);
             int credit = creditSystem.Pay(100);

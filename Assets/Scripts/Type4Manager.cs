@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class Type4Manager : CraneManager
 {
-    public int[] priceSet = new int[2];
-    public int[] timesSet = new int[2];
     [SerializeField] float leftCatchArmpower = 20f; //左アームパワー
     [SerializeField] float rightCatchArmpower = 20f; //右アームパワー
     [SerializeField] float armApertures = 80f; //開口率
@@ -724,121 +722,130 @@ public class Type4Manager : CraneManager
 
     public override void ButtonDown(int num)
     {
-        if (host.playable)
+        switch (num)
         {
-            switch (num)
-            {
-                case 1:
-                    if (craneStatus == 1 && !buttonPushed)
-                    {
-                        buttonPushed = true;
-                        craneStatus = 2;
-                        creditSystem.ResetPayment();
-                        videoManager.Play(1);
-                        sp.Play(1, 1);
-                        isExecuted[15] = false;
-                    }
-                    if (craneStatus == 2 && buttonPushed)
-                        sp.Play(1, 1);
+            case 1:
+                if (craneStatus == 1 && !buttonPushed)
+                {
+                    buttonPushed = true;
+                    craneStatus = 2;
+                    creditSystem.ResetPayment();
+                    videoManager.Play(1);
+                    sp.Play(1, 1);
+                    isExecuted[15] = false;
+                }
+                if (craneStatus == 2 && buttonPushed)
+                    sp.Play(1, 1);
 
-                    break;
-                case 2:
-                    if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
+                break;
+            case 2:
+                if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
+                {
+                    buttonPushed = true;
+                    craneStatus = 4;
+                    sp.Play(1, 1);
+                }
+                break;
+            case 3:
+                if ((craneStatus == 5 && operationType == 0) || (craneStatus == 3 && operationType == 1 && !leverTilted))
+                {
+                    if (rotation)
                     {
-                        buttonPushed = true;
-                        craneStatus = 4;
-                        sp.Play(1, 1);
+                        craneStatus = 6;
+                        roter.RotateStart();
+                        videoManager.Play(2);
                     }
-                    break;
-                case 3:
-                    if ((craneStatus == 5 && operationType == 0) || (craneStatus == 3 && operationType == 1 && !leverTilted))
+                    else
                     {
-                        if (rotation)
-                        {
-                            craneStatus = 6;
-                            roter.RotateStart();
-                            videoManager.Play(2);
-                        }
-                        else
-                        {
-                            craneStatus = 7;
-                            videoManager.Play(3);
-                        }
+                        craneStatus = 7;
+                        videoManager.Play(3);
                     }
+                }
 
-                    else if (craneStatus == 8)
+                else if (craneStatus == 8)
+                {
+                    if (downStop)
                     {
-                        if (downStop)
-                        {
-                            lifter.DownForceStop();
-                            craneStatus = 9;
-                        }
+                        lifter.DownForceStop();
+                        craneStatus = 9;
                     }
-                    break;
-                case 4: // player2 case 1:
-                    if (craneStatus == 1 && !buttonPushed)
-                    {
-                        buttonPushed = true;
-                        craneStatus = 2;
-                        creditSystem.ResetPayment();
-                        videoManager.Play(1);
-                        sp.Play(1, 1);
-                        isExecuted[15] = false;
-                    }
-                    if (craneStatus == 2 && buttonPushed)
-                        sp.Play(1, 1);
-                    break;
-            }
+                }
+                break;
+            case 4: // player2 case 1:
+                if (craneStatus == 1 && !buttonPushed)
+                {
+                    buttonPushed = true;
+                    craneStatus = 2;
+                    creditSystem.ResetPayment();
+                    videoManager.Play(1);
+                    sp.Play(1, 1);
+                    isExecuted[15] = false;
+                }
+                if (craneStatus == 2 && buttonPushed)
+                    sp.Play(1, 1);
+                break;
         }
     }
 
-    public void ButtonUp(int num)
+    public override void ButtonUp(int num)
     {
-        if (host.playable)
+        switch (num)
         {
-            switch (num)
-            {
-                case 1:
-                    if (craneStatus == 2 && buttonPushed)
-                    {
-                        craneStatus = 3;
-                        sp.Stop(1);
-                        sp.Play(2, 1);
-                        buttonPushed = false;
-                    }
-                    break;
-                case 2:
-                    if (craneStatus == 4 && buttonPushed)
-                    {
-                        craneStatus = 5;
-                        sp.Stop(1);
-                        sp.Play(2, 1);
-                        buttonPushed = false;
-                    }
-                    break;
-                case 3:
-                    if (craneStatus == 6)
-                    {
-                        craneStatus = 7;
-                        roter.RotateStop();
-                        videoManager.Play(3);
-                    }
-                    break;
-                case 4: // player2 case 1:
-                    if (craneStatus == 2 && buttonPushed)
-                    {
-                        craneStatus = 3;
-                        sp.Stop(1);
-                        sp.Play(2, 1);
-                        buttonPushed = false;
-                    }
-                    break;
-            }
+            case 1:
+                if (craneStatus == 2 && buttonPushed)
+                {
+                    craneStatus = 3;
+                    sp.Stop(1);
+                    sp.Play(2, 1);
+                    buttonPushed = false;
+                }
+                break;
+            case 2:
+                if (craneStatus == 4 && buttonPushed)
+                {
+                    craneStatus = 5;
+                    sp.Stop(1);
+                    sp.Play(2, 1);
+                    buttonPushed = false;
+                }
+                break;
+            case 3:
+                if (craneStatus == 6)
+                {
+                    craneStatus = 7;
+                    roter.RotateStop();
+                    videoManager.Play(3);
+                }
+                break;
+            case 4: // player2 case 1:
+                if (craneStatus == 2 && buttonPushed)
+                {
+                    craneStatus = 3;
+                    sp.Stop(1);
+                    sp.Play(2, 1);
+                    buttonPushed = false;
+                }
+                break;
         }
     }
     public override void InsertCoin()
     {
         if (!isHibernate && host.playable && craneStatus >= 0)
+        {
+            int credit = creditSystem.Pay(100);
+            if (credit < 10) credit3d.text = credit.ToString();
+            else credit3d.text = "9.";
+            if (credit > 0 && craneStatus == 0)
+            {
+                craneStatus = 1;
+                videoManager.randomMode = false;
+            }
+        }
+    }
+
+    public override void InsertCoinAuto()
+    {
+        if (!isHibernate && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 10) credit3d.text = credit.ToString();

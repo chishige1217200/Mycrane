@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class Type13Manager : CraneManager
 {
     public Type13Player[] player = new Type13Player[2];
-    [SerializeField] int[] priceSet = new int[2];
-    [SerializeField] int[] timesSet = new int[2];
     [SerializeField] bool player2 = false; //player2の場合true
     public Animator[] animator = new Animator[2];
     [SerializeField] Text Credit;
@@ -71,6 +69,19 @@ public class Type13Manager : CraneManager
         }
     }
 
+    public override void InsertCoinAuto()
+    {
+        if (!isHibernate && player[0].craneStatus >= 0 && player[1].craneStatus >= 0)
+        {
+            int credit = creditSystem.Pay(100);
+
+            if (credit < 100) credit3d.text = credit.ToString("D1");
+            else credit3d.text = "99.";
+
+            if (credit > 0 && craneStatus == 0) craneStatus = 1;
+        }
+    }
+
     public void PlayerStart()
     {
         creditSystem.PlayStart();
@@ -122,6 +133,10 @@ public class Type13Manager : CraneManager
     {
         if (craneStatus == 1)
             SelectBooth(num);
+    }
+
+    public override void ButtonUp(int num)
+    {
     }
 
     public void CreditSegUpdate()
