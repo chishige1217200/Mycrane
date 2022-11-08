@@ -1,6 +1,5 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -20,7 +19,12 @@ public class MissionMode : MonoBehaviour
     bool isExecuted = false;
     int playerCount = 1;
     int prizeCount = 0;
-    async void Start()
+    private IEnumerator DelayCoroutine(float miliseconds, Action action)
+    {
+        yield return new WaitForSeconds(miliseconds / 1000f);
+        action?.Invoke();
+    }
+    void Start()
     {
         //credit = this.transform.Find("Canvas").Find("Credit").GetComponent<Text>();
         missionPanel = this.transform.Find("Canvas").Find("MissionPanel").gameObject;
@@ -28,26 +32,29 @@ public class MissionMode : MonoBehaviour
         gameClearPanel = this.transform.Find("Canvas").Find("GameClearPanel").gameObject;
         if (c[0] == null) Debug.LogError("Mission: 基準のCraneManagerがセットされていません");
         if (target == null) Debug.LogError("Mission: 基準のGameObjectがセットされていません");
-        await Task.Delay(500); // c[0].GetCTypeで正常に番号を取得できない問題を解消
-        switch (c[0].GetCType())
+        // c[0].GetCTypeで正常に番号を取得できない問題を解消
+        StartCoroutine(DelayCoroutine(500, () =>
         {
-            case 1:
-            case 4:
-            case 5:
-            case 6:
-            case 10:
-                playerCount = 2;
-                c[1] = target.transform.Find("2P").GetComponent<CraneManager>();
-                creditSystem[0] = target.transform.Find("1P").Find("CreditSystem").GetComponent<CreditSystem>();
-                creditSystem[1] = target.transform.Find("2P").Find("CreditSystem").GetComponent<CreditSystem>();
-                break;
-            case 9:
-                creditSystem[0] = target.transform.Find("1P").Find("CreditSystem").GetComponent<CreditSystem>();
-                break;
-            default:
-                creditSystem[0] = target.transform.Find("CreditSystem").GetComponent<CreditSystem>();
-                break;
-        }
+            switch (c[0].GetCType())
+            {
+                case 1:
+                case 4:
+                case 5:
+                case 6:
+                case 10:
+                    playerCount = 2;
+                    c[1] = target.transform.Find("2P").GetComponent<CraneManager>();
+                    creditSystem[0] = target.transform.Find("1P").Find("CreditSystem").GetComponent<CreditSystem>();
+                    creditSystem[1] = target.transform.Find("2P").Find("CreditSystem").GetComponent<CreditSystem>();
+                    break;
+                case 9:
+                    creditSystem[0] = target.transform.Find("1P").Find("CreditSystem").GetComponent<CreditSystem>();
+                    break;
+                default:
+                    creditSystem[0] = target.transform.Find("CreditSystem").GetComponent<CreditSystem>();
+                    break;
+            }
+        }));
     }
 
     void Update()
@@ -97,14 +104,16 @@ public class MissionMode : MonoBehaviour
         }
     }
 
-    async void GameOver()
+    void GameOver()
     {
-        await Task.Delay(gameOverTime);
-        if (!gameClear)
+        StartCoroutine(DelayCoroutine(gameOverTime, () =>
         {
-            CloseMissionPanel();
-            gameOverPanel.SetActive(true);
-        }
+            if (!gameClear)
+            {
+                CloseMissionPanel();
+                gameOverPanel.SetActive(true);
+            }
+        }));
         // ゲームオーバー画面の表示
     }
 

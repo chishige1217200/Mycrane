@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Type3ArmController : MonoBehaviour
@@ -63,7 +62,7 @@ public class Type3ArmController : MonoBehaviour
         }
     }*/
 
-    public async void Release()
+    public void Release()
     {
         if (autoPower)
         {
@@ -76,14 +75,19 @@ public class Type3ArmController : MonoBehaviour
                 //motor[i].force = 1f;
                 joint[i].motor = motor[i];
             }
-            while (support.prizeCount > 0)
-                await Task.Delay(50);
-            for (int i = 0; i < 3; i++)
-            {
-                motor[i].targetVelocity = 0f;
-                //motor[i].force = 1f;
-                joint[i].motor = motor[i];
-            }
+            StartCoroutine(InternalRelease());
+        }
+    }
+
+    IEnumerator InternalRelease()
+    {
+        while (support.prizeCount > 0)
+            yield return new WaitForSeconds(0.05f);
+        for (int i = 0; i < 3; i++)
+        {
+            motor[i].targetVelocity = 0f;
+            //motor[i].force = 1f;
+            joint[i].motor = motor[i];
         }
     }
 

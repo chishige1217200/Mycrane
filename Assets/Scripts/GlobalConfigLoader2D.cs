@@ -7,5 +7,6 @@ public class GlobalConfigLoader2D : MonoBehaviour
     void Start()
     {
         CraneManager.useUI = true;
+        CraneManagerV2.useUI = true;
     }
 }

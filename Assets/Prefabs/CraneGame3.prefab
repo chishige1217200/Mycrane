@@ -661,6 +661,50 @@ MonoBehaviour:
   pushTime: 0
   prizeCount: 0
   isShieldcollis: 0
+--- !u!1 &1958727469552626500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3245448669659083889}
+  - component: {fileID: 7358054859320590423}
+  m_Layer: 0
+  m_Name: DownStopper
+  m_TagString: DownLimit
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967294
+  m_IsActive: 1
+--- !u!4 &3245448669659083889
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958727469552626500}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.165, y: 1.24, z: -0.19}
+  m_LocalScale: {x: 0.11, y: 0.01, z: 0.1}
+  m_Children: []
+  m_Father: {fileID: 8292428783451093935}
+  m_RootOrder: 43
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7358054859320590423
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958727469552626500}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2129659296016885644
 GameObject:
   m_ObjectHideFlags: 0
@@ -7207,6 +7251,7 @@ Transform:
   - {fileID: 8292428785012616973}
   - {fileID: 8292428784360906839}
   - {fileID: 2303190522695345075}
+  - {fileID: 3245448669659083889}
   m_Father: {fileID: 8292428784426687509}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8676,8 +8721,6 @@ GameObject:
   - component: {fileID: 8292428783763844258}
   - component: {fileID: 8292428783763844256}
   - component: {fileID: 8292428783763844257}
-  - component: {fileID: 8292428783763844286}
-  - component: {fileID: 8292428783763844287}
   m_Layer: 0
   m_Name: Rope
   m_TagString: Untagged
@@ -8828,37 +8871,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!54 &8292428783763844286
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8292428783763844259}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!138 &8292428783763844287
-FixedJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8292428783763844259}
-  m_ConnectedBody: {fileID: 8292428783317020123}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
 --- !u!1 &8292428783800809132
 GameObject:
   m_ObjectHideFlags: 0
@@ -12070,7 +12082,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8811487b625a8d243b5965a3f44408ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  creditSystem: {fileID: 0}
   sp: {fileID: 8292428783415645056}
+  craneBox: {fileID: 0}
   host: {fileID: 6802760231548339779}
   isHibernate: 0
   priceSet: 6400000064000000

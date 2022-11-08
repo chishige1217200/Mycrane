@@ -7,10 +7,15 @@ public class LockOnStretcher : MonoBehaviour
     public bool stretchRefusedFlag = false;
     public bool shrinkRefusedFlag = false;
     LockOnManager l;
+    public float stretchLimit = 0.95f;
+    public float shrinkLimit = 0;
+    public float moveSpeed = 0.01f;
 
     void Start()
     {
         l = transform.parent.parent.parent.GetComponent<LockOnManager>();
+
+        if (shrinkLimit >= stretchLimit) Debug.LogWarning("正常に伸び縮みしない可能性があります");
     }
 
     public bool CheckPos(int mode) // 1:奥 2:手前
@@ -25,7 +30,7 @@ public class LockOnStretcher : MonoBehaviour
         if (!stretchRefusedFlag)
         {
             shrinkRefusedFlag = false;
-            if (transform.localPosition.z < 0.95f) transform.localPosition += new Vector3(0, 0, 0.01f);
+            if (transform.localPosition.z < stretchLimit) transform.localPosition += new Vector3(0, 0, moveSpeed);
             else stretchRefusedFlag = true;
         }
     }
@@ -35,14 +40,15 @@ public class LockOnStretcher : MonoBehaviour
         if (!shrinkRefusedFlag)
         {
             stretchRefusedFlag = false;
-            if (transform.localPosition.z > 0) transform.localPosition -= new Vector3(0, 0, 0.01f);
+            if (transform.localPosition.z > shrinkLimit) transform.localPosition -= new Vector3(0, 0, moveSpeed);
             else shrinkRefusedFlag = true;
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("prize")) l.GetPrize();
+        if (collision.gameObject.CompareTag("prize"))
+            if (l != null) l.GetPrize();
     }
 
     void OnTriggerEnter(Collider collider)

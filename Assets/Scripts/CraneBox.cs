@@ -124,7 +124,7 @@ public class CraneBox : MonoBehaviour
 
     public void Right()
     {
-        if (useLeftDummy && !leftDummyFlag && !Input.GetKey(KeyCode.F)) EnableLeftDummy();
+        if (useLeftDummy && !leftDummyFlag && !Input.GetKey(KeyCode.F)) StartCoroutine(EnableLeftDummy());
         if (!rightRefusedFlag || limitIgnoreFlag)
         {
             transform.localPosition += new Vector3(moveSpeed, 0, 0);
@@ -183,10 +183,10 @@ public class CraneBox : MonoBehaviour
         }
     }
 
-    async void EnableLeftDummy()
+    private IEnumerator EnableLeftDummy()
     {
         leftDummyFlag = true;
-        await Task.Delay(dummyEnableTime);
+        yield return new WaitForSeconds(dummyEnableTime / 1000f);
         leftDummyFlag = false;
     }
 }

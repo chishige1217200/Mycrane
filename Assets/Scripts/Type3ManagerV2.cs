@@ -1,12 +1,9 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
 
 public class Type3ManagerV2 : CraneManager
 {
-    [SerializeField] int[] priceSet = new int[2];
-    [SerializeField] int[] timesSet = new int[2];
     [SerializeField] float[] armPowerConfig = new float[2]; //アームパワー(%)
     [SerializeField] float audioPitch = 1f; //サウンドのピッチ
     public float romVer = 1.7f;
@@ -32,7 +29,11 @@ public class Type3ManagerV2 : CraneManager
     Timer errorTimer;
     [SerializeField] TextMesh credit3d;
     EnarcYmCoord coord;
-
+    private IEnumerator DelayCoroutine(float miliseconds, Action action)
+    {
+        yield return new WaitForSeconds(miliseconds / 1000f);
+        action?.Invoke();
+    }
     void Start()
     {
         Transform temp;
@@ -153,10 +154,18 @@ public class Type3ManagerV2 : CraneManager
         }
 
         craneStatus = -3;
-        Invoke("Initialize", 1);
+        StartCoroutine(DelayCoroutine(1000, () =>
+        {
+            ResetButton();
+        }));
     }
 
-    public async void Initialize()
+    public void ResetButton()
+    {
+        StartCoroutine(Initialize());
+    }
+
+    IEnumerator Initialize()
     {
         if (craneStatus == -3 || craneStatus == 99)
         {
@@ -164,6 +173,7 @@ public class Type3ManagerV2 : CraneManager
             sp.Stop(5);
             if (romVer != 2.1f) credit3d.text = romVer.ToString("f1");
             else credit3d.text = "2.0"; // 2.0改
+            Debug.Log("EnarcYm ROM: " + romVer);
             errorTimer.StartTimer();
             if (!ropeBroken)
             {
@@ -172,8 +182,8 @@ public class Type3ManagerV2 : CraneManager
             }
             while (!ropeManager.UpFinished())
             {
-                if (craneStatus == 99) return;
-                await Task.Delay(100);
+                if (craneStatus == 99) yield break;
+                yield return new WaitForSeconds(0.1f);
             }
 
             errorTimer.CancelTimer();
@@ -214,56 +224,64 @@ public class Type3ManagerV2 : CraneManager
         sp.Play(5);
     }
 
-    public async void Human()
+    public void Human()
     {
         if (doHuman)
         {
             HingeJoint h = transform.Find("CraneUnit").Find("ArmUnit").Find("Head").GetComponent<HingeJoint>();
             h.useMotor = true;
-            await Task.Delay(500);
-            h.useMotor = false;
+            StartCoroutine(DelayCoroutine(500, () =>
+            {
+                h.useMotor = false;
+            }));
         }
     }
 
-    public async void DownStopError()
+    public void DownStopError()
     {
         if (UnityEngine.Random.Range(1, downStopProbability[1] + 1) <= downStopProbability[0])
         {
             int downErrorTime = UnityEngine.Random.Range(1, 2001);
-            await Task.Delay(downErrorTime);
-            if (craneStatus == 6)
+            StartCoroutine(DelayCoroutine(downErrorTime, () =>
             {
-                ropeManager.DownForceStop();
-                craneStatus = 7;
-            }
+                if (craneStatus == 6)
+                {
+                    ropeManager.DownForceStop();
+                    craneStatus = 7;
+                }
+            }));
         }
     }
-    public async void UpStopError()
+    public void UpStopError()
     {
         if (UnityEngine.Random.Range(1, upStopErrorProbability[1] + 1) <= upStopErrorProbability[0])
         {
             int upErrorTime = UnityEngine.Random.Range(1, 2001);
-            await Task.Delay(upErrorTime);
-            if (craneStatus == 8)
+            StartCoroutine(DelayCoroutine(upErrorTime, () =>
             {
-                ropeManager.UpForceStop();
-                craneStatus = 9;
-            }
+                if (craneStatus == 8)
+                {
+                    ropeManager.UpForceStop();
+                    craneStatus = 9;
+                }
+            }));
         }
     }
 
-    public async void RopeBreak()
+    public void RopeBreak()
     {
         if (UnityEngine.Random.Range(1, ropeBreakProbability[1] + 1) <= ropeBreakProbability[0])
         {
             int waitTime = UnityEngine.Random.Range(500, 3001);
-            await Task.Delay(waitTime);
-            if (!ropeBroken)
+            StartCoroutine(DelayCoroutine(waitTime, () =>
             {
-                ropeBroken = true;
-                RopePoint r = ropeManager.ropePoint[ropeManager.ropePoint.Length - 1];
-                r.GetComponent<HingeJoint>().breakForce = 0.01f;
-            }
+                if (!ropeBroken)
+                {
+                    ropeBroken = true;
+                    RopePoint r = ropeManager.ropePoint[ropeManager.ropePoint.Length - 1];
+                    r.GetComponent<HingeJoint>().breakForce = 0.01f;
+                }
+            }));
         }
     }
 
@@ -274,9 +292,9 @@ public class Type3ManagerV2 : CraneManager
         return false;
     }
 
-    async void Update()
+    void Update()
     {
-        if (host.playable && craneStatus == 99 && Input.GetKeyDown(KeyCode.R)) Initialize();
+        if (host.playable && craneStatus == 99 && Input.GetKeyDown(KeyCode.R)) StartCoroutine(Initialize());
         if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
         else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
@@ -297,6 +315,7 @@ public class Type3ManagerV2 : CraneManager
         }
         else
         {
+            if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.C) && !probability) probability = true; // テスト用隠しコマンド
             if (craneStatus == 1)
             {
                 //コイン投入有効化;
@@ -304,7 +323,6 @@ public class Type3ManagerV2 : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     bp.Stop(0);
-                    Debug.Log("EnarcYm ROM: " + romVer);
                 }
                 DetectKey(craneStatus);     //右移動ボタン有効化;
             }
@@ -405,12 +423,14 @@ public class Type3ManagerV2 : CraneManager
                     DownStopError();
                     if (downTime > 0 && downTime <= 4600)
                     {
-                        await Task.Delay(downTime);
-                        if (craneStatus == 6)
+                        StartCoroutine(DelayCoroutine(downTime, () =>
                         {
-                            ropeManager.DownForceStop();
-                            craneStatus = 7;
-                        }
+                            if (craneStatus == 6)
+                            {
+                                ropeManager.DownForceStop();
+                                craneStatus = 7;
+                            }
+                        }));
                     }
                 }
                 if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
@@ -427,8 +447,10 @@ public class Type3ManagerV2 : CraneManager
                     armController.Close();
                     armController.MotorPower(armPowerConfig[0]);
                     upStopDisable = UpStopDisable();
-                    await Task.Delay(1000);
-                    if (craneStatus == 7) craneStatus = 8;
+                    StartCoroutine(DelayCoroutine(1000, () =>
+                    {
+                        if (craneStatus == 7) craneStatus = 8;
+                    }));
                 }
                 //アーム下降音再生停止;
                 //アーム掴む音再生;
@@ -460,8 +482,10 @@ public class Type3ManagerV2 : CraneManager
                     }
                     RopeBreak();
                     errorTimer.StartTimer();
-                    await Task.Delay(1500);
-                    if (releaseTiming == 0) armController.MotorPower(armPowerConfig[1]);
+                    StartCoroutine(DelayCoroutine(1500, () =>
+                    {
+                        if (releaseTiming == 0) armController.MotorPower(armPowerConfig[1]);
+                    }));
                 }
                 if (!sp.audioSource[2].isPlaying)
                     sp.Play(1);
@@ -481,8 +505,10 @@ public class Type3ManagerV2 : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     errorTimer.CancelTimer();
-                    await Task.Delay(200);
-                    if (craneStatus == 9) craneStatus = 10;
+                    StartCoroutine(DelayCoroutine(200, () =>
+                    {
+                        if (craneStatus == 9) craneStatus = 10;
+                    }));
                 }
                 //アーム上昇停止音再生;
                 //アーム上昇停止;
@@ -513,8 +539,10 @@ public class Type3ManagerV2 : CraneManager
                     coord.ResetBeforePush();
                     upStopDisable = false;
                     armController.Open();
-                    await Task.Delay(1000);
-                    craneStatus = 12;
+                    StartCoroutine(DelayCoroutine(1000, () =>
+                    {
+                        craneStatus = 12;
+                    }));
                 }
                 //アーム開く音再生;
                 //アーム開く;
@@ -531,14 +559,15 @@ public class Type3ManagerV2 : CraneManager
                         sp.Play(4, 1);
                     for (int i = 0; i < 12; i++)
                         isExecuted[i] = false;
-                    await Task.Delay(1500);
-
-                    if (creditSystem.creditDisplayed > 0)
-                        craneStatus = 1;
-                    else
-                        craneStatus = 0;
-                    //アーム閉じる音再生;
-                    //アーム閉じる;
+                    StartCoroutine(DelayCoroutine(1500, () =>
+                    {
+                        if (creditSystem.creditDisplayed > 0)
+                            craneStatus = 1;
+                        else
+                            craneStatus = 0;
+                        //アーム閉じる音再生;
+                        //アーム閉じる;
+                    }));
                 }
             }
 
@@ -624,62 +653,67 @@ public class Type3ManagerV2 : CraneManager
 
     public override void ButtonDown(int num)
     {
-        if (host.playable)
+        switch (num)
         {
-            switch (num)
-            {
-                case 1:
-                    if (craneStatus == 1 && !buttonPushed)
-                    {
-                        buttonPushed = true;
-                        craneStatus = 2;
-                        creditSystem.ResetPayment();
-                        int credit = creditSystem.PlayStart();
-                        if (credit < 0x100) credit3d.text = credit.ToString("X");
-                        else credit3d.text = "FF.";
-                        isExecuted[12] = false;
-                        probability = creditSystem.ProbabilityCheck();
-                        Debug.Log("Probability:" + probability);
-                    }
-                    break;
-                case 2:
-                    if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
-                    {
-                        buttonPushed = true;
-                        craneStatus = 4;
-                    }
-                    break;
-            }
+            case 1:
+                if (craneStatus == 1 && !buttonPushed)
+                {
+                    buttonPushed = true;
+                    craneStatus = 2;
+                    creditSystem.ResetPayment();
+                    int credit = creditSystem.PlayStart();
+                    if (credit < 0x100) credit3d.text = credit.ToString("X");
+                    else credit3d.text = "FF.";
+                    isExecuted[12] = false;
+                    probability = creditSystem.ProbabilityCheck();
+                    Debug.Log("Probability:" + probability);
+                }
+                break;
+            case 2:
+                if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
+                {
+                    buttonPushed = true;
+                    craneStatus = 4;
+                }
+                break;
         }
     }
 
-    public void ButtonUp(int num)
+    public override void ButtonUp(int num)
     {
-        if (host.playable)
+        switch (num)
         {
-            switch (num)
-            {
-                case 1:
-                    if (craneStatus == 2 && buttonPushed)
-                    {
-                        craneStatus = 3;
-                        buttonPushed = false;
-                    }
-                    break;
-                case 2:
-                    if (craneStatus == 4 && buttonPushed)
-                    {
-                        craneStatus = 5;
-                        buttonPushed = false;
-                    }
-                    break;
-            }
+            case 1:
+                if (craneStatus == 2 && buttonPushed)
+                {
+                    craneStatus = 3;
+                    buttonPushed = false;
+                }
+                break;
+            case 2:
+                if (craneStatus == 4 && buttonPushed)
+                {
+                    craneStatus = 5;
+                    buttonPushed = false;
+                }
+                break;
         }
     }
 
     public override void InsertCoin()
     {
         if (!isHibernate && host.playable && craneStatus >= 0 && craneStatus != 99)
+        {
+            int credit = creditSystem.Pay(100);
+            if (credit < 0x100) credit3d.text = credit.ToString("X");
+            else credit3d.text = "FF.";
+            if (credit > 0 && craneStatus == 0) craneStatus = 1;
+        }
+    }
+
+    public override void InsertCoinAuto()
+    {
+        if (!isHibernate && craneStatus >= 0 && craneStatus != 99)
         {
             int credit = creditSystem.Pay(100);
             if (credit < 0x100) credit3d.text = credit.ToString("X");

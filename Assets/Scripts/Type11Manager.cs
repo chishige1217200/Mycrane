@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 
 public class Type11Manager : CraneManager
 {
-    public int[] priceSet = new int[2];
-    public int[] timesSet = new int[2];
     [SerializeField] int[] downTime = new int[2];
     public bool isBonus { get; private set; } = false;
     bool[] isExecuted = new bool[17]; //各craneStatusで1度しか実行しない処理の管理
@@ -81,6 +79,7 @@ public class Type11Manager : CraneManager
         if (craneStatus == -1 && ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2))) craneStatus = 0;
         if (craneStatus > 0)
         {
+            if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.C) && !probability) probability = true; // テスト用隠しコマンド
             if (craneStatus == 1)
             {
                 if (!isExecuted[craneStatus])
@@ -367,63 +366,68 @@ public class Type11Manager : CraneManager
 
     public override void ButtonDown(int num)
     {
-        if (host.playable)
+        int credit = 0;
+        switch (num)
         {
-            int credit = 0;
-            switch (num)
-            {
-                case 1:
-                    if (craneStatus == 1 && !buttonPushed)
-                    {
-                        buttonPushed = true;
-                        craneStatus = 2;
-                        creditSystem.ResetPayment();
-                        credit = creditSystem.PlayStart();
-                        // if (credit < 10) credit3d.text = credit.ToString();
-                        // else credit3d.text = "9.";
-                        isExecuted[16] = false;
-                        probability = creditSystem.ProbabilityCheck();
-                        Debug.Log("Probability:" + probability);
-                    }
-                    break;
-                case 2:
-                    if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
-                    {
-                        buttonPushed = true;
-                        craneStatus = 4;
-                    }
-                    break;
-            }
+            case 1:
+                if (craneStatus == 1 && !buttonPushed)
+                {
+                    buttonPushed = true;
+                    craneStatus = 2;
+                    creditSystem.ResetPayment();
+                    credit = creditSystem.PlayStart();
+                    // if (credit < 10) credit3d.text = credit.ToString();
+                    // else credit3d.text = "9.";
+                    isExecuted[16] = false;
+                    probability = creditSystem.ProbabilityCheck();
+                    Debug.Log("Probability:" + probability);
+                }
+                break;
+            case 2:
+                if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
+                {
+                    buttonPushed = true;
+                    craneStatus = 4;
+                }
+                break;
         }
     }
 
-    public void ButtonUp(int num)
+    public override void ButtonUp(int num)
     {
-        if (host.playable)
+        switch (num)
         {
-            switch (num)
-            {
-                case 1:
-                    if (craneStatus == 2 && buttonPushed)
-                    {
-                        craneStatus = 3;
-                        buttonPushed = false;
-                    }
-                    break;
-                case 2:
-                    if (craneStatus == 4 && buttonPushed)
-                    {
-                        craneStatus = 5;
-                        buttonPushed = false;
-                    }
-                    break;
-            }
+            case 1:
+                if (craneStatus == 2 && buttonPushed)
+                {
+                    craneStatus = 3;
+                    buttonPushed = false;
+                }
+                break;
+            case 2:
+                if (craneStatus == 4 && buttonPushed)
+                {
+                    craneStatus = 5;
+                    buttonPushed = false;
+                }
+                break;
         }
     }
 
     public override void InsertCoin()
     {
         if (!isHibernate && host.playable && craneStatus >= 0)
+        {
+            int credit = creditSystem.Pay(100);
+            // if (credit < 10) credit3d.text = credit.ToString();
+            // else credit3d.text = "9.";
+            if (credit > 0 && craneStatus == 0) craneStatus = 1;
+        }
+    }
+
+    public override void InsertCoinAuto()
+    {
+        if (!isHibernate && craneStatus >= 0)
         {
             int credit = creditSystem.Pay(100);
             // if (credit < 10) credit3d.text = credit.ToString();

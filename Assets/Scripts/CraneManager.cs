@@ -6,9 +6,11 @@ public abstract class CraneManager : MonoBehaviour
 {
     protected int craneType;
     protected int craneStatus; //クレーン状態
+    public int[] priceSet = new int[2];
+    public int[] timesSet = new int[2];
     protected bool probability; //確率判定用
     protected int getSoundNum = -1;
-    protected CreditSystem creditSystem;
+    public CreditSystem creditSystem;
     public SEPlayer sp;
     public CraneBox craneBox;
     protected GetPoint getPoint;
@@ -40,7 +42,9 @@ public abstract class CraneManager : MonoBehaviour
 
     protected abstract void DetectKey(int num);
     public abstract void ButtonDown(int num);
+    public abstract void ButtonUp(int num);
     public abstract void InsertCoin();
+    public abstract void InsertCoinAuto();
     public int GetStatus()
     {
         return craneStatus;

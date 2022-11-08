@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Threading.Tasks;
 
 public class CreditSystem : ProbabilitySystem
 {
@@ -20,46 +19,56 @@ public class CreditSystem : ProbabilitySystem
     private SEPlayer sp;
     public Text Credit; //残クレジット
     //-------------------------------------------------
-    async void Start()
+    private IEnumerator DelayCoroutine(float miliseconds, Action action)
     {
-        base.Start();
-        await Task.Delay(100);
-        if (rateSet[0, 0] == 0 || rateSet[0, 1] == 0)
-        {
-            rateSet[0, 0] = 100;
-            rateSet[0, 1] = 1;
-        }
-        if (rateSet[1, 0] == 0 || rateSet[1, 1] == 0 || (float)rateSet[0, 0] / rateSet[0, 1] < (float)rateSet[1, 0] / rateSet[1, 1])
-        // 未入力の場合，低価格設定を反映 //高額のレートになるとコストが多くなる設定エラーのとき
-        {
-            rateSet[1, 0] = rateSet[0, 0];
-            rateSet[1, 1] = rateSet[0, 1];
-        }
-
-        priceSet[0].text = rateSet[0, 0].ToString();
-        timesSet[0].text = rateSet[0, 1].ToString();
-        if (rateSet[0, 0] == rateSet[1, 0] && rateSet[0, 1] == rateSet[1, 1]) // 単一プレイ回数設定時
-        {
-            priceSet[1].text = ""; //下段側は表示しない
-            timesSet[1].text = "";
-        }
-        else //2つのレート設定があるとき
-        {
-            priceSet[1].text = rateSet[1, 0].ToString();
-            timesSet[1].text = rateSet[1, 1].ToString();
-        }
-
-        Credit.text = "00";
+        yield return new WaitForSeconds(miliseconds / 1000f);
+        action?.Invoke();
     }
 
-    public async void SetHibernate()
+    new void Start()
     {
-        await Task.Delay(150);
-        Credit.text = "--";
-        timesSet[0].text = "-";
-        timesSet[1].text = "-";
-        priceSet[0].text = "---";
-        priceSet[1].text = "---";
+        base.Start();
+        StartCoroutine(DelayCoroutine(100, () =>
+        {
+            if (rateSet[0, 0] == 0 || rateSet[0, 1] == 0)
+            {
+                rateSet[0, 0] = 100;
+                rateSet[0, 1] = 1;
+            }
+            if (rateSet[1, 0] == 0 || rateSet[1, 1] == 0 || (float)rateSet[0, 0] / rateSet[0, 1] < (float)rateSet[1, 0] / rateSet[1, 1])
+            // 未入力の場合，低価格設定を反映 //高額のレートになるとコストが多くなる設定エラーのとき
+            {
+                rateSet[1, 0] = rateSet[0, 0];
+                rateSet[1, 1] = rateSet[0, 1];
+            }
+
+            priceSet[0].text = rateSet[0, 0].ToString();
+            timesSet[0].text = rateSet[0, 1].ToString();
+            if (rateSet[0, 0] == rateSet[1, 0] && rateSet[0, 1] == rateSet[1, 1]) // 単一プレイ回数設定時
+            {
+                priceSet[1].text = ""; //下段側は表示しない
+                timesSet[1].text = "";
+            }
+            else //2つのレート設定があるとき
+            {
+                priceSet[1].text = rateSet[1, 0].ToString();
+                timesSet[1].text = rateSet[1, 1].ToString();
+            }
+
+            Credit.text = "00";
+        }));
+    }
+
+    public void SetHibernate()
+    {
+        StartCoroutine(DelayCoroutine(150, () =>
+        {
+            Credit.text = "--";
+            timesSet[0].text = "-";
+            timesSet[1].text = "-";
+            priceSet[0].text = "---";
+            priceSet[1].text = "---";
+        }));
     }
 
     public int Pay(int cost)

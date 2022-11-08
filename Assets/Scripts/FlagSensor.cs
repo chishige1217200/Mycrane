@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class FlagSensor : MonoBehaviour
@@ -9,14 +7,22 @@ public class FlagSensor : MonoBehaviour
     bool isCollis;
     [SerializeField] bool timeValidation = true;
 
-    async void Unlock()
+    public void Unlock()
+    {
+        StartCoroutine(InternalUnlock());
+    }
+
+    IEnumerator InternalUnlock()
     {
         if (timeValidation)
         {
-            await Task.Delay(2000);
-            if (!isCollis) return;
+            yield return new WaitForSeconds(2);
+            if (isCollis && h.useLimits) h.useLimits = false;
         }
-        if (h.useLimits) h.useLimits = false;
+        else
+        {
+            if (h.useLimits) h.useLimits = false;
+        }
     }
 
     void OnTriggerEnter(Collider collider)

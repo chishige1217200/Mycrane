@@ -21,21 +21,26 @@ public class Timer : MonoBehaviour
         soundNum = num; //クレジット投入効果音番号登録
     }
 
-    public async void StartTimer()
+    public void StartTimer()
+    {
+        StartCoroutine(InternalStartTimer());
+    }
+
+    IEnumerator InternalStartTimer()
     {
         limitTimeNow = limitTime;
         while (limitTimeNow >= 0)
         {
             if (limitTimeNow == 0)
             {
-                await Task.Delay(1000);
+                yield return new WaitForSeconds(1);
                 break;
             }
             if (limitTimeNow <= thresholdTimeCount)
             {
                 if (soundNum != -1) sp.ForcePlay(soundNum);
             }
-            await Task.Delay(1000);
+            yield return new WaitForSeconds(1);
             limitTimeNow--;
         }
     }

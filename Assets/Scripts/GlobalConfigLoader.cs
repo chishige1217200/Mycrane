@@ -8,10 +8,14 @@ public class GlobalConfigLoader : MonoBehaviour
     void Start()
     {
         if (PlayerPrefs.GetInt("useUI") == 1)
+        {
             CraneManager.useUI = true;
+            CraneManagerV2.useUI = true;
+        }
         else
         {
             CraneManager.useUI = false;
+            CraneManagerV2.useUI = false;
             backButton.SetActive(false);
         }
 

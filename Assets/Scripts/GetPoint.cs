@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class GetPoint : MonoBehaviour
@@ -10,7 +9,11 @@ public class GetPoint : MonoBehaviour
     PrizePanel panel;
     Prize prize;
     MissionMode mission;
-
+    private IEnumerator DelayCoroutine(float miliseconds, Action action)
+    {
+        yield return new WaitForSeconds(miliseconds / 1000f);
+        action?.Invoke();
+    }
     void Start()
     {
         GameObject gb = GameObject.Find("GameManager");
@@ -23,7 +26,7 @@ public class GetPoint : MonoBehaviour
         craneManager = c;
     }
 
-    async void OnTriggerEnter(Collider collider)
+    void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "prize")
         {
@@ -39,9 +42,11 @@ public class GetPoint : MonoBehaviour
                 {
                     mission.GameClear();
                 }
-                await Task.Delay(5000);
-                if (prize.destroyObject != null) Destroy(prize.destroyObject);
-                else Destroy(collider.gameObject);
+                StartCoroutine(DelayCoroutine(5000, () =>
+                {
+                    if (prize.destroyObject != null) Destroy(prize.destroyObject);
+                    else Destroy(collider.gameObject);
+                }));
             }
         }
     }
