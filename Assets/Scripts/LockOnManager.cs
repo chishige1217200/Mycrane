@@ -279,57 +279,51 @@ public class LockOnManager : CraneManager
 
     public override void ButtonDown(int num)
     {
-        if (host.playable)
+        switch (num)
         {
-            switch (num)
-            {
-                case 1:
-                    if (craneStatus == 1 && !buttonPushed)
-                    {
-                        buttonPushed = true;
-                        craneStatus = 2;
-                        creditSystem.ResetPayment();
-                        int credit = creditSystem.PlayStart();
-                        if (credit < 0x100) credit3d.text = credit.ToString();
-                        else credit3d.text = "FF.";
-                        lc.ResetJudge();
-                        isExecuted[10] = false;
-                        //probability = creditSystem.ProbabilityCheck();
-                        //Debug.Log("Probability:" + probability);
-                    }
-                    break;
-                case 2:
-                    if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
-                    {
-                        buttonPushed = true;
-                        craneStatus = 4;
-                    }
-                    break;
-            }
+            case 1:
+                if (craneStatus == 1 && !buttonPushed)
+                {
+                    buttonPushed = true;
+                    craneStatus = 2;
+                    creditSystem.ResetPayment();
+                    int credit = creditSystem.PlayStart();
+                    if (credit < 0x100) credit3d.text = credit.ToString();
+                    else credit3d.text = "FF.";
+                    lc.ResetJudge();
+                    isExecuted[10] = false;
+                    //probability = creditSystem.ProbabilityCheck();
+                    //Debug.Log("Probability:" + probability);
+                }
+                break;
+            case 2:
+                if ((craneStatus == 3 && !buttonPushed) || (craneStatus == 4 && buttonPushed))
+                {
+                    buttonPushed = true;
+                    craneStatus = 4;
+                }
+                break;
         }
     }
 
     public override void ButtonUp(int num)
     {
-        if (host.playable)
+        switch (num)
         {
-            switch (num)
-            {
-                case 1:
-                    if (craneStatus == 2 && buttonPushed)
-                    {
-                        craneStatus = 3;
-                        buttonPushed = false;
-                    }
-                    break;
-                case 2:
-                    if (craneStatus == 4 && buttonPushed)
-                    {
-                        craneStatus = 5;
-                        buttonPushed = false;
-                    }
-                    break;
-            }
+            case 1:
+                if (craneStatus == 2 && buttonPushed)
+                {
+                    craneStatus = 3;
+                    buttonPushed = false;
+                }
+                break;
+            case 2:
+                if (craneStatus == 4 && buttonPushed)
+                {
+                    craneStatus = 5;
+                    buttonPushed = false;
+                }
+                break;
         }
     }
 

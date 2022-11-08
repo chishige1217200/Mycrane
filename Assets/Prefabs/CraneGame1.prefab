@@ -10586,6 +10586,7 @@ GameObject:
   - component: {fileID: 4492863929762378587}
   - component: {fileID: 4492863929762378584}
   - component: {fileID: 8926576898109348163}
+  - component: {fileID: 2378248085276015357}
   m_Layer: 0
   m_Name: 1P
   m_TagString: Untagged
@@ -10627,11 +10628,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad8399aacb0ba146b17b6210bbad40d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sp: {fileID: 4492863930639203534}
-  host: {fileID: 7960573069485182724}
-  isHibernate: 0
   priceSet: 64000000f4010000
   timesSet: 0100000006000000
+  creditSystem: {fileID: 4492863930454330583}
+  sp: {fileID: 4492863930639203534}
+  craneBox: {fileID: 4492863930251427074}
+  host: {fileID: 7960573069485182724}
+  isHibernate: 0
   leftCatchArmpower: 10
   rightCatchArmpower: 10
   armApertures: 80
@@ -10668,6 +10671,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetObjects: {fileID: 5915032210075156462}
   player2: 0
+--- !u!114 &2378248085276015357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4492863929762378585}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04328d22e4ac1c043be25e34841bdb11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 4492863929762378584}
+  host: {fileID: 7960573069485182724}
+  coinInterval:
+  - 1
+  - 3
+  playInterval:
+  - 15
+  - 20
+  button1Interval:
+  - 0.1
+  - 3
+  button2Interval:
+  - 0.1
+  - 3
+  button3: 0
+  button3Interval:
+  - 0
+  - 0
 --- !u!1 &4492863929779946520
 GameObject:
   m_ObjectHideFlags: 0
@@ -10679,6 +10712,7 @@ GameObject:
   - component: {fileID: 4492863929779946523}
   - component: {fileID: 4492863929779946522}
   - component: {fileID: 7001319977762803117}
+  - component: {fileID: 5585900643951484561}
   m_Layer: 0
   m_Name: 2P
   m_TagString: Untagged
@@ -10718,11 +10752,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad8399aacb0ba146b17b6210bbad40d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sp: {fileID: 7472821619159484049}
-  host: {fileID: 7960573069485182724}
-  isHibernate: 0
   priceSet: 64000000f4010000
   timesSet: 0100000006000000
+  creditSystem: {fileID: 4492863929664403390}
+  sp: {fileID: 7472821619159484049}
+  craneBox: {fileID: 4492863931291733529}
+  host: {fileID: 7960573069485182724}
+  isHibernate: 0
   leftCatchArmpower: 10
   rightCatchArmpower: 10
   armApertures: 80
@@ -10759,6 +10795,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetObjects: {fileID: 3548179694486824869}
   player2: 1
+--- !u!114 &5585900643951484561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4492863929779946520}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04328d22e4ac1c043be25e34841bdb11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 4492863929779946522}
+  host: {fileID: 7960573069485182724}
+  coinInterval:
+  - 1
+  - 3
+  playInterval:
+  - 15
+  - 20
+  button1Interval:
+  - 0.1
+  - 3
+  button2Interval:
+  - 0.1
+  - 3
+  button3: 0
+  button3Interval:
+  - 0
+  - 0
 --- !u!1 &4492863929785643352
 GameObject:
   m_ObjectHideFlags: 0

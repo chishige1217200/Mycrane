@@ -12036,6 +12036,7 @@ GameObject:
   - component: {fileID: 8292428784426687509}
   - component: {fileID: 8292428784426687510}
   - component: {fileID: 2744780323240246559}
+  - component: {fileID: 867289129885038989}
   m_Layer: 0
   m_Name: CraneGame3
   m_TagString: Untagged
@@ -12082,13 +12083,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8811487b625a8d243b5965a3f44408ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  priceSet: 6400000064000000
+  timesSet: 0100000001000000
   creditSystem: {fileID: 0}
   sp: {fileID: 8292428783415645056}
   craneBox: {fileID: 0}
   host: {fileID: 6802760231548339779}
   isHibernate: 0
-  priceSet: 6400000064000000
-  timesSet: 0100000001000000
   armPowerConfig:
   - 100
   - 50
@@ -12117,6 +12118,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetObjects: {fileID: 8459664721417456366}
   player2: 0
+--- !u!114 &867289129885038989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8292428784426687511}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04328d22e4ac1c043be25e34841bdb11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 8292428784426687510}
+  host: {fileID: 6802760231548339779}
+  coinInterval:
+  - 1
+  - 2
+  playInterval:
+  - 10
+  - 15
+  button1Interval:
+  - 0.1
+  - 7.5
+  button2Interval:
+  - 0.1
+  - 7.5
+  button3: 0
+  button3Interval:
+  - 0
+  - 0
 --- !u!1 &8292428784456400021
 GameObject:
   m_ObjectHideFlags: 0

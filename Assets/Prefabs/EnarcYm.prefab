@@ -6822,6 +6822,7 @@ GameObject:
   - component: {fileID: 345126676771130311}
   - component: {fileID: 2100664539048202054}
   - component: {fileID: 345126676771130328}
+  - component: {fileID: 1301647393841800429}
   m_Layer: 0
   m_Name: EnarcYm
   m_TagString: Untagged
@@ -6868,13 +6869,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edda3996bd804d746a922ff710a0955c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  priceSet: 6400000000000000
+  timesSet: 0100000000000000
   creditSystem: {fileID: 0}
   sp: {fileID: 345126676261368821}
   craneBox: {fileID: 0}
   host: {fileID: 345126677075385575}
   isHibernate: 0
-  priceSet: 6400000000000000
-  timesSet: 0100000000000000
   armPowerConfig:
   - 80
   - 20
@@ -6915,6 +6916,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetObjects: {fileID: 345126676786913676}
   player2: 0
+--- !u!114 &1301647393841800429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 345126676771130330}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04328d22e4ac1c043be25e34841bdb11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 345126676771130311}
+  host: {fileID: 345126677075385575}
+  coinInterval:
+  - 1
+  - 3
+  playInterval:
+  - 15
+  - 20
+  button1Interval:
+  - 0.1
+  - 5
+  button2Interval:
+  - 0.1
+  - 5
+  button3: 0
+  button3Interval:
+  - 0
+  - 0
 --- !u!1 &345126676786913676
 GameObject:
   m_ObjectHideFlags: 0

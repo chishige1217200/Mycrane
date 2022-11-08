@@ -5565,6 +5565,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stretchRefusedFlag: 0
   shrinkRefusedFlag: 0
+  stretchLimit: 0.95
+  shrinkLimit: 0
+  moveSpeed: 0.01
 --- !u!1 &2770176209692392898
 GameObject:
   m_ObjectHideFlags: 0
@@ -7083,6 +7086,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6153329544871537595}
   - component: {fileID: 6153329544871537594}
+  - component: {fileID: 145527919118501217}
   m_Layer: 0
   m_Name: LockOn
   m_TagString: Untagged
@@ -7127,13 +7131,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844252101b170ae4b989f6b07fab817d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  priceSet: 0000000000000000
+  timesSet: 0000000000000000
+  creditSystem: {fileID: 0}
   sp: {fileID: 6153329545873663022}
   craneBox: {fileID: 0}
   host: {fileID: 8654202105530561005}
   isHibernate: 0
-  priceSet: 0000000000000000
-  timesSet: 0000000000000000
   credit3d: {fileID: 312408444877740516}
+--- !u!114 &145527919118501217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6153329544871537593}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04328d22e4ac1c043be25e34841bdb11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 6153329544871537594}
+  host: {fileID: 8654202105530561005}
+  coinInterval:
+  - 1
+  - 3
+  playInterval:
+  - 10
+  - 15
+  button1Interval:
+  - 0.1
+  - 4
+  button2Interval:
+  - 0.1
+  - 4
+  button3: 0
+  button3Interval:
+  - 0
+  - 0
 --- !u!1 &6153329544916805800
 GameObject:
   m_ObjectHideFlags: 0
