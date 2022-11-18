@@ -23,6 +23,11 @@ public class GlobalConfigLoader : MonoBehaviour
         if (PlayerPrefs.GetInt("useCentralIcon") == 0)
             GameObject.Find("FirstPerson-AIO").GetComponent<FirstPersonAIO>().autoCrosshair = false;
 
+        if (PlayerPrefs.GetInt("doAutoPlay") == 1)
+            AutoControllerFlag.doAutoPlay = true;
+        else
+            AutoControllerFlag.doAutoPlay = false;
+
         if (hm == null)
             Debug.LogWarning("HelpMessengerがセットされていません");
         else

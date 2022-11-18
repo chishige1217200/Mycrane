@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutoContoller : MonoBehaviour
+public class AutoContollerB : MonoBehaviour
 {
     [SerializeField] CraneManager target;
     public MachineHost host;
@@ -54,7 +54,10 @@ public class AutoContoller : MonoBehaviour
 
     void Update()
     {
-        autoPlay = !host.playable;
+        if (AutoControllerFlag.doAutoPlay)
+            autoPlay = !host.playable;
+        else
+            autoPlay = false;
     }
 
     void Operate()

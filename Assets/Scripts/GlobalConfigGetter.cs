@@ -17,5 +17,9 @@ public class GlobalConfigGetter : MonoBehaviour
             else
                 t.isOn = false;
         }
+        else
+        {
+            t.isOn = true;
+        }
     }
 }
