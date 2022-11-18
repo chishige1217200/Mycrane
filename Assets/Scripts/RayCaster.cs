@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RayCaster : MonoBehaviour
 {
-    MachineHost host; // 現在プレイ中の筐体情報
+    public MachineHost host; // 現在プレイ中の筐体情報
     PrizePanel panel;
     Prize prize;
     bool isFirst = true; // 初回時のみtrue

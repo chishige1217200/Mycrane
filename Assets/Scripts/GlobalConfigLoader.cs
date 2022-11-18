@@ -5,6 +5,7 @@ using UnityEngine;
 public class GlobalConfigLoader : MonoBehaviour
 {
     [SerializeField] GameObject backButton;
+    [SerializeField] HelpMessnger hm;
     void Start()
     {
         if (PlayerPrefs.GetInt("useUI") == 1)
@@ -21,5 +22,15 @@ public class GlobalConfigLoader : MonoBehaviour
 
         if (PlayerPrefs.GetInt("useCentralIcon") == 0)
             GameObject.Find("FirstPerson-AIO").GetComponent<FirstPersonAIO>().autoCrosshair = false;
+
+        if (hm == null)
+            Debug.LogWarning("HelpMessengerがセットされていません");
+        else
+        {
+            if (PlayerPrefs.GetInt("useUI") == 1)
+            {
+                hm.useUI = true;
+            }
+        }
     }
 }
