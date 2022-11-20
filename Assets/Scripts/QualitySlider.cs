@@ -7,6 +7,8 @@ public class QualitySlider : MonoBehaviour
 {
     Slider s;
     [SerializeField] Text QualityText;
+    [SerializeField] AudioSource sliderSE;
+    bool isFirst = true;
     [SerializeField] string[] qualitymessages = new string[6];
     void Start()
     {
@@ -16,8 +18,10 @@ public class QualitySlider : MonoBehaviour
     }
     public void ApplyConfiguration()
     {
+        if(!isFirst) sliderSE.PlayOneShot(sliderSE.clip);
         QualityText.text = qualitymessages[((int)s.value)];
         if (s.value != QualitySettings.GetQualityLevel())
             QualitySettings.SetQualityLevel(((int)s.value));
+        isFirst = false;
     }
 }
