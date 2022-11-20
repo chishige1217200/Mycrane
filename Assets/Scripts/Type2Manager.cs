@@ -118,6 +118,8 @@ public class Type2Manager : CraneManager
         {
             await Task.Delay(100);
         }
+
+        host.manualCode = 2 + operationType;
         craneStatus = -1;
         armController.Open();
     }

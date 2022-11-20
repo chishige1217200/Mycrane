@@ -148,6 +148,7 @@ public class Type1Manager : CraneManager
         if (downRestriction < 100) downLimit.localPosition = new Vector3(downLimit.localPosition.x, 1.39f - 0.0068f * downRestriction, downLimit.localPosition.z);
         craneBox.goPoint = startPoint;
 
+        host.manualCode = 1;
         craneStatus = -2;
     }
 

@@ -60,6 +60,7 @@ public class LockOnManager : CraneManager
             for (int i = 0; i < 11; i++)
                 isExecuted[i] = false;
 
+            host.manualCode = 18;
             craneStatus = -1;
             lc.ResetJudge();
         }));

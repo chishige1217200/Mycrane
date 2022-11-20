@@ -5,6 +5,7 @@ using UnityEngine;
 public class GlobalConfigLoader : MonoBehaviour
 {
     [SerializeField] GameObject backButton;
+    [SerializeField] GameObject manualButton;
     [SerializeField] HelpMessnger hm;
     void Start()
     {
@@ -18,6 +19,7 @@ public class GlobalConfigLoader : MonoBehaviour
             CraneManager.useUI = false;
             CraneManagerV2.useUI = false;
             backButton.SetActive(false);
+            manualButton.SetActive(false);
         }
 
         if (PlayerPrefs.GetInt("useCentralIcon") == 0)

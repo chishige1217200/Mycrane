@@ -60,6 +60,7 @@ public class TetrasJewelManager : CraneManagerV2
         creditSystem.SetCreditSound(0);
         getPoint.SetManager(this);
 
+        host.manualCode = 19;
         craneStatus = -1;
     }
 

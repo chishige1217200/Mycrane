@@ -201,6 +201,7 @@ public class Type3ManagerV2 : CraneManager
             //ropeManager.SetDownSpeed(0.0015f);
             //ResetCoordinate();
 
+            host.manualCode = 20;
             craneStatus = -1;
         }
     }

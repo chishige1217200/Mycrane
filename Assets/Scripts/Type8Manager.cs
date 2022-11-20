@@ -96,6 +96,7 @@ public class Type8Manager : CraneManager
         for (int i = 0; i < 13; i++)
             isExecuted[i] = false;
 
+        host.manualCode = 10;
         IncrimentStatus();
     }
 

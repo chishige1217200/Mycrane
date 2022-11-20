@@ -352,6 +352,7 @@ public class Type12Manager : CraneManager
         armController.SetLimit(armApertures);
         armController.Close(30f);
 
+        host.manualCode = 15 + operationType;
         craneStatus = -1;
     }
 
