@@ -33,7 +33,7 @@ public class GetPointV2 : MonoBehaviour
             craneManager.GetPrize();
             if (collider.gameObject.TryGetComponent(out prize) && autoDestroy)
             {
-                if (mission == null)
+                if (mission == null || !mission.enabled)
                 {
                     panel.SetPrizeName(prize.prizeName);
                     panel.PanelActive(true);
