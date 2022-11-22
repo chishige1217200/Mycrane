@@ -76,7 +76,7 @@ public class HelpMessnger : MonoBehaviour
             for (int i = 0; i < manualPanels.Count; i++)
                 manualPanels[i].gameObject.SetActive(false);
 
-            if (rc.host.manualCode - 1 < manualPanels.Count)
+            if (rc.host.manualCode - 1 < manualPanels.Count && rc.host.manualCode > 0)
                 manualPanels[rc.host.manualCode - 1].gameObject.SetActive(true);
         }
     }
