@@ -6,7 +6,6 @@ public class NoOperationTimer : MonoBehaviour
 {
     SceneChanger sc;
     float startTime;
-    [SerializeField] float thresholdSeconds = 60f;
     // Start is called before the first frame update
     void Start()
     {

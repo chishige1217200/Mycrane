@@ -53,7 +53,9 @@ public abstract class CraneManagerV2 : MonoBehaviour
 
     protected abstract void DetectKey(int num);
     public abstract void ButtonDown(int num);
+    public abstract void ButtonUp(int num);
     public abstract void InsertCoin();
+    public abstract void InsertCoinAuto();
     protected abstract void FirstStatusEvent(int status);
 
 

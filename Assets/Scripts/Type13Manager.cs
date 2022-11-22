@@ -39,6 +39,7 @@ public class Type13Manager : CraneManager
         creditSystem.SetCreditSound(0);
         getPoint.SetManager(this);
         getSoundNum = 6;
+        host.manualCode = 17;
     }
 
     // Update is called once per frame

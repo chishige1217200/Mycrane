@@ -84,6 +84,7 @@ public class Type7Manager : CraneManager
         for (int i = 0; i < 12; i++)
             isExecuted[i] = false;
 
+        host.manualCode = 9;
         craneStatus = -1;
     }
 

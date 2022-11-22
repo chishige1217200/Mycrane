@@ -5,6 +5,7 @@ using UnityEngine;
 public class PanelButton : MonoBehaviour
 {
     [SerializeField] GameObject panel;
+    [SerializeField] AudioSource closeSE; // 異なるゲームオブジェクトにアタッチしておくこと
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +25,7 @@ public class PanelButton : MonoBehaviour
 
     public void DisShow()
     {
+        if (closeSE != null) closeSE.PlayOneShot(closeSE.clip);
         panel.SetActive(false);
     }
 }

@@ -66,6 +66,7 @@ public class Type11Manager : CraneManager
         for (int i = 0; i < isExecuted.Length; i++)
             isExecuted[i] = false;
 
+        host.manualCode = 14;
         craneStatus = -1;
     }
 

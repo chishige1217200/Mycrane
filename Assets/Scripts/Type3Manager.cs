@@ -93,6 +93,7 @@ public class Type3Manager : CraneManager
         for (int i = 0; i < 12; i++)
             isExecuted[i] = false;
 
+        host.manualCode = 4;
         craneStatus = -1;
     }
 

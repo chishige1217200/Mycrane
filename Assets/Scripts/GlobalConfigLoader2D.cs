@@ -8,5 +8,6 @@ public class GlobalConfigLoader2D : MonoBehaviour
     {
         CraneManager.useUI = true;
         CraneManagerV2.useUI = true;
+        AutoControllerFlag.doAutoPlay = true;
     }
 }

@@ -9,7 +9,7 @@ public class Type4Manager : CraneManager
     [SerializeField] float armApertures = 80f; //開口率
     [SerializeField] float[] boxRestrictions = new float[2]; //横・縦の順で移動制限設定
     [SerializeField] float downRestriction = 100f;
-    [SerializeField] int operationType = 1; //0:ボタン式，1:レバー式
+    public int operationType = 1; //0:ボタン式，1:レバー式
     [SerializeField] int catchLong = 2000; //キャッチに要する時間(m秒)
     [SerializeField] int catchTiming = 2000; //キャッチが始まるまでの時間(m秒)
     [SerializeField] int backTime = 1000; //戻り動作が始まるまでの時間(m秒)
@@ -181,6 +181,7 @@ public class Type4Manager : CraneManager
         armController.SetLimit(armApertures);
         armController.Close(30f);
 
+        host.manualCode = 5 + operationType;
         craneStatus = -1;
     }
 

@@ -109,6 +109,7 @@ public class Type10Manager : CraneManager
         }
         armController.Close();
 
+        host.manualCode = 12 + operationType;
         craneStatus = -1;
     }
 

@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutoContoller : MonoBehaviour
+public class AutoContollerB2 : MonoBehaviour
 {
-    [SerializeField] CraneManager target;
+    [SerializeField] CraneManagerV2 target;
     public MachineHost host;
     bool autoPlay
     {
@@ -54,7 +54,10 @@ public class AutoContoller : MonoBehaviour
 
     void Update()
     {
-        autoPlay = !host.playable;
+        if (AutoControllerFlag.doAutoPlay)
+            autoPlay = !host.playable;
+        else
+            autoPlay = false;
     }
 
     void Operate()
@@ -64,8 +67,8 @@ public class AutoContoller : MonoBehaviour
 
     private IEnumerator AutoOperate()
     {
-        yield return new WaitForSeconds(10f);
         Debug.Log("Start AutoControl");
+        yield return new WaitForSeconds(UnityEngine.Random.Range(15f, 20f));
         target.InsertCoinAuto();
         for (int i = 1; i < target.priceSet[0] / 100; i++)
         {

@@ -5,24 +5,27 @@ using UnityEngine.UI;
 
 public class GlobalConfigSetter : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] AudioSource checkSE;
+    bool useSE = false;
+
     void Start()
     {
-        if (!PlayerPrefs.HasKey("useUI"))
-            PlayerPrefs.SetInt("useUI", 1);
-        if (!PlayerPrefs.HasKey("useCentralIcon"))
-            PlayerPrefs.SetInt("useCentralIcon", 1);
+        Invoke("EnableSE", 0.1f);
+    }
 
-        PlayerPrefs.Save();
+    void EnableSE()
+    {
+        useSE = true;
     }
 
     public void SetTogglePrefs(Toggle t)
     {
+        if (useSE)
+            checkSE.PlayOneShot(checkSE.clip);
         if (t.isOn)
             PlayerPrefs.SetInt(t.gameObject.name, 1);
         else
             PlayerPrefs.SetInt(t.gameObject.name, 0);
         PlayerPrefs.Save();
     }
-
 }

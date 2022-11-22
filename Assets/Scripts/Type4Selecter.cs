@@ -7,11 +7,14 @@ public class Type4Selecter : MonoBehaviour
 {
     [SerializeField] Type4Manager[] manager = new Type4Manager[2];
     [SerializeField] Type4VideoManager[] videoManager = new Type4VideoManager[2];
+    [SerializeField] int operationType = 1;
     BGMPlayer bp;
     SEPlayer[] sp = new SEPlayer[2];
 
     void Start()
     {
+        manager[0].operationType = operationType;
+        manager[1].operationType = operationType;
         int temp = Random.Range(0, videoManager[0].videoClips.Length);
         bp = transform.Find("BGM").GetComponent<BGMPlayer>();
         sp[0] = transform.Find("1P").Find("SE").GetComponent<SEPlayer>();
