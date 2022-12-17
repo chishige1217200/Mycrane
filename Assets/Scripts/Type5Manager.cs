@@ -427,25 +427,39 @@ public class Type5Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    if (prizezoneType == 9)
+                    switch (soundType)
                     {
-                        craneBox.goPoint = homePoint;
-                        craneBox.goPositionFlag = true;
+                        case 0:
+                        case 1:
+                        case 2:
+                            sp.Stop(4);
+                            break;
+                        case 3:
+                            sp.Stop(14);
+                            break;
                     }
                     await Task.Delay(200);
-                    if (probability)
+                    if (craneStatus == 9)
                     {
-                        armLPower = armLPowerConfigSuccess[1];
-                        armRPower = armRPowerConfigSuccess[1];
+                        if (probability)
+                        {
+                            armLPower = armLPowerConfigSuccess[1];
+                            armRPower = armRPowerConfigSuccess[1];
+                        }
+                        else
+                        {
+                            armLPower = armLPowerConfig[1];
+                            armRPower = armRPowerConfig[1];
+                        }
+                        armController.SetMotorPower(armLPower, 0);
+                        armController.SetMotorPower(armRPower, 1);
+                        if (prizezoneType == 9)
+                        {
+                            craneBox.goPoint = homePoint;
+                            craneBox.goPositionFlag = true;
+                        }
+                        craneStatus = 10;
                     }
-                    else
-                    {
-                        armLPower = armLPowerConfig[1];
-                        armRPower = armRPowerConfig[1];
-                    }
-                    armController.SetMotorPower(armLPower, 0);
-                    armController.SetMotorPower(armRPower, 1);
-                    if (craneStatus == 9) craneStatus = 10;
                 }
             }
 
@@ -459,11 +473,9 @@ public class Type5Manager : CraneManager
                         case 0:
                         case 1:
                         case 2:
-                            sp.Stop(4);
                             sp.Play(6);
                             break;
                         case 3:
-                            sp.Stop(14);
                             sp.Play(9);
                             break;
                     }

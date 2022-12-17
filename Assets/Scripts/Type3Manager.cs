@@ -17,6 +17,7 @@ public class Type3Manager : CraneManager
     Type3ArmController armController;
     BaseLifter ropeManager;
     ArmControllerSupport support;
+    CraneBoxSound cbs;
     [SerializeField] TextMesh credit3d;
     private IEnumerator DelayCoroutine(float miliseconds, Action action)
     {
@@ -58,6 +59,7 @@ public class Type3Manager : CraneManager
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
+        cbs = temp.Find("CraneBox").GetComponent<CraneBoxSound>();
 
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(sp);
@@ -95,6 +97,7 @@ public class Type3Manager : CraneManager
 
         host.manualCode = 4;
         craneStatus = -1;
+        cbs.MoveSound(true);
     }
 
     void Update()
@@ -104,7 +107,11 @@ public class Type3Manager : CraneManager
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
 
         if (craneStatus == -1)
-            if (craneBox.CheckPos(1)) craneStatus = 0;
+            if (craneBox.CheckPos(1)) 
+            {
+                cbs.MoveSound(false);
+                craneStatus = 0;
+            }
 
         if (craneStatus == 0)
         {
@@ -155,6 +162,11 @@ public class Type3Manager : CraneManager
             {
                 //右移動中
                 bp.Stop(soundType);
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    cbs.MoveSound(true);
+                }
                 DetectKey(craneStatus);
                 //コイン投入無効化;
                 switch (soundType)
@@ -184,6 +196,11 @@ public class Type3Manager : CraneManager
 
             if (craneStatus == 3)
             {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    cbs.MoveSound(false);
+                }
                 DetectKey(craneStatus);         //奥移動ボタン有効化;
                 //右移動効果音ループ再生停止;
             }
@@ -191,6 +208,11 @@ public class Type3Manager : CraneManager
             if (craneStatus == 4)
             {
                 //奥移動中
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    cbs.MoveSound(true);
+                }
                 DetectKey(craneStatus);
                 //クレーン奥移動;
                 switch (soundType)
@@ -224,6 +246,7 @@ public class Type3Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    cbs.MoveSound(false);
                     int waitTime = 0;
                     if (soundType != 2) armController.Open();
                     switch (soundType)
@@ -375,6 +398,7 @@ public class Type3Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    cbs.MoveSound(true);
                     switch (soundType)
                     {
                         case 0:
@@ -401,6 +425,7 @@ public class Type3Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    cbs.MoveSound(false);
                     armController.Open();
                     int waitTime = 1000;
                     switch (soundType)

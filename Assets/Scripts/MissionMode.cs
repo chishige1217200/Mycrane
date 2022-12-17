@@ -42,6 +42,8 @@ public class MissionMode : MonoBehaviour
                 case 5:
                 case 6:
                 case 10:
+                case 11:
+                case 12:
                     playerCount = 2;
                     c[1] = target.transform.Find("2P").GetComponent<CraneManager>();
                     creditSystem[0] = target.transform.Find("1P").Find("CreditSystem").GetComponent<CreditSystem>();

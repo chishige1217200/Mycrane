@@ -22,6 +22,7 @@ public class Type1Manager : CraneManager
     TwinArmController armController;
     ArmUnitLifter lifter;
     ArmControllerSupport support;
+    CraneBoxSound cbs;
     ArmNail[] nail = new ArmNail[2];
     [SerializeField] TextMesh credit3d;
     [SerializeField] TextMesh[] preset = new TextMesh[4];
@@ -98,6 +99,7 @@ public class Type1Manager : CraneManager
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
+        cbs = temp.Find("CraneBox").GetComponent<CraneBoxSound>();
 
         // ロープにマネージャー情報をセット
         creditSystem.SetSEPlayer(sp);
@@ -150,6 +152,7 @@ public class Type1Manager : CraneManager
 
         host.manualCode = 1;
         craneStatus = -2;
+        cbs.MoveSound(true);
     }
 
     async void Update()
@@ -161,12 +164,18 @@ public class Type1Manager : CraneManager
 
         if (craneStatus == -2 && ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2)))
         {
+            cbs.MoveSound(false);
             craneStatus = -1;
             craneBox.goPositionFlag = true;
+            cbs.MoveSound(true);
         }
         if (craneStatus == -1)
         {
-            if (craneBox.CheckPos(9)) craneStatus = 0;
+            if (craneBox.CheckPos(9))
+            {
+                cbs.MoveSound(false);
+                craneStatus = 0;
+            }
         }
 
         if (craneStatus > 0)
@@ -181,6 +190,11 @@ public class Type1Manager : CraneManager
             if (craneStatus == 2)
             { //右移動中
               //コイン投入無効化;
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    cbs.MoveSound(true);
+                }
                 DetectKey(craneStatus);
                 //クレーン右移動;
                 switch (soundType)
@@ -209,6 +223,11 @@ public class Type1Manager : CraneManager
 
             if (craneStatus == 3)
             {
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    cbs.MoveSound(false);
+                }
                 DetectKey(craneStatus);
                 switch (soundType)
                 {
@@ -226,6 +245,11 @@ public class Type1Manager : CraneManager
             if (craneStatus == 4)
             { //奥移動中
               //クレーン奥移動;
+                if (!isExecuted[craneStatus])
+                {
+                    isExecuted[craneStatus] = true;
+                    cbs.MoveSound(true);
+                }
                 DetectKey(craneStatus);
                 switch (soundType)
                 {
@@ -260,6 +284,7 @@ public class Type1Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    cbs.MoveSound(false);
                     armController.Open();
                     await Task.Delay(1000);
                     if (craneStatus == 5) craneStatus = 6;
@@ -370,11 +395,6 @@ public class Type1Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    if (prizezoneType == 9)
-                    {
-                        craneBox.goPoint = homePoint;
-                        craneBox.goPositionFlag = true;
-                    }
                     switch (soundType)
                     {
                         case 0:
@@ -385,14 +405,26 @@ public class Type1Manager : CraneManager
                             sp.Stop(10);
                             break;
                     }
-                    await Task.Delay(200);
-                    if (craneStatus == 9) craneStatus = 10;
+                    await Task.Delay(500);
+                    if (craneStatus == 9)
+                    {
+                        if (prizezoneType == 9)
+                        {
+                            craneBox.goPoint = homePoint;
+                            craneBox.goPositionFlag = true;
+                        }
+                        cbs.MoveSound(true);
+                        craneStatus = 10;
+                    }
                 }
             }
 
             if (craneStatus == 10)
             {
-                if (craneBox.CheckPos(prizezoneType)) craneStatus = 11;
+                if (craneBox.CheckPos(prizezoneType))
+                {
+                    craneStatus = 11;
+                }
                 //アーム獲得口ポジション移動音再生;
                 //アーム獲得口ポジションへ;
             }
@@ -402,6 +434,7 @@ public class Type1Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    cbs.MoveSound(false);
                     armController.SetLimit(100f); // アーム開口度を100に
                     armController.Open();
                     await Task.Delay(2000);
@@ -419,7 +452,11 @@ public class Type1Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     armController.Close(50f);
                     await Task.Delay(1000);
-                    if (craneStatus == 12) craneStatus = 13;
+                    if (craneStatus == 12)
+                    {
+                        cbs.MoveSound(true);
+                        craneStatus = 13;
+                    }
                 }
                 //アーム閉じる音再生;
                 //アーム閉じる;
@@ -430,6 +467,11 @@ public class Type1Manager : CraneManager
             {
                 if ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2))
                 {
+                    if (!isExecuted[craneStatus])
+                    {
+                        isExecuted[craneStatus] = true;
+                        cbs.MoveSound(false);
+                    }
                     await Task.Delay(1000);
                     if (craneStatus == 13) craneStatus = 14;
                 }
@@ -446,11 +488,13 @@ public class Type1Manager : CraneManager
 
                     craneBox.goPoint = startPoint;
                     craneBox.goPositionFlag = true;
+                    cbs.MoveSound(true);
                 }
                 if (isExecuted[craneStatus])
                 {
                     if (craneBox.CheckPos(9))
                     {
+                        cbs.MoveSound(false);
                         if (creditSystem.creditDisplayed > 0)
                             craneStatus = 1;
                         else
