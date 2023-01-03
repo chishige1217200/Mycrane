@@ -7,7 +7,7 @@ public class CraneUnitRoter : MonoBehaviour
     bool rightRefusedFlag = false; // trueなら、その方向に移動禁止
     bool leftRefusedFlag = false;
     public float[] limit = new float[2];　// Left-Right
-    float rotateSpeed = 0.2f; // 度数法 実際の回転数は0.2f * 60 = 12
+    [SerializeField] float rotateSpeed = 0.2f; // 度数法 実際の回転数は0.2f * 60 = 12
 
     void Update()
     {
