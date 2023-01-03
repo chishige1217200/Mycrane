@@ -169,11 +169,11 @@ public class EnarcYm2Manager : CraneManagerV2
             }
             if (craneStatus == 8)
             {
-                if (lifter.UpFinished() && craneStatus == 8) craneStatus = 10;
+                if (lifter.UpFinished() && craneStatus == 8) craneStatus = 9;
             }
             if (craneStatus == 10)
             {
-                if (craneBox.CheckPos(8)) craneStatus = 11;
+                if (roter.CheckPos(3) && craneBox.CheckPos(8)) craneStatus = 11;
             }
             if (craneStatus == 11)
             {
@@ -225,8 +225,8 @@ public class EnarcYm2Manager : CraneManagerV2
                         {
                             creditSystem.ResetPayment();
                             int credit = creditSystem.PlayStart();
-                            if (credit < 100) credit3d.text = credit.ToString("D2");
-                            else credit3d.text = "99.";
+                            if (credit < 10) credit3d.text = credit.ToString("D1");
+                            else credit3d.text = "9.";
                             //probability = creditSystem.ProbabilityCheck();
                             //Debug.Log("Probability:" + probability);
                         }
@@ -270,8 +270,8 @@ public class EnarcYm2Manager : CraneManagerV2
                     craneStatus = 2;
                     creditSystem.ResetPayment();
                     int credit = creditSystem.PlayStart();
-                    if (credit < 100) credit3d.text = credit.ToString("D2");
-                    else credit3d.text = "99.";
+                    if (credit < 10) credit3d.text = credit.ToString("D1");
+                    else credit3d.text = "9.";
                     //probability = creditSystem.ProbabilityCheck();
                     //Debug.Log("Probability:" + probability);
                 }
@@ -375,6 +375,10 @@ public class EnarcYm2Manager : CraneManagerV2
                     armController.SetMotorPower(leftCatchArmpower, 0);
                     armController.SetMotorPower(rightCatchArmpower, 1);
                 }
+                break;
+            case 9:
+                roter.RotateToTarget(45f);
+                craneStatus = 10;
                 break;
             case 11:
                 StartCoroutine(DelayCoroutine(300, () =>

@@ -107,7 +107,7 @@ public class Type3Manager : CraneManager
         if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
 
         if (craneStatus == -1)
-            if (craneBox.CheckPos(1)) 
+            if (craneBox.CheckPos(1))
             {
                 cbs.MoveSound(false);
                 craneStatus = 0;
