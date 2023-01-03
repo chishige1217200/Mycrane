@@ -14,6 +14,8 @@ public class EnarcYm2Manager : CraneManagerV2
     ArmUnitLifter lifter;
     ArmNailV2[] nail = new ArmNailV2[2];
     CraneUnitRoter roter;
+    EnarcYm2Compresser cp;
+    SEPlayer cbs;
     public bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     [SerializeField] TextMesh credit3d;
     private IEnumerator DelayCoroutine(float miliseconds, Action action)
@@ -34,6 +36,7 @@ public class EnarcYm2Manager : CraneManagerV2
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystem>();
         //sp = transform.Find("SE").GetComponent<SEPlayer>();
         getPoint = transform.Find("Floor").Find("GetPoint").GetComponent<GetPointV2>();
+        cp = transform.parent.Find("MainCP").GetComponent<EnarcYm2Compresser>();
 
         temp = transform.Find("CraneUnitBase").Find("CraneUnit").transform;
 
@@ -78,6 +81,7 @@ public class EnarcYm2Manager : CraneManagerV2
 
         // CraneBoxに関する処理
         craneBox = temp.Find("CraneBox").GetComponent<CraneBox>();
+        cbs = craneBox.GetComponent<SEPlayer>();
         roter = temp.GetComponent<CraneUnitRoter>();
 
         // ロープにマネージャー情報をセット
@@ -333,7 +337,14 @@ public class EnarcYm2Manager : CraneManagerV2
     {
         switch (status)
         {
+            case 1:
+                cp.DoCompressor();
+                break;
+            case 4:
+                cbs.Play(0, 1);
+                break;
             case 5:
+                cbs.Stop(0);
                 StartCoroutine(DelayCoroutine(300, () =>
                 {
                     armController.Open();
@@ -343,6 +354,7 @@ public class EnarcYm2Manager : CraneManagerV2
                         if (craneStatus == 5)
                         {
                             lifter.Down();
+                            cbs.Play(0, 1);
                             sp.Play(4);
                             craneStatus = 6;
                         }
@@ -350,6 +362,7 @@ public class EnarcYm2Manager : CraneManagerV2
                 }));
                 break;
             case 7:
+                cbs.Stop(0);
                 sp.Stop(4);
                 StartCoroutine(DelayCoroutine(500, () =>
                 {
@@ -368,6 +381,7 @@ public class EnarcYm2Manager : CraneManagerV2
                 }));
                 break;
             case 8:
+                cbs.Play(0, 1);
                 sp.Play(6);
                 lifter.Up();
                 if (craneStatus < 11)
@@ -377,8 +391,13 @@ public class EnarcYm2Manager : CraneManagerV2
                 }
                 break;
             case 9:
+                cbs.Stop(0);
                 roter.RotateToTarget(45f);
                 craneStatus = 10;
+                break;
+            case 10:
+                cbs.Play(0, 1);
+                StartCoroutine(CraneBoxStopSound());
                 break;
             case 11:
                 StartCoroutine(DelayCoroutine(300, () =>
@@ -395,8 +414,11 @@ public class EnarcYm2Manager : CraneManagerV2
                 break;
             case 12:
                 armController.Close(30f);
+                cbs.Play(0, 1);
                 break;
             case 13:
+                cbs.Stop(0);
+                cbs.Play(1, 1);
                 StartCoroutine(DelayCoroutine(500, () =>
                 {
                     if (creditSystem.creditDisplayed > 0)
@@ -410,5 +432,12 @@ public class EnarcYm2Manager : CraneManagerV2
 
     protected override void LastStatusEvent(int status)
     {
+    }
+
+    private IEnumerator CraneBoxStopSound()
+    {
+        while (!craneBox.CheckPos(6) && !craneBox.CheckPos(8)) yield return null;
+        cbs.Stop(0);
+        cbs.Play(1, 1);
     }
 }
