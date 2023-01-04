@@ -7,6 +7,7 @@ public class EnarcYm2Selecter : MonoBehaviour
     [SerializeField] EnarcYm2Manager[] manager = new EnarcYm2Manager[8];
     BGMPlayer bp;
     [SerializeField] int soundType = 0; //0：エラー，1：BGM
+    [SerializeField] bool doRotate = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +33,14 @@ public class EnarcYm2Selecter : MonoBehaviour
                 if (bp.audioSource[2].isPlaying) bp.Stop(2);
                 bp.Play(1);
             }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if(doRotate)
+        {
+            transform.localEulerAngles += new Vector3(0, -0.05f, 0);
         }
     }
 
