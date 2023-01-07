@@ -9,6 +9,8 @@ public class EnarcYm2Manager : CraneManagerV2
     [SerializeField] float rightCatchArmpower = 20f; //右アームパワー
     [SerializeField] float armApertures = 80f; //開口率
     [SerializeField] int[] armSize = new int[2]; // 0:なし，1:S，2:M，3:L
+    [SerializeField] int maintainedPercent = 100; // 0-100
+    private bool airError = false;
     TwinArmController armController;
     ArmControllerSupportV2 support;
     ArmUnitLifter lifter;
@@ -101,6 +103,10 @@ public class EnarcYm2Manager : CraneManagerV2
             nail[i].SetManager(this);
             nail[i].SetLifter(lifter);
         }
+
+        craneBox.moveSpeed = 0.003f;
+        lifter.downSpeed = 0.003f;
+        lifter.upSpeed = 0.003f;
 
         StartCoroutine(DelayCoroutine(300, () =>
         {
@@ -339,6 +345,20 @@ public class EnarcYm2Manager : CraneManagerV2
         {
             case 1:
                 cp.DoCompressor();
+                if (UnityEngine.Random.Range(0, 101) > maintainedPercent)
+                {
+                    airError = true;
+                    float a = UnityEngine.Random.Range(0.006f, 0.013f);
+                    if (a > 0.008f)
+                        craneBox.moveSpeed = 0.008f;
+                    else
+                        craneBox.moveSpeed = a;
+                    lifter.downSpeed = a;
+                    if (a > 0.012f)
+                        lifter.upSpeed = 0.012f;
+                    else
+                        lifter.upSpeed = a;
+                }
                 break;
             case 4:
                 cbs.Play(0, 1);
@@ -374,6 +394,9 @@ public class EnarcYm2Manager : CraneManagerV2
                     }
                     else armController.Close(30f);
 
+                    if(airError)
+                        craneBox.moveSpeed = 0.005f;
+
                     StartCoroutine(DelayCoroutine(3000, () =>
                     {
                         craneStatus = 8;
@@ -405,6 +428,11 @@ public class EnarcYm2Manager : CraneManagerV2
                     sp.Play(3, 1);
                     armController.SetLimit(100f); // アーム開口度を100に
                     armController.Open();
+                    if(airError)
+                    {
+                        airError = false;
+                        craneBox.moveSpeed = 0.006f;
+                    }
                     StartCoroutine(DelayCoroutine(2000, () =>
                     {
                         craneStatus = 12;
@@ -419,6 +447,11 @@ public class EnarcYm2Manager : CraneManagerV2
             case 13:
                 cbs.Stop(0);
                 cbs.Play(1, 1);
+
+                craneBox.moveSpeed = 0.003f;
+                lifter.downSpeed = 0.003f;
+                lifter.upSpeed = 0.003f;
+
                 StartCoroutine(DelayCoroutine(500, () =>
                 {
                     if (creditSystem.creditDisplayed > 0)
