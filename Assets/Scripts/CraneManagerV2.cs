@@ -33,6 +33,7 @@ public abstract class CraneManagerV2 : MonoBehaviour
     public virtual void GetPrize()
     {
         Debug.Log("CraneManager GetPrize");
+        creditSystem.NewPrize();
         switch (creditSystem.probabilityMode)
         {
             case 2:
