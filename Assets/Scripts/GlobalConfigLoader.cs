@@ -7,6 +7,7 @@ public class GlobalConfigLoader : MonoBehaviour
     [SerializeField] GameObject backButton;
     [SerializeField] GameObject manualButton;
     [SerializeField] HelpMessnger hm;
+    [SerializeField] FirstPersonAIO faio;
     void Start()
     {
         if (PlayerPrefs.GetInt("useUI") == 1)
@@ -22,8 +23,15 @@ public class GlobalConfigLoader : MonoBehaviour
             manualButton.SetActive(false);
         }
 
-        if (PlayerPrefs.GetInt("useCentralIcon") == 0)
-            GameObject.Find("FirstPerson-AIO").GetComponent<FirstPersonAIO>().autoCrosshair = false;
+        if (faio == null)
+            Debug.LogWarning("FirstPersonAIOがセットされていません");
+        else
+        {
+            if (PlayerPrefs.GetInt("useCentralIcon") == 1)
+                faio.autoCrosshair = true;
+            else
+                faio.autoCrosshair = false;
+        }
 
         if (PlayerPrefs.GetInt("doAutoPlay") == 1)
             AutoControllerFlag.doAutoPlay = true;
