@@ -10,6 +10,7 @@ public class Type13Manager : CraneManager
     public Animator[] animator = new Animator[2];
     [SerializeField] Text Credit;
     [SerializeField] TextMesh credit3d;
+    [SerializeField] GameObject[] LCD = new GameObject[2];
     private int playingBooth = -1;
     // Start is called before the first frame update
     void Start()
@@ -38,6 +39,7 @@ public class Type13Manager : CraneManager
         creditSystem.SetSEPlayer(sp);
         creditSystem.SetCreditSound(0);
         getPoint.SetManager(this);
+        LCD[0].SetActive(true);
         getSoundNum = 6;
         host.manualCode = 17;
     }
@@ -66,7 +68,12 @@ public class Type13Manager : CraneManager
             if (credit < 100) credit3d.text = credit.ToString("D1");
             else credit3d.text = "99.";
 
-            if (credit > 0 && craneStatus == 0) craneStatus = 1;
+            if (credit > 0 && craneStatus == 0)
+            {
+                craneStatus = 1;
+                LCD[0].SetActive(false);
+                LCD[1].SetActive(true);
+            }
         }
     }
 
@@ -79,7 +86,12 @@ public class Type13Manager : CraneManager
             if (credit < 100) credit3d.text = credit.ToString("D1");
             else credit3d.text = "99.";
 
-            if (credit > 0 && craneStatus == 0) craneStatus = 1;
+            if (credit > 0 && craneStatus == 0)
+            {
+                craneStatus = 1;
+                LCD[0].SetActive(false);
+                LCD[1].SetActive(true);
+            }
         }
     }
 
@@ -96,7 +108,12 @@ public class Type13Manager : CraneManager
         else credit3d.text = "99.";
 
         if (credit > 0) craneStatus = 1;
-        else craneStatus = 0;
+        else
+        {
+            craneStatus = 0;
+            LCD[1].SetActive(false);
+            LCD[0].SetActive(true);
+        }
     }
 
     public void SelectBooth(int id)
