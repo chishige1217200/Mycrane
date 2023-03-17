@@ -320,12 +320,11 @@ public class Type13Player : MonoBehaviour
             if (boothNumber < 2) craneBox.goPoint = new Vector2(-0.24f, 0);
             else craneBox.goPoint = new Vector2(0.24f, 0);
 
+            limitTime3d.text = timer.limitTime.ToString();
             craneBox.goPositionFlag = true;
         }
         else if (status == 3)
         {
-            manager.ResetPayment();
-            manager.PlayerStart();
             manager.creditSystem.segUpdateFlag = false;
             timer.StartTimer();
             probabilitySystem.NewPlay();
@@ -335,7 +334,10 @@ public class Type13Player : MonoBehaviour
         else if (status == 4)
         {
             timer.CancelTimer();
+            limitTime3d.text = "0";
             manager.creditSystem.segUpdateFlag = true;
+            manager.ResetPayment();
+            manager.PlayerStart();
             manager.CreditSegUpdate();
             ropeManager.Down();
             // 下降音
