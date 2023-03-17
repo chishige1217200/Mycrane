@@ -136,7 +136,7 @@ public class Type13Manager : CraneManager
 
     public void SelectBooth(int id)
     {
-        if (host.playable)
+        if (host.playable && craneStatus == 1)
         {
             player[id].GameStart();
             playingBooth = id;
