@@ -417,4 +417,9 @@ public class TetrasJewelManager : CraneManagerV2
         internalCamera.SetActive(flag);
         blackLine.SetActive(flag);
     }
+
+    public void MultiCameraUI()
+    {
+        MultiCamera(!internalCamera.activeSelf);
+    }
 }
