@@ -2123,7 +2123,7 @@ GameObject:
   - component: {fileID: 9179917737567354247}
   - component: {fileID: 9179917737567354240}
   - component: {fileID: 9179917737567354241}
-  - component: {fileID: 9179917737567354242}
+  - component: {fileID: 797903844838265289}
   m_Layer: 9
   m_Name: Hat
   m_TagString: Untagged
@@ -2220,7 +2220,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.2, z: 0.04}
   m_Center: {x: 0.000000029802322, y: -0.000000029802322, z: -0.135}
---- !u!114 &9179917737567354242
+--- !u!114 &797903844838265289
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2229,7 +2229,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9179917737567354252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d85221ad8c7e7842bd63741608384d0, type: 3}
+  m_Script: {fileID: 11500000, guid: 833f134d13a38794eb2bb6392a788468, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pushTime: 0
@@ -6726,6 +6726,7 @@ GameObject:
   - component: {fileID: 9179917738071214025}
   - component: {fileID: 9179917738071214031}
   - component: {fileID: 9179917738071214024}
+  - component: {fileID: 6416519584661885644}
   m_Layer: 0
   m_Name: GetPoint
   m_TagString: Untagged
@@ -6767,9 +6768,22 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9179917738071214026}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f70a04029bf9af5419208accb0aa778d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoDestroy: 0
+--- !u!114 &6416519584661885644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179917738071214026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c524d4b400617a144b8838ebea6fcfba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoDestroy: 0
@@ -7907,6 +7921,7 @@ GameObject:
   - component: {fileID: 9179917738194502013}
   - component: {fileID: 9179917738194502003}
   - component: {fileID: 9179917738194502012}
+  - component: {fileID: 6360765349309138905}
   m_Layer: 0
   m_Name: GetPoint
   m_TagString: Untagged
@@ -7948,9 +7963,22 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9179917738194502014}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f70a04029bf9af5419208accb0aa778d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoDestroy: 0
+--- !u!114 &6360765349309138905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179917738194502014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c524d4b400617a144b8838ebea6fcfba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoDestroy: 0
@@ -8053,6 +8081,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9179917738197184389}
   - component: {fileID: 9179917738197184388}
+  - component: {fileID: 2647971811852428049}
   - component: {fileID: 5060904534052337919}
   - component: {fileID: 8998445424648183989}
   m_Layer: 0
@@ -8090,9 +8119,44 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9179917738197184390}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 923001a397778c749835d57159ce692c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priceSet: 6400000000000000
+  timesSet: 0100000000000000
+  creditSystem: {fileID: 0}
+  sp: {fileID: 9179917739358463983}
+  craneBox: {fileID: 0}
+  host: {fileID: 9179917738867960809}
+  isHibernate: 0
+  armPowerConfig:
+  - 80
+  - 40
+  - 0
+  armPowerConfigSuccess:
+  - 100
+  - 100
+  - 100
+  operationType: 1
+  limitTimeSet: 30
+  leverTilted: 0
+  player2: 1
+  downTime: 4800
+  autoPower: 1
+  armPower: 0
+  limitTimedisplayed: {fileID: 9179917737919620604}
+--- !u!114 &2647971811852428049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179917738197184390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55d2463a4c0d00749a0937409b958cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   priceSet: 6400000000000000
@@ -11267,7 +11331,7 @@ GameObject:
   - component: {fileID: 9179917738412795497}
   - component: {fileID: 9179917738412795498}
   - component: {fileID: 9179917738412795499}
-  - component: {fileID: 9179917738412795508}
+  - component: {fileID: 125385210093620839}
   m_Layer: 9
   m_Name: Hat
   m_TagString: Untagged
@@ -11364,7 +11428,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.2, z: 0.04}
   m_Center: {x: 0.000000029802322, y: -0.000000029802322, z: -0.135}
---- !u!114 &9179917738412795508
+--- !u!114 &125385210093620839
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11373,7 +11437,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9179917738412795510}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d85221ad8c7e7842bd63741608384d0, type: 3}
+  m_Script: {fileID: 11500000, guid: 833f134d13a38794eb2bb6392a788468, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pushTime: 0
@@ -12022,6 +12086,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9179917738451098981}
   - component: {fileID: 9179917738451098980}
+  - component: {fileID: 7501106388416263399}
   m_Layer: 0
   m_Name: CraneGame10
   m_TagString: Untagged
@@ -12056,7 +12121,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9179917738451098982}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 83135e3b45d6ae848ba0abebe1cfdc25, type: 3}
   m_Name: 
@@ -12065,6 +12130,23 @@ MonoBehaviour:
   - {fileID: 9179917739511486987}
   - {fileID: 9179917738197184388}
   operationType: 0
+--- !u!114 &7501106388416263399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179917738451098982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9dc6b58e217fcd4ba8586568bd393d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager:
+  - {fileID: 2624968202528342830}
+  - {fileID: 2647971811852428049}
+  operationType: 1
+  doAutoStart: 0
 --- !u!1 &9179917738471737695
 GameObject:
   m_ObjectHideFlags: 0
@@ -22793,6 +22875,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9179917739368403261}
   - component: {fileID: 9179917739368403260}
+  - component: {fileID: 8262648058613461271}
   m_Layer: 0
   m_Name: ArmUnit
   m_TagString: Untagged
@@ -22825,9 +22908,22 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9179917739368403262}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a89b9e97f4e83744a31e7a11663698f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoPower: 1
+--- !u!114 &8262648058613461271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179917739368403262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02a86230b0bb32641a2409ea8a9d85a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoPower: 1
@@ -23264,6 +23360,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9179917739412704445}
   - component: {fileID: 9179917739412704444}
+  - component: {fileID: 862558714910356603}
   m_Layer: 0
   m_Name: ArmUnit
   m_TagString: Untagged
@@ -23296,9 +23393,22 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9179917739412704446}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a89b9e97f4e83744a31e7a11663698f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoPower: 1
+--- !u!114 &862558714910356603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179917739412704446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02a86230b0bb32641a2409ea8a9d85a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoPower: 1
@@ -23599,6 +23709,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9179917739511486996}
   - component: {fileID: 9179917739511486987}
+  - component: {fileID: 2624968202528342830}
   - component: {fileID: 5723213742107488827}
   - component: {fileID: 399036994511154291}
   m_Layer: 0
@@ -23637,9 +23748,44 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9179917739511486997}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 923001a397778c749835d57159ce692c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priceSet: 6400000000000000
+  timesSet: 0100000000000000
+  creditSystem: {fileID: 0}
+  sp: {fileID: 9179917739081984220}
+  craneBox: {fileID: 0}
+  host: {fileID: 9179917738867960809}
+  isHibernate: 0
+  armPowerConfig:
+  - 80
+  - 40
+  - 0
+  armPowerConfigSuccess:
+  - 100
+  - 100
+  - 100
+  operationType: 1
+  limitTimeSet: 30
+  leverTilted: 0
+  player2: 0
+  downTime: 4800
+  autoPower: 1
+  armPower: 0
+  limitTimedisplayed: {fileID: 9179917738449349662}
+--- !u!114 &2624968202528342830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179917739511486997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55d2463a4c0d00749a0937409b958cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   priceSet: 6400000000000000
