@@ -72,7 +72,7 @@ public class Type9Manager : CraneManager
         support.SetManager(this);
         support.SetLifter(lifter);
         support.pushTime = 300; // 押し込みパワーの調整
-        getSoundNum = 4;
+        getSoundNum = 5;
         for (int i = 0; i < 2; i++)
         {
             nail[i].SetManager(this);
@@ -161,7 +161,7 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    sp.Play(3, 1);
+                    sp.Play(3);
                 }
                 if (lifter.DownFinished() && craneStatus == 6) IncrimentStatus();
             }
@@ -170,6 +170,8 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    sp.Stop(3);
+                    sp.Play(4, 1);
                     await Task.Delay(300);
                     if (leftCatchArmpower >= 30 || rightCatchArmpower >= 30) //閉じるときのアームパワーは大きい方を採用．最低値は30f
                     {
@@ -177,7 +179,7 @@ public class Type9Manager : CraneManager
                         else armController.Close(rightCatchArmpower);
                     }
                     else armController.Close(30f);
-                    await Task.Delay(800);
+                    await Task.Delay(1200);
                     IncrimentStatus();
                 }
             }
@@ -186,6 +188,7 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    sp.Play(3);
                     lifter.Up();
                     if (craneStatus < 11)
                     {
@@ -200,6 +203,7 @@ public class Type9Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    sp.Stop(3);
                     await Task.Delay(200);
                     if (craneStatus == 9) IncrimentStatus();
                 }

@@ -18,7 +18,7 @@ public class Type10Manager : CraneManager
     [SerializeField] bool autoPower = true;
     public float armPower; //現在のアームパワー
     Type3ArmController armController;
-    RopeManager ropeManager;
+    BaseLifter ropeManager;
     Lever lever;
     Timer timer;
     ArmControllerSupport support;
@@ -43,7 +43,7 @@ public class Type10Manager : CraneManager
         timer = transform.Find("Timer").GetComponent<Timer>();
         temp = transform.Find("CraneUnit").transform;
 
-        await Task.Delay(50);
+        await Task.Delay(100);
 
         // ControlGroupの制御
         if (operationType == 0)
@@ -77,7 +77,7 @@ public class Type10Manager : CraneManager
         }
 
         // ロープとアームコントローラに関する処理
-        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<BaseLifter>();
         armController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
         support = temp.Find("ArmUnit").Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
 

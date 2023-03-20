@@ -33,6 +33,7 @@ public abstract class CraneManagerV2 : MonoBehaviour
     public virtual void GetPrize()
     {
         Debug.Log("CraneManager GetPrize");
+        creditSystem.NewPrize();
         switch (creditSystem.probabilityMode)
         {
             case 2:
@@ -50,23 +51,17 @@ public abstract class CraneManagerV2 : MonoBehaviour
                 sp.Play(getSoundNum, 1);
         }
     }
-
     protected abstract void DetectKey(int num);
     public abstract void ButtonDown(int num);
     public abstract void ButtonUp(int num);
     public abstract void InsertCoin();
     public abstract void InsertCoinAuto();
     protected abstract void FirstStatusEvent(int status);
-
-
     protected abstract void LastStatusEvent(int status);
-
-
     public int GetCType()
     {
         return craneType;
     }
-
     public bool GetProbability()
     {
         return probability;

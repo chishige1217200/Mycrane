@@ -29,7 +29,7 @@ public class RayCaster : MonoBehaviour
         Physics.Raycast(ray, out hit, 10);
         if (num == 1)
         {
-            if (hit.collider.CompareTag("CP")) // 操作パネルにRayがあたった場合（要コライダー）
+            if (hit.collider != null && hit.collider.CompareTag("CP")) // 操作パネルにRayがあたった場合（要コライダー）
             {
                 if (!isFirst) host.playable = false; // 古い方の筐体は再度ロック
                 host = hit.collider.gameObject.GetComponent<MachineHost>();
@@ -43,7 +43,7 @@ public class RayCaster : MonoBehaviour
             }
         }
         else if (num == 0)
-            if (hit.collider.CompareTag("prize"))
+            if (hit.collider != null && hit.collider.CompareTag("prize"))
             {
                 if (hit.collider.gameObject.TryGetComponent(out prize))
                 {

@@ -11,7 +11,8 @@ public class ProbabilitySystem : MonoBehaviour
     protected int creditPlayed = 0; //現在プレイ中のクレジット数（リセットあり）
     [SerializeField] int[] n = new int[2]; //ランダム確率設定n[0]/n[1]
                                            //private List<int> costList = new List<int>(); //投入された金額をリセット毎に分けて保存
-    public int probabilityMode; //0：確率なし，1:ランダム確率，2:クレジット回数天井設定，3:クレジット回数周期設定，(4:設定金額天井設定，5:設定金額周期設定)
+    public int probabilityMode; //0：確率なし，1:ランダム確率，2:クレジット回数固定天井設定，3:クレジット回数周期設定，(4:設定金額天井設定，5:設定金額周期設定) 6:クレジット回数収束天井設定
+    protected int prizeCount = 0;
 
     protected void Start()
     {
@@ -30,6 +31,11 @@ public class ProbabilitySystem : MonoBehaviour
     public void NewPlay()
     {
         creditPlayed++; //確率用プレイ数を1加算
+    }
+
+    public void NewPrize()
+    {
+        prizeCount++;
     }
 
     public bool ProbabilityCheck()
@@ -53,6 +59,8 @@ public class ProbabilitySystem : MonoBehaviour
             ResetCostProbability();
             return true;
         }*/
+
+        if(probabilityMode == 6 && creditPlayed / (prizeCount + 1) >= creditProbability) return true;
         return false;
     }
 

@@ -4,19 +4,26 @@ using UnityEngine;
 
 public class Rope : MonoBehaviour
 {
-    public GameObject[] vertices = new GameObject[10];
+    [SerializeField] GameObject[] vertices = new GameObject[2];
+    [SerializeField] bool[] useMeshRenderer = new bool[2];
     LineRenderer line;
 
     void Start()
     {
         line = GetComponent<LineRenderer>();
-        line.material = new Material(Shader.Find("Unlit/Color"));
+        //line.material = new Material(Shader.Find("Unlit/Color"));
         line.positionCount = vertices.Length;
 
-        foreach (GameObject v in vertices)
+        for (int i = 0; i < vertices.Length; i++)
         {
-            v.GetComponent<MeshRenderer>().enabled = false;
+            if (useMeshRenderer[i] == false)
+                vertices[i].GetComponent<MeshRenderer>().enabled = false;
         }
+
+        // foreach (GameObject v in vertices)
+        // {
+        //     v.GetComponent<MeshRenderer>().enabled = false;
+        // }
     }
 
     void Update()
