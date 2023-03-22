@@ -97,7 +97,7 @@ public class Type3Manager : CraneManager
 
         host.manualCode = 4;
         craneStatus = -1;
-        cbs.MoveSound(true);
+        //cbs.MoveSound(true);
     }
 
     void Update()
@@ -109,7 +109,7 @@ public class Type3Manager : CraneManager
         if (craneStatus == -1)
             if (craneBox.CheckPos(1))
             {
-                cbs.MoveSound(false);
+                //cbs.MoveSound(false);
                 craneStatus = 0;
             }
 

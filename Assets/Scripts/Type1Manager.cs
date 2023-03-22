@@ -152,7 +152,7 @@ public class Type1Manager : CraneManager
 
         host.manualCode = 1;
         craneStatus = -2;
-        cbs.MoveSound(true);
+        //cbs.MoveSound(true);
     }
 
     async void Update()
@@ -164,16 +164,16 @@ public class Type1Manager : CraneManager
 
         if (craneStatus == -2 && ((craneBox.CheckPos(1) && !player2) || (craneBox.CheckPos(3) && player2)))
         {
-            cbs.MoveSound(false);
+            //cbs.MoveSound(false);
             craneStatus = -1;
             craneBox.goPositionFlag = true;
-            cbs.MoveSound(true);
+            //cbs.MoveSound(true);
         }
         if (craneStatus == -1)
         {
             if (craneBox.CheckPos(9))
             {
-                cbs.MoveSound(false);
+                //cbs.MoveSound(false);
                 craneStatus = 0;
             }
         }
