@@ -16,7 +16,7 @@ public class Type7Manager : CraneManager
     public float armPower; //現在のアームパワー
     BGMPlayer bp;
     Type3ArmController armController;
-    RopeManager ropeManager;
+    BaseLifter ropeManager;
     ArmControllerSupport support;
     Lever[] lever = new Lever[2];
     Timer timer;
@@ -54,7 +54,7 @@ public class Type7Manager : CraneManager
         if (isHibernate) creditSystem.SetHibernate();
 
         // ロープとアームコントローラに関する処理
-        ropeManager = transform.Find("RopeManager").GetComponent<RopeManager>();
+        ropeManager = transform.Find("RopeManager").GetComponent<BaseLifter>();
         armController = temp.Find("ArmUnit").GetComponent<Type3ArmController>();
         support = temp.Find("ArmUnit").Find("Head").Find("Hat").GetComponent<ArmControllerSupport>();
 
@@ -325,23 +325,26 @@ public class Type7Manager : CraneManager
             if (Input.GetKey(KeyCode.G) || lever[0].forwardFlag)
                 craneBox.Forward();
 
-            if ((Input.GetKey(KeyCode.I) || lever[1].backFlag) && leverState != 2)
-            {
-                Debug.Log("Up");
-                leverState = 2;
-                ropeManager.Up();
-            }
-            if ((Input.GetKey(KeyCode.K) || lever[1].forwardFlag) && leverState != 1 && !support.isShieldcollis)
-            {
-                Debug.Log("Down");
-                leverState = 1;
-                ropeManager.Down();
-            }
             if (!Input.GetKey(KeyCode.I) && !Input.GetKey(KeyCode.K) && !lever[1].backFlag && !lever[1].forwardFlag)
             {
                 leverState = 0;
                 ropeManager.UpForceStop();
                 ropeManager.DownForceStop();
+            }
+            else if (!(Input.GetKey(KeyCode.I) && Input.GetKey(KeyCode.K)))
+            {
+                if ((Input.GetKey(KeyCode.I) || lever[1].backFlag) && leverState != 2)
+                {
+                    Debug.Log("Up");
+                    leverState = 2;
+                    ropeManager.Up();
+                }
+                if ((Input.GetKey(KeyCode.K) || lever[1].forwardFlag) && leverState != 1 && !support.isShieldcollis)
+                {
+                    Debug.Log("Down");
+                    leverState = 1;
+                    ropeManager.Down();
+                }
             }
             if (support.isShieldcollis) ropeManager.DownForceStop();
         }
