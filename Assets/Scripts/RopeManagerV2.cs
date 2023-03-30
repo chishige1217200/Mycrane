@@ -94,7 +94,11 @@ public class RopeManagerV2 : BaseLifter
 
     void InternalUp()
     {
-        if (upRefusedFlag) moveUpFlag = false;
+        if (upRefusedFlag)
+        {
+            moveUpFlag = false;
+            return;
+        }
         rb.WakeUp();
         cj.connectedAnchor += new Vector3(0, upSpeed, 0);
         switch (targetAxis)
@@ -113,7 +117,11 @@ public class RopeManagerV2 : BaseLifter
 
     void InternalDown()
     {
-        if (downRefusedFlag) moveDownFlag = false;
+        if (downRefusedFlag)
+        {
+            moveDownFlag = false;
+            return;
+        }
         rb.WakeUp();
         cj.connectedAnchor -= new Vector3(0, downSpeed, 0);
         switch (targetAxis)
