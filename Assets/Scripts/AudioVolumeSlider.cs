@@ -22,8 +22,7 @@ public class AudioVolumeSlider : MonoBehaviour
 
     public void ApplyConfiguration()
     {
-        if (s.value != AudioListener.volume)
-            AudioListener.volume = s.value / 100f;
+        AudioListener.volume = s.value / 100f;
         VolumeText.text = (AudioListener.volume * 100).ToString();
         PlayerPrefs.SetFloat("AudioVolume", s.value / 100f);
         if (!isFirst) sliderSE.PlayOneShot(sliderSE.clip);

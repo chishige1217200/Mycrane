@@ -10,18 +10,19 @@ public class QualitySlider : MonoBehaviour
     [SerializeField] AudioSource sliderSE;
     bool isFirst = true;
     [SerializeField] string[] qualitymessages = new string[6];
+    [SerializeField] VSyncCountSlider vscs;
     void Start()
     {
         s = GetComponent<Slider>();
         s.value = QualitySettings.GetQualityLevel();
-        QualityText.text = qualitymessages[((int)s.value)];
+        QualityText.text = qualitymessages[(int)s.value];
     }
     public void ApplyConfiguration()
     {
-        if(!isFirst) sliderSE.PlayOneShot(sliderSE.clip);
-        QualityText.text = qualitymessages[((int)s.value)];
-        if (s.value != QualitySettings.GetQualityLevel())
-            QualitySettings.SetQualityLevel(((int)s.value));
+        if (!isFirst) sliderSE.PlayOneShot(sliderSE.clip);
+        QualitySettings.SetQualityLevel(((int)s.value));
+        QualityText.text = qualitymessages[(int)s.value];
+        vscs.RefreshSlider();
         isFirst = false;
     }
 }
