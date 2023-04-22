@@ -5,6 +5,7 @@ using UnityEngine;
 public class CraneBoxV3Tester : MonoBehaviour
 {
     [SerializeField] CraneBoxV3 cb;
+    [SerializeField] Vector2 goPoint;
 
     void Start()
     {
@@ -25,10 +26,13 @@ public class CraneBoxV3Tester : MonoBehaviour
             cb.Back(true);
         else if (Input.GetKeyUp(KeyCode.T))
             cb.Back(false);
-        if(Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G))
             cb.Forward(true);
-        else if(Input.GetKeyUp(KeyCode.G))
+        else if (Input.GetKeyUp(KeyCode.G))
             cb.Forward(false);
+
+        if (Input.GetKeyDown(KeyCode.V))
+            cb.GoPosition(goPoint);
     }
 
 }
