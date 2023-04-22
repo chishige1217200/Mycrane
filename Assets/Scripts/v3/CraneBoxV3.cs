@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -134,7 +133,7 @@ public class CraneBoxV3 : MonoBehaviour
         else cbs.MoveSound(false);
     }
 
-    public void Right(Boolean flag)
+    public void Right(bool flag)
     {
         if (flag) rightCoroutine = StartCoroutine(InternalRight());
         else if (!flag && rightCoroutine != null)
@@ -174,7 +173,7 @@ public class CraneBoxV3 : MonoBehaviour
         }
     }
 
-    public void Left(Boolean flag)
+    public void Left(bool flag)
     {
         if (flag) leftCoroutine = StartCoroutine(InternalLeft());
         else if (!flag && leftCoroutine != null)
@@ -214,7 +213,7 @@ public class CraneBoxV3 : MonoBehaviour
         }
     }
 
-    public void Back(Boolean flag)
+    public void Back(bool flag)
     {
         if (flag) backCoroutine = StartCoroutine(InternalBack());
         else if (!flag && backCoroutine != null)
@@ -254,7 +253,7 @@ public class CraneBoxV3 : MonoBehaviour
         }
     }
 
-    public void Forward(Boolean flag)
+    public void Forward(bool flag)
     {
         if (flag) frontCoroutine = StartCoroutine(InternalForward());
         else if (!flag && frontCoroutine != null)
@@ -294,7 +293,7 @@ public class CraneBoxV3 : MonoBehaviour
         }
     }
 
-    public void Up(Boolean flag)
+    public void Up(bool flag)
     {
         if (flag) backCoroutine = StartCoroutine(InternalUp());
         else if (!flag && backCoroutine != null)
