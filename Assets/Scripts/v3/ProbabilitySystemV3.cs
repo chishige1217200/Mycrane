@@ -17,12 +17,12 @@ public class ProbabilitySystemV3 : MonoBehaviour
         return mode;
     }
 
-    public void Setup(int mode, int creditProbability, int n1, int n2)
+    public void Setup(int mode, int creditProbability, int[] n)
     {
         this.mode = mode;
         this.creditProbability = creditProbability;
-        n[0] = n1;
-        n[1] = n2;
+        this.n[0] = n[0];
+        this.n[1] = n[1];
 
         if (mode == 1)
         {
