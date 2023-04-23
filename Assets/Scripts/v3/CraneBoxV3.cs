@@ -133,7 +133,7 @@ public class CraneBoxV3 : MonoBehaviour
         else cbs.MoveSound(false);
     }
 
-    public void Right(bool flag)
+    public void Right(bool flag) // CraneBox.csのものとは仕様が異なる．動かすときにtrue，止めるときにfalseで呼び出すこと．
     {
         if (flag) rightCoroutine = StartCoroutine(InternalRight());
         else if (!flag && rightCoroutine != null)
@@ -173,7 +173,7 @@ public class CraneBoxV3 : MonoBehaviour
         }
     }
 
-    public void Left(bool flag)
+    public void Left(bool flag) // CraneBox.csのものとは仕様が異なる．動かすときにtrue，止めるときにfalseで呼び出すこと．
     {
         if (flag) leftCoroutine = StartCoroutine(InternalLeft());
         else if (!flag && leftCoroutine != null)
@@ -213,7 +213,7 @@ public class CraneBoxV3 : MonoBehaviour
         }
     }
 
-    public void Back(bool flag)
+    public void Back(bool flag) // CraneBox.csのものとは仕様が異なる．動かすときにtrue，止めるときにfalseで呼び出すこと．
     {
         if (flag) backCoroutine = StartCoroutine(InternalBack());
         else if (!flag && backCoroutine != null)
@@ -253,7 +253,7 @@ public class CraneBoxV3 : MonoBehaviour
         }
     }
 
-    public void Forward(bool flag)
+    public void Forward(bool flag) // CraneBox.csのものとは仕様が異なる．動かすときにtrue，止めるときにfalseで呼び出すこと．
     {
         if (flag) frontCoroutine = StartCoroutine(InternalForward());
         else if (!flag && frontCoroutine != null)
