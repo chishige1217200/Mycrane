@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 public class PrizePanel : MonoBehaviour
 {
-    GameObject canvas;
-    Text prizeText;
-    Text dateText;
+    public bool mode3d { get; private set; } = false;
+    private GameObject canvas;
+    private Text prizeText;
+    private Text dateText;
     void Start()
     {
         canvas = this.transform.Find("Canvas").Find("PrizePanel").gameObject;
