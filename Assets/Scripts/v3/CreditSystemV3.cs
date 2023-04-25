@@ -33,9 +33,44 @@ public class CreditSystemV3 : ProbabilitySystemV3
         return nowpaidSum;
     }
 
+    public void Setup()
+    {
+        if (priceSets[0] == 0 || timesSets[0] == 0)
+        {
+            priceSets[0] = 100;
+            timesSets[0] = 1;
+        }
+        if (priceSets[1] == 0 || timesSets[1] == 0 || (float)priceSets[0] / timesSets[0] < (float)priceSets[1] / timesSets[1])
+        // 未入力の場合，低価格設定を反映 // 高額のレートになるとコストが多くなる設定エラーのとき
+        {
+            priceSets[1] = priceSets[0];
+            timesSets[1] = timesSets[0];
+        }
+
+        priceTexts[0].text = priceSets[0].ToString();
+        timesTexts[0].text = timesSets[0].ToString();
+        if (priceSets[0] == priceSets[1] && timesSets[0] == timesSets[1]) // 単一プレイ回数設定時
+        {
+            priceTexts[1].text = ""; // 下段側は表示しない
+            timesTexts[1].text = "";
+        }
+        else // 2つのレート設定があるとき
+        {
+            priceTexts[1].text = priceSets[1].ToString();
+            timesTexts[1].text = timesSets[1].ToString();
+        }
+        Credit.text = "00";
+        isInitialized = true;
+    }
+
     // SEPlayerとsoundNumの設定も行うこと
     public void Setup(int p1, int t1, int p2, int t2)
     {
+        priceSets[0] = p1;
+        timesSets[0] = t1;
+        priceSets[1] = p2;
+        timesSets[1] = t2;
+
         if (priceSets[0] == 0 || timesSets[0] == 0)
         {
             priceSets[0] = 100;
