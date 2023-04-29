@@ -11,6 +11,7 @@ public class Type3ManagerV3 : CraneManagerV3
     [SerializeField] float audioPitch = 1f; //サウンドのピッチ
     [SerializeField] int downTime = 0; //0より大きく4600以下のとき有効，下降時間設定
     [SerializeField] bool autoPower = true;
+    [SerializeField] bool openEnd = false;
     [HideInInspector] public float armPower; //現在のアームパワー
     private bool buttonPushed = false; //trueならボタンをクリックしているかキーボードを押下している
     private BGMPlayer bp;
@@ -28,7 +29,7 @@ public class Type3ManagerV3 : CraneManagerV3
     {
         Transform temp;
 
-        craneStatus = -2;
+        craneStatus = -1;
         craneType = 3;
 
         // 様々なコンポーネントの取得
@@ -76,6 +77,7 @@ public class Type3ManagerV3 : CraneManagerV3
         StartCoroutine(Init());
     }
 
+    // 基本動作チェック用
     IEnumerator Init()
     {
         Debug.Log("Starting...");
@@ -99,517 +101,170 @@ public class Type3ManagerV3 : CraneManagerV3
         craneBox.Left(false);
         yield return new WaitForSeconds(0.5f);
 
+        craneBox.Right(true);
+
         while (true)
         {
-            craneBox.Right(true);
-
-            while (true)
-            {
-                if (craneBox.CheckPos(7)) break;
-                yield return null;
-            }
-
-            yield return new WaitForSeconds(0.5f);
-
-            craneBox.Back(true);
-
-            while (true)
-            {
-                if (craneBox.CheckPos(4)) break;
-                yield return null;
-            }
-
-            yield return new WaitForSeconds(0.5f);
-
-            armController.Open();
-
-            yield return new WaitForSeconds(1);
-
-            ropeManager.Down();
-
-            while (true)
-            {
-                if (ropeManager.DownFinished()) break;
-                yield return null;
-            }
-
-            yield return new WaitForSeconds(1);
-
-            ropeManager.Up();
-
-            while (true)
-            {
-                if (ropeManager.UpFinished()) break;
-                yield return null;
-            }
-
-            yield return new WaitForSeconds(1);
-
-            armController.Close();
-
-            yield return new WaitForSeconds(0.5f);
-
-            craneBox.Left(true);
-
-            while (true)
-            {
-                if (craneBox.CheckPos(2)) break;
-                yield return null;
-            }
-
-            yield return new WaitForSeconds(0.5f);
-
-            craneBox.Forward(true);
-
-            while (true)
-            {
-                if (craneBox.CheckPos(1)) break;
-                yield return null;
-            }
-
-            yield return new WaitForSeconds(3);
+            if (craneBox.CheckPos(7)) break;
+            yield return null;
         }
+
+        yield return new WaitForSeconds(0.5f);
+
+        craneBox.Back(true);
+
+        while (true)
+        {
+            if (craneBox.CheckPos(4)) break;
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        armController.Open();
+
+        yield return new WaitForSeconds(1);
+
+        ropeManager.Down();
+
+        while (true)
+        {
+            if (ropeManager.DownFinished()) break;
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(1);
+
+        ropeManager.Up();
+
+        while (true)
+        {
+            if (ropeManager.UpFinished()) break;
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(1);
+
+        armController.Close();
+
+        yield return new WaitForSeconds(0.5f);
+
+        craneBox.Left(true);
+
+        while (true)
+        {
+            if (craneBox.CheckPos(2)) break;
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        craneBox.Forward(true);
+
+        while (true)
+        {
+            if (craneBox.CheckPos(1)) break;
+            yield return null;
+        }
+
+        armController.Open();
+
+        yield return new WaitForSeconds(3);
+
+        armController.Close();
+
+        yield return new WaitForSeconds(3);
+
+        StartCoroutine(Setup());
     }
 
-    // IEnumerator InternalStart()
-    // {
-    //     ropeManager.Up();
-    //     while (!ropeManager.UpFinished())
-    //     {
-    //         yield return new WaitForSeconds(0.1f);
-    //     }
-    //     if (soundType == 2) armController.Open();
-    //     else armController.Close();
+    IEnumerator Setup()
+    {
+        // ロープ巻取り確認
+        if (!ropeManager.UpFinished())
+        {
+            ropeManager.Up();
+            while (!ropeManager.UpFinished())
+            {
+                yield return null;
+            }
+        }
 
+        // アームユニット位置確認
+        if (!craneBox.CheckPos(1))
+        {
+            craneBox.Left(true);
+            craneBox.Forward(true);
+            while (!craneBox.CheckPos(1))
+            {
+                yield return null;
+            }
+        }
 
-    //     craneStatus = -1;
-    // }
+        if (openEnd) armController.Open();
+        else armController.Close();
+
+        craneStatus = 0;
+    }
 
     void Update()
     {
-        // if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
-        // else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
-        // if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
+        if (useUI && host.playable && !canvas.activeSelf) canvas.SetActive(true);
+        else if (!host.playable && canvas.activeSelf) canvas.SetActive(false);
+        if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))) InsertCoin();
 
-        // if (craneStatus == -1)
-        //     if (craneBox.CheckPos(1))
-        //     {
-        //         craneStatus = 0;
-        //     }
+        if (craneStatus >= 1 && craneStatus <= 4) DetectKey(craneStatus);
 
-        // if (craneStatus == 0)
-        // {
-        //     //コイン投入有効化;
-        //     switch (soundType)
-        //     {
-        //         case 0:
-        //             if (!sp.audioSource[5].isPlaying) bp.Play(0);
-        //             break;
-        //         case 1:
-        //             if (!sp.audioSource[12].isPlaying) bp.Play(1);
-        //             break;
-        //         case 2:
-        //             if (!sp.audioSource[16].isPlaying && !sp.audioSource[17].isPlaying)
-        //                 bp.Play(2);
-        //             break;
-        //         case 3:
-        //             bp.Stop(4);
-        //             bp.Play(3);
-        //             break;
-        //     }
-        // }
-        // else
-        // {
-        //     if (Input.GetKey(KeyCode.M) && Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.C) && !probability) probability = true; // テスト用隠しコマンド
-        //     if (craneStatus == 1)
-        //     {
-        //         //コイン投入有効化;
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //             bp.Stop(soundType);
-        //         }
-        //         DetectKey(craneStatus);     //右移動ボタン有効化;
-        //         switch (soundType)
-        //         {
-        //             case 1:
-        //                 if (!sp.audioSource[6].isPlaying)
-        //                     sp.Play(7);
-        //                 break;
-        //             case 3:
-        //                 bp.Play(4);
-        //                 break;
-        //         }
-        //     }
-
-        //     if (craneStatus == 2)
-        //     {
-        //         //右移動中
-        //         bp.Stop(soundType);
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //         }
-        //         DetectKey(craneStatus);
-        //         //コイン投入無効化;
-        //         switch (soundType)
-        //         {
-        //             case 0:
-        //                 sp.Play(1);
-        //                 break;
-        //             case 1:
-        //                 sp.Stop(7);
-        //                 sp.Play(8);
-        //                 break;
-        //             case 2:
-        //                 sp.Play(14);
-        //                 break;
-        //             case 3:
-        //                 sp.Play(18);
-        //                 break;
-        //         }
-        //         if (craneBox.CheckPos(7))
-        //         {
-        //             buttonPushed = false;
-        //             craneStatus = 3;
-        //         }
-        //         //クレーン右移動;
-        //         //右移動効果音ループ再生;
-        //     }
-
-        //     if (craneStatus == 3)
-        //     {
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //         }
-        //         DetectKey(craneStatus);         //奥移動ボタン有効化;
-        //         //右移動効果音ループ再生停止;
-        //     }
-
-        //     if (craneStatus == 4)
-        //     {
-        //         //奥移動中
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //         }
-        //         DetectKey(craneStatus);
-        //         //クレーン奥移動;
-        //         switch (soundType)
-        //         {
-        //             case 0:
-        //                 sp.Stop(1);
-        //                 sp.Play(2);
-        //                 break;
-        //             case 1:
-        //                 sp.Stop(8);
-        //                 sp.Play(9);
-        //                 break;
-        //             case 2:
-        //                 sp.Play(14);
-        //                 break;
-        //             case 3:
-        //                 sp.Stop(18);
-        //                 sp.Play(19);
-        //                 break;
-        //         }
-        //         if (craneBox.CheckPos(8))
-        //         {
-        //             buttonPushed = false;
-        //             craneStatus = 5;
-        //         }
-        //         //奥移動効果音ループ再生;
-        //     }
-
-        //     if (craneStatus == 5)
-        //     {
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //             int waitTime = 0;
-        //             if (soundType != 2) armController.Open();
-        //             switch (soundType)
-        //             {
-        //                 case 0:
-        //                     sp.Stop(2);
-        //                     sp.Play(3);
-        //                     waitTime = 1000;
-        //                     break;
-        //                 case 1:
-        //                     sp.Stop(9);
-        //                     sp.Play(10);
-        //                     waitTime = 1000;
-        //                     break;
-        //                 case 2:
-        //                     sp.Stop(14);
-        //                     break;
-        //                 case 3:
-        //                     sp.Stop(19);
-        //                     sp.Play(20, 1);
-        //                     waitTime = 2000;
-        //                     break;
-        //             }
-        //             StartCoroutine(DelayCoroutine(waitTime, () =>
-        //             {
-        //                 ropeManager.Down();
-        //                 if (craneStatus == 5) craneStatus = 6;
-        //             }));
-        //         }
-        //         //奥移動効果音ループ再生停止;
-        //         //アーム開く音再生;
-        //         //アーム開く;
-        //     }
-
-        //     if (craneStatus == 6)
-        //     {
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //             switch (soundType)
-        //             {
-        //                 case 2:
-        //                     sp.Play(15, 1);
-        //                     break;
-        //                 case 3:
-        //                     sp.Play(21);
-        //                     break;
-        //             }
-        //             if (downTime > 0 && downTime <= 4600)
-        //             {
-        //                 StartCoroutine(DelayCoroutine(downTime, () =>
-        //                 {
-        //                     if (craneStatus == 6)
-        //                     {
-        //                         ropeManager.DownForceStop();
-        //                         craneStatus = 7;
-        //                     }
-        //                 }));
-        //             }
-        //         }
-        //         if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
-        //         //アーム下降音再生
-        //         //アーム下降;
-        //     }
-
-        //     if (craneStatus == 7)
-        //     {
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //             switch (soundType)
-        //             {
-        //                 case 3:
-        //                     sp.Stop(21);
-        //                     break;
-        //             }
-        //             if (probability) armPower = armPowerConfigSuccess[0];
-        //             else armPower = armPowerConfig[0];
-        //             armController.Close();
-        //             armController.MotorPower(armPower);
-        //             StartCoroutine(DelayCoroutine(1000, () =>
-        //             {
-        //                 if (craneStatus == 7) craneStatus = 8;
-        //             }));
-        //         }
-        //         //アーム下降音再生停止;
-        //         //アーム掴む音再生;
-        //         //アーム掴む;
-        //     }
-
-        //     if (craneStatus == 8)
-        //     {
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //             switch (soundType)
-        //             {
-        //                 case 0:
-        //                     sp.Stop(3);
-        //                     sp.Play(4);
-        //                     break;
-        //                 case 1:
-        //                     sp.Stop(10);
-        //                     sp.Play(11);
-        //                     break;
-        //                 case 3:
-        //                     sp.Play(22);
-        //                     break;
-        //             }
-        //             ropeManager.Up();
-        //             StartCoroutine(DelayCoroutine(1500, () =>
-        //             {
-        //                 if (!probability && UnityEngine.Random.Range(0, 3) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); //上昇中に離す振り分け(autoPower設定時のみ)
-        //             }));
-        //         }
-        //         if (soundType == 2)
-        //             if (!sp.audioSource[15].isPlaying)
-        //                 sp.Play(14);
-        //         if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
-        //         //アーム上昇音再生;
-        //         //アーム上昇;
-        //     }
-
-        //     if (craneStatus == 9)
-        //     {
-        //         if (!armController.autoPower)
-        //         {
-        //             if (probability) armPower = armPowerConfigSuccess[1];
-        //             else armPower = armPowerConfig[1];
-        //             armController.MotorPower(armPower);
-        //         }
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //             StartCoroutine(DelayCoroutine(200, () =>
-        //             {
-        //                 if (soundType == 3) sp.Stop(22);
-        //                 if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
-        //                 if (craneStatus == 9) craneStatus = 10;
-        //             }));
-        //         }
-        //         //アーム上昇停止音再生;
-        //         //アーム上昇停止;
-        //     }
-
-        //     if (craneStatus == 10)
-        //     {
-        //         //アーム獲得口ポジション移動音再生;
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //             switch (soundType)
-        //             {
-        //                 case 0:
-        //                     sp.Stop(4);
-        //                     sp.Play(1);
-        //                     break;
-        //                 case 2:
-        //                     sp.Stop(15);
-        //                     sp.Stop(14);
-        //                     sp.Play(14);
-        //                     break;
-        //                 case 3:
-        //                     sp.Play(23);
-        //                     break;
-        //             }
-
-        //         }
-        //         if (craneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
-        //         //アーム獲得口ポジションへ;
-        //     }
-
-        //     if (craneStatus == 11)
-        //     {
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //             armController.Open();
-        //             int waitTime = 1000;
-        //             switch (soundType)
-        //             {
-        //                 case 3:
-        //                     sp.Stop(23);
-        //                     sp.Play(24, 1);
-        //                     waitTime = 2500;
-        //                     break;
-        //             }
-        //             StartCoroutine(DelayCoroutine(waitTime, () =>
-        //             {
-        //                 craneStatus = 12;
-        //             }));
-        //         }
-        //         //アーム開く音再生;
-        //         //アーム開く;
-        //         //1秒待機;
-        //     }
-
-        //     if (craneStatus == 12)
-        //     {
-        //         if (!isExecuted[craneStatus])
-        //         {
-        //             isExecuted[craneStatus] = true;
-        //             if (soundType != 2) armController.Close();
-        //             int waitTime = 1500;
-        //             switch (soundType)
-        //             {
-        //                 case 0:
-        //                 case 1:
-        //                     waitTime = 2000;
-        //                     break;
-        //                 case 2:
-        //                     sp.Stop(14);
-        //                     if (!sp.audioSource[16].isPlaying)
-        //                         sp.Play(17, 1);
-        //                     break;
-        //                 case 3:
-        //                     sp.Play(25, 1);
-        //                     waitTime = 2500;
-        //                     break;
-        //             }
-        //             for (int i = 0; i < 12; i++)
-        //                 isExecuted[i] = false;
-        //             StartCoroutine(DelayCoroutine(waitTime, () =>
-        //             {
-        //                 switch (soundType)
-        //                 {
-        //                     case 0:
-        //                         sp.Stop(1);
-        //                         break;
-        //                     case 1:
-        //                         sp.Stop(11);
-        //                         break;
-        //                 }
-        //                 if (creditSystem.GetCreditCount() > 0)
-        //                     craneStatus = 1;
-        //                 else
-        //                     craneStatus = 0;
-        //                 //アーム閉じる音再生;
-        //                 //アーム閉じる;
-        //             }));
-        //         }
-        //     }
-        // }
+        if (craneBox.CheckPos(7) && craneStatus == 2)
+        {
+            buttonPushed = false;
+            craneStatus = 3;
+        }
+        if (craneBox.CheckPos(8) && craneStatus == 4)
+        {
+            buttonPushed = false;
+            craneStatus = 5;
+        }
+        if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
+        if (soundType == 2 && craneStatus == 8)
+            if (!sp.audioSource[15].isPlaying)
+                sp.Play(14);
+        if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
+        if (craneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
     }
 
-    void FixedUpdate()
+    void FixedUpdate() // アームのパワーを緩める処理のみ残す
     {
-        // if (craneStatus != 0)
-        // {
-        //     if (craneStatus == -1 || craneStatus == 10)
-        //     {
-        //         if (craneStatus == 10)
-        //         {
-        //             if (!armController.autoPower)
-        //             {
-        //                 if (support.prizeCount > 0)
-        //                 {
-        //                     if (probability && armPower > armPowerConfigSuccess[2]) armPower -= 0.5f;
-        //                     else if (!probability && armPower > armPowerConfig[2]) armPower -= 0.5f;
-        //                     armController.MotorPower(armPower);
-        //                 }
-        //                 else armController.MotorPower(100f);
-        //             }
-        //         }
-        //         craneBox.Left();
-        //         craneBox.Forward();
-        //     }
-        //     else if (craneStatus == 2) craneBox.Right();
-        //     else if (craneStatus == 4) craneBox.Back();
-        //     else if (craneStatus == 8)
-        //     {
-        //         if (!armController.autoPower)
-        //         {
-        //             if (support.prizeCount > 0)
-        //             {
-        //                 if (probability && armPower > armPowerConfigSuccess[1]) armPower -= 0.5f;
-        //                 else if (!probability && armPower > armPowerConfig[1]) armPower -= 0.5f;
-        //                 armController.MotorPower(armPower);
-        //             }
-        //             else armController.MotorPower(100f);
-        //         }
-        //     }
-        // }
+        if (craneStatus != 0)
+        {
+            if (craneStatus == 8)
+            {
+                if (!armController.autoPower)
+                {
+                    if (support.prizeCount > 0)
+                    {
+                        if (probability && armPower > armPowerConfigSuccess[1]) armPower -= 0.5f;
+                        else if (!probability && armPower > armPowerConfig[1]) armPower -= 0.5f;
+                        armController.MotorPower(armPower);
+                    }
+                    else armController.MotorPower(100f);
+                }
+            }
+            else if (craneStatus == 10)
+            {
+                if (!armController.autoPower)
+                {
+                    if (support.prizeCount > 0)
+                    {
+                        if (probability && armPower > armPowerConfigSuccess[2]) armPower -= 0.5f;
+                        else if (!probability && armPower > armPowerConfig[2]) armPower -= 0.5f;
+                        armController.MotorPower(armPower);
+                    }
+                    else armController.MotorPower(100f);
+                }
+            }
+
+        }
     }
 
     public override void GetPrize()
@@ -648,15 +303,6 @@ public class Type3ManagerV3 : CraneManagerV3
                     if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && !buttonPushed)
                     {
                         buttonPushed = true;
-                        if (craneStatus == 1)
-                        {
-                            creditSystem.ResetPay();
-                            int credit = creditSystem.DecrementCredit();
-                            if (credit < 10) credit3d.text = credit.ToString();
-                            else credit3d.text = "9.";
-                            probability = creditSystem.ProbabilityCheck();
-                            Debug.Log("Probability:" + probability);
-                        }
                         craneStatus = 2;
                     }
                     break;
@@ -695,12 +341,6 @@ public class Type3ManagerV3 : CraneManagerV3
                 {
                     buttonPushed = true;
                     craneStatus = 2;
-                    creditSystem.ResetPay();
-                    int credit = creditSystem.DecrementCredit();
-                    if (credit < 10) credit3d.text = credit.ToString();
-                    else credit3d.text = "9.";
-                    probability = creditSystem.ProbabilityCheck();
-                    Debug.Log("Probability:" + probability);
                 }
                 break;
             case 2:
@@ -758,6 +398,282 @@ public class Type3ManagerV3 : CraneManagerV3
 
     protected override void FirstStatusEvent(int status)
     {
+        if (status == 0)
+        {
+            switch (soundType)
+            {
+                case 0:
+                    if (!sp.audioSource[5].isPlaying) bp.Play(0);
+                    break;
+                case 1:
+                    if (!sp.audioSource[12].isPlaying) bp.Play(1);
+                    break;
+                case 2:
+                    if (!sp.audioSource[16].isPlaying && !sp.audioSource[17].isPlaying)
+                        bp.Play(2);
+                    break;
+                case 3:
+                    bp.Stop(4);
+                    bp.Play(3);
+                    break;
+            }
+        }
+        else if (status == 1)
+        {
+            bp.Stop(soundType);
+            switch (soundType)
+            {
+                case 1:
+                    if (!sp.audioSource[6].isPlaying)
+                        sp.Play(7);
+                    break;
+                case 3:
+                    bp.Play(4);
+                    break;
+            }
+        }
+        else if (status == 2)
+        {
+            creditSystem.ResetPay();
+            creditSystem.NewPlay();
+            probability = creditSystem.ProbabilityCheck();
+            Debug.Log("Probability:" + probability);
+            craneBox.Right(true);
+            switch (soundType)
+            {
+                case 0:
+                    sp.Play(1);
+                    break;
+                case 1:
+                    sp.Stop(7);
+                    sp.Play(8);
+                    break;
+                case 2:
+                    sp.Play(14);
+                    break;
+                case 3:
+                    sp.Play(18);
+                    break;
+            }
+        }
+        else if (status == 3)
+        {
+            craneBox.Right(false);
+        }
+        else if (status == 4)
+        {
+            craneBox.Back(true);
+            switch (soundType)
+            {
+                case 0:
+                    sp.Stop(1);
+                    sp.Play(2);
+                    break;
+                case 1:
+                    sp.Stop(8);
+                    sp.Play(9);
+                    break;
+                case 2:
+                    sp.Play(14);
+                    break;
+                case 3:
+                    sp.Stop(18);
+                    sp.Play(19);
+                    break;
+            }
+        }
+        else if (status == 5)
+        {
+            craneBox.Back(false);
+            int waitTime = 0;
+            if (!openEnd) armController.Open();
+            switch (soundType)
+            {
+                case 0:
+                    sp.Stop(2);
+                    sp.Play(3);
+                    waitTime = 1000;
+                    break;
+                case 1:
+                    sp.Stop(9);
+                    sp.Play(10);
+                    waitTime = 1000;
+                    break;
+                case 2:
+                    sp.Stop(14);
+                    if (!openEnd) waitTime = 1000;
+                    break;
+                case 3:
+                    sp.Stop(19);
+                    sp.Play(20, 1);
+                    waitTime = 2000;
+                    break;
+            }
+            StartCoroutine(DelayCoroutine(waitTime, () =>
+            {
+                ropeManager.Down();
+                if (craneStatus == 5) craneStatus = 6;
+            }));
+        }
+        else if (status == 6)
+        {
+            switch (soundType)
+            {
+                case 2:
+                    sp.Play(15, 1);
+                    break;
+                case 3:
+                    sp.Play(21);
+                    break;
+            }
+            if (downTime > 0 && downTime <= 4600)
+            {
+                StartCoroutine(DelayCoroutine(downTime, () =>
+                {
+                    if (craneStatus == 6)
+                    {
+                        ropeManager.DownForceStop();
+                        craneStatus = 7;
+                    }
+                }));
+            }
+        }
+        else if (status == 7)
+        {
+            switch (soundType)
+            {
+                case 3:
+                    sp.Stop(21);
+                    break;
+            }
+            if (probability) armPower = armPowerConfigSuccess[0];
+            else armPower = armPowerConfig[0];
+            armController.Close();
+            armController.MotorPower(armPower);
+            StartCoroutine(DelayCoroutine(1000, () =>
+            {
+                if (craneStatus == 7) craneStatus = 8;
+            }));
+        }
+        else if (status == 8)
+        {
+            switch (soundType)
+            {
+                case 0:
+                    sp.Stop(3);
+                    sp.Play(4);
+                    break;
+                case 1:
+                    sp.Stop(10);
+                    sp.Play(11);
+                    break;
+                case 3:
+                    sp.Play(22);
+                    break;
+            }
+            ropeManager.Up();
+            StartCoroutine(DelayCoroutine(1500, () =>
+            {
+                if (!probability && UnityEngine.Random.Range(0, 3) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); //上昇中に離す振り分け(autoPower設定時のみ)
+            }));
+        }
+        else if (status == 9)
+        {
+            if (!armController.autoPower)
+            {
+                if (probability) armPower = armPowerConfigSuccess[1];
+                else armPower = armPowerConfig[1];
+                armController.MotorPower(armPower);
+            }
+            StartCoroutine(DelayCoroutine(200, () =>
+            {
+                if (soundType == 3) sp.Stop(22);
+                if (!probability && UnityEngine.Random.Range(0, 2) == 0 && craneStatus == 9 && support.prizeCount > 0) armController.Release(); // 上昇後に離す振り分け
+                if (craneStatus == 9) craneStatus = 10;
+            }));
+        }
+        else if (status == 10)
+        {
+            craneBox.Left(true);
+            craneBox.Forward(true);
+            switch (soundType)
+            {
+                case 0:
+                    sp.Stop(4);
+                    sp.Play(1);
+                    break;
+                case 2:
+                    sp.Stop(15);
+                    sp.Stop(14);
+                    sp.Play(14);
+                    break;
+                case 3:
+                    sp.Play(23);
+                    break;
+            }
+        }
+        else if (status == 11)
+        {
+            armController.Open();
+            int waitTime = 1000;
+            switch (soundType)
+            {
+                case 3:
+                    sp.Stop(23);
+                    sp.Play(24, 1);
+                    waitTime = 2500;
+                    break;
+            }
+            StartCoroutine(DelayCoroutine(waitTime, () =>
+            {
+                craneStatus = 12;
+            }));
+        }
+        else if (status == 12)
+        {
+            if (!openEnd) armController.Close();
+            int waitTime = 500;
+            switch (soundType)
+            {
+                case 0:
+                case 1:
+                    waitTime += 1500;
+                    break;
+                case 2:
+                    waitTime += 1500;
+                    sp.Stop(14);
+                    if (!sp.audioSource[16].isPlaying)
+                        sp.Play(17, 1);
+                    break;
+                case 3:
+                    waitTime += 2000;
+                    sp.Play(25, 1);
+                    break;
+            }
+            StartCoroutine(DelayCoroutine(waitTime, () =>
+            {
+                switch (soundType)
+                {
+                    case 0:
+                        sp.Stop(1);
+                        break;
+                    case 1:
+                        sp.Stop(11);
+                        break;
+                }
+
+                int credit = creditSystem.DecrementCredit();
+                if (credit < 10) credit3d.text = credit.ToString();
+                else credit3d.text = "9.";
+
+                if (creditSystem.GetCreditCount() > 0)
+                    craneStatus = 1;
+                else
+                    craneStatus = 0;
+                //アーム閉じる音再生;
+                //アーム閉じる;
+            }));
+        }
     }
 
     protected override void LastStatusEvent(int status)

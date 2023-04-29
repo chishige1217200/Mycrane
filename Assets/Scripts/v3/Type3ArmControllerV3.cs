@@ -8,7 +8,7 @@ public class Type3ArmControllerV3 : MonoBehaviour
     HingeJoint[] joint;
     JointMotor[] motor;
     ArmControllerSupportV3 support;
-    Type3Manager _Type3Manager;
+    Type3ManagerV3 _Type3Manager;
     Type7Manager _Type7Manager;
     Type10ManagerV2 _Type10Manager;
     public bool autoPower = true; //trueなら強制射出
@@ -88,7 +88,7 @@ public class Type3ArmControllerV3 : MonoBehaviour
     public void SetManager(int num) // 筐体のマネージャー情報取得
     {
         craneType = num;
-        if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3Manager>();
+        if (craneType == 3) _Type3Manager = transform.root.gameObject.GetComponent<Type3ManagerV3>();
         if (craneType == 7) _Type7Manager = transform.root.gameObject.GetComponent<Type7Manager>();
         if (craneType == 10) _Type10Manager = transform.parent.parent.gameObject.GetComponent<Type10ManagerV2>();
         support = transform.Find("Head").Find("Hat").GetComponent<ArmControllerSupportV3>();
