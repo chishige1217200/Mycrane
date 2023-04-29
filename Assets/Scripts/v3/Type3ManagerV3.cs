@@ -32,7 +32,6 @@ public class Type3ManagerV3 : CraneManagerV3
         craneType = 3;
 
         // 様々なコンポーネントの取得
-        host = transform.Find("CP").GetComponent<MachineHost>();
         canvas = transform.Find("Canvas").gameObject;
         creditSystem = transform.Find("CreditSystem").GetComponent<CreditSystemV3>();
         bp = transform.Find("BGM").GetComponent<BGMPlayer>();
@@ -72,14 +71,9 @@ public class Type3ManagerV3 : CraneManagerV3
 
         getPoint.SetManager(this);
 
-        // host.manualCode = 4;
+        host.manualCode = 4;
 
         StartCoroutine(Init());
-
-        // StartCoroutine(DelayCoroutine(300, () =>
-        // {
-        //     StartCoroutine(InternalStart());
-        // }));
     }
 
     IEnumerator Init()
@@ -115,7 +109,7 @@ public class Type3ManagerV3 : CraneManagerV3
                 yield return null;
             }
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
 
             craneBox.Back(true);
 
@@ -125,7 +119,7 @@ public class Type3ManagerV3 : CraneManagerV3
                 yield return null;
             }
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
 
             armController.Open();
 
@@ -153,7 +147,7 @@ public class Type3ManagerV3 : CraneManagerV3
 
             armController.Close();
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
 
             craneBox.Left(true);
 
@@ -163,7 +157,7 @@ public class Type3ManagerV3 : CraneManagerV3
                 yield return null;
             }
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
 
             craneBox.Forward(true);
 
