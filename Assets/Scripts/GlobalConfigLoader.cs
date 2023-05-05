@@ -31,6 +31,17 @@ public class GlobalConfigLoader : MonoBehaviour
                 faio.autoCrosshair = true;
             else
                 faio.autoCrosshair = false;
+
+            if (PlayerPrefs.HasKey("FirstPersonAIOHeight"))
+            {
+                float height = PlayerPrefs.GetFloat("FirstPersonAIOHeight");
+                faio._crouchModifiers.colliderHeight = height;
+                if(height < 1)
+                {
+                    faio.canJump = true;
+                    faio.jumpPower = 3.5f - height;
+                }
+            }
         }
 
         if (PlayerPrefs.GetInt("doAutoPlay") == 1)
