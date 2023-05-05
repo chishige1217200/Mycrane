@@ -12,7 +12,10 @@ public class AudioVolumeSlider : MonoBehaviour
     void Start()
     {
         if (!PlayerPrefs.HasKey("AudioVolume"))
+        {
             PlayerPrefs.SetFloat("AudioVolume", 1);
+            PlayerPrefs.Save();
+        }
         else
             AudioListener.volume = PlayerPrefs.GetFloat("AudioVolume");
         s = GetComponent<Slider>();
@@ -25,6 +28,7 @@ public class AudioVolumeSlider : MonoBehaviour
         AudioListener.volume = s.value / 100f;
         VolumeText.text = (AudioListener.volume * 100).ToString();
         PlayerPrefs.SetFloat("AudioVolume", s.value / 100f);
+        PlayerPrefs.Save();
         if (!isFirst) sliderSE.PlayOneShot(sliderSE.clip);
         isFirst = false;
     }
