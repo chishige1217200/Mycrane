@@ -6,18 +6,21 @@ using UnityEngine.UI;
 public class CraneStatusViewer : MonoBehaviour
 {
     [SerializeField] Text[] view;
-    [SerializeField] CraneManager[] src;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+    [SerializeField] CraneManagerV3[] src;
 
-    // Update is called once per frame
     void Update()
     {
         for (int i = 0; i < src.Length; i++)
         {
-            view[i].text = src[i].GetStatus().ToString();
+            view[i].text = src[i].craneStatus.ToString();
+        }
+    }
+
+    public void AddStatus()
+    {
+        for (int i = 0; i < src.Length; i++)
+        {
+            src[i].craneStatus += 1;
         }
     }
 }
