@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 public class CraneBoxSound : MonoBehaviour
 {
-    // [SerializeField] CraneBox craneBox;
     [SerializeField] SEPlayer sp; // 0:Start, 1:Moving, 2:Stop
     [SerializeField] bool useModule = false;
-    Coroutine sound;
+    private bool soundPlaying = false;
+    private Coroutine sound;
 
     void Start()
     {
@@ -18,16 +18,19 @@ public class CraneBoxSound : MonoBehaviour
 
     public void MoveSound(bool flag)
     {
-        if (useModule)
+        if (useModule && flag != soundPlaying)
         {
             if (flag)
             {
-                sp.Play(0, 1);
+                soundPlaying = true;
+                sp.ForcePlay(0);
                 sound = StartCoroutine(MovingUpdate());
             }
             else
             {
+                soundPlaying = false;
                 if (sound != null) StopCoroutine(sound);
+                sp.Stop(0);
                 sp.Stop(1);
                 sp.Play(2, 1);
                 sound = null;
@@ -37,6 +40,7 @@ public class CraneBoxSound : MonoBehaviour
 
     private IEnumerator MovingUpdate()
     {
+        sp.Stop(2);
         while (true)
         {
             if (!sp.audioSource[0].isPlaying)

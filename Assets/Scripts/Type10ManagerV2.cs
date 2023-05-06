@@ -235,6 +235,7 @@ public class Type10ManagerV2 : CraneManagerV2
 
             if (craneStatus == 6)
             {
+                DetectKey(6);
                 if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
                 //アーム下降音再生
                 //アーム下降;
@@ -406,6 +407,18 @@ public class Type10ManagerV2 : CraneManagerV2
                     if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && player2 && craneStatus == 3)
                         craneStatus = 5;
                     break;
+                case 6:
+                    if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && !player2)
+                    {
+                        ropeManager.DownForceStop();
+                        craneStatus = 7;
+                    }
+                    if ((Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8)) && player2)
+                    {
+                        ropeManager.DownForceStop();
+                        craneStatus = 7;
+                    }
+                    break;
             }
         }
     }
@@ -483,6 +496,13 @@ public class Type10ManagerV2 : CraneManagerV2
             case 3: // レバー操作用
                 if (craneStatus == 3)
                     craneStatus = 5;
+                break;
+            case 4: // 下降停止用
+                if (craneStatus == 6)
+                {
+                    ropeManager.DownForceStop();
+                    craneStatus = 7;
+                }
                 break;
         }
     }

@@ -14,11 +14,13 @@ public class GlobalConfigLoader : MonoBehaviour
         {
             CraneManager.useUI = true;
             CraneManagerV2.useUI = true;
+            CraneManagerV3.useUI = true;
         }
         else
         {
             CraneManager.useUI = false;
             CraneManagerV2.useUI = false;
+            CraneManagerV3.useUI = false;
             backButton.SetActive(false);
             manualButton.SetActive(false);
         }
@@ -31,6 +33,17 @@ public class GlobalConfigLoader : MonoBehaviour
                 faio.autoCrosshair = true;
             else
                 faio.autoCrosshair = false;
+
+            if (PlayerPrefs.HasKey("FirstPersonAIOHeight"))
+            {
+                float height = PlayerPrefs.GetFloat("FirstPersonAIOHeight");
+                faio._crouchModifiers.colliderHeight = height;
+                if (height < 1)
+                {
+                    faio.canJump = true;
+                    faio.jumpPower = 3.5f - height;
+                }
+            }
         }
 
         if (PlayerPrefs.GetInt("doAutoPlay") == 1)

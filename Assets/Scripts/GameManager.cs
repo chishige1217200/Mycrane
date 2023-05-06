@@ -33,12 +33,12 @@ public class GameManager : MonoBehaviour
 
     public void OpenYouTube()
     {
-        Application.OpenURL("https://www.youtube.com/channel/UCs5Z8JDmjCh__vymU6BdMWQ");
+        Application.OpenURL("https://www.youtube.com/@mycrane7200");
     }
 
     public void OpenTwitter()
     {
-        Application.OpenURL("https://twitter.com/mycraneofficial");
+        Application.OpenURL("https://twitter.com/mycrane7200");
     }
 
     public void ResetCursor()
