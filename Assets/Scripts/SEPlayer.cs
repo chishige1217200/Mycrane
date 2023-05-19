@@ -36,12 +36,14 @@ public class SEPlayer : MonoBehaviour
 
     public void Play(int num, int repeatcount)
     {
+        audioSource[num].loop = false;
         repeatCount[num] = repeatcount;
     }
 
     public void Play(int num)
     {
-        repeatCount[num] = 2147483647;
+        audioSource[num].loop = true;
+        if (!audioSource[num].isPlaying) audioSource[num].Play();
     }
 
     public void Stop(int num)
