@@ -25,5 +25,12 @@ public class ArmUnitLifterV3Tester : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Comma))
             auf.GoPosition(targetHeight);
+
+        if (Input.GetKeyDown(KeyCode.Z))
+            Debug.Log("UpFinished: " + auf.CheckPos(1));
+        if (Input.GetKeyDown(KeyCode.X))
+            Debug.Log("DownFinished: " + auf.CheckPos(2));
+        if (Input.GetKeyDown(KeyCode.C))
+            Debug.Log("GoPositionFinished: " + auf.CheckPos(3));
     }
 }

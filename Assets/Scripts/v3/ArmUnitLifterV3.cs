@@ -54,11 +54,11 @@ public class ArmUnitLifterV3 : BaseLifterV3
         int checker = 0; // 復帰チェック用
         if (mode == 1)
         {
-            if (upCoroutine == null) checker++;
+            if (transform.localPosition.y >= upLimit) checker++;
         }
         else if (mode == 2)
         {
-            if (downCoroutine == null) checker++;
+            if (transform.localPosition.y <= downLimit) checker++;
         }
         else if (mode == 3)
         {
