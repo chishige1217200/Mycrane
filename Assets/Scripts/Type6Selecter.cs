@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Type6Selecter : MonoBehaviour
+public class Type6Selecter : CelebrationSync
 {
     [SerializeField] Type6Manager[] manager = new Type6Manager[2];
     [SerializeField] Animator[] animator = new Animator[3];
@@ -64,5 +64,16 @@ public class Type6Selecter : MonoBehaviour
     public Type6Manager GetManager(int num)
     {
         return manager[num - 1];
+    }
+
+    public override void SetupNetWork(Type5NetworkV3 net) // 獲得連動用
+    {
+        manager[0].net = net;
+        manager[1].net = net;
+    }
+
+    public override void Celebrate() // 獲得連動用
+    {
+        for (int i = 0; i < 3; i++) animator[i].SetTrigger("GetPrize");
     }
 }
