@@ -145,6 +145,7 @@ public class CraneBoxV3 : MonoBehaviour
 
     private void RightEvent()
     {
+        if (leftCoroutine != null) StopCoroutine(leftCoroutine);
         if (transform.localPosition.x < rightLimit)
         {
             moveFlags[0] = true;
@@ -185,6 +186,7 @@ public class CraneBoxV3 : MonoBehaviour
 
     private void LeftEvent()
     {
+        if (rightCoroutine != null) StopCoroutine(rightCoroutine);
         if (transform.localPosition.x > leftLimit)
         {
             moveFlags[1] = true;
@@ -225,6 +227,7 @@ public class CraneBoxV3 : MonoBehaviour
 
     private void BackEvent()
     {
+        if (frontCoroutine != null) StopCoroutine(frontCoroutine);
         if (transform.localPosition.z < backLimit)
         {
             moveFlags[2] = true;
@@ -265,6 +268,7 @@ public class CraneBoxV3 : MonoBehaviour
 
     private void ForwardEvent()
     {
+        if (backCoroutine != null) StopCoroutine(backCoroutine);
         if (transform.localPosition.z > frontLimit)
         {
             moveFlags[3] = true;

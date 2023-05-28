@@ -7,8 +7,8 @@ public class ArmUnitLifterV3 : BaseLifterV3
 {
     [SerializeField] float upSpeed = 0.001f; // 上昇速度
     [SerializeField] float downSpeed = 0.001f; // 下降速度
-    [SerializeField] float upLimit = 1f;
-    [SerializeField] float downLimit = 0.7f;
+    public float upLimit = 1f;
+    public float downLimit = 0.7f;
     private Coroutine goPositionCoroutine;
     private Coroutine upCoroutine;
     private Coroutine downCoroutine;
