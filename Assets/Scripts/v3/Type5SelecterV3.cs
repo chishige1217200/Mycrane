@@ -1,26 +1,19 @@
-﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Type5Selecter : CelebrationSync
+public class Type5SelecterV3 : CelebrationSync
 {
-    [SerializeField] Type5Manager[] manager = new Type5Manager[2];
+    public Type5SelecterConfig config;
+    [SerializeField] Type5ManagerV3[] manager = new Type5ManagerV3[2];
     [SerializeField] Animator[] animator = new Animator[3];
-    BGMPlayer bp;
-    [SerializeField] int soundType = 0; //0:U9_1，1:U9_2，2:U8，3:U7
-    [SerializeField] float audioPitch = 1.0f;
     [SerializeField] int lightColor = 1; //1:Red, 2:Green, 3:Blue, 4:Yellow, 5:Sky, 6:Purple, 7:Pink(255,128,255), 8:Orange(255,128,0), 9:Forest(128,255,0)
-    int nextPlay = 6;
+    private BGMPlayer bp;
+    private int nextPlay = 6;
 
     void Start()
     {
         bp = transform.Find("BGM").GetComponent<BGMPlayer>();
-        bp.SetAudioPitch(audioPitch);
-        manager[0].soundType = soundType;
-        manager[1].soundType = soundType;
-        manager[0].sp.SetAudioPitch(audioPitch);
-        manager[1].sp.SetAudioPitch(audioPitch);
 
         for (int i = 0; i < 3; i++)
         {
@@ -28,13 +21,28 @@ public class Type5Selecter : CelebrationSync
             manager[0].animator[i] = animator[i];
             manager[1].animator[i] = animator[i];
         }
+
+        if(config != null)
+        {
+            Setup(config);
+        }
+    }
+
+    public void Setup(Type5SelecterConfig config)
+    {
+        this.config = config;
+        bp.SetAudioPitch(config.audioPitch);
+        manager[0].soundType = config.soundType;
+        manager[1].soundType = config.soundType;
+        manager[0].sp.SetAudioPitch(config.audioPitch);
+        manager[1].sp.SetAudioPitch(config.audioPitch);
     }
 
     void Update()
     {
-        if (manager[0].GetStatus() == 0 && manager[1].GetStatus() == 0)
+        if (manager[0].craneStatus == 0 && manager[1].craneStatus == 0)
         {
-            switch (soundType)
+            switch (config.soundType)
             {
                 case 0:
                     bp.Stop(1);
@@ -59,9 +67,9 @@ public class Type5Selecter : CelebrationSync
                     break;
             }
         }
-        else if (manager[0].GetStatus() > 0 || manager[1].GetStatus() > 0)
+        else if (manager[0].craneStatus > 0 || manager[1].craneStatus > 0)
         {
-            switch (soundType)
+            switch (config.soundType)
             {
                 case 0:
                     bp.Stop(0);
@@ -81,18 +89,7 @@ public class Type5Selecter : CelebrationSync
                     bp.Play(8);
                     break;
             }
-            /*if (bp.audioSource[0].isPlaying) await Task.Delay(500);
-            if (!bp.audioSource[1].isPlaying && (!sp[0].audioSource[6].isPlaying || !sp[1].audioSource[6].isPlaying))
-            {
-                bp.Stop(0);
-                bp.Play(1);
-            }*/
         }
-    }
-
-    public Type5Manager GetManager(int num)
-    {
-        return manager[num - 1];
     }
 
     public override void SetupNetWork(Type5NetworkV3 net) // 獲得連動用

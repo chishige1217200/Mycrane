@@ -505,7 +505,7 @@ public class Type4Manager : CraneManager
                     for (int i = 0; i < 14; i++)
                         isExecuted[i] = false;
                     armController.SetLimit(armApertures); //アーム開口度リセット
-                    if (!sp.audioSource[6].isPlaying) sp.Play(7, 1);
+                    if (!sp.audioSources[6].isPlaying) sp.Play(7, 1);
 
                     creditSystem.ResetPayment();
                     int credit = creditSystem.PlayStart();

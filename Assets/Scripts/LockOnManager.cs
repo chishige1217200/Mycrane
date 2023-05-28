@@ -89,7 +89,7 @@ public class LockOnManager : CraneManager
         if (craneStatus == 0)
         {
             //コイン投入有効化;
-            if (!sp.audioSource[2].isPlaying && !sp.audioSource[3].isPlaying) bp.Play(0);
+            if (!sp.audioSources[2].isPlaying && !sp.audioSources[3].isPlaying) bp.Play(0);
         }
         else
         {
@@ -97,7 +97,7 @@ public class LockOnManager : CraneManager
             {
                 // 待機中
                 DetectKey(craneStatus);
-                if (!sp.audioSource[0].isPlaying && !sp.audioSource[2].isPlaying && !sp.audioSource[3].isPlaying) bp.Play(0);
+                if (!sp.audioSources[0].isPlaying && !sp.audioSources[2].isPlaying && !sp.audioSources[3].isPlaying) bp.Play(0);
             }
 
             if (craneStatus == 2)
@@ -167,7 +167,7 @@ public class LockOnManager : CraneManager
                     isExecuted[craneStatus] = true;
                     lc.IncrimentTarget();
                     sp.Stop(1);
-                    if (!sp.audioSource[3].isPlaying) sp.Play(2, 1);
+                    if (!sp.audioSources[3].isPlaying) sp.Play(2, 1);
                     StartCoroutine(DelayCoroutine(1000, () =>
                     {
                         if (craneStatus == 8) craneStatus = 9;
@@ -224,7 +224,7 @@ public class LockOnManager : CraneManager
         StartCoroutine(DelayCoroutine(500, () =>
         {
             sp.Stop(1);
-            if (!sp.audioSource[3].isPlaying) sp.Play(3, 1);
+            if (!sp.audioSources[3].isPlaying) sp.Play(3, 1);
         }));
     }
 

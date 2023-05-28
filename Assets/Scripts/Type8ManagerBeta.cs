@@ -112,13 +112,13 @@ public class Type8ManagerBeta : CraneManager
             switch (soundType)
             {
                 case 0:
-                    if (!sp.audioSource[5].isPlaying) bp.Play(0);
+                    if (!sp.audioSources[5].isPlaying) bp.Play(0);
                     break;
                 case 1:
-                    if (!sp.audioSource[12].isPlaying) bp.Play(1);
+                    if (!sp.audioSources[12].isPlaying) bp.Play(1);
                     break;
                 case 2:
-                    if (!sp.audioSource[16].isPlaying && !sp.audioSource[17].isPlaying)
+                    if (!sp.audioSources[16].isPlaying && !sp.audioSources[17].isPlaying)
                         bp.Play(2);
                     break;
                 case 3:
@@ -141,7 +141,7 @@ public class Type8ManagerBeta : CraneManager
                 switch (soundType)
                 {
                     case 1:
-                        if (!sp.audioSource[6].isPlaying)
+                        if (!sp.audioSources[6].isPlaying)
                             sp.Play(7, 2147483647);
                         break;
                     case 3:
@@ -329,7 +329,7 @@ public class Type8ManagerBeta : CraneManager
                     await Task.Delay(1500);
                 }
                 if (soundType == 2)
-                    if (!sp.audioSource[15].isPlaying)
+                    if (!sp.audioSources[15].isPlaying)
                         sp.Play(14, 2147483647);
                 if (probability && armPower > upArmpowersuccess)
                 {
@@ -385,7 +385,7 @@ public class Type8ManagerBeta : CraneManager
 
                 }
                 if (soundType == 2)
-                    if (!sp.audioSource[15].isPlaying)
+                    if (!sp.audioSources[15].isPlaying)
                         sp.Play(14, 2147483647);
 
                 if (probability && armPower > backArmpowersuccess)
@@ -436,7 +436,7 @@ public class Type8ManagerBeta : CraneManager
                     {
                         case 2:
                             sp.Stop(14);
-                            if (!sp.audioSource[16].isPlaying)
+                            if (!sp.audioSources[16].isPlaying)
                                 sp.Play(17, 1);
                             break;
                         case 3:

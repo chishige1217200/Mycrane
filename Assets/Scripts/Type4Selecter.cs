@@ -28,16 +28,16 @@ public class Type4Selecter : MonoBehaviour
     {
         if (manager[0].GetStatus() == 0 && manager[1].GetStatus() == 0)
         {
-            if (!bp.audioSource[0].isPlaying)
+            if (!bp.audioSources[0].isPlaying)
             {
                 bp.Stop(1);
                 bp.Play(0);
             }
         }
-        else if (manager[0].GetStatus() == 15 || manager[1].GetStatus() == 15 || sp[0].audioSource[6].isPlaying || sp[1].audioSource[6].isPlaying) bp.Stop(1);
+        else if (manager[0].GetStatus() == 15 || manager[1].GetStatus() == 15 || sp[0].audioSources[6].isPlaying || sp[1].audioSources[6].isPlaying) bp.Stop(1);
         else if ((manager[0].GetStatus() > 0 || manager[1].GetStatus() > 0) && (manager[0].GetStatus() < 15 || manager[1].GetStatus() < 15))
         {
-            if (!bp.audioSource[1].isPlaying && (!sp[0].audioSource[6].isPlaying || !sp[1].audioSource[6].isPlaying))
+            if (!bp.audioSources[1].isPlaying && (!sp[0].audioSources[6].isPlaying || !sp[1].audioSources[6].isPlaying))
             {
                 bp.Stop(0);
                 bp.Play(1);

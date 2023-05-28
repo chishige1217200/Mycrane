@@ -256,7 +256,7 @@ public class Type8Manager : CraneManager
                     }
                 }
                 if (craneStatus == 4 && isExecuted[4]) DetectKey(craneStatus);
-                if (soundType == 3 && !sp.audioSource[9].isPlaying && !sp.audioSource[10].isPlaying) bp.Play(soundType * 2 + 1);
+                if (soundType == 3 && !sp.audioSources[9].isPlaying && !sp.audioSources[10].isPlaying) bp.Play(soundType * 2 + 1);
                 if (ropeManager.DownFinished() && craneStatus == 4) IncrimentStatus();
             }
 
@@ -300,7 +300,7 @@ public class Type8Manager : CraneManager
                         IncrimentStatus();
                     }
                 }
-                if (soundType == 3 && !sp.audioSource[10].isPlaying) bp.Play(soundType * 2 + 1);
+                if (soundType == 3 && !sp.audioSources[10].isPlaying) bp.Play(soundType * 2 + 1);
             }
 
             if (craneStatus == 6) //上昇中
@@ -319,7 +319,7 @@ public class Type8Manager : CraneManager
                     ropeManager.Up();
                 }
 
-                if (!sp.audioSource[10].isPlaying)
+                if (!sp.audioSources[10].isPlaying)
                 {
                     if (soundType == 3) bp.Play(soundType * 2 + 1);
                     if (soundType == 4) bp.Play(6);
@@ -346,7 +346,7 @@ public class Type8Manager : CraneManager
                     armController.SetMotorPower(armPower);
                     IncrimentStatus();
                 }
-                if (!sp.audioSource[10].isPlaying)
+                if (!sp.audioSources[10].isPlaying)
                 {
                     if (soundType == 3) bp.Play(soundType * 2 + 1);
                     if (soundType == 4) bp.Play(6);
@@ -355,7 +355,7 @@ public class Type8Manager : CraneManager
 
             if (craneStatus == 8) //離すポジションに移動
             {
-                if (!sp.audioSource[10].isPlaying)
+                if (!sp.audioSources[10].isPlaying)
                 {
                     if (soundType == 3) bp.Play(soundType * 2 + 1);
                     if (soundType == 4) bp.Play(6);
@@ -372,7 +372,7 @@ public class Type8Manager : CraneManager
                     craneBox.goPoint = new Vector2(-0.2f, craneBox.transform.localPosition.z);
                     craneBox.goPositionFlag = true;
                 }
-                if (!sp.audioSource[10].isPlaying)
+                if (!sp.audioSources[10].isPlaying)
                 {
                     if (soundType == 3) bp.Play(soundType * 2 + 1);
                     if (soundType == 4) bp.Play(6);
@@ -567,7 +567,7 @@ public class Type8Manager : CraneManager
                 creditSystem.ResetCostProbability();
                 break;
         }
-        if (!sp.audioSource[getSoundNum].isPlaying)
+        if (!sp.audioSources[getSoundNum].isPlaying)
         {
             if (getSoundNum != -1)
                 sp.Play(getSoundNum, 1);

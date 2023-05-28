@@ -658,7 +658,7 @@ public class Type12Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
-                    if (!sp.audioSource[7].isPlaying) sp.Play(8, 1);
+                    if (!sp.audioSources[7].isPlaying) sp.Play(8, 1);
                 }
                 if (craneBox.CheckPos(6)) craneStatus = 18;
             }

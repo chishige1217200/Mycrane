@@ -6,12 +6,12 @@ using UnityEngine.UI;
 // シリアライズはなしで別途値を設定するように
 public class CreditSystemV3 : ProbabilitySystemV3
 {
-    public int[] priceSets = new int[2];
-    public int[] timesSets = new int[2];
-    public bool segUpdateFlag = true; // trueならクレジット情報を7セグに表示，タイマー共存時用
+    public int[] priceSets = new int[2]; // 原則Setup()で与える
+    public int[] timesSets = new int[2]; // 原則Setup()で与える
     public Text[] priceTexts = new Text[2]; // プレイ回数に対応する金額表示(priceSetsと連携)
     public Text[] timesTexts = new Text[2]; // プレイ回数対応表示(timesSetsと連携)
     public Text Credit; // 残クレジット表示
+    [HideInInspector] public bool segUpdateFlag = true; // trueならクレジット情報を7セグに表示，タイマー共存時用
     //-------------------------------------------------
     private int creditDisplayed = 0; // 筐体に表示されるクレジット（表示・参照用）
     private int nowpaidSum = 0; // 投入金額合計

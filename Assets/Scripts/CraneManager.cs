@@ -36,7 +36,7 @@ public abstract class CraneManager : MonoBehaviour
         }
         if (getSoundNum != -1)
         {
-            if (!sp.audioSource[getSoundNum].isPlaying)
+            if (!sp.audioSources[getSoundNum].isPlaying)
                 sp.Play(getSoundNum, 1);
         }
     }

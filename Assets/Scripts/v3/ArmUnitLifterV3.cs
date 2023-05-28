@@ -5,13 +5,25 @@ using System;
 
 public class ArmUnitLifterV3 : BaseLifterV3
 {
-    public float upSpeed = 0.001f; //上昇速度
-    public float downSpeed = 0.001f; //下降速度
+    [SerializeField] float upSpeed = 0.001f; // 上昇速度
+    [SerializeField] float downSpeed = 0.001f; // 下降速度
     [SerializeField] float upLimit = 1f;
     [SerializeField] float downLimit = 0.7f;
     private Coroutine goPositionCoroutine;
     private Coroutine upCoroutine;
     private Coroutine downCoroutine;
+
+    public void SetMoveSpeeds(float upSpeed, float downSpeed)
+    {
+        this.upSpeed = upSpeed;
+        this.downSpeed = downSpeed;
+    }
+
+    public void SetLimits(float upLimit, float downLimit)
+    {
+        this.upLimit = upLimit;
+        this.downLimit = downLimit;
+    }
 
     public override void GoPosition(float height)
     {

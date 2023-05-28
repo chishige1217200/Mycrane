@@ -139,7 +139,7 @@ public class Type7Manager : CraneManager
                         bp.Stop(1);
                         sp.Play(2, 1);
                     }
-                    if (!sp.audioSource[2].isPlaying && timer.limitTimeNow <= 9) sp.Play(3);
+                    if (!sp.audioSources[2].isPlaying && timer.limitTimeNow <= 9) sp.Play(3);
                 }
                 if (timer.limitTimeNow == 0) craneStatus = 7;
                 DetectKey(0);

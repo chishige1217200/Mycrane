@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class CraneBoxV3 : MonoBehaviour
 {
-    [SerializeField] float moveSpeedX = 0.001f;
-    [SerializeField] float moveSpeedZ = 0.001f;
-    [SerializeField] float rightLimit = 1f;
-    [SerializeField] float leftLimit = -1f;
-    [SerializeField] float backLimit = 1f;
-    [SerializeField] float frontLimit = -1f;
+    public CraneBoxSound cbs; // モーター駆動音用SEPlayer
+    [SerializeField] float moveSpeedX = 0.001f; // 原則SetMoveSpeeds()で与える
+    [SerializeField] float moveSpeedZ = 0.001f; // 原則SetMoveSpeeds()で与える
+    [SerializeField] float rightLimit = 1f; // 原則SetLimits()で与える
+    [SerializeField] float leftLimit = -1f; // 原則SetLimits()で与える
+    [SerializeField] float backLimit = 1f; // 原則SetLimits()で与える
+    [SerializeField] float frontLimit = -1f; // 原則SetLimits()で与える
     [SerializeField] bool supportDirectionChanger = false; // true:x-move false:z-move
     [SerializeField] GameObject ropeHost;
-    [SerializeField] CraneBoxSound cbs; // モーター駆動音用SEPlayer
     private GameObject craneBoxSupport;
     private Coroutine goPositionCoroutine; // 座標指定移動のコルーチン
     private Coroutine rightCoroutine;
@@ -33,7 +33,6 @@ public class CraneBoxV3 : MonoBehaviour
         this.moveSpeedX = moveSpeedX;
         this.moveSpeedZ = moveSpeedZ;
     }
-
 
     public void SetLimits(float rightLimit, float leftLimit, float backLimit, float frontLimit)
     {
