@@ -89,7 +89,19 @@ public class Type2Manager : CraneManager
             creditSystem.SetCreditSound(10);
             timer.SetAlertSound(11);
         }
-        getSoundNum = 5;
+
+        switch (soundType)
+        {
+            case 0:
+                getSoundNum = 5;
+                break;
+            case 1:
+                getSoundNum = 14;
+                break;
+            case 2:
+                getSoundNum = 15;
+                break;
+        }
         bp.SetAudioPitch(audioPitch);
         sp.SetAudioPitch(audioPitch);
 
