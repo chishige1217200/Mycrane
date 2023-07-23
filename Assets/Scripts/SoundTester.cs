@@ -55,7 +55,7 @@ public class SoundTester : MonoBehaviour
 
         idText.text = nowPlaying.ToString("D3");
         pitchText.text = audioSources[nowPlaying].pitch.ToString("0.000");
-        s.value = (int)((audioSources[nowPlaying].pitch - 0.75f) / 0.025f);
+        s.value = ((audioSources[nowPlaying].pitch - 0.75f) / 0.025f);
     }
 
     public void UpdatePitchText()
