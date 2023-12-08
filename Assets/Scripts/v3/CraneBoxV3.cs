@@ -159,7 +159,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.x >= rightLimit)
+            if (transform.localPosition.x > rightLimit)
             {
                 moveFlags[0] = false;
                 SendMoveSoundFlag();
@@ -200,7 +200,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.x <= leftLimit)
+            if (transform.localPosition.x < leftLimit)
             {
                 moveFlags[1] = false;
                 SendMoveSoundFlag();
@@ -241,7 +241,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.z >= backLimit)
+            if (transform.localPosition.z > backLimit)
             {
                 moveFlags[2] = false;
                 SendMoveSoundFlag();
@@ -282,7 +282,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.z <= frontLimit)
+            if (transform.localPosition.z < frontLimit)
             {
                 moveFlags[3] = false;
                 SendMoveSoundFlag();
@@ -320,7 +320,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.y >= backLimit)
+            if (transform.localPosition.y > backLimit)
             {
                 moveFlags[2] = false;
                 SendMoveSoundFlag();
@@ -358,7 +358,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.y <= frontLimit)
+            if (transform.localPosition.y < frontLimit)
             {
                 moveFlags[3] = false;
                 SendMoveSoundFlag();
