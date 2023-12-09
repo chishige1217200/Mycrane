@@ -11,7 +11,7 @@ public class SceneChanger : MonoBehaviour
     [SerializeField] new AudioSource audio;
     LoadingUIController loadingUIController;
     [SerializeField] bool exitKeyOn = false;
-    bool enabled = false;
+    bool executed = false;
 
     void Start()
     {
@@ -29,9 +29,9 @@ public class SceneChanger : MonoBehaviour
 
     public void SceneTransition()
     {
-        if (!enabled)
+        if (!executed)
         {
-            enabled = true;
+            executed = true;
             StartCoroutine(DoTransit());
         }
     }
