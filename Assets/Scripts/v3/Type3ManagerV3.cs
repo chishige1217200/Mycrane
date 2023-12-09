@@ -76,7 +76,7 @@ public class Type3ManagerV3 : CraneManagerV3
     IEnumerator Init()
     {
         Debug.Log("Starting...");
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
         // ropeManager.Up();
 
         // while (true)
