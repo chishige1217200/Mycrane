@@ -396,6 +396,7 @@ public class Type6Manager : CraneManager
                     isExecuted[craneStatus] = true;
 
                     sp.Stop(6);
+                    await Task.Delay(500);
                     sp.Play(3, 1);
                     if (probability) await Task.Delay(500);
                     armController.ArmLimit(100f); // アーム開口度を100に

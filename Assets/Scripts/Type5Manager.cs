@@ -497,10 +497,20 @@ public class Type5Manager : CraneManager
                         case 1:
                         case 2:
                             sp.Stop(6);
-                            sp.Play(3, 1);
                             break;
                         case 3:
                             sp.Stop(9);
+                            break;
+                    }
+                    await Task.Delay(500);
+                    switch (soundType)
+                    {
+                        case 0:
+                        case 1:
+                        case 2:
+                            sp.Play(3, 1);
+                            break;
+                        case 3:
                             sp.Play(11, 1);
                             break;
                     }

@@ -475,6 +475,7 @@ public class Type4Manager : CraneManager
                 if (!isExecuted[craneStatus])
                 {
                     isExecuted[craneStatus] = true;
+                    await Task.Delay(500);
                     videoManager.Play(5);
                     armController.SetLimit(100f); // アーム開口度を100に
                     armController.Open();

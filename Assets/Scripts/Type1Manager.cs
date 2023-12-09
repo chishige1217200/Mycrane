@@ -435,6 +435,7 @@ public class Type1Manager : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     cbs.MoveSound(false);
+                    await Task.Delay(500);
                     armController.SetLimit(100f); // アーム開口度を100に
                     armController.Open();
                     await Task.Delay(2000);
