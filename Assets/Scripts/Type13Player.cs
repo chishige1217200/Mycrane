@@ -340,16 +340,26 @@ public class Type13Player : MonoBehaviour
             manager.ResetPayment();
             manager.PlayerStart();
             manager.CreditSegUpdate();
-            ropeManager.Down();
-            // 下降音
-            manager.sp.Play(3);
-            if (downTime > 0 && downTime <= 4600)
+
+            int waitTime = 0;
+            if (manager.sp.audioSources[2].isPlaying)
             {
-                StartCoroutine(DelayCoroutine(downTime, () =>
-                {
-                    if (craneStatus == 4) craneStatus = 5;
-                }));
+                waitTime = 1000;
             }
+
+            StartCoroutine(DelayCoroutine(waitTime, () =>
+            {
+                ropeManager.Down();
+                // 下降音
+                manager.sp.Play(3);
+                if (downTime > 0 && downTime <= 4600)
+                {
+                    StartCoroutine(DelayCoroutine(downTime, () =>
+                    {
+                        if (craneStatus == 4) craneStatus = 5;
+                    }));
+                }
+            }));
         }
         else if (status == 5)
         {
