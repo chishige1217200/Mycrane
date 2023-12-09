@@ -11,6 +11,7 @@ public class SceneChanger : MonoBehaviour
     [SerializeField] new AudioSource audio;
     LoadingUIController loadingUIController;
     [SerializeField] bool exitKeyOn = false;
+    bool enabled = false;
 
     void Start()
     {
@@ -28,13 +29,17 @@ public class SceneChanger : MonoBehaviour
 
     public void SceneTransition()
     {
-        StartCoroutine(DoTransit());
+        if (!enabled)
+        {
+            enabled = true;
+            StartCoroutine(DoTransit());
+        }
     }
 
     private IEnumerator DoTransit()
     {
         AsyncOperation async = SceneManager.LoadSceneAsync(scene);
-        // async.allowSceneActivation = false;
+
         if (loadingUIController != null)
         {
             loadingUIController.Show();
