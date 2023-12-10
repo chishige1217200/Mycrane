@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class CraneManagerV3 : MonoBehaviour
 {
+    public MachineHost host;
     public int craneStatus // クレーン状態
     {
         get { return _craneStatus; }
@@ -16,19 +18,23 @@ public abstract class CraneManagerV3 : MonoBehaviour
         }
     }
     private int _craneStatus = 0;
+    public SEPlayer sp;
+    [SerializeField] protected bool isHibernate = false; // 休止状態
     protected int craneType; // 筐体タイプ
-    public MachineHost host;
-    protected bool isHibernate = false; // 休止状態
-    protected bool isTest = false; // テストプレイモード
+    protected bool testMode = false; // テストプレイモード
     protected bool probability; // 確率判定用
     protected int getSoundNum = -1; // 獲得音番号
     protected CreditSystemV3 creditSystem;
-    protected SEPlayer sp;
     protected CraneBoxV3 craneBox;
     protected GetPointV3 getPoint;
     protected GameObject canvas;
     public static bool useUI = true; // UI表示
 
+    protected IEnumerator DelayCoroutine(float miliseconds, Action action)
+    {
+        yield return new WaitForSeconds(miliseconds / 1000f);
+        action?.Invoke();
+    }
     public virtual void GetPrize()
     {
         Debug.Log("CraneManagerV3 GetPrize");
@@ -42,7 +48,7 @@ public abstract class CraneManagerV3 : MonoBehaviour
         }
         if (getSoundNum != -1)
         {
-            if (!sp.audioSource[getSoundNum].isPlaying)
+            if (!sp.audioSources[getSoundNum].isPlaying)
                 sp.Play(getSoundNum, 1);
         }
     }

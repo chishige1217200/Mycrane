@@ -311,7 +311,7 @@ public class Type3ManagerV2 : CraneManager
         if (craneStatus == 0)
         {
             //コイン投入有効化;
-            if (!sp.audioSource[3].isPlaying && !sp.audioSource[4].isPlaying)
+            if (!sp.audioSources[3].isPlaying && !sp.audioSources[4].isPlaying)
                 bp.Play(0);
         }
         else
@@ -488,7 +488,7 @@ public class Type3ManagerV2 : CraneManager
                         if (releaseTiming == 0) armController.MotorPower(armPowerConfig[1]);
                     }));
                 }
-                if (!sp.audioSource[2].isPlaying)
+                if (!sp.audioSources[2].isPlaying)
                     sp.Play(1);
                 if (!upStopDisable && ropeManager.UpFinished() && craneStatus == 8)
                 {
@@ -556,7 +556,7 @@ public class Type3ManagerV2 : CraneManager
                 {
                     isExecuted[craneStatus] = true;
                     sp.Stop(1);
-                    if (!sp.audioSource[3].isPlaying)
+                    if (!sp.audioSources[3].isPlaying)
                         sp.Play(4, 1);
                     for (int i = 0; i < 12; i++)
                         isExecuted[i] = false;

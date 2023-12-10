@@ -22,7 +22,7 @@ public class EnarcYm2Selecter : MonoBehaviour
         {
             if (soundType == 1)
             {
-                if (bp.audioSource[1].isPlaying) bp.Stop(1);
+                if (bp.audioSources[1].isPlaying) bp.Stop(1);
                 bp.Play(2);
             }
         }
@@ -30,7 +30,7 @@ public class EnarcYm2Selecter : MonoBehaviour
         {
             if (soundType == 1)
             {
-                if (bp.audioSource[2].isPlaying) bp.Stop(2);
+                if (bp.audioSources[2].isPlaying) bp.Stop(2);
                 bp.Play(1);
             }
         }

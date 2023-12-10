@@ -220,6 +220,7 @@ public class Type9Manager : CraneManager
                     isExecuted[craneStatus] = true;
                     sp.Stop(1);
                     sp.Play(2, 1);
+                    await Task.Delay(500);
                     armController.SetLimit(100f); // アーム開口度を100に
                     armController.Open();
                     await Task.Delay(2000);

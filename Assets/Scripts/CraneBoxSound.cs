@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 public class CraneBoxSound : MonoBehaviour
 {
+    public bool useModule = false;
     [SerializeField] SEPlayer sp; // 0:Start, 1:Moving, 2:Stop
-    [SerializeField] bool useModule = false;
     private bool soundPlaying = false;
     private Coroutine sound;
 
@@ -43,7 +43,7 @@ public class CraneBoxSound : MonoBehaviour
         sp.Stop(2);
         while (true)
         {
-            if (!sp.audioSource[0].isPlaying)
+            if (!sp.audioSources[0].isPlaying)
             {
                 sp.Play(1);
                 yield break;

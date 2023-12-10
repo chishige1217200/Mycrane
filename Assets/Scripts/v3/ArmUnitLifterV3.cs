@@ -1,23 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class ArmUnitLifterV3 : MonoBehaviour
+public class ArmUnitLifterV3 : BaseLifterV3
 {
-    public float upSpeed = 0.001f; //上昇速度
-    public float downSpeed = 0.001f; //下降速度
-    [SerializeField] float upLimit = 1f;
-    [SerializeField] float downLimit = 0.7f;
+    [SerializeField] float upSpeed = 0.001f; // 上昇速度
+    [SerializeField] float downSpeed = 0.001f; // 下降速度
+    public float upLimit = 1f;
+    public float downLimit = 0.7f;
     private Coroutine goPositionCoroutine;
     private Coroutine upCoroutine;
     private Coroutine downCoroutine;
 
-    public void GoPosition(float height)
+    public void SetMoveSpeeds(float upSpeed, float downSpeed)
+    {
+        this.upSpeed = upSpeed;
+        this.downSpeed = downSpeed;
+    }
+
+    public void SetLimits(float upLimit, float downLimit)
+    {
+        this.upLimit = upLimit;
+        this.downLimit = downLimit;
+    }
+
+    public override void GoPosition(float height)
     {
         goPositionCoroutine = StartCoroutine(InternalGoPosition(height));
     }
 
-    public void CancelGoPosition()
+    public override void CancelGoPosition()
     {
         if (goPositionCoroutine != null) StopCoroutine(goPositionCoroutine);
     }
@@ -48,19 +61,27 @@ public class ArmUnitLifterV3 : MonoBehaviour
         }
     }
 
-    public bool UpFinished()
+    public override bool CheckPos(int mode) // 1:上，2：下，3：GoPosition用
     {
-        if (upCoroutine == null) return true;
-        else return false;
+        int checker = 0; // 復帰チェック用
+        if (mode == 1)
+        {
+            if (transform.localPosition.y >= upLimit) checker++;
+        }
+        else if (mode == 2)
+        {
+            if (transform.localPosition.y <= downLimit) checker++;
+        }
+        else if (mode == 3)
+        {
+            if (goPositionCoroutine == null) checker++;
+        }
+
+        if (checker == 1) return true;    // 該当箇所に復帰したとみなす
+        else return false;                // 復帰していないとみなす
     }
 
-    public bool DownFinished()
-    {
-        if (downCoroutine == null) return true;
-        else return false;
-    }
-
-    public void Up(bool flag)
+    public override void Up(bool flag)
     {
         if (flag)
         {
@@ -94,7 +115,7 @@ public class ArmUnitLifterV3 : MonoBehaviour
         }
     }
 
-    public void Down(bool flag)
+    public override void Down(bool flag)
     {
         if (flag)
         {

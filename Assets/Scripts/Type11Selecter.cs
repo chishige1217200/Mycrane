@@ -43,7 +43,7 @@ public class Type11Selecter : MonoBehaviour
             else
             {
                 bp.Stop(3);
-                if (!bp.audioSource[1].isPlaying)
+                if (!bp.audioSources[1].isPlaying)
                 {
                     if (nextPlay == 1)
                     {

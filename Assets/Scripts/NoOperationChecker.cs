@@ -24,6 +24,6 @@ public class NoOperationChecker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKey || (vp != null && !vp.isPlaying)) sc.SceneTransition();
+        if (Input.anyKeyDown || (vp != null && !vp.isPlaying)) sc.SceneTransition();
     }
 }

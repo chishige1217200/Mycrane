@@ -32,6 +32,7 @@ public class Type6Manager : CraneManager
     [SerializeField] TextMesh[] preset = new TextMesh[4];
     public Animator[] animator = new Animator[3];
     [SerializeField] Animator needle;
+    [HideInInspector] public Type5NetworkV3 net;
 
     async void Start()
     {
@@ -395,6 +396,7 @@ public class Type6Manager : CraneManager
                     isExecuted[craneStatus] = true;
 
                     sp.Stop(6);
+                    await Task.Delay(500);
                     sp.Play(3, 1);
                     if (probability) await Task.Delay(500);
                     armController.ArmLimit(100f); // アーム開口度を100に
@@ -490,7 +492,10 @@ public class Type6Manager : CraneManager
 
     public override void GetPrize()
     {
-        for (int i = 0; i < 3; i++) animator[i].SetTrigger("GetPrize");
+        if (net == null) // ネットワークに参加していないとき
+            for (int i = 0; i < 3; i++) animator[i].SetTrigger("GetPrize");
+        else
+            net.CelebrateAll();
         base.GetPrize();
     }
 

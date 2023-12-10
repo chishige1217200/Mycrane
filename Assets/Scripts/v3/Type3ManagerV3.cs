@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class Type3ManagerV3 : CraneManagerV3
 {
@@ -16,15 +15,10 @@ public class Type3ManagerV3 : CraneManagerV3
     private bool buttonPushed = false; // trueならボタンをクリックしているかキーボードを押下している
     private BGMPlayer bp;
     private Type3ArmControllerV3 armController;
-    private BaseLifter ropeManager;
+    private RopeManagerV3 ropeManager;
     private ArmControllerSupportV3 support;
     [SerializeField] TextMesh credit3d;
     [SerializeField] GameObject wait3d;
-    private IEnumerator DelayCoroutine(float miliseconds, Action action)
-    {
-        yield return new WaitForSeconds(miliseconds / 1000f);
-        action?.Invoke();
-    }
 
     void Start()
     {
@@ -50,7 +44,7 @@ public class Type3ManagerV3 : CraneManagerV3
         }
 
         // ロープとアームコントローラに関する処理
-        ropeManager = transform.Find("RopeManager").GetComponent<BaseLifter>();
+        ropeManager = transform.Find("RopeManager").GetComponent<RopeManagerV3>();
         armController = temp.Find("ArmUnit").GetComponent<Type3ArmControllerV3>();
         support = temp.Find("ArmUnit").Find("Head").Find("Hat").GetComponent<ArmControllerSupportV3>();
 
@@ -82,7 +76,7 @@ public class Type3ManagerV3 : CraneManagerV3
     IEnumerator Init()
     {
         Debug.Log("Starting...");
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
         // ropeManager.Up();
 
         // while (true)
@@ -182,10 +176,10 @@ public class Type3ManagerV3 : CraneManagerV3
     IEnumerator Setup()
     {
         // ロープ巻取り確認
-        if (!ropeManager.UpFinished())
+        if (!ropeManager.CheckPos(1))
         {
-            ropeManager.Up();
-            while (!ropeManager.UpFinished())
+            ropeManager.Up(true);
+            while (!ropeManager.CheckPos(1))
             {
                 yield return null;
             }
@@ -219,13 +213,13 @@ public class Type3ManagerV3 : CraneManagerV3
             switch (soundType)
             {
                 case 0:
-                    if (!sp.audioSource[5].isPlaying) bp.Play(0);
+                    if (!sp.audioSources[5].isPlaying) bp.Play(0);
                     break;
                 case 1:
-                    if (!sp.audioSource[6].isPlaying && !sp.audioSource[12].isPlaying) bp.Play(1);
+                    if (!sp.audioSources[6].isPlaying && !sp.audioSources[12].isPlaying) bp.Play(1);
                     break;
                 case 2:
-                    if (!sp.audioSource[13].isPlaying && !sp.audioSource[16].isPlaying && !sp.audioSource[17].isPlaying)
+                    if (!sp.audioSources[13].isPlaying && !sp.audioSources[16].isPlaying && !sp.audioSources[17].isPlaying)
                         bp.Play(2);
                     break;
                 case 3:
@@ -239,11 +233,11 @@ public class Type3ManagerV3 : CraneManagerV3
             switch (soundType)
             {
                 case 1:
-                    if (!sp.audioSource[6].isPlaying)
+                    if (!sp.audioSources[6].isPlaying)
                         sp.Play(7);
                     break;
                 case 2:
-                    if (!sp.audioSource[13].isPlaying && !sp.audioSource[16].isPlaying && !sp.audioSource[17].isPlaying)
+                    if (!sp.audioSources[13].isPlaying && !sp.audioSources[16].isPlaying && !sp.audioSources[17].isPlaying)
                         bp.Play(2);
                     break;
                 case 3:
@@ -264,11 +258,11 @@ public class Type3ManagerV3 : CraneManagerV3
             buttonPushed = false;
             craneStatus = 5;
         }
-        if (ropeManager.DownFinished() && craneStatus == 6) craneStatus = 7;
+        if (ropeManager.CheckPos(2) && craneStatus == 6) craneStatus = 7;
         if (soundType == 2 && craneStatus == 8)
-            if (!sp.audioSource[15].isPlaying)
+            if (!sp.audioSources[15].isPlaying)
                 sp.Play(14);
-        if (ropeManager.UpFinished() && craneStatus == 8) craneStatus = 9;
+        if (ropeManager.CheckPos(1) && craneStatus == 8) craneStatus = 9;
         if (craneBox.CheckPos(1) && craneStatus == 10) craneStatus = 11;
     }
 
@@ -445,6 +439,7 @@ public class Type3ManagerV3 : CraneManagerV3
         {
             wait3d.SetActive(false);
             credit3d.gameObject.SetActive(true);
+            ropeManager.activateRigidbody = true;
             bp.Stop(soundType);
         }
         else if (status == 2)
@@ -528,7 +523,7 @@ public class Type3ManagerV3 : CraneManagerV3
             }
             StartCoroutine(DelayCoroutine(waitTime, () =>
             {
-                ropeManager.Down();
+                ropeManager.Down(true);
                 if (craneStatus == 5) craneStatus = 6;
             }));
         }
@@ -541,7 +536,7 @@ public class Type3ManagerV3 : CraneManagerV3
                 {
                     if (craneStatus == 6)
                     {
-                        ropeManager.DownForceStop();
+                        ropeManager.Down(false);
                         craneStatus = 7;
                     }
                 }));
@@ -580,7 +575,7 @@ public class Type3ManagerV3 : CraneManagerV3
                     sp.Play(22);
                     break;
             }
-            ropeManager.Up();
+            ropeManager.Up(true);
             StartCoroutine(DelayCoroutine(1500, () =>
             {
                 if (!probability && UnityEngine.Random.Range(0, 3) == 0 && craneStatus == 8 && support.prizeCount > 0) armController.Release(); //上昇中に離す振り分け(autoPower設定時のみ)
@@ -652,7 +647,7 @@ public class Type3ManagerV3 : CraneManagerV3
                     waitTime = 2000;
                     break;
                 case 2:
-                    if (openEnd && !sp.audioSource[16].isPlaying)
+                    if (openEnd && !sp.audioSources[16].isPlaying)
                     {
                         waitTime = 2000;
                         sp.Stop(14);
@@ -663,7 +658,7 @@ public class Type3ManagerV3 : CraneManagerV3
                         waitTime = 3000;
                         StartCoroutine(DelayCoroutine(1000, () =>
                         {
-                            if (!sp.audioSource[16].isPlaying)
+                            if (!sp.audioSources[16].isPlaying)
                             {
                                 sp.Stop(14);
                                 sp.Play(17, 1);
@@ -695,7 +690,10 @@ public class Type3ManagerV3 : CraneManagerV3
                 if (creditSystem.GetCreditCount() > 0)
                     craneStatus = 1;
                 else
+                {
+                    ropeManager.activateRigidbody = true;
                     craneStatus = 0;
+                }
             }));
         }
     }

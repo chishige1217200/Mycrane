@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RopeManagerV3 : BaseLifter
+public class RopeManagerV3Beta : BaseLifter
 {
     [SerializeField] GameObject topTarget;
     [SerializeField] GameObject bottomTarget;

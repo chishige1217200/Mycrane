@@ -17,7 +17,7 @@ public class Type1Selecter : MonoBehaviour
 
     void Update()
     {
-        if (manager[0].GetStatus() >= 0 && manager[1].GetStatus() >= 0 && !bp.audioSource[soundType].isPlaying)
+        if (manager[0].GetStatus() >= 0 && manager[1].GetStatus() >= 0 && !bp.audioSources[soundType].isPlaying)
             bp.Play(soundType);
     }
 

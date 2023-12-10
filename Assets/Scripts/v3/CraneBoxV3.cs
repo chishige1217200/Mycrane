@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class CraneBoxV3 : MonoBehaviour
 {
-    [SerializeField] float moveSpeedX = 0.001f;
-    [SerializeField] float moveSpeedZ = 0.001f;
-    [SerializeField] float rightLimit = 1f;
-    [SerializeField] float leftLimit = -1f;
-    [SerializeField] float backLimit = 1f;
-    [SerializeField] float frontLimit = -1f;
+    public CraneBoxSound cbs; // モーター駆動音用SEPlayer
+    [SerializeField] float moveSpeedX = 0.001f; // 原則SetMoveSpeeds()で与える
+    [SerializeField] float moveSpeedZ = 0.001f; // 原則SetMoveSpeeds()で与える
+    [SerializeField] float rightLimit = 1f; // 原則SetLimits()で与える
+    [SerializeField] float leftLimit = -1f; // 原則SetLimits()で与える
+    [SerializeField] float backLimit = 1f; // 原則SetLimits()で与える
+    [SerializeField] float frontLimit = -1f; // 原則SetLimits()で与える
     [SerializeField] bool supportDirectionChanger = false; // true:x-move false:z-move
     [SerializeField] GameObject ropeHost;
-    [SerializeField] CraneBoxSound cbs; // モーター駆動音用SEPlayer
     private GameObject craneBoxSupport;
     private Coroutine goPositionCoroutine; // 座標指定移動のコルーチン
     private Coroutine rightCoroutine;
@@ -33,7 +33,6 @@ public class CraneBoxV3 : MonoBehaviour
         this.moveSpeedX = moveSpeedX;
         this.moveSpeedZ = moveSpeedZ;
     }
-
 
     public void SetLimits(float rightLimit, float leftLimit, float backLimit, float frontLimit)
     {
@@ -146,6 +145,7 @@ public class CraneBoxV3 : MonoBehaviour
 
     private void RightEvent()
     {
+        if (leftCoroutine != null) StopCoroutine(leftCoroutine);
         if (transform.localPosition.x < rightLimit)
         {
             moveFlags[0] = true;
@@ -159,7 +159,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.x >= rightLimit)
+            if (transform.localPosition.x > rightLimit)
             {
                 moveFlags[0] = false;
                 SendMoveSoundFlag();
@@ -186,6 +186,7 @@ public class CraneBoxV3 : MonoBehaviour
 
     private void LeftEvent()
     {
+        if (rightCoroutine != null) StopCoroutine(rightCoroutine);
         if (transform.localPosition.x > leftLimit)
         {
             moveFlags[1] = true;
@@ -199,7 +200,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.x <= leftLimit)
+            if (transform.localPosition.x < leftLimit)
             {
                 moveFlags[1] = false;
                 SendMoveSoundFlag();
@@ -226,6 +227,7 @@ public class CraneBoxV3 : MonoBehaviour
 
     private void BackEvent()
     {
+        if (frontCoroutine != null) StopCoroutine(frontCoroutine);
         if (transform.localPosition.z < backLimit)
         {
             moveFlags[2] = true;
@@ -239,7 +241,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.z >= backLimit)
+            if (transform.localPosition.z > backLimit)
             {
                 moveFlags[2] = false;
                 SendMoveSoundFlag();
@@ -266,6 +268,7 @@ public class CraneBoxV3 : MonoBehaviour
 
     private void ForwardEvent()
     {
+        if (backCoroutine != null) StopCoroutine(backCoroutine);
         if (transform.localPosition.z > frontLimit)
         {
             moveFlags[3] = true;
@@ -279,7 +282,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.z <= frontLimit)
+            if (transform.localPosition.z < frontLimit)
             {
                 moveFlags[3] = false;
                 SendMoveSoundFlag();
@@ -317,7 +320,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.y >= backLimit)
+            if (transform.localPosition.y > backLimit)
             {
                 moveFlags[2] = false;
                 SendMoveSoundFlag();
@@ -355,7 +358,7 @@ public class CraneBoxV3 : MonoBehaviour
     {
         while (true)
         {
-            if (transform.localPosition.y <= frontLimit)
+            if (transform.localPosition.y < frontLimit)
             {
                 moveFlags[3] = false;
                 SendMoveSoundFlag();

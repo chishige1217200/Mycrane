@@ -25,18 +25,18 @@ public class Type12Selecter : MonoBehaviour
 
     void Update()
     {
-        if (!bp.audioSource[0].isPlaying && !sp[0].audioSource[7].isPlaying && !sp[0].audioSource[8].isPlaying && !sp[1].audioSource[7].isPlaying && !sp[1].audioSource[8].isPlaying && (manager[0].GetStatus() == 0 && manager[1].GetStatus() == 0))
+        if (!bp.audioSources[0].isPlaying && !sp[0].audioSources[7].isPlaying && !sp[0].audioSources[8].isPlaying && !sp[1].audioSources[7].isPlaying && !sp[1].audioSources[8].isPlaying && (manager[0].GetStatus() == 0 && manager[1].GetStatus() == 0))
         {
             bp.Stop(1);
             bp.Play(0);
         }
-        else if (!sp[0].audioSource[7].isPlaying && !sp[0].audioSource[8].isPlaying && !sp[1].audioSource[7].isPlaying && !sp[1].audioSource[8].isPlaying && (manager[0].GetStatus() >= 1 || manager[1].GetStatus() >= 1))
+        else if (!sp[0].audioSources[7].isPlaying && !sp[0].audioSources[8].isPlaying && !sp[1].audioSources[7].isPlaying && !sp[1].audioSources[8].isPlaying && (manager[0].GetStatus() >= 1 || manager[1].GetStatus() >= 1))
         {
             bp.Stop(0);
 
             if ((manager[0].GetStatus() < 8 && manager[1].GetStatus() < 8))
             {
-                if (!bp.audioSource[1].isPlaying) bp.Play(1);
+                if (!bp.audioSources[1].isPlaying) bp.Play(1);
             }
             else bp.Stop(1);
         }

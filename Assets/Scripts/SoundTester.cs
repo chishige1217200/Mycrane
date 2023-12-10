@@ -7,6 +7,8 @@ public class SoundTester : MonoBehaviour
 {
     [SerializeField] AudioSource[] audioSources;
     [SerializeField] Text idText;
+    [SerializeField] Text pitchText;
+    [SerializeField] Slider s;
     private int nowPlaying = 0; // 選択中の音声
     void Start()
     {
@@ -52,5 +54,17 @@ public class SoundTester : MonoBehaviour
             nowPlaying = 0;
 
         idText.text = nowPlaying.ToString("D3");
+        pitchText.text = audioSources[nowPlaying].pitch.ToString("0.000");
+        s.value = ((audioSources[nowPlaying].pitch - 0.75f) / 0.025f);
+    }
+
+    public void UpdatePitchText()
+    {
+        pitchText.text = (0.75f + 0.025f * s.value).ToString("0.000");
+    }
+
+    public void SetPitch() // ピッチ適用ボタン用
+    {
+        audioSources[nowPlaying].pitch = 0.75f + 0.025f * s.value;
     }
 }

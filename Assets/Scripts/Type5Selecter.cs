@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Type5Selecter : MonoBehaviour
+public class Type5Selecter : CelebrationSync
 {
     [SerializeField] Type5Manager[] manager = new Type5Manager[2];
     [SerializeField] Animator[] animator = new Animator[3];
@@ -50,7 +50,7 @@ public class Type5Selecter : MonoBehaviour
                     break;
                 case 3:
                     bp.Stop(8);
-                    if (!bp.audioSource[6].isPlaying && !bp.audioSource[7].isPlaying)
+                    if (!bp.audioSources[6].isPlaying && !bp.audioSources[7].isPlaying)
                     {
                         bp.Play(nextPlay);
                         if (nextPlay == 6) nextPlay = 7;
@@ -93,5 +93,16 @@ public class Type5Selecter : MonoBehaviour
     public Type5Manager GetManager(int num)
     {
         return manager[num - 1];
+    }
+
+    public override void SetupNetWork(Type5NetworkV3 net) // 獲得連動用
+    {
+        manager[0].net = net;
+        manager[1].net = net;
+    }
+
+    public override void Celebrate() // 獲得連動用
+    {
+        for (int i = 0; i < 3; i++) animator[i].SetTrigger("GetPrize");
     }
 }

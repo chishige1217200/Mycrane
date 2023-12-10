@@ -29,6 +29,7 @@ public class Type5Manager : CraneManager
     [SerializeField] TextMesh credit3d;
     [SerializeField] TextMesh[] preset = new TextMesh[4];
     public Animator[] animator = new Animator[3];
+    [HideInInspector] public Type5NetworkV3 net;
 
     async void Start()
     {
@@ -496,10 +497,20 @@ public class Type5Manager : CraneManager
                         case 1:
                         case 2:
                             sp.Stop(6);
-                            sp.Play(3, 1);
                             break;
                         case 3:
                             sp.Stop(9);
+                            break;
+                    }
+                    await Task.Delay(500);
+                    switch (soundType)
+                    {
+                        case 0:
+                        case 1:
+                        case 2:
+                            sp.Play(3, 1);
+                            break;
+                        case 3:
                             sp.Play(11, 1);
                             break;
                     }
@@ -695,7 +706,10 @@ public class Type5Manager : CraneManager
 
     public override void GetPrize()
     {
-        for (int i = 0; i < 3; i++) animator[i].SetTrigger("GetPrize");
+        if (net == null) // ネットワークに参加していないとき
+            for (int i = 0; i < 3; i++) animator[i].SetTrigger("GetPrize");
+        else
+            net.CelebrateAll();
         base.GetPrize();
     }
 

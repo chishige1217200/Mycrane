@@ -32,7 +32,8 @@ public class Type13Player : MonoBehaviour
     Type8ArmController armController;
     BaseLifter ropeManager;
     Lever lever;
-    Timer timer;
+    //Timer timer;
+    TimerV3 timer;
     [SerializeField] Text limitTimedisplayed;
     [SerializeField] TextMesh limitTime3d;
     private IEnumerator DelayCoroutine(float miliseconds, Action action)
@@ -49,8 +50,8 @@ public class Type13Player : MonoBehaviour
         manager = transform.parent.GetComponent<Type13Manager>();
         probabilitySystem = GetComponent<ProbabilitySystem>();
         lever = transform.parent.Find("Canvas").Find("ControlGroup").Find("Lever 1").GetComponent<Lever>();
-        timer = GetComponent<Timer>();
-        timer.limitTime = limitTimeSet;
+        timer = GetComponent<TimerV3>();
+        // timer.SetSEPlayer(manager.sp);
         temp = transform.Find("CraneUnit").transform;
         //timer.SetSEPlayer(sp);
 
@@ -105,7 +106,7 @@ public class Type13Player : MonoBehaviour
             if (craneStatus == 3)
             {
                 if (!leverTilted) DetectKey(craneStatus);
-                if (timer.limitTimeNow <= 0) craneStatus = 4;
+                if (timer.GetLimitTimeNow() <= 0) craneStatus = 4;
             }
             if (craneStatus == 4)
             {
@@ -160,10 +161,10 @@ public class Type13Player : MonoBehaviour
             }
             if (!manager.creditSystem.segUpdateFlag) // Timer表示用
             {
-                if (timer.limitTimeNow >= 0)
+                if (timer.GetLimitTimeNow() >= 0)
                 {
-                    limitTimedisplayed.text = timer.limitTimeNow.ToString("D2");
-                    limitTime3d.text = timer.limitTimeNow.ToString("D1");
+                    limitTimedisplayed.text = timer.GetLimitTimeNow().ToString("D2");
+                    limitTime3d.text = timer.GetLimitTimeNow().ToString("D1");
                 }
                 else
                 {
@@ -320,35 +321,45 @@ public class Type13Player : MonoBehaviour
             if (boothNumber < 2) craneBox.goPoint = new Vector2(-0.24f, 0);
             else craneBox.goPoint = new Vector2(0.24f, 0);
 
-            limitTime3d.text = timer.limitTime.ToString();
+            limitTime3d.text = limitTimeSet.ToString();
             craneBox.goPositionFlag = true;
         }
         else if (status == 3)
         {
             manager.creditSystem.segUpdateFlag = false;
-            timer.StartTimer();
+            timer.Activate(limitTimeSet);
             probabilitySystem.NewPlay();
             probability = probabilitySystem.ProbabilityCheck();
             Debug.Log("Probability:" + probability);
         }
         else if (status == 4)
         {
-            timer.CancelTimer();
+            timer.Cancel();
             limitTime3d.text = "0";
             manager.creditSystem.segUpdateFlag = true;
             manager.ResetPayment();
             manager.PlayerStart();
             manager.CreditSegUpdate();
-            ropeManager.Down();
-            // 下降音
-            manager.sp.Play(3);
-            if (downTime > 0 && downTime <= 4600)
+
+            int waitTime = 0;
+            if (manager.sp.audioSources[2].isPlaying)
             {
-                StartCoroutine(DelayCoroutine(downTime, () =>
-                {
-                    if (craneStatus == 4) craneStatus = 5;
-                }));
+                waitTime = 1000;
             }
+
+            StartCoroutine(DelayCoroutine(waitTime, () =>
+            {
+                ropeManager.Down();
+                // 下降音
+                manager.sp.Play(3);
+                if (downTime > 0 && downTime <= 4600)
+                {
+                    StartCoroutine(DelayCoroutine(downTime, () =>
+                    {
+                        if (craneStatus == 4) craneStatus = 5;
+                    }));
+                }
+            }));
         }
         else if (status == 5)
         {

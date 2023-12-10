@@ -7,7 +7,7 @@ public class ArmControllerSupportV3 : MonoBehaviour
 {
     Type3ArmControllerV3 _Type3ArmController;
     CraneManagerV3 craneManager;
-    BaseLifter lifter;
+    BaseLifterV3 lifter;
     public int pushTime = 0;
     public int prizeCount = 0; // プライズがアームにいくつ検知されているか
     public bool isShieldcollis = false; // アームがShieldに衝突しているかどうか
@@ -50,7 +50,7 @@ public class ArmControllerSupportV3 : MonoBehaviour
                     if (craneManager.craneStatus == 6)
                     {
                         Debug.Log("下降制限に接触");
-                        lifter.DownForceStop();
+                        lifter.Down(false);
                         craneManager.craneStatus = 7;
                     }
                     break;
@@ -73,7 +73,7 @@ public class ArmControllerSupportV3 : MonoBehaviour
                             {
                                 if (craneManager.craneStatus == 6)
                                 {
-                                    lifter.DownForceStop();
+                                    lifter.Down(false);
                                     craneManager.craneStatus = 7;
                                 }
                             }));
@@ -84,7 +84,7 @@ public class ArmControllerSupportV3 : MonoBehaviour
                             {
                                 if (craneManager.craneStatus == 6)
                                 {
-                                    lifter.DownForceStop();
+                                    lifter.Down(false);
                                     craneManager.craneStatus = 7;
                                 }
                             }));
@@ -107,7 +107,7 @@ public class ArmControllerSupportV3 : MonoBehaviour
                             {
                                 if (craneManager.craneStatus == 6)
                                 {
-                                    lifter.DownForceStop();
+                                    lifter.Down(false);
                                     craneManager.craneStatus = 7;
                                 }
                             }));
@@ -118,7 +118,7 @@ public class ArmControllerSupportV3 : MonoBehaviour
                             {
                                 if (craneManager.craneStatus == 6)
                                 {
-                                    lifter.DownForceStop();
+                                    lifter.Down(false);
                                     craneManager.craneStatus = 7;
                                 }
                             }));
@@ -156,7 +156,7 @@ public class ArmControllerSupportV3 : MonoBehaviour
                     case 5:
                         if (craneManager.craneStatus == 6)
                         {
-                            lifter.DownForceStop();
+                            lifter.Down(false);
                             craneManager.craneStatus = 7;
                         }
                         break;
@@ -176,7 +176,7 @@ public class ArmControllerSupportV3 : MonoBehaviour
             _Type3ArmController = transform.parent.parent.gameObject.GetComponent<Type3ArmControllerV3>();
     }
 
-    public void SetLifter(BaseLifter r)
+    public void SetLifter(BaseLifterV3 r)
     {
         lifter = r;
     }
